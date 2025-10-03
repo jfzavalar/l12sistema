@@ -1,11 +1,11 @@
 @extends('layouts.bootstrap5.index')
 
-@section('title', 'Usuarios')
+@section('title', 'Permisos')
 
 @section('content')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
-            <i class="fa-solid fa-users"></i> Usuarios
+            <i class="fa-solid fa-users"></i> Permisos
         </h1>
         <div class="btn-group">
             @include('layouts.bootstrap5.btnlogin')
@@ -37,21 +37,13 @@
 
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="1-tab-pane" role="tabpanel" aria-labelledby="1-tab" tabindex="0">
-            <livewire:admin.users.inicio />
+            <livewire:admin.permissions.activos />
         </div>
         <div class="tab-pane fade" id="2-tab-pane" role="tabpanel" aria-labelledby="2-tab" tabindex="0">
-            <livewire:admin.users.inactivos />
+            {{-- <livewire:dashboard.inactivos /> --}}
         </div>
         <div class="tab-pane fade" id="3-tab-pane" role="tabpanel" aria-labelledby="3-tab" tabindex="0">...</div>
         <div class="tab-pane fade" id="4-tab-pane" role="tabpanel" aria-labelledby="4-tab" tabindex="0">...</div>
     </div>
         
 @endsection
-
-@section('css')
-
-@stop
-
-@section('js')
-
-@stop

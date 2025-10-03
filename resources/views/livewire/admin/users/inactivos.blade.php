@@ -18,9 +18,9 @@
         <div class="card-body">
             <div class="table-responsive small">
                 <div class="input-group mb-3">
-                    <input type="text" id="txtsearchi" class="form-control form-control-sm" wire:model.live="searcha" placeholder="Buscar">
+                    <input type="text" id="txtsearchi" class="form-control form-control-sm" wire:model.live="searchi" placeholder="Buscar">
                 </div>
-                <table class="table table-striped table-hover table-sm table-small">
+                <table class="table table-striped table-hover table-sm table-xsmall">
                     <thead class="table-primary text-center align-middle">
                         <tr>
                             <th scope="col">#</th>
@@ -49,7 +49,7 @@
                                 <td>{{ $item->regimen }}</td>
                                 <td>{{ $item->cargo }}</td>
                                 <td>{{ $item->correo_personal }}</td>
-                                <td class="d-flex justify-content-end">
+                                <td class="text-end">
                                     <div class="btn-group" role="group">
                                         <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar" data-bs-toggle="modal" data-bs-target="#NuevoEditarModal">
                                             <i class="fa-solid fa-pen-to-square"></i><br>Editar
@@ -61,9 +61,13 @@
                                 </td>
                             </tr>
                         @empty
-                            <div class="alert alert-danger" role="alert">
-                                No se encontraron resultados!
-                            </div>
+                            <tr>
+                                <td colspan="10" class="text-center">
+                                    <div class="alert alert-danger" role="alert">
+                                        No se encontraron resultados!
+                                    </div>
+                                </td>
+                            </tr>
                         @endforelse
                     </tbody>
                 </table>

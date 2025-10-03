@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\RoleController;
+
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
@@ -32,6 +35,23 @@ Route::middleware(['auth'])->group(function () {
         ->name('two-factor.show');
 });
 
-Route::get('/users', [UserController::class, 'index'])->name('procesos.admin.users.index');
+Route::get('/permissions', [PermissionController::class, 'index'])->name('procesos.admin.permissions.index');
+
+Route::middleware(['auth','can:procesos.admin.users.index'])->group(function () {
+
+    Route::get('/users', [UserController::class, 'index'])->name('procesos.admin.users.index');
+    Route::get('/users/{user}/roles', [UserController::class, 'editRoles'])->name('procesos.admin.users.roles.edit');
+    Route::post('/users/{user}/roles', [UserController::class, 'updateRoles'])->name('procesos.admin.users.roles.update');
+
+});
+
+Route::middleware(['auth','can:procesos.admin.roles.index'])->group(function () {
+    Route::get('/roles', [RoleController::class, 'index'])->name('procesos.admin.roles.index');
+    Route::get('/roles/create', [RoleController::class, 'create'])->name('procesos.admin.roles.create');
+    Route::post('/roles', [RoleController::class, 'store'])->name('procesos.admin.roles.store');
+    // Nueva ruta para editar un rol
+    Route::get('/roles/{role}/edit', [RoleController::class, 'edit'])->name('procesos.admin.roles.edit');
+    Route::put('/roles/{role}', [RoleController::class, 'update'])->name('procesos.admin.roles.update');
+});
 
 require __DIR__.'/auth.php';

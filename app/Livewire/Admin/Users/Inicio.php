@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Usuarios;
+namespace App\Livewire\Admin\Users;
 
 use App\Models\Tblsede;
 use App\Models\User;
@@ -46,7 +46,9 @@ class Inicio extends Component
                     $q->where('dni', 'like', '%' . $this->searcha . '%')
                     ->orWhere('datos', 'like', '%' . $this->searcha . '%');
                 });
-            })->paginate(10);
+            })
+            ->orderBy('datos')
+            ->paginate(10);
 
         $lista_sedes = Tblsede::select('codsedeofi','nomsedeofi')
             ->where('activo','1')
@@ -63,7 +65,7 @@ class Inicio extends Component
             ->orderBy('nomdepofi')
             ->get();
 
-        return view('livewire.usuarios.inicio',
+        return view('livewire.admin.users.inicio',
                 compact('lista_activos',
                 'lista_sedes','lista_dependencias')
             );

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Usuarios;
+namespace App\Livewire\Admin\Users;
 
 use App\Models\Tblsede;
 use App\Models\User;
@@ -32,9 +32,11 @@ class Inactivos extends Component
                     $q->where('dni', 'like', '%' . $this->searchi . '%')
                     ->orWhere('datos', 'like', '%' . $this->searchi . '%');
                 });
-            })->paginate(10);
+            })
+            ->orderBy('datos')
+            ->paginate(10);
 
-        return view('livewire.usuarios.inactivos',compact('lista_inactivos'));
+        return view('livewire.admin.users.inactivos',compact('lista_inactivos'));
     }
 
     public function activar(User $iusuario){

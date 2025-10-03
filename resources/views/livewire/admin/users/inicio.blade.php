@@ -23,7 +23,7 @@
                         <i class="fa-solid fa-file"></i> Nuevo {{ $searcha }}
                     </button>
                 </div>
-                <table class="table table-striped table-hover table-sm table-small">
+                <table class="table table-striped table-hover table-sm table-xsmall">
                     <thead class="table-primary text-center align-middle">
                         <tr>
                             <th scope="col">#</th>
@@ -37,6 +37,7 @@
                             <th scope="col">REGIMEN</th>
                             <th scope="col">CARGO</th>
                             <th scope="col">CORREO PERSONAL</th>
+                            <th scope="col" class="table-success">ROLES</th>
                             <th scope="col"><i class="fa-solid fa-gears"></i></th>
                         </tr>
                     </thead>
@@ -52,7 +53,8 @@
                                 <td>{{ $item->regimen }}</td>
                                 <td>{{ $item->cargo }}</td>
                                 <td>{{ $item->correo_personal }}</td>
-                                <td class="d-flex justify-content-end">
+                                <td>{{ $item->getRoleNames()->implode(' | ') }}</td>
+                                <td class="text-end">
                                     <div class="btn-group" role="group">
                                         <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar({{ $item->id }})">
                                             <i class="fa-solid fa-pen-to-square"></i><br>Editar
@@ -84,9 +86,9 @@
                                         <button type="button" class="btn btn-outline-info btn-sm">
                                             <i class="fa-solid fa-timeline"></i>
                                         </button>                           --}}
-                                        <button type="button" class="btn btn-outline-primary btn-xs">
+                                        <a href="{{ route('procesos.admin.users.roles.edit', $item->id) }}" class="btn btn-outline-primary btn-xs">
                                             <i class="fa-solid fa-user-gear"></i><br>Asignar_rol
-                                        </button>
+                                        </a>
                                         <button type="button" class="btn btn-outline-danger btn-xs" wire:click="desactivar({{ $item->id }})">
                                             <i class="fa-solid fa-trash-can"></i><br>Eliminar
                                         </button>
@@ -94,9 +96,13 @@
                                 </td>
                             </tr>
                         @empty
-                            <div class="alert alert-danger" role="alert">
-                                No se encontraron resultados!
-                            </div>
+                             <tr>
+                                <td colspan="10" class="text-center">
+                                    <div class="alert alert-danger" role="alert">
+                                        No se encontraron resultados!
+                                    </div>
+                                </td>
+                            </tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -127,7 +133,6 @@
                             @else
                                 <i class="fa-solid fa-pen-to-square"></i> EDITAR
                             @endif
-                            {{ $ip_equipo }}
                         </h1>
                         <button type="button" class="btn-close" wire:click="cerrar"></button>
                     </div>
@@ -135,7 +140,7 @@
                         <div class="row">
                             <div class="col-xl-2 col-sm-12">
                                 <fieldset class="border p-3 rounded text-center">
-                                    <legend class="float-none w-outo px-3 fs-5">Foto</legend>
+                                    <legend class="float-none w-outo px-3 fs-6">Foto de perfil</legend>
                                     <button type="button" class="btn btn-outline-secondary" wire:click="editar_imagen">
                                         <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('img/perfil.jpg') }}" class="img-fluid rounded-start" alt="Foto perfil">
                                     </button>
@@ -146,7 +151,7 @@
                             </div>
                             <div class="col-xl-4 col-sm-12">
                                 <fieldset class="border p-3 rounded">
-                                    <legend class="float-none w-outo px-3 fs-5">Datos Personales</legend>
+                                    <legend class="float-none w-outo px-3 fs-6">Datos Personales</legend>
                                     <div class="row">
                                         <div class="col-xl-12 col-sm-12">
                                             <label for="txtdni" class="fw-bold fs-6">DNI</label>
@@ -171,7 +176,7 @@
                             </div>
                             <div class="col-xl-6 col-sm-12">
                                 <fieldset class="border p-3 rounded">
-                                    <legend class="float-none w-outo px-3 fs-5">Datos Institucionales</legend>
+                                    <legend class="float-none w-outo px-3 fs-6">Datos Institucionales</legend>
                                     <div class="row">
                                         <div class="col-xl-4 col-sm-12">
                                             <label for="cmbcodsede" class="fw-bold fs-6">Sede</label>
@@ -260,13 +265,13 @@
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-sm">
                             @if ($btn_guardar_actualizar === "guardar")
-                                <i class="fa-solid fa-floppy-disk"></i> Guardar
+                                <i class="fa-solid fa-floppy-disk"></i><br>Guardar
                             @else
-                                <i class="fa-solid fa-floppy-disk"></i> Actualizar
+                                <i class="fa-solid fa-floppy-disk"></i><br>Actualizar
                             @endif    
                         </button>
                         <button type="button" class="btn btn-secondary btn-sm" wire:click="cerrar">
-                            <i class="fa-solid fa-square-xmark"></i> Cerrar
+                            <i class="fa-solid fa-square-xmark"></i><br>Cerrar
                         </button>
                     </div>
                 </form>
@@ -276,10 +281,10 @@
 
     <!-- Modal cargar imagen -->
     <div class="modal fade @if($modal_abierto_imagen) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <form action="">
-                    <div class="modal-header bg-success-subtle">
+                    <div class="modal-header bg-warning-subtle">
                         <h1 class="modal-title fs-5" id="NuevoEditarModalLabel">
                             <i class="fa-solid fa-file-image"></i> CARGAR IMAGEN
                         </h1>
@@ -297,7 +302,7 @@
                                     width="200">
                             @endif
                             <div class="col-lg-12">
-                                <label for="fileimagen" class="fw-bold fs-6 mb-3">FOTO</label>
+                                <label for="fileimagen" class="fw-bold fs-6 mb-3">Foto de perfil</label>
                                 <input type="file" id="fileimagen" class="form-control" wire:model="avatar" required>
                             </div>
                         </fieldset>

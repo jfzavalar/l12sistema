@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -15,51 +18,15 @@ class UserController extends Controller
         return view("procesos.admin.users.index");
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function editRoles(User $user)
     {
-        //
+        $roles = Role::all(); // todos los roles disponibles
+        return view('procesos.admin.users.assign-roles', compact('user', 'roles'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function updateRoles(Request $request, User $user)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $user->syncRoles($request->roles); // asigna los roles
+        return redirect()->back()->with('success', 'Roles actualizados correctamente.');
     }
 }

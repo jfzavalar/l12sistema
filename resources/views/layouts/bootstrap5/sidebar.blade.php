@@ -9,32 +9,51 @@
 
         <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
             <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('dashboard') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('dashboard') }}">
-                        <i class="fa-solid fa-house"></i> Dashboard
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('procesos.admin.users.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.users.index') }}">
-                        <i class="fa-solid fa-users"></i> Usuarios
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2" href="#">
-                        <svg class="bi" aria-hidden="true">
-                            <use xlink:href="#cart"></use>
-                        </svg>
-                        Products
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2" href="#">
-                        <svg class="bi" aria-hidden="true">
-                            <use xlink:href="#people"></use>
-                        </svg>
-                        Customers
-                    </a>
-                </li>
+                @can('dashboard')
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('dashboard') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('dashboard') }}">
+                            <i class="fa-solid fa-house"></i> Dashboard
+                        </a>
+                    </li>
+                @endcan
+
+                <hr class="border border-light my-3">
+                
+                @can('procesos.admin')
+                    <h6 class="sidebar-heading px-3 mt-4 mb-1 text-uppercase text-white">
+                        PANEL ADMIN
+                    </h6>
+                @endcan
+                
+                @can('procesos.admin.users.index')
+                    <li class="nav-item ms-4">
+                        <a class="nav-link {{ request()->routeIs('procesos.admin.users.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.users.index') }}">
+                            <i class="fa-solid fa-users"></i> Usuarios
+                        </a>
+                    </li>
+                @endcan
+                @can('procesos.admin.roles.index')
+                    <li class="nav-item ms-4">
+                        <a class="nav-link {{ request()->routeIs('procesos.admin.roles.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.roles.index') }}">
+                            <i class="fa-solid fa-users-gear"></i> Roles
+                        </a>
+                    </li>
+                @endcan
+
+                @can('procesos.admin.roles.index')
+                    <li class="nav-item ms-4">
+                        <a class="nav-link {{ request()->routeIs('procesos.admin.permissions.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.permissions.index') }}">
+                            <i class="fa-solid fa-users-gear"></i> Permisos
+                        </a>
+                    </li>
+                @endcan
+
+                <hr class="border border-light my-3">
+
+                <h6 class="sidebar-heading px-3 mt-4 mb-1 text-uppercase text-white">
+                    ADMINISTRACIÓN
+                </h6>
+
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-2" href="#">
                         <svg class="bi" aria-hidden="true">
@@ -53,13 +72,10 @@
                 </li>
             </ul>
 
-            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-body-secondary text-uppercase">
-                <span>Saved reports</span>
-                <a class="link-secondary" href="#" aria-label="Add a new report">
-                    <svg class="bi" aria-hidden="true">
-                        <use xlink:href="#plus-circle"></use>
-                    </svg>
-                </a>
+            <hr class="border border-light my-3">
+
+            <h6 class="sidebar-heading px-3 mt-4 mb-1 text-uppercase text-white">
+                INFORMÁTICA
             </h6>
 
             <ul class="nav flex-column mb-auto">
@@ -97,7 +113,7 @@
                 </li>
             </ul>
 
-            <hr class="my-3" />
+            <hr class="border border-light my-3">
 
             <ul class="nav flex-column mb-auto">
                 <li class="nav-item">
@@ -108,7 +124,7 @@
                 <li class="nav-item">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="nav-link d-flex align-items-center gap-2" style="background: none; border: none;">
+                        <button type="submit" class="nav-link text-white" style="background: none; border: none;">
                             <i class="fa-solid fa-door-open"></i> Cerrar Sesión
                         </button>
                     </form>
