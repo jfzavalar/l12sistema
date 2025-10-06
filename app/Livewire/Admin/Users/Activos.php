@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Admin\Users;
 
-use App\Models\Tblsede;
+use App\Models\Tbl_sede;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -10,7 +10,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
-class Inicio extends Component
+class Activos extends Component
 {
     protected $listeners = ['usuarioActivado' => '$refresh'];
 
@@ -50,13 +50,13 @@ class Inicio extends Component
             ->orderBy('datos')
             ->paginate(10);
 
-        $lista_sedes = Tblsede::select('codsedeofi','nomsedeofi')
+        $lista_sedes = Tbl_sede::select('codsedeofi','nomsedeofi')
             ->where('activo','1')
             ->distinct()
             ->orderBy('nomsedeofi')
             ->get();
             
-        $lista_dependencias = Tblsede::select('coddepofi','nomdepofi')
+        $lista_dependencias = Tbl_sede::select('coddepofi','nomdepofi')
             ->where('activo','1')
             ->when($this->codsede, function($query, $codsede) {
                 $query->where('codsedeofi', $codsede);
@@ -65,7 +65,7 @@ class Inicio extends Component
             ->orderBy('nomdepofi')
             ->get();
 
-        return view('livewire.admin.users.inicio',
+        return view('livewire.admin.users.activos',
                 compact('lista_activos',
                 'lista_sedes','lista_dependencias')
             );

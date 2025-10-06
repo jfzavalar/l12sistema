@@ -1,14 +1,22 @@
 @extends('layouts.bootstrap5.index')
 
-@section('title', 'Usuarios')
+@section('title', 'Ips')
 
 @section('content')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">
-            <i class="fa-solid fa-users"></i> Usuarios
-        </h1>
-        <div class="btn-group">
-            @include('layouts.bootstrap5.btnlogin')
+        <h1 class="h2">IPs</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group me-2">
+                <button type="button" class="btn btn-sm btn-outline-secondary">
+                    <i class="fa-solid fa-house"></i>
+                </button>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
+                <svg class="bi" aria-hidden="true">
+                <use xlink:href="#calendar3"></use>
+                </svg>
+                This week
+            </button>
         </div>
     </div>
 
@@ -37,21 +45,13 @@
 
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="1-tab-pane" role="tabpanel" aria-labelledby="1-tab" tabindex="0">
-            <livewire:admin.users.activos />
+            <livewire:informatica.ips.activos />
         </div>
         <div class="tab-pane fade" id="2-tab-pane" role="tabpanel" aria-labelledby="2-tab" tabindex="0">
-            <livewire:admin.users.inactivos />
+            {{-- <livewire:dashboard.inactivos /> --}}
         </div>
         <div class="tab-pane fade" id="3-tab-pane" role="tabpanel" aria-labelledby="3-tab" tabindex="0">...</div>
         <div class="tab-pane fade" id="4-tab-pane" role="tabpanel" aria-labelledby="4-tab" tabindex="0">...</div>
     </div>
         
 @endsection
-
-@section('css')
-
-@stop
-
-@section('js')
-
-@stop

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Informatica\IpsController;
 use App\Http\Controllers\RoleController;
 
 use Illuminate\Support\Facades\Route;
@@ -52,6 +53,12 @@ Route::middleware(['auth','can:procesos.admin.roles.index'])->group(function () 
     // Nueva ruta para editar un rol
     Route::get('/roles/{role}/edit', [RoleController::class, 'edit'])->name('procesos.admin.roles.edit');
     Route::put('/roles/{role}', [RoleController::class, 'update'])->name('procesos.admin.roles.update');
+});
+
+//INFORMATICA
+Route::middleware('auth','can:procesos.informatica.ips.index')->group(function () {
+    Route::resource('ips', IpsController::class)->names('procesos.informatica.ips');
+    // Route::get('pdf/informatica/firmapc-acta/{id}', [IpsController::class, 'exportarPDF'])->name('pdf.informatica.firmapc-acta');
 });
 
 require __DIR__.'/auth.php';
