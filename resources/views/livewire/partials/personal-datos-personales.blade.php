@@ -1,0 +1,23 @@
+<fieldset class="border p-3 rounded">
+    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Datos Personales</legend>
+    <div class="row">
+        <div class="col-xl-12 col-sm-12">
+            <label for="txt_dni" class="fw-bold fs-6">DNI</label>
+            <input type="text" id="txt_dni" class="form-control form-control-sm" wire:model="dni">
+        </div>
+        <div class="col-xl-12 col-sm-12">
+            <label for="txt_datos" class="fw-bold fs-6">Personal</label>
+            <input type="text" id="txt_datos" class="form-control form-control-sm" wire:model="datos">
+        </div>
+    </div>   
+    <div class="row">
+        <div class="col-xl-12 col-sm-12">
+            <label for="txt_celular_personal" class="fw-bold fs-6">Celular personal</label>
+            <input type="text" id="txt_celular_personal" class="form-control form-control-sm" wire:model="cel_personal">
+        </div>
+        <div class="col-xl-12 col-sm-12">
+            <label for="txt_correo_personal" class="fw-bold fs-6">Correo personal</label>
+            <input type="text" id="txt_correo_personal" class="form-control form-control-sm" wire:model="correo_personal">
+        </div>
+    </div> 
+</fieldset>

@@ -81,6 +81,13 @@
             <ul class="nav flex-column mb-auto">
                 @can('procesos.informatica.ips.index')
                     <li class="nav-item ms-4">
+                        <a class="nav-link {{ request()->routeIs('procesos.informatica.firmasdigitales.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.firmasdigitales.index') }}">
+                            <i class="fa-solid fa-signature"></i> Firmas digitales
+                        </a>
+                    </li>    
+                @endcan
+                @can('procesos.informatica.ips.index')
+                    <li class="nav-item ms-4">
                         <a class="nav-link {{ request()->routeIs('procesos.informatica.ips.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.ips.index') }}">
                             <i class="fa-solid fa-robot"></i> IPs
                         </a>

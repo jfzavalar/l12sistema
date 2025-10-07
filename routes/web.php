@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Informatica\FirmasdigitalesController;
 use App\Http\Controllers\Informatica\IpsController;
 use App\Http\Controllers\RoleController;
 
@@ -57,6 +58,8 @@ Route::middleware(['auth','can:procesos.admin.roles.index'])->group(function () 
 
 //INFORMATICA
 Route::middleware('auth','can:procesos.informatica.ips.index')->group(function () {
+    Route::resource('firmas', FirmasdigitalesController::class)->names('procesos.informatica.firmasdigitales');
+
     Route::resource('ips', IpsController::class)->names('procesos.informatica.ips');
     // Route::get('pdf/informatica/firmapc-acta/{id}', [IpsController::class, 'exportarPDF'])->name('pdf.informatica.firmapc-acta');
 });

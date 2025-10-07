@@ -96,7 +96,7 @@
                                 </td>
                             </tr>
                         @empty
-                             <tr>
+                            <tr>
                                 <td colspan="10" class="text-center">
                                     <div class="alert alert-danger" role="alert">
                                         No se encontraron resultados!
@@ -123,7 +123,8 @@
 
     <!-- Modal Nuevo-Editar-->
     <div class="modal fade @if($modal_abierto_personal) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
-        <div class="modal-dialog modal-xl" style="max-width:90%;">
+        {{-- <div class="modal-dialog modal-xl" style="max-width:90%;"> --}}
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <form wire:submit.prevent="{{ $btn_guardar_actualizar }}">
                     <div class="modal-header bg-{{ $modal_header_color }}">
@@ -138,18 +139,13 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-xl-2 col-sm-12">
+                            <div class="col-xl-4 col-sm-12">
                                 <fieldset class="border p-3 rounded text-center">
                                     <legend class="float-none w-outo px-3 fs-6">Foto de perfil</legend>
                                     <button type="button" class="btn btn-outline-secondary" wire:click="editar_imagen">
                                         <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('img/perfil.jpg') }}" class="img-fluid rounded-start" alt="Foto perfil">
                                     </button>
-                                    {{-- <p>Sede seleccionada: {{ $codsede }}</p>
-                                    <p>Dependencia seleccionada: {{ $coddependencia }}</p> --}}
-
                                 </fieldset>
-                            </div>
-                            <div class="col-xl-4 col-sm-12">
                                 <fieldset class="border p-3 rounded">
                                     <legend class="float-none w-outo px-3 fs-6">Datos Personales</legend>
                                     <div class="row">
@@ -174,7 +170,7 @@
                                     </div> 
                                 </fieldset>
                             </div>
-                            <div class="col-xl-6 col-sm-12">
+                            <div class="col-xl-8 col-sm-12">
                                 <fieldset class="border p-3 rounded">
                                     <legend class="float-none w-outo px-3 fs-6">Datos Institucionales</legend>
                                     <div class="row">
@@ -208,15 +204,6 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        {{-- <div class="col-xl-4 col-sm-12">
-                                            <label for="txtdespacho" class="fw-bold fs-6">Despacho</label>
-                                            <div class="input-group">
-                                                <button class="btn btn-secondary btn-sm">
-                                                    <i class="fa-solid fa-magnifying-glass"></i>
-                                                </button>
-                                                <input type="text" id="txtdespacho" class="form-control form-control-sm">
-                                            </div>
-                                        </div> --}}
                                     </div>
                                     <div class="row">
                                         <div class="col-xl-4 col-sm-12">
@@ -278,48 +265,7 @@
             </div>
         </div>
     </div>
-
-    <!-- Modal cargar imagen -->
-    <div class="modal fade @if($modal_abierto_imagen) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <form action="">
-                    <div class="modal-header bg-warning-subtle">
-                        <h1 class="modal-title fs-5" id="NuevoEditarModalLabel">
-                            <i class="fa-solid fa-file-image"></i> CARGAR IMAGEN
-                        </h1>
-                        <button type="button" class="btn-close" wire:click="cerrar_imagen"></button>
-                    </div>
-                    <div class="modal-body bg-secondary-subtle">
-                        <fieldset class="border p-3 rounded text-center">
-                            {{-- Imagen previa (preview Livewire) --}}
-                            @if ($avatar)
-                                <img src="{{ $avatar->temporaryUrl() }}" class="img-fluid rounded-start mb-3" alt="Preview" width="200">
-                            @else
-                                <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('img/perfil.jpg') }}" 
-                                    class="img-fluid rounded-start mb-3" 
-                                    alt="Foto perfil" 
-                                    width="200">
-                            @endif
-                            <div class="col-lg-12">
-                                <label for="fileimagen" class="fw-bold fs-6 mb-3">Foto de perfil</label>
-                                <input type="file" id="fileimagen" class="form-control" wire:model="avatar" required>
-                            </div>
-                        </fieldset>
-                    </div>
-                    <div class="modal-footer bg-dark-subtle">
-                        <button type="submit" class="btn btn-success btn-sm">
-                            <i class="fa-solid fa-floppy-disk"></i> Actualizar
-                        </button>
-                        <button type="button" class="btn btn-secondary btn-sm" wire:click="cerrar_imagen">
-                            <i class="fa-solid fa-square-xmark"></i> Cerrar
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
+    @include('livewire.partials.personal-modal-foto')
 </div>
 
 
