@@ -6,5 +6,29 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tbl_tokens_asignado extends Model
 {
-    //
+    protected $fillable = [
+        //'id',
+        'dni',
+        'datos',
+        'sede',
+        'dependencia',
+        'regimen',
+        'cargo',
+        'correo_personal',
+        'correo_institucional',
+        'cel_personal',
+        'cel_institucional',
+        //
+        'idtoken',
+        'codtoken',
+        'operativo',
+        'asignacion',
+        'fecha_expiracion',
+        'observacion',
+        'actaruta',
+        'activo',
+        //
+        'created_user',
+        'updated_user'
+    ];
 }

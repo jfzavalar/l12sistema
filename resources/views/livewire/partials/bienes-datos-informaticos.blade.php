@@ -1,5 +1,5 @@
-<fieldset class="border p-4 rounded">
-    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Detalles</legend>
+{{-- <fieldset class="border p-4 rounded">
+    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Detalles</legend> --}}
     <div class="row g-3">
         <div class="col-lg-6 col-sm-12">
             <label for="txt_ip" class="form-label"><strong>IP</strong></label>
@@ -100,4 +100,4 @@
             <input id="txt_observacion" type="text" class="form-control form-control-sm" wire:model="observacion">
         </div>
     </div>
-</fieldset>
+{{-- </fieldset> --}}

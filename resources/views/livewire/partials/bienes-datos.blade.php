@@ -1,5 +1,5 @@
-<fieldset class="border p-4 rounded">
-    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Bien informático</legend>
+{{-- <fieldset class="border p-4 rounded">
+    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Bien informático</legend> --}}
     <div class="row g-3">
         <div class="col-lg-12 col-sm-12">
             <div class="input-group">
@@ -51,4 +51,4 @@
             @enderror
         </div>
     </div>
-</fieldset>
+{{-- </fieldset> --}}

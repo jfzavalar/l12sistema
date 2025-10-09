@@ -1,9 +1,17 @@
-<fieldset class="border p-3 rounded">
-    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Datos Personales</legend>
+{{-- <fieldset class="border p-3 rounded">
+    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Datos Personales</legend> --}}
     <div class="row">
         <div class="col-xl-12 col-sm-12">
             <label for="txt_dni" class="fw-bold fs-6">DNI</label>
-            <input type="text" id="txt_dni" class="form-control form-control-sm" wire:model="dni">
+            <div class="input-group">
+                <button type="button" class="btn btn-secondary btn-sm" wire:click="buscar_personal">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+                <input type="text" id="txt_dni" class="form-control form-control-sm" wire:model="dni">
+            </div>
+            @error('dni')
+                <small class="text-danger">{{ $message }}</small>
+            @enderror
         </div>
         <div class="col-xl-12 col-sm-12">
             <label for="txt_datos" class="fw-bold fs-6">Personal</label>
@@ -20,4 +28,4 @@
             <input type="text" id="txt_correo_personal" class="form-control form-control-sm" wire:model="correo_personal">
         </div>
     </div> 
-</fieldset>
+{{-- </fieldset> --}}

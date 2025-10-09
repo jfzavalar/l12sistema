@@ -29,7 +29,7 @@ class Activos extends Component
 
     // Variables de Modal
     public $modal_abierto_personal = false;
-    public $modal_abierto_bienes_buscar = false;
+    public $modal_abierto_bienes = false;
     public $modal_abierto_imagen = false;
 
     // Variables de tabla
@@ -135,8 +135,9 @@ class Activos extends Component
             );
     }
 
-     protected function rules()
-    {
+    // Reglas de validación de variables
+
+    protected function rules(){
         return [
             'cod_pat' => 'required|string|unique:tbl_bienes,cod_pat,' . $this->id_bien,
             'desc_ubif' => 'required',
@@ -335,7 +336,7 @@ class Activos extends Component
     // Bienes
     // ---------------------------------------------------------
     public function buscar_bienes(){
-        $this->modal_abierto_bienes_buscar = true;
+        $this->modal_abierto_bienes = true;
     }
     public function agregar_bienes(Tbl_biene $ibienInformatico){
 
@@ -361,10 +362,10 @@ class Activos extends Component
         $this->ip_impresora03 = $ibienInformatico->ip_impresora03;
         $this->observacion = $ibienInformatico->observacion;
 
-        $this->modal_abierto_bienes_buscar = false;
+        $this->modal_abierto_bienes = false;
     }
     public function cerrar_bienes(){
-        $this->modal_abierto_bienes_buscar = false;
+        $this->modal_abierto_bienes = false;
     }
 
     // Imagen
