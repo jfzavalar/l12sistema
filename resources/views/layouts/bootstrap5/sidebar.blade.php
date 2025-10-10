@@ -54,14 +54,14 @@
                     ADMINISTRACIÓN
                 </h6>
 
-                <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2" href="#">
-                        <svg class="bi" aria-hidden="true">
-                            <use xlink:href="#graph-up"></use>
-                        </svg>
-                        Reports
-                    </a>
-                </li>
+                @can('procesos.administracion.patrimonio.index')
+                    <li class="nav-item ms-4">
+                        <a class="nav-link {{ request()->routeIs('procesos.administracion.patrimonio.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.administracion.patrimonio.index') }}">
+                            <i class="fa-solid fa-boxes-stacked"></i> Patrimonio
+                        </a>
+                    </li>
+                @endcan
+
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-2" href="#">
                         <svg class="bi" aria-hidden="true">

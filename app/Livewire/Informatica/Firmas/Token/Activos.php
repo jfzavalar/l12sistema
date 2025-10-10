@@ -31,6 +31,7 @@ class Activos extends Component
     public $modal_abierto_imagen = false;
     public $modal_abierto_personal = false;
     public $modal_abierto_pdf_cargar = false;
+    public $modal_abierto_pdf_imprimir = false;
     
 
     public $id_token,$codtoken,$operativo,$asignacion,$actaruta,$fecha_expiracion,$observacion,$created_user,$updated_user,$activo;
@@ -285,6 +286,10 @@ class Activos extends Component
 
     // PDF
     // ---------------------------------------------------------
+
+    public function imprimirPDF(){
+        $this->modal_abierto_pdf_imprimir = true;
+    }
 
     public function cargarPDF1(Tbl_tokens_asignado $instanciaTbl){
         $this->modal_abierto_pdf_cargar = true;

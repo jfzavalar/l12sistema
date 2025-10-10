@@ -1,0 +1,15 @@
+.btn-xs {
+    --bs-btn-padding-y: .25rem !important;
+    --bs-btn-padding-x: .5rem !important;
+    --bs-btn-font-size: .75rem !important;
+}
+
+.form-control-xs {
+    padding: .25rem .5rem;   /* arriba/abajo - izquierda/derecha */
+    font-size: .75rem;       /* tamaño de letra */
+}
+
+.form-select-xs {
+    padding: .25rem .5rem;   /* arriba/abajo - izquierda/derecha */
+    font-size: .75rem;       /* tamaño de letra */
+}

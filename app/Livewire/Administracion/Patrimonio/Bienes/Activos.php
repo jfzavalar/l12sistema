@@ -1,21 +1,19 @@
 <?php
 
-namespace App\Livewire\Dashboard;
+namespace App\Livewire\Administracion\Patrimonio\Bienes;
 
 use Livewire\Component;
 
-class Inicio extends Component
+class Activos extends Component
 {
     public $modal_header_titulo = 'nuevo';
     public $modal_header_color = 'primary-subtle';
     public $btn_guardar_actualizar = 'guardar';
     public $btn_guardar_actualizar_color = 'primary';
 
-    // Variables de tabla
-
     public function render()
     {
-        return view('livewire.dashboard.inicio');
+        return view('livewire.administracion.patrimonio.bienes.activos');
     }
 
     public function nuevo(){

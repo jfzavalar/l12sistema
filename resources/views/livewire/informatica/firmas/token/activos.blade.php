@@ -225,9 +225,9 @@
                     <div class="modal-header bg-{{ $modal_header_color }}">
                         <h1 class="modal-title fs-5" id="NuevoEditarModalLabel">
                             @if ($modal_header_titulo === "nuevo")
-                                <i class="fa-solid fa-file"></i> NUEVO
+                                <i class="fa-solid fa-file"></i> NUEVO - TOKEN
                             @else
-                                <i class="fa-solid fa-pen-to-square"></i> EDITAR
+                                <i class="fa-solid fa-pen-to-square"></i> EDITAR - TOKEN
                             @endif
                         </h1>
                         <button type="button" class="btn-close" wire:click="cerrar"></button>
@@ -253,12 +253,12 @@
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Detalles de firma token</legend>
                                     <div class="row">
                                         <div class="col-lg-6 col-sm-12">
-                                            <label class="form-label fw-bold fs-6">Fecha Expiración</label>
-                                            <input type="date" class="form-control" wire:model="fecha_expiracion">
+                                            <label for="txt_fecha_expiracion_token" class="form-label fw-bold fs-6">Fecha Expiración</label>
+                                            <input type="date" id="txt_fecha_expiracion_token" class="form-control" wire:model="fecha_expiracion">
                                         </div>
                                         <div class="col-lg-6 col-sm-12">
-                                            <label class="form-label fw-bold fs-6">Observación</label>
-                                            <input type="text" class="form-control" wire:model="observacion">
+                                            <label for="txt_observacion_token" class="form-label fw-bold fs-6">Observación</label>
+                                            <input type="text" id="txt_observacion_token" class="form-control" wire:model="observacion">
                                         </div>
                                     </div>
                                 </fieldset>
@@ -283,7 +283,7 @@
     </div>
 
     <!-- Modal historial -->
-    <div class="modal fade @if($modal_abierto_historial_token) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
+    <div class="modal fade @if($modal_abierto_historial_token) show d-block @endif" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <form action="">
@@ -330,9 +330,12 @@
                                             <td>
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                     <div class="btn-group" role="group">
-                                                        {{-- <a type="button" href="{{ route('pdf.informatica.token-acta', $historial->id) }}" target="_blank" class="btn btn-outline-dark btn-sm">
+                                                        <a type="button" href="{{ route('pdf.informatica.token-acta', $historial->id) }}" target="_blank" class="btn btn-outline-dark btn-xs">
                                                             <i class="fa-solid fa-print"></i><br>Acta
-                                                        </a> --}}
+                                                        </a>
+                                                        {{-- <button type="button" class="btn btn-outline-dark" wire:click="imprimirPDF({{ $historial->id }})">
+                                                            <i class="fa-solid fa-print"></i>
+                                                        </button> --}}
                                                         @can('procesos.informatica.tokens.edit')
                                                             <button type="button" class="btn btn-outline-success btn-xs" wire:click="cargarPDF1({{ $historial->id }})" data-bs-toggle="modal" data-bs-target="#pdf-cargar-Modal">
                                                                 <i class="fa-solid fa-file-pdf"></i><br>CargarPDF
@@ -379,4 +382,13 @@
     @include('livewire.partials.personal-modal-buscar')
 
     @include('livewire.partials.pdf-modal-cargar')
+
+    <!-- Modal historial -->
+    <div class="modal fade @if($modal_abierto_pdf_imprimir) show d-block @endif" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                vdfvdfvfdvdf
+            </div>
+        </div>
+    </div>
 </div>
