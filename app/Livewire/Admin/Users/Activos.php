@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Users;
 
+use App\Models\Tbl_personale;
 use App\Models\Tbl_sede;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -23,9 +24,11 @@ class Activos extends Component
     public $modal_header_color = 'primary-subtle';
     public $btn_guardar_actualizar = 'guardar';
     public $btn_guardar_actualizar_color = 'primary';
+    public $fieldset_disable = 'disable';
 
     // Variables de Modal
     public $modal_abierto_personal = false;
+    public $modal_abierto_personal_buscar = false;
     public $modal_abierto_imagen = false;
 
     //Buscar
@@ -33,10 +36,37 @@ class Activos extends Component
     public function updatingSearcha(){
         $this->resetPage();
     }
+    public $searchpersonal;
+    public function updatingSearchpersonal(){
+        $this->resetPage();
+    }
 
     // Variables de tabla
-    public $dni,$datos,$codsede,$sede,$coddependencia,$dependencia,$regimen,$cargo,$correo_personal,$correo_institucional,$cel_personal,$cel_institucional,$observacion,$avatar,$activo,$created_user,$updated_user;
-    public $ip_equipo;
+    public $id_usuario,
+        $dni,
+        $datos,
+
+        $codsede_origen,
+        $sede_origen,
+        $coddependencia_origen,
+        $dependencia_origen,
+
+        $codsede_destino,
+        $sede_destino,
+        $coddependencia_destino,
+        $dependencia_destino,
+
+        $regimen,
+        $cargo,
+        $correo_personal,
+        $correo_institucional,
+        $cel_personal,
+        $cel_institucional,
+        $observacion,
+        $avatar,
+        $activo,
+        $created_user,
+        $updated_user;
 
     public function render()
     {
@@ -58,16 +88,19 @@ class Activos extends Component
             
         $lista_dependencias = Tbl_sede::select('coddepofi','nomdepofi')
             ->where('activo','1')
-            ->when($this->codsede, function($query, $codsede) {
-                $query->where('codsedeofi', $codsede);
-            })
+            ->where('codsedeofi',$this->codsede_destino)
             ->distinct()
             ->orderBy('nomdepofi')
             ->get();
 
+        $lista_personal = Tbl_personale::where('activo','1')
+            ->where('dni','like','%' .$this->searchpersonal .'%')
+            ->orwhere('datos','like','%' .$this->searchpersonal .'%')
+            ->paginate(5);
+
         return view('livewire.admin.users.activos',
                 compact('lista_activos',
-                'lista_sedes','lista_dependencias')
+                'lista_sedes','lista_dependencias','lista_personal')
             );
     }
 
@@ -85,36 +118,93 @@ class Activos extends Component
     }
 
 
-    public function editar(User $iusuario){
+    public function editar(User $iEditar){
         $this->modal_abierto_personal = true;
 
         $this->modal_header_titulo = 'editar';
         $this->modal_header_color = 'success-subtle';
         $this->btn_guardar_actualizar = 'actualizar';
         $this->btn_guardar_actualizar_color = 'success';
+        $this->fieldset_disable = '';
 
-        // Llenado de variables
+        // Datos
+        $this->id_usuario = $iEditar->id;
+        $this->dni = $iEditar->dni;
+        $this->datos = $iEditar->datos;
 
-        $this->dni = $iusuario->dni;
-        $this->datos = $iusuario->datos;
-        $this->codsede = $iusuario->codsede;
-        $this->sede = $iusuario->sede;
-        $this->coddependencia = $iusuario->coddependencia;
-        $this->dependencia = $iusuario->dependencia;
-        $this->regimen = $iusuario->regimen;
-        $this->cargo = $iusuario->cargo;
-        $this->correo_personal = $iusuario->correo_personal;
-        $this->correo_institucional = $iusuario->correo_institucional;
-        $this->avatar = $iusuario->avatar;
-        $this->activo = $iusuario->activo;
-        $this->created_user = $iusuario->created_user;
-        $this->updated_user = $iusuario->updated_user;
+        // Origen
+        $this->codsede_origen = $iEditar->codsede_origen;
+        $this->sede_origen = $iEditar->sede_origen;
+        $this->coddependencia_origen = $iEditar->coddependencia_origen;
+        $this->dependencia_origen = $iEditar->dependencia_origen;
 
-        // Captura la IP del cliente
-        $this->ip_equipo = request()->ip();
+        // Destino
+        $this->codsede_destino = $iEditar->codsede_destino;
+        $this->sede_destino = $iEditar->sede_destino;
+        $this->coddependencia_destino = $iEditar->coddependencia_destino;
+        $this->dependencia_destino = $iEditar->dependencia_destino;
+
+        // Otros campos
+        $this->regimen = $iEditar->regimen;
+        $this->cargo = $iEditar->cargo;
+        $this->cel_personal = $iEditar->cel_personal;
+        $this->correo_personal = $iEditar->correo_personal;
+        $this->cel_institucional = $iEditar->cel_institucional;
+        $this->correo_institucional = $iEditar->correo_institucional;
+        $this->avatar = $iEditar->avatar;
+        $this->activo = $iEditar->activo;
+        $this->created_user = $iEditar->created_user;
+        $this->updated_user = $iEditar->updated_user;
     }
 
     public function actualizar(){
+        $iActualizar = User::where('dni', $this->dni)->firstOrFail();
+
+        try {
+            $iActualizar->update([            
+                'dni' => $this->dni,
+                'datos' => $this->datos,
+
+                'codsede_origen' => $this->codsede_origen,
+                'sede_origen' => $this->sede_origen,
+                'coddependencia_origen' => $this->coddependencia_origen,
+                'dependencia_origen' => $this->dependencia_origen,
+
+                'codsede_destino' => $this->codsede_destino,
+                'sede_destino' => $this->sede_destino,
+                'coddependencia_destino' => $this->coddependencia_destino,
+                'dependencia_destino' => $this->dependencia_destino,
+
+                'regimen' => $this->regimen,
+                'cargo' => $this->cargo,
+                'cel_personal' => $this->cel_personal,
+                'correo_personal' => $this->correo_personal,
+                'cel_institucional' => $this->cel_institucional,
+                'correo_institucional' => $this->correo_institucional,
+                'avatar' => $this->avatar,
+                'activo' => $this->activo,
+                
+                'created_user' => $this->created_user,
+                'updated_user' => $this->updated_user,
+            ]);
+
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error al desactivar el usuario: ' . $e->getMessage());
+        }        
+
+        // Reiniciamos todas la variable excepto:
+        $this->resetExcept('searcha');
+        
+        // Cerramos modal
+        $this->modal_abierto_personal = false;
+
+        // Emitimos un evento para mostrar el SweetAlert
+        $this->dispatch(
+            'alerta-actualizado',
+            titulo: 'Datos actualizado',
+            mensaje: 'Los datos se han guardado correctamente.',
+            tipo: 'success' // success | error | warning | info
+        );
         
     }
 
@@ -137,9 +227,8 @@ class Activos extends Component
     public function cerrar(){
         $this->modal_abierto_personal = false;
 
-        // Variable de entorno
-        $this->reset(['modal_header_titulo','modal_header_color','btn_guardar_actualizar','btn_guardar_actualizar_color',
-                        'dni','datos','codsede','sede','coddependencia','dependencia','regimen','cargo','correo_personal','correo_institucional','cel_personal','cel_institucional','observacion','avatar','activo','created_user','updated_user']);
+        // Reiniciamos todas la variable excepto:
+        $this->resetExcept('searcha');
     }
 
     public function editar_imagen(){
@@ -151,5 +240,42 @@ class Activos extends Component
 
         // Variable de entorno
         $this->reset(['avatar']);
+    }
+
+    // PERSONAL
+    // ---------------------------------------------------------
+    public function buscar_personal(){
+        $this->modal_abierto_personal_buscar = true;
+    }
+
+    public function agregar_personal(Tbl_personale $ipersonal){
+        $this->id_usuario = $ipersonal->id;
+        $this->dni = $ipersonal->dni;
+        $this->datos = $ipersonal->datos;
+
+        $this->codsede_origen = $ipersonal->codsede_origen;
+        $this->sede_origen = $ipersonal->sede;
+        $this->coddependencia_origen = $ipersonal->coddependencia_origen;
+        $this->dependencia_origen = $ipersonal->dependencia;
+
+        $this->codsede_destino = $ipersonal->codsede_destino;
+        $this->sede_destino = $ipersonal->sede_destino;
+        $this->coddependencia_destino = $ipersonal->coddependencia_destino;
+        $this->dependencia_destino = $ipersonal->depencia_destino;
+
+        $this->regimen = $ipersonal->regimen;
+        $this->cargo = $ipersonal->cargo;
+        $this->correo_personal = $ipersonal->correo_personal;
+        $this->correo_institucional = $ipersonal->correo_institucional;
+        $this->cel_personal = $ipersonal->cel_personal;
+        $this->cel_institucional = $ipersonal->cel_institucional;
+
+        $this->reset('searchpersonal');
+
+        $this->modal_abierto_personal_buscar = false;
+    }
+
+    public function cerrar_personal(){
+        $this->modal_abierto_personal_buscar = false;
     }
 }

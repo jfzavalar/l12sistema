@@ -4,7 +4,7 @@
         <div class="col-xl-12 col-sm-12">
             <label for="txt_dni" class="fw-bold fs-6">DNI</label>
             <div class="input-group">
-                <button type="button" class="btn btn-secondary btn-sm" wire:click="buscar_personal">
+                <button type="button" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-sm" wire:click="buscar_personal">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
                 <input type="text" id="txt_dni" class="form-control form-control-sm" wire:model="dni">

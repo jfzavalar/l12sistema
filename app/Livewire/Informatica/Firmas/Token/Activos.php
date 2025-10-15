@@ -35,12 +35,12 @@ class Activos extends Component
     
 
     public $id_token,$codtoken,$operativo,$asignacion,$actaruta,$fecha_expiracion,$observacion,$created_user,$updated_user,$activo;
-    public $idpersonal,$dni,$datos,$sede,$dependencia,$despacho,$regimen,$cargo,$correo_personal,$correo_institucional,$cel_personal,$cel_institucional;
+    public $idpersonal,$dni,$datos,$sede_destino,$dependencia_destino,$despacho,$regimen,$cargo,$correo_personal,$correo_institucional,$cel_personal,$cel_institucional;
     public $pdf;
     public $filtro_asignados, $filtro_usuarios, $filtro_rutas;
 
     public $avatar;
-    public $codsede,$coddependencia;
+    public $codsede_destino,$coddependencia_destino;
 
     //Buscar
     public $searcha;
@@ -111,16 +111,19 @@ class Activos extends Component
             
         $lista_dependencias = Tbl_sede::select('coddepofi','nomdepofi')
             ->where('activo','1')
-            ->when($this->codsede, function($query, $codsede) {
-                $query->where('codsedeofi', $codsede);
-            })
+            ->where('codsedeofi',$this->codsede_destino)
             ->distinct()
             ->orderBy('nomdepofi')
             ->get();
 
         $lista_personal = Tbl_personale::where('activo','1')
-            ->where('dni','like','%' .$this->searchpersonal .'%')
-            ->orwhere('datos','like','%' .$this->searchpersonal .'%')
+            ->when($this->searchpersonal !== '', function ($query) {
+                $query->where(function ($q) {
+                    $q->where('dni', 'like', '%' . $this->searchpersonal . '%')
+                    ->orWhere('datos', 'like', '%' . $this->searchpersonal . '%');
+                });
+            })
+            ->orderBy('datos')
             ->paginate(10);
 
         return view('livewire.informatica.firmas.token.activos',
@@ -207,8 +210,8 @@ class Activos extends Component
         $this->id_token = $instanciaTbl->id;
         $this->dni = $instanciaTbl->dni;
         $this->datos = $instanciaTbl->datos;
-        $this->sede = $instanciaTbl->sede;
-        $this->dependencia = $instanciaTbl->dependencia;
+        $this->sede_destino = $instanciaTbl->sede_destino;
+        $this->dependencia_destino = $instanciaTbl->dependencia_destino;
         $this->regimen = $instanciaTbl->regimen;
         $this->cargo = $instanciaTbl->cargo;
         $this->correo_personal = $instanciaTbl->correo_personal;

@@ -1,9 +1,9 @@
 <!-- Modal Cargar PDF -->
 <div class="modal fade @if($modal_abierto_pdf_cargar) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form wire:submit.prevent="cargarPDF2">
-                <div class="modal-header bg-secondary-subtle">
+                <div class="modal-header bg-warning-subtle">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">
                         <i class="fa-solid fa-file-pdf"></i> CARGAR PDF
                     </h1>

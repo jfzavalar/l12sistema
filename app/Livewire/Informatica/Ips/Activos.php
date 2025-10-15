@@ -29,6 +29,7 @@ class Activos extends Component
 
     // Variables de Modal
     public $modal_abierto_personal = false;
+    public $modal_abierto_personal_buscar = false;
     public $modal_abierto_bienes = false;
     public $modal_abierto_imagen = false;
 

@@ -40,7 +40,7 @@ class Activos extends Component
     public $filtro_asignados, $filtro_usuarios, $filtro_rutas;
 
     public $avatar;
-    public $codsede,$coddependencia;
+    public $codsede_destino,$coddependencia_destino;
 
     //Buscar
     public $searcha2;
@@ -79,9 +79,7 @@ class Activos extends Component
             
         $lista_dependencias = Tbl_sede::select('coddepofi','nomdepofi')
             ->where('activo','1')
-            ->when($this->codsede, function($query, $codsede) {
-                $query->where('codsedeofi', $codsede);
-            })
+            ->where('codsedeofi',$this->codsede_destino)
             ->distinct()
             ->orderBy('nomdepofi')
             ->get();

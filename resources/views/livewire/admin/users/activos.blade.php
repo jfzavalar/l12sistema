@@ -123,8 +123,7 @@
 
     <!-- Modal Nuevo-Editar-->
     <div class="modal fade @if($modal_abierto_personal) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
-        {{-- <div class="modal-dialog modal-xl" style="max-width:90%;"> --}}
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-xl" style="max-width:90%;">
             <div class="modal-content">
                 <form wire:submit.prevent="{{ $btn_guardar_actualizar }}">
                     <div class="modal-header bg-{{ $modal_header_color }}">
@@ -175,7 +174,11 @@
             </div>
         </div>
     </div>
+
     @include('livewire.partials.personal-modal-foto')
+    
+    @include('livewire.partials.personal-modal-buscar')
+
 </div>
 
 

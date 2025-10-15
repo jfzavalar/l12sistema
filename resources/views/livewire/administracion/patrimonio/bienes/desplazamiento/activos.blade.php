@@ -4,7 +4,7 @@
         <div class="card-body">
             <div class="table-responsive small">
                 <div class="input-group mb-3">
-                    <input type="text" id="txtsearcha" class="form-control form-control-sm" placeholder="Buscar...">
+                    <input type="text" id="txtsearcha2" class="form-control form-control-sm" wire:model.live="searcha2" placeholder="Buscar por código patrimonial">
                     <button type="button" id="btnnuevo" class="btn btn-outline-primary btn-sm" wire:click="nuevo">
                         <i class="fa-solid fa-file"></i> Nuevo
                     </button>
@@ -50,13 +50,24 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <div class="btn-group" role="group">
-
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <button class="btn btn-outline-info" type="button" wire:click="ver({{ $item2->id }})">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-outline-dark" type="button" wire:click="imprimir({{ $item2->id }})">
+                                            <i class="fa-solid fa-print"></i>
+                                        </button>
+                                        <button class="btn btn-outline-warning" type="button" wire:click="cargarPDF1({{ $item2->id }})">
+                                            <i class="fa-solid fa-upload"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger" type="button">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                        <div class="btn-group" role="group">  
+                                        {{-- <div class="btn-group" role="group">  
                                             <button type="button" class="btn btn-outline-dark dropdown-toggle btn-xs me-2" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class="fa-solid fa-list"></i> Acciones
                                             </button>
@@ -88,7 +99,7 @@
                                                     <i class="fa-solid fa-file-pdf"></i>
                                                 </a>
                                             @endif
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </td>
                             </tr>
@@ -109,7 +120,7 @@
 
     <!-- Modal Nuevo-Editar-->
     <div class="modal fade @if($modal_abierto_bien_desplazamiento) show d-block @endif" tabindex="-1">
-        <div class="modal-dialog modal-xl" style="max-width:90%;">>
+        <div class="modal-dialog modal-xl" style="max-width:90%;">
             <div class="modal-content">
                 <form wire:submit.prevent={{ $btn_guardar_actualizar }}>
                     <div class="modal-header bg-{{ $modal_header_color }}">
@@ -336,8 +347,88 @@
         </div>
     </div>
 
+    <!-- MODAL DETALLE REGISTRO-->
+    <div class="modal fade @if($modal_abierto_bien_desplazamiento_detalle) show d-block @endif" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                {{-- <form wire:submit.prevent={{ $guardar_actualizar }}> --}}
+                    <div class="modal-header bg-secondary-subtle">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">
+                            <i class="fa-solid fa-bars"></i> DETALLE DE BIENES TRANSFERIDOS
+                        </h1>
+                        <button type="button" class="btn-close" wire:click="cerrar" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover table-sm small">
+                                <thead class="table-dark align-middle">
+                                    <tr class="text-center">
+                                        {{-- <th scope="col">#</th> --}}
+                                        <th scope="col"># ACTA</th>
+                                        <th scope="col">CÓDIGO DE BARRAS</th>
+                                        <th scope="col">CÓDIGO MARGESI</th>
+                                        <th scope="col">DESCRIPCIÓN</th>
+                                        <th scope="col">MARCA</th>
+                                        <th scope="col">MODELO</th>
+                                        <th scope="col">SERIE</th>
+                                        <th scope="col">COLOR</th>
+                                        <th scope="col">ESTADO</th>
+                                        <th scope="col">TRASLADO</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($lista_desplazamientos_detalle as $activo_detalle)
+                                        <tr>
+                                            {{-- <th scope="row">{{ $loop->iteration }}</th> --}}
+                                            <th scope="row">{{ $activo_detalle->id_biendesplazamiento }}</th>
+                                            <td>{{ $activo_detalle->cod_patrimonial }}</td>
+                                            <td>{{ $activo_detalle->cod_barra }}</td>
+                                            <td>{{ $activo_detalle->bien}}</td>
+                                            <td>{{ $activo_detalle->marca}}</td>
+                                            <td>{{ $activo_detalle->modelo}}</td>
+                                            <td>{{ $activo_detalle->serie}}</td>
+                                            <td>{{ $activo_detalle->color}}</td>
+                                            <td>{{ $activo_detalle->est_cons}}</td>
+                                            <td>
+                                                @if ($activo_detalle->traslado == "TRASLADADO")
+                                                    <h6><span class="badge bg-danger-subtle text-danger">TRASLADADO</span></h6>
+                                                @else
+                                                    <h6><span class="badge bg-success-subtle text-success">DEVUELTO</span></h6>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <div class="alert alert-danger" role="alert">
+                                            No existen registros
+                                        </div>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{-- <button type="submit" class="btn {{ $color_boton }}">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            <br>Guardar
+                        </button> --}}
+                        <button type="button" class="btn btn-outline-secondary" wire:click="cerrar">
+                            <i class="fa-solid fa-door-closed"></i>
+                            Cerrar
+                        </button>
+                    </div>
+                {{-- </form> --}}
+            </div>
+        </div>
+    </div>
+
     @include('livewire.partials.personal-modal-buscar')
     @include('livewire.partials.bienes-modal-buscar')
+    @include('livewire.partials.pdf-modal-cargar')
+    @include('livewire.partials.pdf-modal-vista-previa')
 
 </div>
 

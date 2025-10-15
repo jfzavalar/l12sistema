@@ -19,7 +19,7 @@ class PatrimonioController extends Controller
         $instanciaTbl = Tbl_patrimonio_bienes_desplazamiento::findOrFail($id);
         
         $instanciaTbl_detalle = DB::table('tbl_patrimonio_bienes_desplazamientos_detalles as d')
-            ->join('tbl_patrimonio_bienes as b', 'b.cod_patrimonial', '=', 'd.cod_patrimonial')
+            ->join('tbl_bienes as b', 'b.cod_pat', '=', 'd.cod_patrimonial')
             ->select(
                 'd.id',
                 'd.id_biendesplazamiento',
@@ -29,18 +29,18 @@ class PatrimonioController extends Controller
                 'd.created_user',
                 'd.updated_user',
                 'b.cod_barra',
-                'b.desc_bien',
-                'b.desc_marca',
+                'b.bien',
+                'b.marca',
                 'b.modelo',
-                'b.nro_serie',
-                'b.desc_color',
-                'b.des_estado_conservacion'
+                'b.serie',
+                'b.color',
+                'b.est_cons'
             )
             ->where('d.activo', '1')
             ->where('d.id_biendesplazamiento', $id)
             ->get();
 
-        $pdf = Pdf::loadView('pdf.patrimonio.bieninformatico-traslado-acta', compact('instanciaTbl','instanciaTbl_detalle'));
+        $pdf = Pdf::loadView('pdf.patrimonio.desplazamiento-bienes-acta', compact('instanciaTbl','instanciaTbl_detalle'));
 
         //Mostrar PDF
         return $pdf->stream('traslado_'.$instanciaTbl->id.'.pdf');

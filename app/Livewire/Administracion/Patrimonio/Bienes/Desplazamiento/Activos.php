@@ -28,13 +28,20 @@ class Activos extends Component
 
     // Variables de Modal
     public $modal_abierto_bien_desplazamiento = false;
-    public $modal_abierto_personal = false;
+    Public $modal_abierto_bien_desplazamiento_detalle = false;
+    public $modal_abierto_personal_buscar = false;
     public $modal_abierto_imagen = false;
     public $modal_abierto_bienes = false;
+    public $modal_abierto_pdf_cargar = false; 
+    public $modal_abierto_pdf_vista_previa = false;
 
     //Buscar
-    public $searcha;
-    public function updatingSearcha(){
+    // public $searcha;
+    // public function updatingSearcha(){
+    //     $this->resetPage();
+    // }
+    public $searcha2;
+    public function updatingSearcha2(){
         $this->resetPage();
     }
     public $searchpersonal;
@@ -51,7 +58,7 @@ class Activos extends Component
     }
 
 
-    public $idindex;
+    public $id_index;
     public $solicitante_traslado;
 
     // Variables de tabla
@@ -104,9 +111,13 @@ class Activos extends Component
     public $iddesplazamiento,
         $solicitante,
         $responsabletraslado,
+        $codsede_origen,
         $sede_origen,
+        $coddependencia_origen,
         $dependencia_origen,
+        $codsede_destino,
         $sede_destino,
+        $coddependencia_destino,
         $dependencia_destino,
         $motivo_traslado,
         $tipotraslado,
@@ -161,8 +172,30 @@ class Activos extends Component
                 'created_user',
                 'updated_user')
             ->where('activo','1')
-            ->where('lista_equipos_traslado','like','%' . $this->searcha . '%')
+            ->where('lista_equipos_traslado','like','%' . $this->searcha2 . '%')
             ->orderBy('id','desc')
+            ->paginate(30);
+
+        $lista_desplazamientos_detalle = DB::table('tbl_patrimonio_bienes_desplazamientos_detalles as d')
+            ->join('tbl_bienes as b', 'b.cod_pat', '=', 'd.cod_patrimonial')
+            ->select(
+                'd.id',
+                'd.id_biendesplazamiento',
+                'd.cod_patrimonial',
+                'd.traslado',
+                'd.activo',
+                'd.created_user',
+                'd.updated_user',
+                'b.cod_barra',
+                'b.bien',
+                'b.marca',
+                'b.modelo',
+                'b.serie',
+                'b.color',
+                'b.est_cons'
+            )
+            ->where('d.activo', '1')
+            ->where('d.id_biendesplazamiento', $this->iddesplazamiento)
             ->paginate(30);
 
         $lista_personal = Tbl_personale::where('Activo','1')
@@ -205,7 +238,7 @@ class Activos extends Component
             ->get();
         
         return view('livewire.administracion.patrimonio.bienes.desplazamiento.activos',
-                    compact('lista_activos','lista_personal','lista_cargo','lista_bienes',
+                    compact('lista_activos','lista_desplazamientos_detalle','lista_personal','lista_cargo','lista_bienes',
                         'lista_sedes','lista_dependencias','lista_dependencias2')
                 );
     }
@@ -275,6 +308,8 @@ class Activos extends Component
                     $ibien->update([
                         'desplazamiento' => $this->traslado === "TRASLADADO" ? "1" : "0",
                     ]);
+                } else {
+                    dd('No se encontró el bien con código:', $temp['cod_patrimonial']);
                 }
             }
         });
@@ -297,6 +332,16 @@ class Activos extends Component
         
     }
 
+    public function ver(Tbl_patrimonio_bienes_desplazamiento $instanciaTbl){
+        $this->modal_abierto_bien_desplazamiento_detalle = true;
+        $this->iddesplazamiento = $instanciaTbl->id;
+    }
+
+    public function imprimir(Tbl_patrimonio_bienes_desplazamiento $instanciaTbl){
+        $this->modal_abierto_pdf_vista_previa = true;
+
+        $this->iddesplazamiento = $instanciaTbl->id;
+    }
     public function cerrar(){
 
         $this->reset([
@@ -313,6 +358,8 @@ class Activos extends Component
         ]);
 
         $this->modal_abierto_bien_desplazamiento = false;
+        $this->modal_abierto_bien_desplazamiento_detalle = false;
+        $this->modal_abierto_pdf_vista_previa = false;
     }
 
     // ---- PROCESOS TIPO DE OPERACION ----
@@ -403,7 +450,7 @@ class Activos extends Component
     // PERSONAL
     // ---------------------------------------------------------
     public function buscar_personal($campo){
-        $this->modal_abierto_personal = true;
+        $this->modal_abierto_personal_buscar = true;
 
         $this->solicitante_traslado= $campo;
     }
@@ -443,13 +490,13 @@ class Activos extends Component
             $this->activo_personal2 = $ipersonal->activo;
         }
 
-        $this->modal_abierto_personal = false;
+        $this->modal_abierto_personal_buscar = false;
 
         $this->reset('searchpersonal');
     }
 
     public function cerrar_personal(){
-        $this->modal_abierto_personal = false;
+        $this->modal_abierto_personal_buscar = false;
     }
 
     // ---- PROCESOS MODAL BUSCAR CARGO ----
@@ -491,7 +538,9 @@ class Activos extends Component
 
     // ---- PROCESOS MODAL CARGAR PDF ----
     public function cargarPDF1(Tbl_patrimonio_bienes_desplazamiento $instanciaTbl){
-        $this->idindex = $instanciaTbl->id;
+        $this->modal_abierto_pdf_cargar = true;
+
+        $this->id_index = $instanciaTbl->id;
         $this->dni = $instanciaTbl->dni_solicitante;
         $this->dni2 = $instanciaTbl->dni_responsabletraslado;
         // $this->asignacion = $instanciaTbl->asignacion;
@@ -500,34 +549,41 @@ class Activos extends Component
     }
 
     public function cargarPDF2(){
-        $this->validate([
+
+       $this->validate([
             'pdf' => 'required|mimes:pdf|max:4096', // Máx. 4MB
         ]);
 
         // Generar un nombre personalizado con timestamp
-        $fileName = 'acta_' . $this->idindex . '_' . $this->dni . '_' . $this->dni2 . '.' . $this->pdf->getClientOriginalExtension();
+        $fileName = 'solicitante_' . $this->dni . '_traslado_' . $this->dni2 . '.' . $this->pdf->getClientOriginalExtension();
 
-        // Guardar en la carpeta storage/app/public/pdfs
-        $path = $this->pdf->storeAs('public/archivos/patrimonio/actastrasladobi', $fileName);
+        $path = $this->pdf->storeAs('archivos/patrimonio/actasdesplazamientobienes', $fileName, 'public');
 
-        //guardar ruta del archivo
-        // dd($this->idindex);
-        $instanciaTbl = Tbl_patrimonio_bienes_desplazamiento::findOrFail($this->idindex);
+        $instanciaTbl = Tbl_patrimonio_bienes_desplazamiento::findOrFail($this->id_index);
 
         $instanciaTbl->update([
-            'actaruta' => str_replace( 'public/','storage/',$path),
-
+            'actaruta' => 'storage/archivos/patrimonio/actasdesplazamientobienes/' . $fileName,
             'updated_user' => auth()->user()->datos,
         ]);
 
         // Limpia el archivo de la propiedad Livewire si lo deseas
-        // $this->reset('pdf');
-        $this->dispatchBrowserEvent('reset-pdf-input');
+        $this->reset('pdf');
 
         // Cerrar el modal en el navegador
-        $this->dispatchBrowserEvent('cerrar-modal-pdf');
+        $this->modal_abierto_pdf_cargar = false;
 
-        // Opcional: mostrar un mensaje flash
-        session()->flash('message', 'PDF cargado correctamente.');
+        // Emitimos un evento para mostrar el SweetAlert
+        $this->dispatch(
+            'alerta-actualizado',
+            titulo: 'PDF actualizado',
+            mensaje: 'Los datos se han guardado correctamente.',
+            tipo: 'success' // success | error | warning | info
+        );
+
+        $this->modal_abierto_pdf_cargar = false; 
+    }
+
+    public function cerrar_PDF(){
+        $this->modal_abierto_pdf_cargar = false; 
     }
 }

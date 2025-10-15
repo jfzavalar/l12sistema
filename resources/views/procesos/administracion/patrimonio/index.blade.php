@@ -5,36 +5,29 @@
 @section('content')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
-            <i class="fa-solid fa-signature"></i> Patrimonio
+            <i class="fa-solid fa-boxes-stacked"></i> Patrimonio
         </h1>
-        <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-group me-2">
-                <button type="button" class="btn btn-sm btn-outline-secondary">
-                    <i class="fa-solid fa-house"></i>
-                </button>
-            </div>
-            <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
-                <svg class="bi" aria-hidden="true">
-                <use xlink:href="#calendar3"></use>
-                </svg>
-                This week
-            </button>
+        <div class="btn-group">
+            @include('layouts.bootstrap5.btnlogin')
         </div>
     </div>
 
     <nav>
         <div class="nav nav-tabs mb-2" id="nav-tab" role="tablist">
-            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">
-                <i class="fa-brands fa-usb"></i> Bienes
+            <button class="nav-link active" id="bienes-tab" data-bs-toggle="tab" data-bs-target="#bienes" type="button" role="tab" aria-controls="bienes" aria-selected="true">
+                <i class="fa-solid fa-layer-group"></i> Bienes
             </button>
-            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">
-                <i class="fa-solid fa-computer"></i> Desplazamiento
+            <button class="nav-link" id="asignacion-bienes-tab" data-bs-toggle="tab" data-bs-target="#asignacion-bienes" type="button" role="tab" aria-controls="asignacion-bienes" aria-selected="false">
+                <i class="fa-solid fa-people-carry-box"></i> Asignación
+            </button>
+            <button class="nav-link" id="desplazamiento-bienes-tab" data-bs-toggle="tab" data-bs-target="#desplazamiento-bienes" type="button" role="tab" aria-controls="desplazamiento-bienes" aria-selected="false">
+                <i class="fa-solid fa-people-carry-box"></i> Desplazamiento
             </button>
         </div>
     </nav>
 
     <div class="tab-content" id="nav-tabContent">
-        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+        <div class="tab-pane fade show active" id="bienes" role="tabpanel" aria-labelledby="bienes-tab" tabindex="0">
             {{-- Tramite de Tokens --}}
             <ul class="nav nav-pills mb-2" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
@@ -61,7 +54,7 @@
 
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="1-tab-pane" role="tabpanel" aria-labelledby="1-tab" tabindex="0">
-                    {{-- <livewire:administracion.patrimonio.bienes.activos /> --}}
+                    <livewire:administracion.patrimonio.bienes.activos />
                 </div>
                 <div class="tab-pane fade" id="2-tab-pane" role="tabpanel" aria-labelledby="2-tab" tabindex="0">
                     
@@ -75,7 +68,11 @@
             </div>
         </div>
 
-        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+        <div class="tab-pane fade" id="asignacion-bienes" role="tabpanel" aria-labelledby="asignacion-bienes-tab" tabindex="0">
+
+        </div>
+
+        <div class="tab-pane fade" id="desplazamiento-bienes" role="tabpanel" aria-labelledby="desplazamiento-bienes-tab" tabindex="0">
             {{-- Tramite de PCs --}}
             <ul class="nav nav-pills mb-2" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">

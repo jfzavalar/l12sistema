@@ -48,10 +48,18 @@
         
 @endsection
 
-@section('css')
-
-@stop
-
-@section('js')
-
-@stop
+@push('scripts')
+    <script>
+        // Escucha el evento que despacha el componente después de actualizar
+        Livewire.on('alerta-actualizado', (data) => {
+            Swal.fire({
+                position: "center",
+                icon: data.tipo ?? "success",
+                title: data.titulo ?? "Actualización exitosa",
+                text: data.mensaje ?? "",
+                showConfirmButton: false,
+                timer: 1800
+            });
+        });
+    </script>
+@endpush

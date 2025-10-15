@@ -27,8 +27,17 @@ class User extends Authenticatable
         //'id',
         'dni',
         'datos',
-        'sede',
-        'dependencia',
+        
+        'codsede_origen',
+        'sede_origen',
+        'coddependencia_origen',
+        'dependencia_origen',
+
+        'codsede_destino',
+        'sede_destino',
+        'coddependencia_destino',
+        'dependencia_destino',
+        
         'regimen',
         'cargo',
         'correo_personal',

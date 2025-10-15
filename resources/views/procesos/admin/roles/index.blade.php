@@ -10,7 +10,9 @@
 @section('content')
     <div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom flex-wrap">
         <h1 class="h2"><i class="fa-solid fa-users-gear"></i> ROLES Y PERMISOS</h1>
-        {{-- @include('layouts.bootstrap5.dashboard.toolbar') --}}
+        <div class="btn-group">
+            @include('layouts.bootstrap5.btnlogin')
+        </div>
     </div>
 
     <a href="{{ route('procesos.admin.roles.create') }}" class="btn btn-primary mb-3">

@@ -1,4 +1,4 @@
-<div class="modal fade @if($modal_abierto_personal) show d-block @endif" tabindex="-1">
+<div class="modal fade @if($modal_abierto_personal_buscar) show d-block @endif" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form action="">
@@ -25,10 +25,8 @@
                                     <th scope="col">#</th>
                                     <th scope="col">DNI</th>
                                     <th scope="col">DATOS</th>
+                                    <th scope="col">SEDE_ORIGEN</th>
                                     <th scope="col">SEDE</th>
-                                    <th scope="col">LOCAL</th>
-                                    <th scope="col">DEPENDENCIA</th>
-                                    <th scope="col">DESPACHO</th>
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
@@ -39,10 +37,14 @@
                                         <td>{{ $personal->id }}</td>
                                         <td>{{ $personal->dni }}</td>
                                         <td>{{ $personal->datos }}</td>
-                                        <td>{{ $personal->sede }}</td>
-                                        <td></td>
-                                        <td>{{ $personal->dependencia }}</td>
-                                        <td></td>
+                                        <td>
+                                            <b>SEDE: </b>{{ $personal->sede_origen }}
+                                            <br><b>DEPENDENCIA: </b>{{ $personal->dependencia_origen }}
+                                        </td>
+                                        <td class="text-primary">
+                                            <b>SEDE: </b>{{ $personal->sede_destino }}
+                                            <br><b>DEPENDENCIA: </b>{{ $personal->dependencia_destino }}
+                                        </td>
                                         <td>
                                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                 <div class="btn-group" role="group">

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Administracion\PatrimonioController;
+use App\Http\Controllers\Administracion\RrhhController;
 use App\Http\Controllers\Informatica\FirmasdigitalesController;
 use App\Http\Controllers\Informatica\IpsController;
 use App\Http\Controllers\RoleController;
@@ -61,6 +62,10 @@ Route::middleware(['auth','can:procesos.admin.roles.index'])->group(function () 
 Route::middleware('auth','can:procesos.administracion.patrimonio.index')->group(function () {
     Route::resource('patrimonio', PatrimonioController::class)->names('procesos.administracion.patrimonio');
     Route::get('pdf/patrimonio/bieninformatico-traslado-acta/{id}', [PatrimonioController::class, 'exportarPDF'])->name('pdf.patrimonio.bieninformatico-traslado-acta');
+});
+
+Route::middleware('auth','can:procesos.administracion.rrhh.index')->group(function () {
+    Route::resource('rrhh', RrhhController::class)->names('procesos.administracion.rrhh');
 });
 
 //INFORMATICA
