@@ -29,7 +29,7 @@ class Activos extends Component
     public $modal_abierto_firmapc = false;
     public $modal_abierto_historial_token = false;
     public $modal_abierto_imagen = false;
-    public $modal_abierto_personal = false;
+    public $modal_abierto_personal_buscar = false;
     public $modal_abierto_pdf_cargar = false;
     public $modal_abierto_pdf_imprimir = false;
     
@@ -320,7 +320,7 @@ class Activos extends Component
     // PERSONAL
     // ---------------------------------------------------------
     public function buscar_personal(){
-        $this->modal_abierto_personal = true;
+        $this->modal_abierto_personal_buscar = true;
     }
 
     public function agregar_personal(Tbl_personale $ipersonal){
@@ -338,11 +338,11 @@ class Activos extends Component
 
         $this->reset('searchpersonal');
 
-        $this->modal_abierto_personal = false;
+        $this->modal_abierto_personal_buscar = false;
     }
 
     public function cerrar_personal(){
-        $this->modal_abierto_personal = false;
+        $this->modal_abierto_personal_buscar = false;
     }
 
 }

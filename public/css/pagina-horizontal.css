@@ -1,0 +1,47 @@
+@page {
+    size: A4 landscape;
+    margin-top: 2.5cm;   /* deja espacio para el header */
+    margin-bottom: 2.5cm; /* deja espacio para el footer */
+    margin-left: 1cm;
+    margin-right: 1cm;
+}
+
+/* Header fijo */
+.header {
+    position: fixed;
+    top: -120px;
+    left: 0;
+    right: 0;
+    height: -10;
+    text-align: center;
+    font-size: 14px;
+    color: black;
+    padding-top: 10px;
+    /* background-color: #f8f8f8; opcional */
+}
+
+/* Footer fijo */
+.footer {
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    height: 0;
+    text-align: center;
+    font-size: 10px;
+    color: black;
+    /* background-color: #f8f8f8; opcional */
+}
+
+/* Contenido principal */
+.content {
+    margin-top: 0; /* el espacio ya está reservado con @page */
+    margin-bottom: 0;
+}
+
+/* Numeración de página automática (si tu motor PDF lo soporta) */
+@page {
+    @bottom-center {
+        content: "Página " counter(page) " de " counter(pages);
+    }
+}

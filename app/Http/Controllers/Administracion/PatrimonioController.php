@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Administracion;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tbl_patrimonio_bienes_desplazamiento;
+use App\Models\Tbl_personale;
+use App\Models\Tbl_personales_biene;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -41,6 +43,19 @@ class PatrimonioController extends Controller
             ->get();
 
         $pdf = Pdf::loadView('pdf.patrimonio.desplazamiento-bienes-acta', compact('instanciaTbl','instanciaTbl_detalle'));
+
+        //Mostrar PDF
+        return $pdf->stream('traslado_'.$instanciaTbl->id.'.pdf');
+    
+    }
+
+    public function exportarPDFAsignacion($vDni)
+    {
+        $instanciaTbl = Tbl_personale::where('dni', $vDni)->firstOrFail();
+        
+        $instanciaTbl_detalle = Tbl_personales_biene::where('cod_usuario', $vDni)->get();
+
+        $pdf = Pdf::loadView('pdf.patrimonio.bien-asignacion-acta', compact('instanciaTbl','instanciaTbl_detalle'));
 
         //Mostrar PDF
         return $pdf->stream('traslado_'.$instanciaTbl->id.'.pdf');

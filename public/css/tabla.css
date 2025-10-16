@@ -20,6 +20,23 @@ th, td { border: 1px solid #000; padding: 8px; text-align: left; } */
     padding: 8px;
 }
 
+/* ======= TABLA ======= */
+.tabla2 {
+    border: 0px solid black; 
+    border-collapse: collapse; 
+    width: 100%;
+}
+
+.tabla2 td {
+    border: 0px solid black;
+    font-size: 8px;
+}
+.tabla2 th{
+    background-color: rgb(209, 207, 207);
+    border: 0px solid black;
+    font-size: 8px;
+}
+
 
 /* ======= TABLA PARA FIRMA ======= */
 
@@ -82,4 +99,25 @@ th, td { border: 1px solid #000; padding: 8px; text-align: left; } */
 .tabla-datos td {
     font-size: 9px;
     border: 0.5px solid black;
+}
+
+/* ======= TABLA DATOS ======= */
+
+.tabla-datos-2 {
+    /* border: 1px solid black; */
+    border-collapse: collapse;
+    width: 100%;
+    margin-left: auto; /* empuja la tabla a la derecha */
+}
+
+.tabla-datos-2 th {
+    font-size: 9px;
+    text-align: left;
+    width: 100px;
+    /* border: 0.5px solid black; */
+}
+.tabla-datos-2 td {
+    font-size: 9px;
+    text-align: left;
+    width: 100px;
 }

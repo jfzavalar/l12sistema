@@ -126,9 +126,9 @@
                     <div class="modal-header bg-{{ $modal_header_color }}">
                         <h1 class="modal-title fs-5" id="NuevoEditarModalLabel">
                             @if ($modal_header_titulo === "nuevo")
-                                <i class="fa-solid fa-file"></i> NUEVO
+                                <i class="fa-solid fa-file"></i> NUEVO - DESPLAZAMIENTO
                             @else
-                                <i class="fa-solid fa-pen-to-square"></i> EDITAR
+                                <i class="fa-solid fa-pen-to-square"></i> EDITAR - DESPLAZAMIENTO
                             @endif
                         </h1>
                         <button type="button" class="btn-close" wire:click="cerrar" aria-label="Close"></button>

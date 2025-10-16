@@ -90,8 +90,8 @@
 
             <div class="table-responsive small">
                 <div class="input-group mb-3">
-                    <input type="text" id="txtsearcha" class="form-control form-control-sm" wire:model.live="searcha" placeholder="Buscar por DNI o Datos del Personal">
-                    <button type="button" id="btnnuevo" class="btn btn-outline-primary btn-sm" wire:click="nuevo">
+                    <input type="text" id="txtsearcha" class="form-control form-control-sm" wire:model.live="searcha" placeholder="Buscar por código patrimonial">
+                    <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" wire:click="nuevo">
                         <i class="fa-solid fa-file"></i> Nuevo
                     </button>
                 </div>
@@ -111,6 +111,8 @@
                             <th scope="col">MEDIDAS</th>
                             <th scope="col">COLOR</th>
                             <th scope="col">ESTADO</th>
+                            <th scope="col">ASIGNACIÓN</th>
+                            <th scope="col"><i class="fa-solid fa-gears"></i></th>
                             <th scope="col"><i class="fa-solid fa-gears"></i></th>
                             {{-- <th scope="col"><i class="fa-solid fa-gears"></i></th> --}}
                         </tr>
@@ -122,7 +124,7 @@
                                 <th>{{ $activo->nro_pecosa }}</th>
                                 <th>{{ $activo->clase }}</th>
                                 <td>{{ $activo->familia }}</td>
-                                <th>{{ $activo->cod_pat }}</th>
+                                <th class="text-primary">{{ $activo->cod_pat }}</th>
                                 <td>{{ $activo->cod_barra }}</td>
                                 <td>{{ $activo->bien }}</td>
                                 <td>{{ $activo->marca }}</td>
@@ -132,6 +134,24 @@
                                 <td>{{ $activo->color }}</td>
                                 <td>{{ $activo->est_cons }}</td>
                                 <td>
+                                    @if ($activo->asignacion == "1")
+                                        <span class="badge rounded-pill text-bg-success">Asignado</span>
+                                    @elseif($activo->asignacion == "0")
+                                        <span class="badge rounded-pill text-bg-danger">Devuelto</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    {{-- @if ($activo->asignacion == "1")
+                                        <button type="button" class="btn btn-outline-secondary btn-xs" wire:click="devolver2({{ $activo->id }})">
+                                            <i class="fas fa-exchange-alt"></i><br>Devolver
+                                        </button>
+                                    @elseif($activo->asignacion == "0")
+                                        <button type="button" class="btn btn-outline-danger btn-xs" wire:click="reasignar1({{ $activo->id }})">
+                                            <i class="fas fa-exchange-alt"></i><br>Reasignar
+                                        </button>
+                                    @endif --}}
+                                </td>
+                                <td>
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                         <div class="btn-group" role="group">
                                             @can('procesos.informatica.tokens.edit')
@@ -139,6 +159,9 @@
                                                     <i class="fa-solid fa-pen-to-square"></i><br>Editar
                                                 </button>
                                             @endcan
+                                            <button type="button" class="btn btn-outline-info btn-xs">
+                                                <i class="fa-solid fa-timeline"></i><br>Historial
+                                            </button>     
                                             {{-- <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Ver">
                                                 <i class="fa-solid fa-eye"></i> Ver
                                             </button> --}}
@@ -176,7 +199,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="12" class="text-center">
+                                <td colspan="16" class="text-center">
                                     <div class="alert alert-danger" role="alert">
                                         No se encontraron resultados!
                                     </div>
@@ -209,9 +232,9 @@
                     <div class="modal-header bg-{{ $modal_header_color }}">
                         <h1 class="modal-title fs-5" id="NuevoEditarModalLabel">
                             @if ($modal_header_titulo === "nuevo")
-                                <i class="fa-solid fa-file"></i> NUEVO - TOKEN
+                                <i class="fa-solid fa-file"></i> NUEVO - BIENES
                             @else
-                                <i class="fa-solid fa-pen-to-square"></i> EDITAR - TOKEN
+                                <i class="fa-solid fa-pen-to-square"></i> EDITAR - BIENES
                             @endif
                         </h1>
                         <button type="button" class="btn-close" wire:click="cerrar"></button>
@@ -230,8 +253,12 @@
                             </div>
                             <div class="col-xl-8 col-sm-12">
                                 <fieldset class="border p-3 rounded">
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DETALLES DEL BIEN A REGISTRAR</legend>
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DETALLES DEL BIEN</legend>
                                     @include('livewire.partials.bienes-datos')
+                                </fieldset>
+                                <fieldset class="border p-3 rounded">
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">LISTA DE BIENES SEGÚN PECOSA</legend>
+                                    @include('livewire.partials.bienes-datos-registrar')
                                 </fieldset>
                             </div>
                         </div>

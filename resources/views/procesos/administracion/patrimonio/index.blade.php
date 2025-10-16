@@ -18,7 +18,7 @@
                 <i class="fa-solid fa-layer-group"></i> Bienes
             </button>
             <button class="nav-link" id="asignacion-bienes-tab" data-bs-toggle="tab" data-bs-target="#asignacion-bienes" type="button" role="tab" aria-controls="asignacion-bienes" aria-selected="false">
-                <i class="fa-solid fa-people-carry-box"></i> Asignación
+                <i class="fa-solid fa-truck-ramp-box"></i> Asignación
             </button>
             <button class="nav-link" id="desplazamiento-bienes-tab" data-bs-toggle="tab" data-bs-target="#desplazamiento-bienes" type="button" role="tab" aria-controls="desplazamiento-bienes" aria-selected="false">
                 <i class="fa-solid fa-people-carry-box"></i> Desplazamiento
@@ -28,7 +28,6 @@
 
     <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade show active" id="bienes" role="tabpanel" aria-labelledby="bienes-tab" tabindex="0">
-            {{-- Tramite de Tokens --}}
             <ul class="nav nav-pills mb-2" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="1-tab" data-bs-toggle="tab" data-bs-target="#1-tab-pane" type="button" role="tab" aria-controls="1-tab-pane" aria-selected="true">
@@ -69,11 +68,6 @@
         </div>
 
         <div class="tab-pane fade" id="asignacion-bienes" role="tabpanel" aria-labelledby="asignacion-bienes-tab" tabindex="0">
-
-        </div>
-
-        <div class="tab-pane fade" id="desplazamiento-bienes" role="tabpanel" aria-labelledby="desplazamiento-bienes-tab" tabindex="0">
-            {{-- Tramite de PCs --}}
             <ul class="nav nav-pills mb-2" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="5-tab" data-bs-toggle="tab" data-bs-target="#5-tab-pane" type="button" role="tab" aria-controls="5-tab-pane" aria-selected="true">
@@ -99,7 +93,7 @@
 
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="5-tab-pane" role="tabpanel" aria-labelledby="5-tab" tabindex="0">
-                    {{-- <livewire:administracion.patrimonio.desplazamiento.activos /> --}}
+                    <livewire:administracion.patrimonio.asignacion.activos />
                 </div>
                 <div class="tab-pane fade" id="6-tab-pane" role="tabpanel" aria-labelledby="6-tab" tabindex="0">
                     
@@ -107,6 +101,45 @@
                 <div class="tab-pane fade" id="7-tab-pane" role="tabpanel" aria-labelledby="7-tab" tabindex="0">
                 </div>
                 <div class="tab-pane fade" id="8-tab-pane" role="tabpanel" aria-labelledby="8-tab" tabindex="0">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="desplazamiento-bienes" role="tabpanel" aria-labelledby="desplazamiento-bienes-tab" tabindex="0">
+            <ul class="nav nav-pills mb-2" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="9-tab" data-bs-toggle="tab" data-bs-target="#9-tab-pane" type="button" role="tab" aria-controls="9-tab-pane" aria-selected="true">
+                        <i class="fa-solid fa-house-user"></i> Inicio
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="10-tab" data-bs-toggle="tab" data-bs-target="#10-tab-pane" type="button" role="tab" aria-controls="10-tab-pane" aria-selected="false">
+                        <i class="fa-solid fa-house-circle-xmark"></i> Inactivos
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="11-tab" data-bs-toggle="tab" data-bs-target="#11-tab-pane" type="button" role="tab" aria-controls="11-tab-pane" aria-selected="false">
+                        <i class="fa-solid fa-chart-pie"></i> Reportes
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="12-tab" data-bs-toggle="tab" data-bs-target="#12-tab-pane" type="button" role="tab" aria-controls="12-tab-pane" aria-selected="false">
+                        <i class="fa-solid fa-audio-description"></i> Auditoría
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="9-tab-pane" role="tabpanel" aria-labelledby="9-tab" tabindex="0">
+                    {{-- <livewire:administracion.patrimonio.desplazamiento.activos /> --}}
+                </div>
+                <div class="tab-pane fade" id="10-tab-pane" role="tabpanel" aria-labelledby="10-tab" tabindex="0">
+                    
+                </div>
+                <div class="tab-pane fade" id="11-tab-pane" role="tabpanel" aria-labelledby="11-tab" tabindex="0">
+                </div>
+                <div class="tab-pane fade" id="12-tab-pane" role="tabpanel" aria-labelledby="12-tab" tabindex="0">
 
                 </div>
             </div>

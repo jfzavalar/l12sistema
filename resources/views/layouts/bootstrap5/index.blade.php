@@ -106,6 +106,56 @@
             --bs-btn-font-size: .75rem !important;
             }
 
+            .btn-naranja {
+            background-color: #ff8800;
+            color: white;
+            }
+
+            .btn-azul-oscuro {
+                background-color: #003366;
+                color: white;
+            }
+
+            .btn-verde-lima {
+                background-color: #00cc66;
+                color: white;
+            }
+
+            .btn-outline-naranja {
+                color: #ff8800;
+                border: 1px solid #ff8800;
+                background-color: transparent;
+            }
+
+            .btn-outline-naranja:hover {
+                background-color: #ff8800;
+                color: white;
+            }
+
+            .btn-outline-azul-oscuro {
+                color: #003366;
+                border: 1px solid #003366;
+                background-color: transparent;
+            }
+
+            .btn-outline-azul-oscuro:hover {
+                background-color: #003366;
+                color: white;
+            }
+
+            .btn-outline-verde-lima {
+                color: #00cc66;
+                border: 1px solid #00cc66;
+                background-color: transparent;
+            }
+
+            .btn-outline-verde-lima:hover {
+                background-color: #00cc66;
+                color: white;
+            }
+
+            /* ------------------------------------- */
+
             .form-control-xs.form-control {
             padding: .25rem .5rem;   /* arriba/abajo - izquierda/derecha */
             font-size: .75rem;       /* tamaño de letra */
@@ -297,7 +347,7 @@
 
         @livewireScripts
 
-        <!-- 🔹 Luego SweetAlert2 -->
+        <!-- Luego SweetAlert2 -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         @stack('scripts')

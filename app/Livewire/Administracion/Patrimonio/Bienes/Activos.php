@@ -4,7 +4,6 @@ namespace App\Livewire\Administracion\Patrimonio\Bienes;
 
 use App\Models\Tbl_biene;
 use App\Models\Tbl_personale;
-use App\Models\Tbl_personales_biene;
 use App\Models\Tbl_sede;
 use App\Models\Tbl_tokens_asignado;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -16,7 +15,7 @@ use Livewire\WithPagination;
 
 class Activos extends Component
 {
-    protected $listeners = ['tokensActivado' => '$refresh'];
+    protected $listeners = ['bienActivado' => '$refresh'];
 
     use WithFileUploads;
     use WithPagination;
@@ -39,11 +38,11 @@ class Activos extends Component
     //Buscar
     public $searcha;
     public function updatingSearcha(){
-        $this->resetPage();
+        $this->resetPage('activosPage');
     }
     public $searchpersonal;
     public function updatingSearchpersonal(){
-        $this->resetPage();
+        $this->resetPage('personalPage');
     }
 
     // Variables de tabla
@@ -107,6 +106,8 @@ class Activos extends Component
     public $pdf;
     public $filtro_asignados, $filtro_usuarios, $filtro_rutas;
 
+    public $tempbienesinformaticos = [];
+
 
     public $avatar;
     public $codsede_origen,$sede_origen,$coddependencia_origen,$dependencia_origen;
@@ -117,8 +118,8 @@ class Activos extends Component
         $lista_activos = Tbl_biene::where('activo','1')
             ->when($this->searcha !== '', function ($query) {
                 $query->where(function ($q) {
-                    $q->where('cod_usuario', 'like', '%' . $this->searcha. '%')
-                    ->orWhere('desc_usuario', 'like', '%' . $this->searcha . '%');
+                    $q->where('nro_pecosa', 'like', '%' . $this->searcha. '%')
+                    ->orWhere('cod_pat', 'like', '%' . $this->searcha . '%');
                 });
             })
             // Filtro por rutas
@@ -140,12 +141,17 @@ class Activos extends Component
                 });
             })
             ->orderBy('id', 'desc')
-            ->paginate(10);
+            ->paginate(20,['*'], 'activosPage');
+
+        $lista_personal = Tbl_personale::where('activo','1')
+            ->where('dni','like','%' .$this->searchpersonal .'%')
+            ->orwhere('datos','like','%' .$this->searchpersonal .'%')
+            ->paginate(10,['*'], 'personalPage');
         
         $totales_asignados = Tbl_biene::select(
                 'created_user',
-                DB::raw("SUM(CASE WHEN asignacion = 'ASIGNACION' THEN 1 ELSE 0 END) AS total_asignados"),
-                DB::raw("SUM(CASE WHEN asignacion = 'DEVOLUCION' THEN 1 ELSE 0 END) AS total_devueltos")
+                DB::raw("SUM(CASE WHEN asignacion = '1' THEN 1 ELSE 0 END) AS total_asignados"),
+                DB::raw("SUM(CASE WHEN asignacion = '0' THEN 1 ELSE 0 END) AS total_devueltos")
             )
             ->where('activo', "1")
             ->groupBy('created_user')
@@ -176,14 +182,21 @@ class Activos extends Component
             ->orderBy('nomdepofi')
             ->get();
 
-        $lista_personal = Tbl_personale::where('activo','1')
-            ->where('dni','like','%' .$this->searchpersonal .'%')
-            ->orwhere('datos','like','%' .$this->searchpersonal .'%')
-            ->paginate(10);
+        $lista_clases = Tbl_biene::select('clase')
+            ->distinct()
+            ->orderBy('clase')
+            ->get();
+
+        $lista_familias = Tbl_biene::select('familia')
+            ->where('clase',$this->clase)
+            ->distinct()
+            ->orderBy('familia')
+            ->get();
 
         return view('livewire.administracion.patrimonio.bienes.activos',
-                compact('lista_activos','totales_asignados','conteo_rutas','lista_historial','lista_personal',
-                    'lista_sedes','lista_dependencias'));
+                compact('lista_activos','lista_personal',
+                    'totales_asignados','conteo_rutas','lista_historial',
+                    'lista_sedes','lista_dependencias','lista_clases','lista_familias'));
     }
 
     protected function rules(){

@@ -61,6 +61,7 @@ Route::middleware(['auth','can:procesos.admin.roles.index'])->group(function () 
 //ADMINISTRACION
 Route::middleware('auth','can:procesos.administracion.patrimonio.index')->group(function () {
     Route::resource('patrimonio', PatrimonioController::class)->names('procesos.administracion.patrimonio');
+    Route::get('pdf/patrimonio/bien-asignado-acta/{id}', [PatrimonioController::class, 'exportarPDFAsignacion'])->name('pdf.patrimonio.bien-asignado-acta');
     Route::get('pdf/patrimonio/bieninformatico-traslado-acta/{id}', [PatrimonioController::class, 'exportarPDF'])->name('pdf.patrimonio.bieninformatico-traslado-acta');
 });
 
