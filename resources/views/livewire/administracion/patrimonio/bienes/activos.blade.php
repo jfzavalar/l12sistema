@@ -99,16 +99,18 @@
                     <thead class="table-primary text-center align-middle">
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col"><i class="fa-solid fa-user"></i> DNI</th>
-                            <th scope="col">DATOS</th>
+                            <th scope="col">N° PECOSA</th>
+                            <th scope="col">CLASE</th>
+                            <th scope="col">FAMILIA</th>
                             <th scope="col">COD_PATRIMONIAL</th>
+                            <th scope="col">COD_BARRA</th>
                             <th scope="col">BIEN</th>
                             <th scope="col">MARCA</th>
                             <th scope="col">MODELO</th>
                             <th scope="col">SERIE</th>
+                            <th scope="col">MEDIDAS</th>
                             <th scope="col">COLOR</th>
                             <th scope="col">ESTADO</th>
-                            <th scope="col"><i class="fa-solid fa-gears"></i></th>
                             <th scope="col"><i class="fa-solid fa-gears"></i></th>
                             {{-- <th scope="col"><i class="fa-solid fa-gears"></i></th> --}}
                         </tr>
@@ -117,35 +119,18 @@
                         @forelse ($lista_activos as $activo)
                             <tr>
                                 <th scope="row">{{ $loop->iteration }}</th>
-                                <th>{{ $activo->cod_usuario }}</th>
-                                <td>{{ $activo->desc_usuario }}</td>
-                                <td>{{ $activo->cod_pat }}</td>
+                                <th>{{ $activo->nro_pecosa }}</th>
+                                <th>{{ $activo->clase }}</th>
+                                <td>{{ $activo->familia }}</td>
+                                <th>{{ $activo->cod_pat }}</th>
+                                <td>{{ $activo->cod_barra }}</td>
                                 <td>{{ $activo->bien }}</td>
                                 <td>{{ $activo->marca }}</td>
                                 <td>{{ $activo->modelo }}</td>
                                 <td>{{ $activo->serie }}</td>
+                                <td>{{ $activo->serie }}</td>
                                 <td>{{ $activo->color }}</td>
-                                <td>
-                                    @if ($activo->asignacion == "ASIGNACION" || $activo->asignacion == "REASIGNACION")
-                                        <span class="badge rounded-pill text-bg-success">{{ $activo->asignacion }}</span>
-                                    @else
-                                        <span class="badge rounded-pill text-bg-danger">{{ $activo->asignacion }}</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @can('procesos.informatica.tokens.edit')
-                                        @if ($activo->asignacion == "ASIGNACION" || $activo->asignacion == "REASIGNACION")
-                                            <button type="button" class="btn btn-outline-secondary btn-xs" wire:click="devolver2({{ $activo->id }})">
-                                                <i class="fas fa-exchange-alt"></i><br>Devolver
-                                            </button>
-                                        @endif
-                                        @if ($activo->asignacion == "DEVOLUCION")
-                                            <button type="button" class="btn btn-outline-danger btn-xs" wire:click="reasignar1({{ $activo->id }})">
-                                                <i class="fas fa-exchange-alt"></i><br>Reasignar
-                                            </button>
-                                        @endif
-                                    @endcan
-                                </td>
+                                <td>{{ $activo->est_cons }}</td>
                                 <td>
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                         <div class="btn-group" role="group">
@@ -169,14 +154,11 @@
                                             {{-- <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#pdf-cargar-Modal">
                                                 <i class="fa-solid fa-file-pdf"></i> Firmado
                                             </button> --}}
-                                            <button type="button" class="btn btn-outline-info btn-xs" wire:click="historial_tokens('{{ $activo->codtoken }}')" >
-                                                <i class="fa-solid fa-timeline"></i><br>Historial
-                                            </button>     
-                                            {{-- @can('procesos.informatica.tokens.destroy')
+                                            @can('procesos.informatica.tokens.destroy')
                                                 <button type="button" class="btn btn-outline-danger btn-xs" wire:click="desactivar({{ $activo->id }})">
                                                     <i class="fa-solid fa-trash-can"></i><br>Eliminar
                                                 </button>
-                                            @endcan --}}
+                                            @endcan
                                         </div>
                                     </div>       
                                 </td>
@@ -238,31 +220,18 @@
                         <div class="row">
                             <div class="col-xl-4 col-sm-12">
                                 <fieldset class="border p-3 rounded text-center" disabled>
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Foto de perfil</legend>
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted rounded bg-{{ $modal_header_color }}">FOTO DE PERFIL</legend>
                                     @include('livewire.partials.personal-datos-foto')
                                 </fieldset>
                                 <fieldset class="border p-3 rounded">
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Datos Personales</legend>
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DATOS PERSONALES</legend>
                                     @include('livewire.partials.personal-datos-personales')
                                 </fieldset>  
                             </div>
                             <div class="col-xl-8 col-sm-12">
                                 <fieldset class="border p-3 rounded">
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Datos Institucionales</legend>
-                                    @include('livewire.partials.personal-datos-institucionales')
-                                </fieldset>
-                                <fieldset class="border p-3 rounded">
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Detalles de firma token</legend>
-                                    <div class="row">
-                                        <div class="col-lg-6 col-sm-12">
-                                            <label for="txt_fecha_expiracion_token" class="form-label fw-bold fs-6">Fecha Expiración</label>
-                                            <input type="date" id="txt_fecha_expiracion_token" class="form-control" wire:model="fecha_expiracion">
-                                        </div>
-                                        <div class="col-lg-6 col-sm-12">
-                                            <label for="txt_observacion_token" class="form-label fw-bold fs-6">Observación</label>
-                                            <input type="text" id="txt_observacion_token" class="form-control" wire:model="observacion">
-                                        </div>
-                                    </div>
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DETALLES DEL BIEN A REGISTRAR</legend>
+                                    @include('livewire.partials.bienes-datos')
                                 </fieldset>
                             </div>
                         </div>
