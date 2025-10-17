@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Administracion\Patrimonio\Asignacion;
 
+use App\Models\Tbl_biene;
 use App\Models\Tbl_personale;
 use App\Models\Tbl_personales_biene;
 use App\Models\Tbl_personales_contrato;
@@ -28,55 +29,42 @@ class Activos extends Component
 
     // Variables de Modal
     public $modal_abierto_personal = false;
+    public $modal_abierto_personal_buscar = false;
     public $modal_abierto_imagen = false;
     public $modal_abierto_historial = false;
     public $modal_abierto_pdf_cargar = false;
+    public $modal_abierto_excel_cargar = false;
+    public $modal_abierto_bienes = false;
 
     //Buscar
     public $searchpersonal;
     public function updatingSearchpersonal(){
         $this->resetPage('activosPage');
     }
+    public $searchbuscarpersonal;
+    public function updatingSearchbuscarpersonal(){
+        $this->resetPage('personalPage');
+    }
     public $searchhistorial;
     public function updatingSearchhistorial(){
         $this->resetPage('historialPage');
     }
+    public $searchbien;
+    public function updatingSearchbien(){
+        $this->resetPage('bienesPage');
+    }
 
-    // Variables de tabla
-    public $id_personal,
-        $dni,
-        $datos,
+    //Variables de tabla
+    public $personal_entrega, $personal_recepciona;
+    Public $entrega_recibe;
+    public $motivo_traslado;
+    
+    //Variables Personal
+    public $idpersonal,$dni,$datos,$codsede_origen,$sede_origen,$coddependencia_origen,$dependencia_origen,$codsede_destino,$sede_destino,$coddependencia_destino,$dependencia_destino,$despacho,$regimen,$cargo,$correo_personal,$correo_institucional,$cel_personal,$cel_institucional,$avatar,$activo_personal;
+    public $idpersonal2,$dni2,$datos2,$codsede_origen2,$sede_origen2,$coddependencia_origen2,$dependencia_origen2,$codsede_destino2,$sede_destino2,$coddependencia_destino2,$dependencia_destino2,$despacho2,$regimen2,$cargo2,$correo_personal2,$correo_institucional2,$cel_personal2,$cel_institucional2,$avatar2,$activo_personal2;
 
-        $codsede_origen,
-        $sede_origen,
-        $coddependencia_origen,
-        $dependencia_origen,
-
-        $codsede_destino,
-        $sede_destino,
-        $coddependencia_destino,
-        $dependencia_destino,
-
-        $regimen,
-        $cargo,
-        $correo_personal,
-        $correo_institucional,
-        $cel_personal,
-        $cel_institucional,
-        $observacion,
-        $avatar,
-        $activo,
-        $created_user,
-        $updated_user;
-
-    public $id_personal_contrato,
-        $fecha_inicio,
-        $fecha_fin,
-        $causal,
-        $actaruta,
-        $observacion_contrato;
-
-    public $pdf;
+    public $pdf,$excel;
+    public $traslado;
 
     public $tempbienesinformaticos = [];
 
@@ -102,6 +90,11 @@ class Activos extends Component
             ->orderBy('id','desc')
             ->paginate(10,['*'], 'historialPage');
 
+        $lista_personal = Tbl_personale::where('activo','1')
+            ->where('dni','like','%' .$this->searchbuscarpersonal .'%')
+            ->orwhere('datos','like','%' .$this->searchbuscarpersonal .'%')
+            ->paginate(10,['*'], 'personalPage');
+
         $lista_sedes = Tbl_sede::select('codsedeofi','nomsedeofi')
             ->where('activo','1')
             ->distinct()
@@ -115,9 +108,26 @@ class Activos extends Component
             ->orderBy('nomdepofi')
             ->get();
 
+        $lista_dependencias2 = Tbl_sede::select('coddepofi','nomdepofi')
+            ->where('activo','1')
+            ->where('codsedeofi',$this->codsede_destino)
+            ->distinct()
+            ->orderBy('nomdepofi')
+            ->get();
+
+        $lista_bienes = Tbl_biene::where('activo','1')
+            ->when($this->searchbien !== '', function ($query) {
+                $query->where(function ($q) {
+                    $q->where('nro_pecosa', 'like', '%' . $this->searchbien. '%')
+                    ->orWhere('cod_pat', 'like', '%' . $this->searchbien . '%');
+                });
+            })
+            ->orderBy('id', 'desc')
+            ->paginate(10,['*'], 'bienesPage');
+
 
         return view('livewire.administracion.patrimonio.asignacion.activos',
-                compact('lista_activos','lista_historial','lista_sedes','lista_dependencias'));
+                compact('lista_activos','lista_historial','lista_personal','lista_sedes','lista_dependencias','lista_dependencias2','lista_bienes'));
     }
 
     protected function rules(){
@@ -174,47 +184,6 @@ class Activos extends Component
         $this->btn_guardar_actualizar_color = 'success';
         $this->fieldset_disable = '';
 
-        // Datos
-        $this->id_personal = $iEditar->id;
-        $this->dni = $iEditar->dni;
-        $this->datos = $iEditar->datos;
-
-        // Origen
-        $this->codsede_origen = $iEditar->codsede_origen;
-        $this->sede_origen = $iEditar->sede_origen;
-        $this->coddependencia_origen = $iEditar->coddependencia_origen;
-        $this->dependencia_origen = $iEditar->dependencia_origen;
-
-        // Destino
-        $this->codsede_destino = $iEditar->codsede_destino;
-        $this->sede_destino = $iEditar->sede_destino;
-        $this->coddependencia_destino = $iEditar->coddependencia_destino;
-        $this->dependencia_destino = $iEditar->dependencia_destino;
-
-        // Otros campos
-        $this->regimen = $iEditar->regimen;
-        $this->cargo = $iEditar->cargo;
-        $this->cel_personal = $iEditar->cel_personal;
-        $this->correo_personal = $iEditar->correo_personal;
-        $this->cel_institucional = $iEditar->cel_institucional;
-        $this->correo_institucional = $iEditar->correo_institucional;
-        $this->avatar = $iEditar->avatar;
-        $this->activo = $iEditar->activo;
-        $this->created_user = $iEditar->created_user;
-        $this->updated_user = $iEditar->updated_user;
-
-        // Variable de contrato
-        $iContrato = Tbl_personales_contrato::where('dni', $iEditar->dni)->orderBy('id','desc')->firstOrFail();
-        
-        $this->id_personal_contrato = $iContrato->id;
-        $this->fecha_inicio = $iContrato->fecha_inicio;
-        $this->fecha_fin = $iContrato->fecha_fin;
-        $this->causal = $iContrato->causal;
-        $this->observacion_contrato = $iContrato->observacion;
-
-        // Refrescar visualmente el select
-        // $this->dispatch('refresh');
-        // $this->js('$wire.$refresh()');
     }
 
     public function actualizar(){
@@ -301,30 +270,7 @@ class Activos extends Component
     }
 
     public function cerrar(){
-        $this->reset([
-        'id_personal',
-        'dni',
-        'datos',
-        'codsede_origen',
-        'sede_origen',
-        'coddependencia_origen',
-        'dependencia_origen',
-        'codsede_destino',
-        'sede_destino',
-        'coddependencia_destino',
-        'dependencia_destino',
-        'regimen',
-        'cargo',
-        'correo_personal',
-        'correo_institucional',
-        'cel_personal',
-        'cel_institucional',
-        'observacion',
-        'avatar',
-        'activo',
-        'created_user',
-        'updated_user',
-    ]);
+        $this->reset([]);
 
         $this->modal_abierto_personal = false;
 
@@ -332,108 +278,65 @@ class Activos extends Component
         // $this->resetExcept('search_personal');
     }
 
-    public function nuevo_contrato(Tbl_personale $iEditar){
-        $this->reset(['fecha_inicio','fecha_fin','causal','observacion_contrato']);
+    // PERSONAL
+    // ---------------------------------------------------------
+    public function buscar_personal($campo){
+        $this->modal_abierto_personal_buscar = true;
 
-        $this->modal_abierto_personal = true;
-
-        $this->modal_header_titulo = 'nuevo_contrato';
-        $this->modal_header_color = 'secondary-subtle';
-        $this->btn_guardar_actualizar = 'guardar_contrato';
-        $this->btn_guardar_actualizar_color = 'secondary';
-        $this->fieldset_disable = 'disabled';
-
-        // Datos
-        $this->id_personal = $iEditar->id;
-        $this->dni = $iEditar->dni;
-        $this->datos = $iEditar->datos;
-
-        // Origen
-        $this->codsede_origen = $iEditar->codsede_origen;
-        $this->sede_origen = $iEditar->sede_origen;
-        $this->coddependencia_origen = $iEditar->coddependencia_origen;
-        $this->dependencia_origen = $iEditar->dependencia_origen;
-
-        // Destino
-        $this->codsede_destino = $iEditar->codsede_destino;
-        $this->sede_destino = $iEditar->sede_destino;
-        $this->coddependencia_destino = $iEditar->coddependencia_destino;
-        $this->dependencia_destino = $iEditar->dependencia_destino;
-
-        // Otros campos
-        $this->regimen = $iEditar->regimen;
-        $this->cargo = $iEditar->cargo;
-        $this->cel_personal = $iEditar->cel_personal;
-        $this->correo_personal = $iEditar->correo_personal;
-        $this->cel_institucional = $iEditar->cel_institucional;
-        $this->correo_institucional = $iEditar->correo_institucional;
-        $this->avatar = $iEditar->avatar;
-        $this->activo = $iEditar->activo;
-        $this->created_user = $iEditar->created_user;
-        $this->updated_user = $iEditar->updated_user;
+        $this->entrega_recibe= $campo;
     }
 
-    public function guardar_contrato(){
-        $iContrato = Tbl_personale::where('dni', $this->dni)->firstOrFail();
+    public function agregar_personal(Tbl_personale $ipersonal){
+        if ($this->entrega_recibe === "solicitante") {
+            $this->idpersonal = $ipersonal->id;
+            $this->dni = $ipersonal->dni;
+            $this->datos = $ipersonal->datos;
+            $this->sede_origen = $ipersonal->sede;
+            $this->dependencia_origen = $ipersonal->dependencia;
+            $this->regimen = $ipersonal->regimen;
+            $this->cargo = $ipersonal->cargo;
 
-        try {
-            $iContrato->update([            
-                'dni' => $this->dni,
-                'datos' => $this->datos,
+            $this->personal_entrega = $this->dni . ' - ' . $this->datos . ' - ' . $this->cargo . ' - ' . $this->regimen;
 
-                'codsede_destino' => $this->codsede_destino,
-                'sede_destino' => $this->sede_destino,
-                'coddependencia_destino' => $this->coddependencia_destino,
-                'dependencia_destino' => $this->dependencia_destino,
+            $this->correo_personal = $ipersonal->correo_personal;
+            $this->correo_institucional = $ipersonal->correo_institucional;
+            $this->cel_personal = $ipersonal->cel_personal;
+            $this->cel_institucional = $ipersonal->cel_institucional;
+            $this->activo_personal = $ipersonal->activo;
+        } else {
+            $this->idpersonal2 = $ipersonal->id;
+            $this->dni2 = $ipersonal->dni;
+            $this->datos2 = $ipersonal->datos;
+            $this->sede_origen2 = $ipersonal->sede;
+            $this->dependencia_origen2 = $ipersonal->dependencia;
+            $this->regimen2 = $ipersonal->regimen;
+            $this->cargo2 = $ipersonal->cargo;
 
-                'regimen' => $this->regimen,
-                'cargo' => $this->cargo,
-                
-                'created_user' => $this->created_user,
-                'updated_user' => $this->updated_user,
-            ]);
+            $this->personal_recepciona = $this->dni2 . ' - ' . $this->datos2 . ' - ' . $this->cargo2 . ' - ' . $this->regimen2;
 
-            Tbl_personales_contrato::create([
-                'dni' => $this->dni,
-                'datos' => $this->datos,
+            $this->correo_personal2 = $ipersonal->correo_personal;
+            $this->correo_institucional2 = $ipersonal->correo_institucional;
+            $this->cel_personal2 = $ipersonal->cel_personal;
+            $this->cel_institucional2 = $ipersonal->cel_institucional;
+            $this->activo_personal2 = $ipersonal->activo;
+        }
 
-                'codsede_origen' => $this->codsede_origen,
-                'sede_origen' => $this->sede_origen,
-                'coddependencia_origen' => $this->coddependencia_origen,
-                'dependencia_origen' => $this->dependencia_origen,
+        $this->tempbienesinformaticos = Tbl_personales_biene::where('cod_usuario', $this->dni)
+            ->orderBy('id', 'desc')
+            ->get()
+            ->toArray();
 
-                'codsede_destino' => $this->codsede_destino,
-                'sede_destino' => $this->sede_destino,
-                'coddependencia_destino' => $this->coddependencia_destino,
-                'dependencia_destino' => $this->dependencia_destino,
+        $this->modal_abierto_personal_buscar = false;
 
-                'regimen' => $this->regimen,
-                'cargo' => $this->cargo,
+        $this->reset('searchbuscarpersonal');
+    }
 
+    public function borrar_datos_temporal(){
+        $this->reset('tempbienesinformaticos');
+    }
 
-                'fecha_inicio' => $this->fecha_inicio,
-                'fecha_fin' => $this->fecha_fin,
-                'causal' => $this->causal,
-                'observacion' => $this->observacion_contrato,
-                'activo' => '1',
-            ]);
-        } catch (\Exception $e) {
-            session()->flash('error', 'Error al desactivar el usuario: ' . $e->getMessage());
-        }        
-
-        // Reiniciamos todas la variable excepto:
-        $this->resetExcept('search_personal');
-        
-        // Cerramos modal
-        $this->modal_abierto_personal = false;
-
-        // Emitimos un evento para mostrar el SweetAlert
-        $this->dispatch(
-            'alerta-actualizado',
-            titulo: 'Datos actualizado',
-            mensaje: 'Los datos se han guardado correctamente.',
-            tipo: 'success' // success | error | warning | info
-        );
+    public function cerrar_personal(){
+        $this->modal_abierto_personal_buscar = false;
     }
 
     public function editar_imagen(){
@@ -512,4 +415,48 @@ class Activos extends Component
 
         $this->modal_abierto_pdf_cargar  = false;
     }
+
+    public function buscar_bien(){
+        $this->modal_abierto_bienes = true;
+    }
+
+    public function cerrar_bienes(){
+        $this->modal_abierto_bienes = false;
+    }
+
+    public function agregar_bienes($item_cod_patrominial){
+        // $this->btndisable = "disabled";
+        $ibieninformatico = Tbl_biene::findOrFail($item_cod_patrominial);
+
+        // Verificar si ya existe
+        if (collect($this->tempbienesinformaticos)->contains('cod_patrimonial', $ibieninformatico->cod_pat)) {
+            // Opcional: mensaje de error
+            session()->flash('error_bien_duplicado', 'El equipo con código patrimonial ' . $ibieninformatico->cod_patrimonial . ' ya fue agregado.');
+            $this->modal_abierto_bienes= false;
+            return;
+        } else {
+
+            // Agregar al array si no existe
+            $this->tempbienesinformaticos[] = [
+                'cod_patrimonial' => $ibieninformatico->cod_pat,
+                'cod_barra' => $ibieninformatico->cod_barra,
+                'desc_bien' => $ibieninformatico->bien,
+                'desc_marca' => $ibieninformatico->marca,
+                'modelo' => $ibieninformatico->modelo,
+                'nro_serie' => $ibieninformatico->erie,
+                'desc_color' => $ibieninformatico->color,
+                'des_estado_conservacion' => $ibieninformatico->est_cons,
+            ];
+
+            // Concatenar lista
+            // $this->lista_equipos_traslado = $this->lista_equipos_traslado . PHP_EOL . $ibieninformatico->cod_pat;
+
+            $this->modal_abierto_bienes= false;
+        }        
+    }
+
+    public function eliminar_buscar_bieninformatico($item_cod_patrominial){
+        unset($this->tempbienesinformaticos[$item_cod_patrominial]);
+        $this->tempbienesinformaticos = array_values($this->tempbienesinformaticos); // Reindexar el array
+    } 
 }

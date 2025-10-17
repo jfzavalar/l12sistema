@@ -18,13 +18,13 @@
         <div class="card-body">
             <div class="table-responsive small">
                 <div class="input-group mb-3">
-                    <input type="text" id="txtsearcha" class="form-control form-control-sm" wire:model.live="searchpersonal" placeholder="Buscar por DNI o Datos del Personal">
+                    <input type="text" id="txtsearcha2" class="form-control form-control-sm" wire:model.live="searchpersonal" placeholder="Buscar por DNI o Datos del Personal">
                     <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" wire:click="nuevo">
                         <i class="fa-solid fa-file"></i> Nuevo
                     </button>
                 </div>
                 <table class="table table-striped table-hover table-sm table-xsmall">
-                    <thead class="table-primary text-center align-middle">
+                    <thead class="table-success text-center align-middle">
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">
@@ -149,20 +149,10 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="row">
-                                <div class="col-xl-4 col-sm-12">
-                                    <fieldset class="border p-3 rounded text-center mb-3" {{ $fieldset_disable }}>
-                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted rounded bg-{{ $modal_header_color }}">FOTO DE PERFIL</legend>
-                                        @include('livewire.partials.personal-datos-foto')
-                                    </fieldset>
-                                    <fieldset class="border p-3 rounded mb-3" {{ $fieldset_disable }}>
-                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DATOS PERSONALES</legend>
-                                        @include('livewire.partials.personal-datos-personales')
-                                    </fieldset>  
-                                </div>
-                                <div class="col-xl-8 col-sm-12">
+                                <div class="col-xl-12 col-sm-12">
                                     <fieldset class="border p-3 rounded mb-3">
-                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DATOS INSTITUCIONALES</legend>
-                                        @include('livewire.partials.personal-datos-institucionales')
+                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DATOS DEL PERSONAL</legend>
+                                        @include('livewire.partials.bienes-datos-asignacion-personal')
                                     </fieldset>
                                     <fieldset class="border p-3 rounded mb-3">
                                         <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DATOS DEL ÚLTIMO CONTRATO</legend>
@@ -206,7 +196,7 @@
                     <div class="modal-body">
                         <div class="card">
                             <div class="card-body">
-                                        <div class="table-responsive small">
+                                <div class="table-responsive small">
                                     <div class="input-group mb-3">
                                         <input type="text" id="txtsearcha" class="form-control form-control-sm" wire:model.live="searchhistorial" placeholder="Buscar por código patrimonial">
                                     </div>
@@ -300,10 +290,15 @@
         </div>
     </div>
 
-    <!-- Modal Foto -->
-    @include('livewire.partials.personal-modal-foto')
+    @include('livewire.partials.personal-modal-buscar')
+
+    @include('livewire.partials.bienes-modal-buscar')
 
     <!-- Modal PDF -->
     @include('livewire.partials.pdf-modal-cargar')
+    <!-- Modal ESCEL -->
+    @include('livewire.partials.excel-modal-cargar')
+
+
 
 </div>

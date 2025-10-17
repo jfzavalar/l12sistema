@@ -1,8 +1,8 @@
 <div class="table-responsive">
     {{-- Mensaje de error equipo duplicado --}}
-    @if (session('error_bien_duplicado'))
+    @if (session('error'))
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ session('error_bien_duplicado') }}
+            {{ session('error') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
@@ -20,11 +20,11 @@
                 <th scope="col">ESTADO</th>
                 <th scope="col" class="text-end">
                     <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-outline-primary btn-xs" wire:click="buscar_bien">
-                            <i class="fas fa-plus-square fa-fw"></i><br>Agregar
+                        <button type="button" class="btn btn-outline-primary btn-sm me-2" wire:click="agregar_bienes">
+                            <i class="fas fa-plus-square fa-fw"></i> Agregar
                         </button>
-                        <button type="button" class="btn btn-danger btn-xs" wire:click="borrar_datos_temporal">
-                            <i class="fa-solid fa-eraser"></i><br>Borrar
+                        <button type="button" class="btn btn-outline-success btn-sm" wire:click="cargarEXCEL1">
+                            <i class="fa-solid fa-file-excel"></i> Importar
                         </button>
                     </div>
                 </th>
@@ -42,7 +42,7 @@
                     <td>{{ $tempbieninfo['serie']}}</td>
                     <td>{{ $tempbieninfo['color']}}</td>
                     <td>{{ $tempbieninfo['est_cons']}}</td>
-                    <td scope="col" class="text-end">
+                    <td class="text-end">
                         <div class="btn-group" role="group">
                             <button type="button" class="btn btn-danger btn-xs" wire:click="eliminar_buscar_bieninformatico({{ $itemtemp }})">
                                 <i class="fas fa-trash"></i>

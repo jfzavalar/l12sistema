@@ -21,19 +21,19 @@
                                                 <button class="input-group-text bg-success text-white" wire:click="setFiltrosAsignados('{{ $tactivos->created_user }}')">
                                                     <i class="fa-solid fa-check me-2"></i>Asignados
                                                 </button>
-                                                <input type="text" class="form-control text-end" value="{{ $tactivos->total_asignados }}" readonly>
+                                                <input type="text" id=txt_asignados class="form-control text-end" value="{{ $tactivos->total_asignados }}" readonly>
                                             </div>
                                             <div class="input-group input-group-xs">
                                                 <button class="input-group-text bg-danger text-white" wire:click="setFiltrosDevueltos('{{ $tactivos->created_user }}')">
                                                     <i class="fa-solid fa-triangle-exclamation me-2"></i>Devueltos
                                                 </button>
-                                                <input type="text" class="form-control text-end" value="{{ $tactivos->total_devueltos }}" readonly>
+                                                <input type="text" id="txt_devueltos" class="form-control text-end" value="{{ $tactivos->total_devueltos }}" readonly>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="input-group input-group-xs">
-                                            <input type="text" class="form-control fw-bold text-end" value="{{ $tactivos->total_asignados + $tactivos->total_devueltos }}" readonly>
+                                            <input type="text" id="txt_total" class="form-control fw-bold text-end" value="{{ $tactivos->total_asignados + $tactivos->total_devueltos }}" readonly>
                                         </div>
                                     </td>
                                 </tr>
@@ -254,11 +254,11 @@
                             <div class="col-xl-8 col-sm-12">
                                 <fieldset class="border p-3 rounded">
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DETALLES DEL BIEN</legend>
-                                    @include('livewire.partials.bienes-datos')
+                                    @include('livewire.partials.bienes-datos-registrar')
                                 </fieldset>
                                 <fieldset class="border p-3 rounded">
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">LISTA DE BIENES SEGÚN PECOSA</legend>
-                                    @include('livewire.partials.bienes-datos-registrar')
+                                    @include('livewire.partials.bienes-datos-registrar-detalles')
                                 </fieldset>
                             </div>
                         </div>
@@ -380,6 +380,8 @@
     @include('livewire.partials.personal-modal-buscar')
 
     @include('livewire.partials.pdf-modal-cargar')
+    <!-- Modal ESCEL -->
+    @include('livewire.partials.excel-modal-cargar')
 
     <!-- Modal historial -->
     <div class="modal fade @if($modal_abierto_pdf_imprimir) show d-block @endif" tabindex="-1">

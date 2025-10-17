@@ -34,6 +34,7 @@ class Activos extends Component
     public $modal_abierto_personal_buscar = false;
     public $modal_abierto_pdf_cargar = false;
     public $modal_abierto_pdf_imprimir = false;
+    public $modal_abierto_excel_cargar = false;
 
     //Buscar
     public $searcha;
@@ -42,6 +43,10 @@ class Activos extends Component
     }
     public $searchpersonal;
     public function updatingSearchpersonal(){
+        $this->resetPage('personalPage');
+    }
+    public $searchbuscarpersonal;
+    public function updatingSearchbuscarpersonal(){
         $this->resetPage('personalPage');
     }
 
@@ -58,8 +63,8 @@ class Activos extends Component
         $est_cons,
         $cod_ubif,
         $desc_ubif,
-        $cod_usuario,
-        $desc_usuario,
+        $dni,//$cod_usuario,
+        $datos,//$desc_usuario,
         $desc_cargo,
         $clase,
         $familia,
@@ -103,7 +108,9 @@ class Activos extends Component
         $created_at,
         $updated_at;
 
-    public $pdf;
+    public $cel_personal,$correo_personal;
+
+    public $pdf,$excel;
     public $filtro_asignados, $filtro_usuarios, $filtro_rutas;
 
     public $tempbienesinformaticos = [];
@@ -357,6 +364,19 @@ class Activos extends Component
         $this->modal_abierto_pdf_cargar  = false;
     }
 
+    public function cargarEXCEL1(){
+
+        $this->modal_abierto_excel_cargar = true;
+
+    }
+
+    public function cerrar_EXCEL(){
+        //Reiniciar variables
+        // $this->reset('searchpersonal');
+
+        $this->modal_abierto_excel_cargar  = false;
+    }
+
     // HISTORIAL DE ASIGNACIONES Y DEVOLUCIONES
     // ---------------------------------------------------------
 
@@ -433,5 +453,56 @@ class Activos extends Component
             tipo: 'success' // success | error | warning | info
         );
     }
+
+
+    public function agregar_bienes()
+    {
+        // 🔍 Validar los campos requeridos antes de continuar
+        $this->validate([
+            'nro_pecosa' => 'required|string',
+            'clase'      => 'required|string',
+            'familia'    => 'required|string',
+            'cod_pat'    => 'required|string',
+            'cod_barra'  => 'required|string',
+            'bien'       => 'required|string',
+            'marca'      => 'required|string',
+            'modelo'     => 'required|string',
+            'serie'      => 'required|string',
+            'medidas'    => 'required|string',
+            'color'      => 'required|string',
+            'estado'     => 'required|string',
+        ], [
+            // ⚠️ Mensajes personalizados (opcional)
+            'required' => 'El campo :attribute es obligatorio.',
+        ]);
+
+        // Verificar si ya existe en el array
+        $existe = collect($this->tempbienesinformaticos)
+            ->contains('cod_pat', $this->cod_pat);
+
+        if ($existe) {
+            session()->flash('error', 'El equipo con código patrimonial ' . $this->cod_pat . ' ya fue agregado.');
+            return;
+        }
+
+        // Si no existe, agregar al array
+        $this->tempbienesinformaticos[] = [
+            'nro_pecosa' => $this->nro_pecosa,
+            'cod_pat' => $this->cod_pat,
+            'cod_barra' => $this->cod_barra,
+            'bien' => $this->bien,
+            'marca' => $this->marca,
+            'modelo' => $this->modelo,
+            'serie' => $this->serie,
+            'color' => $this->color,
+            'est_cons' => $this->est_cons,
+        ];
+    }
+
+    public function eliminar_buscar_bieninformatico($item_cod_patrominial){
+        unset($this->tempbienesinformaticos[$item_cod_patrominial]);
+        $this->tempbienesinformaticos = array_values($this->tempbienesinformaticos); // Reindexar el array
+    } 
+
 
 }
