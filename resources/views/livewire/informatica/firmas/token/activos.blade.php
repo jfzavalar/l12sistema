@@ -101,8 +101,8 @@
                             <th scope="col">#</th>
                             <th scope="col"><i class="fa-solid fa-user"></i> DNI</th>
                             <th scope="col">DATOS</th>
-                            <th scope="col">SEDE</th>
-                            <th scope="col">DEPENDENCIA</th>
+                            <th scope="col">SEDE <br> DEPENDENCIA</th>
+                            <th scope="col">SEDE <br> DEPENDENCIA</th>
                             <th scope="col">CARGO</th>
                             <th scope="col">TOKEN</th>
                             <th scope="col">EXPIRACION</th>
@@ -116,9 +116,9 @@
                         @forelse ($lista_activos as $activo)
                             <tr>
                                 <th scope="row">{{ $loop->iteration }}</th>
-                                <th>{{ $activo->dni }}</th>
+                                <th class="text-primary">{{ $activo->dni }}</th>
                                 <td>{{ $activo->datos }}</td>
-                                <td>{{ $activo->sede }}</td>
+                                <td><b>{{ $activo->sede_origen }}</b> <br> {{ $activo->dependencia_origen }}</td>
                                 <td>{{ $activo->dependencia }}</td>
                                 <td>{{ $activo->cargo }}</td>
                                 <td>{{ $activo->codtoken }}</td>

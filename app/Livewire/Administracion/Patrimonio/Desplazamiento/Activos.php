@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Administracion\Patrimonio\Bienes\Desplazamiento;
+namespace App\Livewire\Administracion\Patrimonio\Desplazamiento;
 
 use App\Models\Tbl_biene;
 use App\Models\Tbl_cargo;
@@ -237,7 +237,7 @@ class Activos extends Component
             ->orderBy('nomdepofi')
             ->get();
         
-        return view('livewire.administracion.patrimonio.bienes.desplazamiento.activos',
+        return view('livewire.administracion.patrimonio.desplazamiento.activos',
                     compact('lista_activos','lista_desplazamientos_detalle','lista_personal','lista_cargo','lista_bienes',
                         'lista_sedes','lista_dependencias','lista_dependencias2')
                 );

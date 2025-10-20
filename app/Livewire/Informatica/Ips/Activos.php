@@ -4,6 +4,8 @@ namespace App\Livewire\Informatica\Ips;
 
 use App\Models\Tbl_biene;
 use App\Models\Tbl_bienes_informativo;
+use App\Models\Tbl_personale;
+use App\Models\Tbl_personales_biene;
 use App\Models\Tbl_sede;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -60,15 +62,18 @@ class Activos extends Component
         $this->resetPage();
     }
 
+    //Diferenciar
+    public $equipo;
+
 
     public function render()
     {
-        $lista_activos = Tbl_biene::where('activo','1')
+        $lista_activos = Tbl_personales_biene::where('activo','1')
             ->where('clase', 'COMPUTO')
-            ->whereIn('familia', [
-                'COMPUTADORA PERSONAL PORTATIL',
-                'UNIDAD CENTRAL DE PROCESO - CPU'
-            ])
+            // ->whereIn('familia', [
+            //     'COMPUTADORA PERSONAL PORTATIL',
+            //     'UNIDAD CENTRAL DE PROCESO - CPU'
+            // ])
             ->whereNotIn('nomsedeofi', [
                 'CASA ACOGIDA TAMBO'
             ])
@@ -140,15 +145,13 @@ class Activos extends Component
 
     protected function rules(){
         return [
-            'cod_pat' => 'required|string|unique:tbl_bienes,cod_pat,' . $this->id_bien,
+            'cod_pat' => 'required|string|unique:tbl_personales_bienes,cod_pat,' . $this->id_bien,
             'desc_ubif' => 'required',
             'marca' => 'required',
             'modelo' => 'required',
             'serie' => 'required',
-            'ip' => 'required|unique:tbl_bienes,ip' . $this->ip,
-            'sistema_operativo' => 'required',
-            'user_admin' => 'required',
-            'pass_admin' => 'required',
+            'ip' => 'required|unique:tbl_personales_bienes,ip,' . $this->id_bien,
+            
         ];
     }
 
@@ -169,6 +172,21 @@ class Activos extends Component
     public function nuevo(){
         $this->reset();
 
+        $this->equipo = 'computador';
+
+        $this->modal_abierto_personal = true;
+
+        $this->modal_header_titulo = 'nuevo';
+        $this->modal_header_color = 'primary-subtle';
+        $this->btn_guardar_actualizar = 'guardar';
+        $this->btn_guardar_actualizar_color = 'primary';
+    }
+
+    public function nuevo_impresora(){
+        $this->reset();
+
+        $this->equipo = 'impresora';
+
         $this->modal_abierto_personal = true;
 
         $this->modal_header_titulo = 'nuevo';
@@ -178,12 +196,37 @@ class Activos extends Component
     }
 
     public function guardar(){
+        
         $validated = $this->validate(); 
 
+        Tbl_personales_biene::create([
+            'cod_usuario' => $this->dni,
+            'desc_usuario' => $this->datos,
+            'cod_pat' => $this->cod_pat,
+            'bien' => $this->bien,
+            'marca' => $this->marca,
+            'modelo' => $this->modelo,
+            'serie' => $this->serie,
+            'color' => $this->color,
+            'est_cons' => $this->est_cons,
+            'desc_ubif' => $this->desc_ubif,
+            'observacion' => $this->observacion,
+
+            'ip' => $this->ip,
+        ]);
+
         $this->reset();
+
+        // Emitimos un evento para mostrar el SweetAlert
+        $this->dispatch(
+            'alerta-actualizado',
+            titulo: 'Datos guardados',
+            mensaje: 'Los datos se han guardado correctamente.',
+            tipo: 'success' // success | error | warning | info
+        );
     }
 
-    public function editar(Tbl_biene $instanciaTbl){
+    public function editar(Tbl_personales_biene $instanciaTbl){
         $this->modal_abierto_personal = true;
 
         $this->modal_header_titulo = 'editar';
@@ -251,7 +294,12 @@ class Activos extends Component
     }
 
     public function actualizar(){
-        $instanciaTbl = Tbl_biene::findOrFail($this->id_bien);
+        $instanciaTbl = Tbl_personales_biene::findOrFail($this->id_bien);
+
+        // 🔒 Si el registro ya tiene IP, se impide que sea modificada
+        if (!empty($instanciaTbl->ip)) {
+            $this->ip = $instanciaTbl->ip;
+        }
 
         $instanciaTbl->update([
             'cod_pat'          => $this->cod_pat,
@@ -311,10 +359,15 @@ class Activos extends Component
         $this->modal_abierto_personal = false;
 
         // Emitimos un evento para mostrar el SweetAlert
-        $this->dispatch('alerta-actualizado');
+        $this->dispatch(
+            'alerta-actualizado',
+            titulo: 'Datos actualizado',
+            mensaje: 'Los datos se han guardado correctamente.',
+            tipo: 'success' // success | error | warning | info
+        );
     }
 
-    public function desactivar(Tbl_biene $ibien){
+    public function desactivar(Tbl_personales_biene $ibien){
         try {
             $ibien->update([
                 'activo' => '0',
@@ -341,27 +394,23 @@ class Activos extends Component
     }
     public function agregar_bienes(Tbl_biene $ibienInformatico){
 
-
         $this->cod_pat = $ibienInformatico->cod_pat;
 
-        $this->personal_detalle = $ibienInformatico->cod_usuario . ' - ' . $ibienInformatico->desc_usuario;
-        $this->equipo_detalle = $ibienInformatico->cod_pat . ' - ' . $ibienInformatico->bien;
+        $this->dni = $ibienInformatico->cod_usuario;
+        
+        $iPersonal = Tbl_personale::where('dni', $this->dni)->firstOrFail();
+
+        $this->datos = $iPersonal->datos;
+        $this->cel_personal = $iPersonal->cel_personal;
+        $this->correo_personal = $iPersonal->correo_personal;
+        
 
         $this->desc_ubif = $ibienInformatico->desc_ubif;
         $this->marca = $ibienInformatico->marca;
         $this->modelo = $ibienInformatico->modelo;
         $this->serie = $ibienInformatico->serie;
-        $this->ip = $ibienInformatico->ip;
-        $this->sistema_operativo = $ibienInformatico->sistema_operativo;
-        $this->user_admin = $ibienInformatico->user_admin;
-        $this->pass_admin = $ibienInformatico->pass_admin;
-        $this->impresora01 = $ibienInformatico->impresora01;
-        $this->impresora02 = $ibienInformatico->impresora02;
-        $this->impresora03 = $ibienInformatico->impresora03;
-        $this->ip_impresora01 = $ibienInformatico->ip_impresora01;
-        $this->ip_impresora02 = $ibienInformatico->ip_impresora02;
-        $this->ip_impresora03 = $ibienInformatico->ip_impresora03;
-        $this->observacion = $ibienInformatico->observacion;
+
+        $this->equipo_detalle = $ibienInformatico->cod_pat . ' - ' . $ibienInformatico->bien;
 
         $this->modal_abierto_bienes = false;
     }

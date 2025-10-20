@@ -35,12 +35,12 @@ class Activos extends Component
     
 
     public $id_token,$codtoken,$operativo,$asignacion,$actaruta,$fecha_expiracion,$observacion,$created_user,$updated_user,$activo;
-    public $idpersonal,$dni,$datos,$sede_destino,$dependencia_destino,$despacho,$regimen,$cargo,$correo_personal,$correo_institucional,$cel_personal,$cel_institucional;
+    public $idpersonal,$dni,$datos,$codsede_origen,$sede_origen,$coddependencia_origen,$dependencia_origen,$codsede_destino,$sede_destino,$coddependencia_destino,$dependencia_destino,$despacho,$regimen,$cargo,$correo_personal,$correo_institucional,$cel_personal,$cel_institucional;
+    
     public $pdf;
     public $filtro_asignados, $filtro_usuarios, $filtro_rutas;
 
     public $avatar;
-    public $codsede_destino,$coddependencia_destino;
 
     //Buscar
     public $searcha;

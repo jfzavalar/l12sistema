@@ -132,7 +132,7 @@
 
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="9-tab-pane" role="tabpanel" aria-labelledby="9-tab" tabindex="0">
-                    {{-- <livewire:administracion.patrimonio.desplazamiento.activos /> --}}
+                    <livewire:administracion.patrimonio.desplazamiento.activos />
                 </div>
                 <div class="tab-pane fade" id="10-tab-pane" role="tabpanel" aria-labelledby="10-tab" tabindex="0">
                     

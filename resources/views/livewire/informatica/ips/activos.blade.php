@@ -20,7 +20,7 @@
                 <div class="row mb-3">
                     <div class="col-12">
                         <div class="row g-3">
-                            <div class="col-lg-4 col-sm-12">
+                            <div class="col-lg-3 col-sm-12">
                                 <label for="cmd_filtro_dependencia" class="form-label">
                                     <strong><i class="fa-solid fa-filter"></i> Filtrar por Sede</strong>
                                 </label>
@@ -32,7 +32,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-lg-4 col-sm-12">
+                            <div class="col-lg-3 col-sm-12">
                                 <label for="cmb_filtro_ip" class="form-label">
                                     <strong><i class="fa-solid fa-filter"></i> Filtrar por IP</strong>
                                 </label>
@@ -42,17 +42,20 @@
                                     <option value="0">Sin IP</option>
                                 </select>
                             </div>
-                            <div class="col-lg-4 col-sm-12">
+                            <div class="col-lg-6 col-sm-12">
                                 <label for="txt_searcha" class="form-label">
                                     <strong> <i class="fa-solid fa-filter"></i>Buscar por DNI - Código Patrimonial - IP</strong>
                                 </label>
                                 <div class="input-group">
                                     <input type="text" id="txt_searcha" class="form-control form-control-sm" placeholder="Buscar por DNI - CÓDIGO PATRIMONIAL - IP" wire:model.live="searcha">
                                     @can('procesos.informatica.ips.create')
-                                        <button type="button" id="btnnuevo" class="btn btn-outline-primary btn-sm" wire:click="nuevo">
-                                            <i class="fa-solid fa-file"></i> Nuevo
+                                        <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" wire:click="nuevo">
+                                            <i class="fa-solid fa-file"></i> Nuevo computador
                                         </button>
                                     @endcan
+                                    <button type="button" id="btnnuevo" class="btn btn-success btn-sm" wire:click="nuevo_impresora">
+                                        <i class="fa-solid fa-file"></i> Nueva impresora
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -155,22 +158,22 @@
                         <div class="row">
                             <div class="col-xl-4 col-sm-12" >
                                 <fieldset class="border p-3 rounded text-center" disabled>
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Foto de perfil</legend>
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted rounded bg-{{ $modal_header_color }}">FOTO DE PERFIL</legend>
                                     @include('livewire.partials.personal-datos-foto')
                                 </fieldset>
                                 <fieldset class="border p-3 rounded" disabled>
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Datos Personales</legend>
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DATOS PERSONALES</legend>
                                     @include('livewire.partials.personal-datos-personales')
                                 </fieldset>                              
                             </div>
                             <div class="col-xl-8 col-sm-12">
                                 <fieldset class="border p-4 rounded">
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Bien informático</legend>
-                                    @include('livewire.partials.bienes-datos')
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">BIEN INFORMATICO - IP</legend>
+                                    @include('livewire.partials.bienes-datos-informaticos-ip')
                                 </fieldset>
                                 <fieldset class="border p-4 rounded">
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Detalles</legend>
-                                    @include('livewire.partials.bienes-datos-informaticos')
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DETALLES DE BIEN INFORMATICO</legend>
+                                    @include('livewire.partials.bienes-datos-informaticos-ip-detalle')
                                 </fieldset>
                             </div>
                         </div>

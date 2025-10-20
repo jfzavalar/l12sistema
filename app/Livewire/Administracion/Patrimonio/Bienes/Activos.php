@@ -151,8 +151,8 @@ class Activos extends Component
             ->paginate(20,['*'], 'activosPage');
 
         $lista_personal = Tbl_personale::where('activo','1')
-            ->where('dni','like','%' .$this->searchpersonal .'%')
-            ->orwhere('datos','like','%' .$this->searchpersonal .'%')
+            ->where('dni','like','%' .$this->searchbuscarpersonal .'%')
+            ->orwhere('datos','like','%' .$this->searchbuscarpersonal .'%')
             ->paginate(10,['*'], 'personalPage');
         
         $totales_asignados = Tbl_biene::select(
@@ -401,6 +401,9 @@ class Activos extends Component
         $this->reset('searchpersonal');
 
         $this->modal_abierto_personal_buscar = false;
+
+        $this->dni = $ipersonal->dni;
+        $this->datos = $ipersonal->datos;
     }
 
     public function cerrar_personal(){
