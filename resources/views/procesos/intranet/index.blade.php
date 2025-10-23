@@ -17,12 +17,16 @@
             <button class="nav-link active" id="configuracion-tab" data-bs-toggle="tab" data-bs-target="#configuracion" type="button" role="tab" aria-controls="configuracion" aria-selected="true">
                 <i class="fa-solid fa-gear"></i> Configuración
             </button>
-            <button class="nav-link" id="personal-atenciones-tab" data-bs-toggle="tab" data-bs-target="#personal-atenciones" type="button" role="tab" aria-controls="personal-atenciones" aria-selected="false">
-                <i class="fa-solid fa-ticket"></i> Atenciones
-            </button>
-            <button class="nav-link" id="registro-conformidad-tab" data-bs-toggle="tab" data-bs-target="#registro-conformidad" type="button" role="tab" aria-controls="registro-conformidad" aria-selected="false">
-                <i class="fa-solid fa-user-pen"></i> Registro de incidencias / solicitudes
-            </button>
+            @can('procesos.intranet.atenciones.index')
+                <button class="nav-link" id="personal-atenciones-tab" data-bs-toggle="tab" data-bs-target="#personal-atenciones" type="button" role="tab" aria-controls="personal-atenciones" aria-selected="false">
+                    <i class="fa-solid fa-ticket"></i> Atenciones
+                </button>
+            @endcan
+            @can('procesos.intranet.incidencia_solicitud.index')
+                <button class="nav-link" id="registro-conformidad-tab" data-bs-toggle="tab" data-bs-target="#registro-conformidad" type="button" role="tab" aria-controls="registro-conformidad" aria-selected="false">
+                    <i class="fa-solid fa-user-pen"></i> Registro de incidencias / solicitudes
+                </button>
+            @endcan
         </div>
     </nav>
 

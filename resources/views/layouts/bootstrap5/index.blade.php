@@ -325,18 +325,20 @@
             </a>
 
             <ul class="navbar-nav flex-row d-md-none">
-                <li class="nav-item text-nowrap">
+                {{-- <li class="nav-item text-nowrap">
                     <button class="nav-link px-3 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSearch" aria-controls="navbarSearch" aria-expanded="false" aria-label="Toggle search">
+                        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
                         <svg class="bi" aria-hidden="true">
                             <use xlink:href="#search"></use>
                         </svg>
                     </button>
-                </li>
+                </li> --}}
                 <li class="nav-item text-nowrap">
                     <button class="nav-link px-3 text-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-                        <svg class="bi" aria-hidden="true">
+                        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+                        {{-- <svg class="bi text-white" aria-hidden="true">
                             <use xlink:href="#list"></use>
-                        </svg>
+                        </svg> --}}
                     </button>
                 </li>
             </ul>
