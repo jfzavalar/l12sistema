@@ -8,6 +8,7 @@
         <meta name="generator" content="Astro v5.13.2" />
 
         <title>@yield('title')</title>
+        <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}">
 
         <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/"/>
 
@@ -25,6 +26,22 @@
         @yield('css')
 
         <style>
+            /* Hace redondeados todos los botones de paginación */
+            .pagination .page-link {
+            border-radius: 50px !important; /* o prueba con .375rem */
+            }
+
+            /* También puedes redondear solo los bordes de los extremos */
+            .pagination .page-item:first-child .page-link {
+            border-top-left-radius: 50px;
+            border-bottom-left-radius: 50px;
+            }
+
+            .pagination .page-item:last-child .page-link {
+            border-top-right-radius: 50px;
+            border-bottom-right-radius: 50px;
+            }
+            
             /* ------------------------------------- */
             .bd-placeholder-img {
                 font-size: 1.125rem;
@@ -300,7 +317,11 @@
 
         <header  class="navbar sticky-top bg-dark flex-md-nowrap p-0 shadow" data-bs-theme="dark">
             <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="#">
-                <i class="fa-brands fa-ubuntu"></i> <strong>SISTEMA</strong>
+                <img src="{{ asset('img/favicon.png') }}" 
+                    alt="Logo" 
+                    width="24" height="24" 
+                    class="me-2 rounded p-1" 
+                    style="background-color: white;"> SISTEMA
             </a>
 
             <ul class="navbar-nav flex-row d-md-none">

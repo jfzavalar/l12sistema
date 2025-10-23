@@ -4,7 +4,7 @@
         <div class="card-body">
             <div class="table-responsive small">
                 <div class="input-group mb-3">
-                    <input type="text" id="txtsearcha2" class="form-control form-control-sm" wire:model.live="searcha2" placeholder="Buscar por código patrimonial">
+                    <input type="text" id="txt_searchabienesdesplazamientoa" class="form-control form-control-sm" wire:model.live="searchabienesdesplazamientoa" placeholder="Buscar por código patrimonial">
                     <button type="button" id="btnnuevo" class="btn btn-outline-primary btn-sm" wire:click="nuevo">
                         <i class="fa-solid fa-file"></i> Nuevo
                     </button>

@@ -90,7 +90,7 @@
 
             <div class="table-responsive small">
                 <div class="input-group mb-3">
-                    <input type="text" id="txtsearcha" class="form-control form-control-sm" wire:model.live="searcha" placeholder="Buscar por código patrimonial">
+                    <input type="text" id="txt-searchbienesactivos" class="form-control form-control-sm" wire:model.live="searchbienesactivos" placeholder="Buscar por código patrimonial">
                     <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" wire:click="nuevo">
                         <i class="fa-solid fa-file"></i> Nuevo
                     </button>

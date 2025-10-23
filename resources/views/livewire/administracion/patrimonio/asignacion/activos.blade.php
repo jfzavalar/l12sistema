@@ -18,7 +18,7 @@
         <div class="card-body">
             <div class="table-responsive small">
                 <div class="input-group mb-3">
-                    <input type="text" id="txtsearcha2" class="form-control form-control-sm" wire:model.live="searchpersonal" placeholder="Buscar por DNI o Datos del Personal">
+                    <input type="text" id="txt_searchabienesasignaciona" class="form-control form-control-sm" wire:model.live="searchabienesasignaciona" placeholder="Buscar por DNI o Datos del Personal">
                     <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" wire:click="nuevo">
                         <i class="fa-solid fa-file"></i> Nuevo
                     </button>

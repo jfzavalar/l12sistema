@@ -63,17 +63,20 @@ class Activos extends Component
     }
 
     //Diferenciar
-    public $equipo;
+    public $equipo,$traslado;
 
 
     public function render()
     {
         $lista_activos = Tbl_personales_biene::where('activo','1')
             ->where('clase', 'COMPUTO')
-            // ->whereIn('familia', [
-            //     'COMPUTADORA PERSONAL PORTATIL',
-            //     'UNIDAD CENTRAL DE PROCESO - CPU'
-            // ])
+            ->where(function ($q) {
+                $q->whereIn('familia', [
+                    'COMPUTADORA PERSONAL PORTATIL',
+                    'UNIDAD CENTRAL DE PROCESO - CPU'
+                ])
+                ->orWhere('familia', 'like', '%impreso%');
+            })
             ->whereNotIn('nomsedeofi', [
                 'CASA ACOGIDA TAMBO'
             ])
@@ -233,6 +236,14 @@ class Activos extends Component
         $this->modal_header_color = 'success-subtle';
         $this->btn_guardar_actualizar = 'actualizar';
         $this->btn_guardar_actualizar_color = 'success';
+
+        $this->dni = $instanciaTbl->cod_usuario;
+        
+        $iPersonal = Tbl_personale::where('dni', $this->dni)->firstOrFail();
+
+        $this->datos = $iPersonal->datos;
+        $this->cel_personal = $iPersonal->cel_personal;
+        $this->correo_personal = $iPersonal->correo_personal;
         
         // Rellenar campos
         $this->id_bien = $instanciaTbl->id;
@@ -300,6 +311,8 @@ class Activos extends Component
         if (!empty($instanciaTbl->ip)) {
             $this->ip = $instanciaTbl->ip;
         }
+
+        $this->validate();
 
         $instanciaTbl->update([
             'cod_pat'          => $this->cod_pat,

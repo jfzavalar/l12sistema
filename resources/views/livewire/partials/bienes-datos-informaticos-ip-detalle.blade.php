@@ -45,7 +45,7 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
-            
+
             <hr class="border-1">
 
             <div class="row g-3">
@@ -80,7 +80,7 @@
                     </select>
                 </div>
             </div>
-            <div class="row g-3">
+            <div class="row">
                 <div class="col-lg-4 col-sm-12">
                     <label for="txt_ip_impresora01" class="form-label"><strong>IP Impresora 01</strong></label>
                     <input id="txt_ip_impresora01" type="text" class="form-control form-control-sm" wire:model="ip_impresora01">
@@ -94,7 +94,7 @@
                     <input id="txt_ip_impresora03" type="text" class="form-control form-control-sm" wire:model="ip_impresora03">
                 </div>
             </div>
-            <div class="row g-3">
+            <div class="row">
                 <div class="col-lg-12 col-sm-12">
                     <label for="txt_observacion" class="form-label"><strong>Observación</strong></label>
                     <input id="txt_observacion" type="text" class="form-control form-control-sm" wire:model="observacion">

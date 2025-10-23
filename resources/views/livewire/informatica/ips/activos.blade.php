@@ -28,7 +28,7 @@
                                     {{-- <option selected>Mostrar todo: Seleccionar sede</option> --}}
                                     <option value="">Seleccionar todo</option>
                                     @foreach ($lista_sedes_dependencias_despachos as $sedeb)
-                                        <option value="{{ $sedeb->nomsedeofi }}">{{ $sedeb->nomsedeofi . ' - ' . $sedeb->total }} - Equipos registrados</option>
+                                        <option value="{{ $sedeb->nomsedeofi }}">{{ $sedeb->nomsedeofi }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -48,14 +48,14 @@
                                 </label>
                                 <div class="input-group">
                                     <input type="text" id="txt_searcha" class="form-control form-control-sm" placeholder="Buscar por DNI - CÓDIGO PATRIMONIAL - IP" wire:model.live="searcha">
-                                    @can('procesos.informatica.ips.create')
-                                        <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" wire:click="nuevo">
-                                            <i class="fa-solid fa-file"></i> Nuevo computador
+                                    @can('procesos.informatica.ips.destroy')
+                                        <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-2" wire:click="nuevo">
+                                            <i class="fa-solid fa-file"></i> Nuevo <i class="fa-solid fa-desktop"></i>
+                                        </button>
+                                        <button type="button" id="btnnuevo" class="btn btn-success btn-sm rounded-2" wire:click="nuevo_impresora">
+                                            <i class="fa-solid fa-file"></i> Nuevo <i class="fa-solid fa-print"></i>
                                         </button>
                                     @endcan
-                                    <button type="button" id="btnnuevo" class="btn btn-success btn-sm" wire:click="nuevo_impresora">
-                                        <i class="fa-solid fa-file"></i> Nueva impresora
-                                    </button>
                                 </div>
                             </div>
                         </div>

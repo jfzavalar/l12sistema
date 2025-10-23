@@ -17,15 +17,20 @@
                         </a>
                     </li>
                 @endcan
+            </ul>
 
+            {{-- --------------------------------------------------------------------------- --}}
+
+            @can('procesos.admin')
                 <hr class="border border-light my-3">
 
-                @can('procesos.admin')
-                    <h6 class="sidebar-heading px-3 mt-4 mb-1 text-uppercase text-white">
-                        PANEL ADMIN
-                    </h6>
-                @endcan
-                
+                <h6 class="sidebar-heading px-3 mt-4 mb-1 text-uppercase text-white">
+                    PANEL ADMIN
+                </h6>
+            @endcan
+
+            <ul class="nav flex-column">
+                               
                 @can('procesos.admin.users.index')
                     <li class="nav-item ms-4">
                         <a class="nav-link {{ request()->routeIs('procesos.admin.users.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.users.index') }}">
@@ -49,11 +54,20 @@
                     </li>
                 @endcan
 
-                <hr class="border border-light my-3">
+            </ul>
 
+
+            {{-- --------------------------------------------------------------------------- --}}
+
+            @can('procesos.administracion')
+                <hr class="border border-light my-3">
+            
                 <h6 class="sidebar-heading px-3 mt-4 mb-1 text-uppercase text-white">
                     ADMINISTRACIÓN
                 </h6>
+            @endcan
+
+            <ul class="nav flex-column">    
 
                 @can('procesos.administracion.patrimonio.index')
                     <li class="nav-item ms-4">
@@ -71,11 +85,16 @@
                 @endcan
             </ul>
 
-            <hr class="border border-light my-3">
 
-            <h6 class="sidebar-heading px-3 mt-4 mb-1 text-uppercase text-white">
-                INFORMÁTICA
-            </h6>
+            {{-- --------------------------------------------------------------------------- --}}
+
+            @can('procesos.informatica')
+                <hr class="border border-light my-3">
+
+                <h6 class="sidebar-heading px-3 mt-4 mb-1 text-uppercase text-white">
+                    INFORMÁTICA
+                </h6>
+            @endcan
 
             <ul class="nav flex-column mb-auto">
                 @can('procesos.informatica.firmaspcs.index')
@@ -83,20 +102,38 @@
                         <a class="nav-link {{ request()->routeIs('procesos.informatica.firmasdigitales.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.firmasdigitales.index') }}">
                             <i class="fa-solid fa-signature"></i> Firmas digitales
                         </a>
-                    </li>    
+                    </li>
                 @endcan
                 @can('procesos.informatica.ips.index')
                     <li class="nav-item ms-4">
                         <a class="nav-link {{ request()->routeIs('procesos.informatica.ips.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.ips.index') }}">
                             <i class="fa-solid fa-robot"></i> IPs
                         </a>
-                    </li>    
+                    </li>
+                @endcan
+                @can('procesos.informatica.spijweb.index')
+                    <li class="nav-item ms-4">
+                        <a class="nav-link {{ request()->routeIs('procesos.informatica.spijweb.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.spijweb.index') }}">
+                            <i class="fa-solid fa-users-viewfinder"></i> Spijweb
+                        </a>
+                    </li>
                 @endcan
             </ul>
+
+
+            {{-- --------------------------------------------------------------------------- --}}
 
             <hr class="border border-light my-3">
 
             <ul class="nav flex-column mb-auto">
+                @can('procesos.intranet.atenciones.index')
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('procesos.intranet.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.intranet.index') }}">
+                            <i class="fa-solid fa-globe"></i> Intranet
+                        </a>
+                    </li>
+                @endcan
+
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-2 text-white" href="#">
                         <i class="fa-solid fa-gear"></i> Configuración
@@ -112,5 +149,6 @@
                 </li>
             </ul>
         </div>
+        <p></p>
     </div>
 </div>

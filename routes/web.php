@@ -6,6 +6,8 @@ use App\Http\Controllers\Administracion\PatrimonioController;
 use App\Http\Controllers\Administracion\RrhhController;
 use App\Http\Controllers\Informatica\FirmasdigitalesController;
 use App\Http\Controllers\Informatica\IpsController;
+use App\Http\Controllers\Informatica\SpijwebController;
+use App\Http\Controllers\IntranetController;
 use App\Http\Controllers\RoleController;
 
 use Illuminate\Support\Facades\Route;
@@ -69,13 +71,28 @@ Route::middleware('auth','can:procesos.administracion.rrhh.index')->group(functi
     Route::resource('rrhh', RrhhController::class)->names('procesos.administracion.rrhh');
 });
 
+
+
 //INFORMATICA
-Route::middleware('auth','can:procesos.informatica.ips.index')->group(function () {
+Route::middleware('auth','can:procesos.informatica.firmasdigitales.index')->group(function () {
     Route::resource('firmas', FirmasdigitalesController::class)->names('procesos.informatica.firmasdigitales');
     Route::get('pdf/informatica/token-acta/{id}', [FirmasdigitalesController::class, 'exportarPDF'])->name('pdf.informatica.token-acta');
+});
 
+Route::middleware('auth','can:procesos.informatica.ips.index')->group(function () {
     Route::resource('ips', IpsController::class)->names('procesos.informatica.ips');
     // Route::get('pdf/informatica/firmapc-acta/{id}', [IpsController::class, 'exportarPDF'])->name('pdf.informatica.firmapc-acta');
+});
+Route::middleware('auth','can:procesos.informatica.spijweb.index')->group(function () {
+    Route::resource('spijweb', SpijwebController::class)->names('procesos.informatica.spijweb');
+    Route::get('pdf/informatica/spijweb-acta/{id}', [SpijwebController::class, 'exportarPDF'])->name('pdf.informatica.spijweb-acta');
+});
+
+
+
+//INTRANET
+Route::middleware('auth','can:procesos.intranet.index')->group(function () {
+    Route::resource('intranet', IntranetController::class)->names('procesos.intranet');
 });
 
 require __DIR__.'/auth.php';

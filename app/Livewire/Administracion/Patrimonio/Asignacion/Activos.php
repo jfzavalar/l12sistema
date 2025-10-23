@@ -37,8 +37,8 @@ class Activos extends Component
     public $modal_abierto_bienes = false;
 
     //Buscar
-    public $searchpersonal;
-    public function updatingSearchpersonal(){
+    public $searchabienesasignaciona;
+    public function updatingSearchabienesasignaciona(){
         $this->resetPage('activosPage');
     }
     public $searchbuscarpersonal;
@@ -71,10 +71,10 @@ class Activos extends Component
     public function render()
     {
         $lista_activos = Tbl_personale::where('activo','1')
-            ->when($this->searchpersonal !== '', function ($query) {
+            ->when($this->searchabienesasignaciona !== '', function ($query) {
                 $query->where(function ($q) {
-                    $q->where('dni', 'like', '%' . $this->searchpersonal . '%')
-                    ->orWhere('datos', 'like', '%' . $this->searchpersonal . '%');
+                    $q->where('dni', 'like', '%' . $this->searchabienesasignaciona . '%')
+                    ->orWhere('datos', 'like', '%' . $this->searchabienesasignaciona . '%');
                 });
             })
             ->orderBy('datos')

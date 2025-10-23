@@ -40,8 +40,8 @@ class Activos extends Component
     // public function updatingSearcha(){
     //     $this->resetPage();
     // }
-    public $searcha2;
-    public function updatingSearcha2(){
+    public $searchabienesdesplazamientoa;
+    public function updatingSearchabienesdesplazamientoa(){
         $this->resetPage();
     }
     public $searchpersonal;
@@ -172,7 +172,7 @@ class Activos extends Component
                 'created_user',
                 'updated_user')
             ->where('activo','1')
-            ->where('lista_equipos_traslado','like','%' . $this->searcha2 . '%')
+            ->where('lista_equipos_traslado','like','%' . $this->searchabienesdesplazamientoa . '%')
             ->orderBy('id','desc')
             ->paginate(30);
 

@@ -104,7 +104,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
     <img src="{{ asset('img/mpfn.png') }}" alt="Logo MPFN" class="mx-auto w-[112px] md:w-[150px] lg:w-[187px]">
 
-    <x-auth-header :title="__('Inicia Sesión en tu cuenta')" :description="__('Ingrese su DNI y contraseña a continuación para iniciar sesión')" />
+    {{-- <x-auth-header :title="__('Inicia Sesión en tu cuenta')" :description="__('Ingrese su DNI y contraseña a continuación para iniciar sesión')" /> --}}
 
     <!-- Session Status -->
     <x-auth-session-status class="text-center" :status="session('status')" />
@@ -145,15 +145,15 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         <div class="flex items-center justify-end">
             <flux:button variant="primary" type="submit" class="w-full" data-test="login-button">
-                {{ __('Log in') }}
+                {{ __('Iniciar Sesión') }}
             </flux:button>
         </div>
     </form>
 
-    @if (Route::has('register'))
+    {{-- @if (Route::has('register'))
         <div class="space-x-1 text-sm text-center rtl:space-x-reverse text-zinc-600 dark:text-zinc-400">
             <span>{{ __('Don\'t have an account?') }}</span>
             <flux:link :href="route('register')" wire:navigate>{{ __('Sign up') }}</flux:link>
         </div>
-    @endif
+    @endif --}}
 </div>

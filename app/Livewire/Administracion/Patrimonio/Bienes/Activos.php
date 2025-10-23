@@ -37,8 +37,8 @@ class Activos extends Component
     public $modal_abierto_excel_cargar = false;
 
     //Buscar
-    public $searcha;
-    public function updatingSearcha(){
+    public $searchbienesactivos;
+    public function updatingSearchbienesactivos(){
         $this->resetPage('activosPage');
     }
     public $searchpersonal;
@@ -123,10 +123,10 @@ class Activos extends Component
     public function render()
     {
         $lista_activos = Tbl_biene::where('activo','1')
-            ->when($this->searcha !== '', function ($query) {
+            ->when($this->searchbienesactivos !== '', function ($query) {
                 $query->where(function ($q) {
-                    $q->where('nro_pecosa', 'like', '%' . $this->searcha. '%')
-                    ->orWhere('cod_pat', 'like', '%' . $this->searcha . '%');
+                    $q->where('nro_pecosa', 'like', '%' . $this->searchbienesactivos. '%')
+                    ->orWhere('cod_pat', 'like', '%' . $this->searchbienesactivos . '%');
                 });
             })
             // Filtro por rutas

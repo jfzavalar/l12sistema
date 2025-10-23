@@ -56,7 +56,7 @@
                     <livewire:administracion.patrimonio.bienes.activos />
                 </div>
                 <div class="tab-pane fade" id="2-tab-pane" role="tabpanel" aria-labelledby="2-tab" tabindex="0">
-                    
+                    <livewire:administracion.patrimonio.bienes.inactivos />
                 </div>
                 <div class="tab-pane fade" id="3-tab-pane" role="tabpanel" aria-labelledby="3-tab" tabindex="0">
                     
