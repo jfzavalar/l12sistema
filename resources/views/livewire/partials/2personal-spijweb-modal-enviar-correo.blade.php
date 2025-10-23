@@ -19,16 +19,16 @@
                         <div class="col-xl-12 border-start-1">
                             <fieldset class="border p-4 rounded mb-2">
                                 {{-- <legend class="float-none w-outo px-3">Datos del Personal</legend> --}}
-                                <br><label class="form-label fw-bold">DNI:</label> {{ $dni }}
-                                <br><label class="form-label fw-bold">Datos:</label> {{ $datos }}
-                                <br><label class="form-label fw-bold">CARGO:</label> {{ $cargo }}
-                                <br><label class="form-label fw-bold">REGIMEN:</label> {{ $regimen }}
-                                <br><label class="form-label fw-bold">SEDE:</label> {{ $sede_origen }}
-                                <br><label class="form-label fw-bold">DEPENDENCIA:</label> {{ $dependencia_origen }}
-                                <br><label class="form-label fw-bold">CORREO INSTITUCIONAL:</label> {{ $correo_institucional }}
-                                <br><label class="form-label fw-bold">CELULAR INSTITUCIONAL:</label> {{ $cel_institucional }}
-                                <br><label class="form-label fw-bold">CORREO PERSONAL:</label> {{ $correo_personal }}
-                                <br><label class="form-label fw-bold">CELULAR PERSONAL:</label>  {{ $cel_personal }}
+                                <br><strong>DNI:</strong> {{ $dni }}
+                                <br><strong>Datos:</strong> {{ $datos }}
+                                <br><strong>CARGO:</strong> {{ $cargo }}
+                                <br><strong>REGIMEN:</strong> {{ $regimen }}
+                                <br><strong>SEDE:</strong> {{ $sede_origen }}
+                                <br><strong>DEPENDENCIA:</strong>{{ $dependencia_origen }}
+                                <br><strong>CORREO INSTITUCIONAL:</strong> {{ $correo_institucional }}
+                                <br><strong>CELULAR INSTITUCIONAL:</strong> {{ $cel_institucional }}
+                                <br><strong>CORREO PERSONAL:</strong>{{ $correo_personal }}
+                                <br><strong>CELULAR PERSONAL: </strong> {{ $cel_personal }}
                             </fieldset>
                         </div>    
                     </div>          

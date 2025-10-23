@@ -14,7 +14,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="input-group mt-3 mb-3">
-                                    <input type="text" class="form-control" placeholder="Buscar cargo" wire:model.live="searchcargo">
+                                    <input type="text" id="searchcargo" class="form-control" placeholder="Buscar cargo" wire:model.live="searchcargo">
                                 </div>
                             </div>
                         </div>

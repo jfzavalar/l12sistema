@@ -14,7 +14,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="input-group mt-3 mb-3">
-                                    <input type="text" class="form-control" placeholder="Buscar dependencia" wire:model.live="searchdependencia">
+                                    <input type="text" id="searchdependencia" class="form-control" placeholder="Buscar dependencia" wire:model.live="searchdependencia">
                                 </div>
                             </div>
                         </div>

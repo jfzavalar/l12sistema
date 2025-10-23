@@ -36,29 +36,34 @@ class Activos extends Component
     public $pdf,$pdftutorial;
 
     //Variables de modal buscar spijweb
-    public $search;
-    public function updatingSearch(){
-        $this->resetPage();
+    public $searchspijweb;
+    public function updatingSearchspijweb(){
+        $this->resetPage('activosPage');
+        $this->reset(['filtro_formatos', 'filtro_usuario', 'filtro_usuarios','filtro_rutas']);
+    }
+    public $searchspijwebi;
+    public function updatingSearchspijwebi(){
+        $this->resetPage('inactivosPage');
         $this->reset(['filtro_formatos', 'filtro_usuario', 'filtro_usuarios','filtro_rutas']);
     }
 
     //Variables de modal buscar personal
     public $searchpersonal;
     public function updatingSearchpersonal(){
-        $this->resetPage();
+        $this->resetPage('personalPage');
     }
     //Variables de modal buscar sede_dependencia
     public $searchcargo;
     public function updatingSearchcargo(){
-        $this->resetPage();
+        $this->resetPage('cargoPage');
     }
     public $searchdependencia;
     public function updatingSearchdependencia(){
-        $this->resetPage();
+        $this->resetPage('dependenciaPage');
     }
     public $searchsede;
     public function updatingSearchsede(){
-        $this->resetPage();
+        $this->resetPage('sedePage');
     }
 
     public $filtro_formatos, $filtro_usuario, $filtro_usuarios, $filtro_rutas;
@@ -80,7 +85,8 @@ class Activos extends Component
     }
 
     public function mount(){
-        $this->search = '';
+        $this->searchspijweb = '';
+        $this->searchspijwebi = '';
         $this->filtro_usuario = '';
         $this->filtro_usuarios = '';
         $this->filtro_formatos = '';
@@ -93,10 +99,10 @@ class Activos extends Component
             ->select('id','dni','datos','sede_origen','dependencia_origen','regimen','cargo','correo_personal','correo_institucional','cel_personal','cel_institucional','actaruta',
                     'usuariospijweb','passwordspijweb','estado_formato','estado_userpass','activo','created_user','updated_user')
             ->where('activo',"1")
-            ->when($this->search !== '', function ($query) {
+            ->when($this->searchspijweb !== '', function ($query) {
                 $query->where(function ($q) {
-                    $q->where('dni', 'like', '%' . $this->search . '%')
-                    ->orWhere('datos', 'like', '%' . $this->search . '%');
+                    $q->where('dni', 'like', '%' . $this->searchspijweb . '%')
+                    ->orWhere('datos', 'like', '%' . $this->searchspijweb . '%');
                 });
             })
             // Filtro por rutas
@@ -130,7 +136,7 @@ class Activos extends Component
             })
 
             ->orderBy('id','desc')
-            ->paginate();
+            ->paginate(10,['*'], 'activosPage');
 
         $conteo_rutas = DB::table('tbl_spijwebs')
             ->selectRaw("
@@ -146,11 +152,11 @@ class Activos extends Component
                     'usuariospijweb','passwordspijweb','estado_formato','estado_userpass','activo')
             ->where('activo',"0")
             ->where(function ($query) {$query
-                ->where('dni', 'like', '%' . $this->search . '%')
-                ->orWhere('datos', 'like', '%' . $this->search . '%');
+                ->where('dni', 'like', '%' . $this->searchspijwebi . '%')
+                ->orWhere('datos', 'like', '%' . $this->searchspijwebi . '%');
             })
             ->orderBy('id','desc')
-            ->paginate();
+            ->paginate(10,['*'], 'inactivosPage');
             
         $totales_asignados = DB::table('tbl_spijwebs')
             ->select(
@@ -168,21 +174,21 @@ class Activos extends Component
             ->select('id','dni','datos','sede_origen','dependencia_origen','regimen','cargo','correo_personal','correo_institucional','cel_personal','cel_institucional','activo')
             ->where('dni','like','%' .$this->searchpersonal .'%')
             ->orwhere('datos','like','%' .$this->searchpersonal .'%')
-            ->paginate(5);
+            ->paginate(5,['*'], 'PersonalPage');
 
         $lista_cargo = DB::table('tbl_cargos')
             ->select('cargo')
             ->where('activo','1')
             ->where('cargo','like','%' . $this->searchcargo . '%')
             ->orderBy('cargo')
-            ->paginate(30);
+            ->paginate(30,['*'], 'cargoPage');
 
         $lista_sede = DB::table('tbl_sedes_dependencias')
             ->select('sede')
             ->distinct()
             ->where('sede','like','%' . $this->searchsede . '%')
             ->orderBy('sede')
-            ->paginate(30);
+            ->paginate(30,['*'], 'sedePage');
 
         $lista_dependencia = DB::table('tbl_sedes_dependencias')
             ->select('dependencia')
@@ -190,7 +196,7 @@ class Activos extends Component
             ->where('sede',$this->sede_origen)
             ->where('dependencia','like','%' . $this->searchdependencia . '%')
             ->orderBy('dependencia')
-            ->paginate();
+            ->paginate(10,['*'], 'cependenciaPage');
 
         return view('livewire.informatica.spijweb.activos',
                 compact('lista_activos','conteo_rutas','lista_inactivos','totales_asignados','lista_personal','lista_cargo','lista_sede','lista_dependencia'));

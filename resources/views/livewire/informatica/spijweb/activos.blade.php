@@ -25,13 +25,13 @@
                                                 <button class="input-group-text bg-success text-white" wire:click="$set('filtro_formatos','ENVIADO')" id="inputGroup-sizing-sm">
                                                     <i class="fa-solid fa-check me-2"></i>Enviado
                                                 </button>
-                                                <input type="text" class="form-control text-end" value="{{ $tactivos->total_enviados }}" readonly>
+                                                <input type="text" id="enviados" class="form-control text-end" value="{{ $tactivos->total_enviados }}" readonly>
                                             </div>
                                             <div class="input-group input-group-xs">
                                                 <button class="input-group-text bg-danger text-white" wire:click="$set('filtro_formatos','PENDIENTE')" id="inputGroup-sizing-sm">
                                                     <i class="fa-solid fa-triangle-exclamation me-2"></i>Pendiente
                                                 </button>
-                                                <input type="text" class="form-control text-end" value="{{ $tactivos->total_pendientes }}" readonly>
+                                                <input type="text" id="pendientes" class="form-control text-end" value="{{ $tactivos->total_pendientes }}" readonly>
                                             </div>
                                         </div>
                                     </td>
@@ -41,13 +41,13 @@
                                                 <button class="input-group-text bg-success text-white" wire:click="$set('filtro_usuarios','ENVIADO')"  id="inputGroup-sizing-sm">
                                                     <i class="fa-solid fa-check me-2"></i>Enviado
                                                 </button>
-                                                <input type="text" class="form-control text-end" value="{{ $tactivos->total_enviados_u }}" readonly>
+                                                <input type="text" id="enviados2" class="form-control text-end" value="{{ $tactivos->total_enviados_u }}" readonly>
                                             </div>
                                             <div class="input-group input-group-xs">
                                                 <button class="input-group-text bg-danger text-white" wire:click="$set('filtro_usuarios','PENDIENTE')" id="inputGroup-sizing-sm">
                                                     <i class="fa-solid fa-triangle-exclamation me-2"></i>Pendiente
                                                 </button>
-                                                <input type="text" class="form-control text-end" value="{{ $tactivos->total_pendientes_u }}" readonly>
+                                                <input type="text" id="pendientes2" class="form-control text-end" value="{{ $tactivos->total_pendientes_u }}" readonly>
                                             </div>
                                         </div>
                                     </td>
@@ -108,7 +108,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="input-group mt-3 mb-3">
-                            <input type="text" class="form-control form-control-sm" placeholder="Buscar por DNI o Datos del Personal" wire:model.live="search">
+                            <input type="text" id="searchspijweb" class="form-control form-control-sm" placeholder="Buscar por DNI o Datos del Personal" wire:model.live="searchspijweb">
                             @can('procesos.informatica.spijweb.create')
                                 <button type="button" class="btn btn-primary btn-sm" wire:click="nuevo" data-bs-toggle="modal" data-bs-target="#new-edit-Modal">
                                     <i class="fa-solid fa-file"></i> Nuevo Registro
@@ -239,7 +239,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="input-group mt-3 mb-3">
-                            <input type="text" class="form-control" placeholder="Buscar por DNI o Datos del Personal" aria-label="Recipient’s username" aria-describedby="button-addon2">
+                            <input type="text" id="searchspijwebi" class="form-control" placeholder="Buscar por DNI o Datos del Personal" wire:model="searchspijwebi" aria-label="Recipient’s username" aria-describedby="button-addon2">
                             {{-- <button type="button" class="btn btn-outline-primary" wire:click="nuevo" data-bs-toggle="modal" data-bs-target="#new-edit-Modal">
                                 <i class="fa-solid fa-file"></i> Nuevo
                             </button> --}}
@@ -328,11 +328,11 @@
                                             <button type="button" class="btn {{ $color_boton }} btn-sm" data-bs-toggle="modal" data-bs-target="#personal-buscar-Modal">
                                                 <i class="fa-brands fa-searchengin"></i> Buscar
                                             </button>
-                                            <input type="text" class="form-control form-control-sm bg-light" value="{{ $dni . ' - ' . $datos . ' - ' . $cargo . ' - ' . $regimen }}" readonly>
+                                            <input type="text" id="datos_todos" class="form-control form-control-sm bg-light" value="{{ $dni . ' - ' . $datos . ' - ' . $cargo . ' - ' . $regimen }}" readonly>
                                         </div>
                                         <div class="col-lg-4 col-sm-12">
-                                            <label class="form-label fw-bold">DNI</label>
-                                            <input type="text" class="form-control form-control-sm bg-light" wire:model="dni" readonly required>
+                                            <label for="txt_dni" class="form-label fw-bold">DNI</label>
+                                            <input type="text" id="txt_dni" class="form-control form-control-sm bg-light" wire:model="dni" readonly required>
                                             @error('dni')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
@@ -340,18 +340,18 @@
                                             @enderror
                                         </div>
                                         <div class="col-lg-8 col-sm-12">
-                                            <label class="form-label fw-bold">Apellidos y Nombres</label>
-                                            <input type="text" class="form-control form-control-sm bg-light" wire:model="datos" readonly required>
+                                            <label for="txt_datos" class="form-label fw-bold">Apellidos y Nombres</label>
+                                            <input type="text" id="txt_datos" class="form-control form-control-sm bg-light" wire:model="datos" readonly required>
                                         </div>
                                     </div>
                                     <div class="row g-3">
                                         <div class="col-lg-4 col-sm-12">
-                                            <label class="form-label fw-bold">Cargo</label>
+                                            <label for="txt_cargo" class="form-label fw-bold">Cargo</label>
                                             <div class="input-group">
                                                 <button type="button" class="btn {{ $color_boton }} btn-sm" data-bs-toggle="modal" data-bs-target="#cargo-buscar-Modal">
                                                     <i class="fa-brands fa-searchengin"></i> Buscar
                                                 </button>
-                                                <input type="text" class="form-control form-control-sm bg-light" wire:model="cargo" readonly required>
+                                                <input type="text" id="txt_cargo" class="form-control form-control-sm bg-light" wire:model="cargo" readonly required>
                                             </div>
                                         </div>
                                         <div class="col-lg-4 col-sm-12">
@@ -370,52 +370,52 @@
                                     </div>
                                     <div class="row g-3">
                                         <div class="col-lg-6 col-sm-12">
-                                            <label class="form-label fw-bold">Sede</label>
+                                            <label for="txt_sede" class="form-label fw-bold">Sede</label>
                                             <div class="input-group mb-3">
                                                 <button type="button" class="btn {{ $color_boton }} btn-sm" data-bs-toggle="modal" data-bs-target="#sede-buscar-Modal">
                                                     <i class="fa-brands fa-searchengin"></i> Buscar
                                                 </button>
-                                                <input type="text" class="form-control form-control-sm bg-light" wire:model="sede_origen" readonly required>
+                                                <input type="text" id="txt_sede" class="form-control form-control-sm bg-light" wire:model="sede_origen" readonly required>
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-sm-12">
-                                            <label class="form-label fw-bold">Dependencia</label>
+                                            <label for="txt_dependencia" class="form-label fw-bold">Dependencia</label>
                                             <div class="input-group mb-3">
                                                 <button type="button" class="btn {{ $color_boton }} btn-sm" data-bs-toggle="modal" data-bs-target="#dependencia-buscar-Modal">
                                                     <i class="fa-brands fa-searchengin"></i> Buscar
                                                 </button>
-                                                <input type="text" class="form-control form-control-sm bg-light" wire:model="dependencia_origen" readonly required>
+                                                <input type="text" id="txt_dependencia" class="form-control form-control-sm bg-light" wire:model="dependencia_origen" readonly required>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row g-3">
                                         <div class="col-lg-3 col-sm-12">
-                                            <label class="form-label fw-bold">Correo Institucional</label>
-                                            <input type="text" class="form-control form-control-sm bg-light" wire:model="correo_institucional" readonly>
+                                            <label for="txt_cinstitucional" class="form-label fw-bold">Correo Institucional</label>
+                                            <input type="text" id="txt_cinstitucional" class="form-control form-control-sm bg-light" wire:model="correo_institucional" readonly>
                                         </div>
                                         <div class="col-lg-3 col-sm-12">
-                                            <label class="form-label fw-bold">Celular Institucional</label>
-                                            <input type="text" class="form-control form-control-sm bg-light" wire:model="cel_institucional" readonly>
+                                            <label for="txt_celinstitucional" class="form-label fw-bold">Celular Institucional</label>
+                                            <input type="text" id="txt_celinstitucional" class="form-control form-control-sm bg-light" wire:model="cel_institucional" readonly>
                                         </div>
                                         <div class="col-lg-3 col-sm-12">
-                                            <label class="form-label fw-bold">Correo Personal</label>
-                                            <input type="text" class="form-control form-control-sm bg-light" wire:model="correo_personal" readonly>
+                                            <label for="cpersonal" class="form-label fw-bold">Correo Personal</label>
+                                            <input type="text" id="cpersonal" class="form-control form-control-sm bg-light" wire:model="correo_personal" readonly>
                                         </div>
                                         <div class="col-lg-3 col-sm-12">
-                                            <label class="form-label fw-bold">Celular Personal</label>
-                                            <input type="text" class="form-control form-control-sm bg-light" wire:model="cel_personal" readonly>
+                                            <label for="txt_celpersonal" class="form-label fw-bold">Celular Personal</label>
+                                            <input type="text" id="txt_celpersonal" class="form-control form-control-sm bg-light" wire:model="cel_personal" readonly>
                                         </div>
                                     </div>
                                 </fieldset>
                                 <fieldset class="border p-4 rounded">
                                     <div class="row g-3">
                                         <div class="col-lg-6 col-sm-12">
-                                            <label class="form-label"><strong>USUARIO</strong></label>
-                                            <input type="text" class="form-control form-control-sm" wire:model="usuariospijweb" required>
+                                            <label for="txt_usuario" class="form-label"><strong>USUARIO</strong></label>
+                                            <input type="text" id="txt_usuario" class="form-control form-control-sm" wire:model="usuariospijweb" required>
                                         </div>
                                         <div class="col-lg-6 col-sm-12">
-                                            <label class="form-label"><strong>CONTRASEÑA</strong></label>
-                                            <input type="text" class="form-control form-control-sm" wire:model="passwordspijweb" required>
+                                            <label for="txt_password" class="form-label"><strong>CONTRASEÑA</strong></label>
+                                            <input type="text" id="txt_password" class="form-control form-control-sm" wire:model="passwordspijweb" required>
                                         </div>
                                     </div>
                                 </fieldset>

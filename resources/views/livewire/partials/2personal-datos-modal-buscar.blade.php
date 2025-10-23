@@ -14,7 +14,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="input-group mt-3 mb-3">
-                                    <input type="text" class="form-control" placeholder="Buscar por DNI o Datos del Personal" wire:model.live="searchpersonal">
+                                    <input type="text" id="searchpersonal" class="form-control" placeholder="Buscar por DNI o Datos del Personal" wire:model.live="searchpersonal">
                                     {{-- <button class="btn btn-outline-primary" type="button" id="button-addon2" data-bs-toggle="modal" data-bs-target="#new-edit-Modal">
                                         <i class="fa-solid fa-file"></i> Nuevo
                                     </button> --}}
@@ -23,7 +23,7 @@
                         </div>
                     </form>
                     <div class="table-responsive mt-3">
-                        <table class="table table-striped table-hover table-sm small align-middle">
+                        <table class="table table-striped table-hover table-xsmall table-small align-middle">
                             <thead class="table-dark text-center">
                                 <tr>
                                     <th scope="col">#</th>
@@ -76,7 +76,7 @@
                         <i class="fa-solid fa-floppy-disk"></i>
                         <br>Guardar
                     </button> --}}
-                    <button type="button" class="btn btn-outline-secondary" wire:click="cerrar_buscar_personal" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#new-edit-Modal">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" wire:click="cerrar_buscar_personal" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#new-edit-Modal">
                         <i class="fa-solid fa-door-closed"></i>
                         <br>Cerrar
                     </button>
