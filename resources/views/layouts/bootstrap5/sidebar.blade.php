@@ -126,7 +126,7 @@
             <hr class="border border-light my-3">
 
             <ul class="nav flex-column mb-auto">
-                @can('procesos.intranet.atenciones.index')
+                @can('procesos.intranet.index')
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('procesos.intranet.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.intranet.index') }}">
                             <i class="fa-solid fa-globe"></i> Intranet
@@ -134,11 +134,11 @@
                     </li>
                 @endcan
 
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-2 text-white" href="#">
                         <i class="fa-solid fa-gear"></i> Configuración
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-item">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

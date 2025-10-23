@@ -14,101 +14,89 @@
 
     <nav>
         <div class="nav nav-tabs mb-2" id="nav-tab" role="tablist">
-            <button class="nav-link active" id="personal-atenciones-tab" data-bs-toggle="tab" data-bs-target="#personal-atenciones" type="button" role="tab" aria-controls="personal-atenciones" aria-selected="true">
+            <button class="nav-link active" id="configuracion-tab" data-bs-toggle="tab" data-bs-target="#configuracion" type="button" role="tab" aria-controls="configuracion" aria-selected="true">
+                <i class="fa-solid fa-gear"></i> Configuración
+            </button>
+            <button class="nav-link" id="personal-atenciones-tab" data-bs-toggle="tab" data-bs-target="#personal-atenciones" type="button" role="tab" aria-controls="personal-atenciones" aria-selected="false">
                 <i class="fa-solid fa-ticket"></i> Atenciones
             </button>
             <button class="nav-link" id="registro-conformidad-tab" data-bs-toggle="tab" data-bs-target="#registro-conformidad" type="button" role="tab" aria-controls="registro-conformidad" aria-selected="false">
                 <i class="fa-solid fa-user-pen"></i> Registro de incidencias / solicitudes
             </button>
-            <button class="nav-link" id="personal-password-tab" data-bs-toggle="tab" data-bs-target="#personal-password" type="button" role="tab" aria-controls="personal-password" aria-selected="false">
-                <i class="fa-solid fa-gear"></i> Configuración
-            </button>
         </div>
     </nav>
 
     <div class="tab-content" id="nav-tabContent">
-        <div class="tab-pane fade show active" id="personal-atenciones" role="tabpanel" aria-labelledby="personal-atenciones-tab" tabindex="0">
-
-            <ul class="nav nav-pills mb-2" id="myTab" role="tablist">
+        {{-- ====================== CONFIGURACIÓN ====================== --}}
+        <div class="tab-pane fade show active" id="configuracion" role="tabpanel" aria-labelledby="configuracion-tab" tabindex="0">
+            <ul class="nav nav-pills mb-2" id="tab-configuracion" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="1-tab" data-bs-toggle="tab" data-bs-target="#1-tab-pane" type="button" role="tab" aria-controls="1-tab-pane" aria-selected="true">
+                    <button class="nav-link active" id="conf-inicio-tab" data-bs-toggle="tab" data-bs-target="#conf-inicio" type="button" role="tab" aria-controls="conf-inicio" aria-selected="true">
                         <i class="fa-solid fa-house-user"></i> Inicio
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="2-tab" data-bs-toggle="tab" data-bs-target="#2-tab-pane" type="button" role="tab" aria-controls="2-tab-pane" aria-selected="false">
+                    <button class="nav-link" id="conf-inactivos-tab" data-bs-toggle="tab" data-bs-target="#conf-inactivos" type="button" role="tab" aria-controls="conf-inactivos" aria-selected="false">
                         <i class="fa-solid fa-house-circle-xmark"></i> Inactivos
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="3-tab" data-bs-toggle="tab" data-bs-target="#3-tab-pane" type="button" role="tab" aria-controls="3-tab-pane" aria-selected="false">
+                    <button class="nav-link" id="conf-reportes-tab" data-bs-toggle="tab" data-bs-target="#conf-reportes" type="button" role="tab" aria-controls="conf-reportes" aria-selected="false">
                         <i class="fa-solid fa-chart-pie"></i> Reportes
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="4-tab" data-bs-toggle="tab" data-bs-target="#4-tab-pane" type="button" role="tab" aria-controls="4-tab-pane" aria-selected="false">
+                    <button class="nav-link" id="conf-auditoria-tab" data-bs-toggle="tab" data-bs-target="#conf-auditoria" type="button" role="tab" aria-controls="conf-auditoria" aria-selected="false">
                         <i class="fa-solid fa-audio-description"></i> Auditoría
                     </button>
                 </li>
             </ul>
 
-            <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="1-tab-pane" role="tabpanel" aria-labelledby="1-tab" tabindex="0">
-                    <livewire:intranet.atenciones.activos />
+            <div class="tab-content" id="tab-content-configuracion">
+                <div class="tab-pane fade show active" id="conf-inicio" role="tabpanel" aria-labelledby="conf-inicio-tab" tabindex="0">
+                    <livewire:intranet.configuracion.activos />
                 </div>
-                <div class="tab-pane fade" id="2-tab-pane" role="tabpanel" aria-labelledby="2-tab" tabindex="0">
-                    
-                </div>
-                <div class="tab-pane fade" id="3-tab-pane" role="tabpanel" aria-labelledby="3-tab" tabindex="0">
-                    
-                </div>
-                <div class="tab-pane fade" id="4-tab-pane" role="tabpanel" aria-labelledby="4-tab" tabindex="0">
-
-                </div>
+                <div class="tab-pane fade" id="conf-inactivos" role="tabpanel" aria-labelledby="conf-inactivos-tab" tabindex="0"></div>
+                <div class="tab-pane fade" id="conf-reportes" role="tabpanel" aria-labelledby="conf-reportes-tab" tabindex="0"></div>
+                <div class="tab-pane fade" id="conf-auditoria" role="tabpanel" aria-labelledby="conf-auditoria-tab" tabindex="0"></div>
             </div>
         </div>
 
-        <div class="tab-pane fade" id="personal-pasword" role="tabpanel" aria-labelledby="personal-pasword-tab" tabindex="0">
-
-            <ul class="nav nav-pills mb-2" id="myTab" role="tablist">
+        {{-- ====================== ATENCIONES ====================== --}}
+        <div class="tab-pane fade" id="personal-atenciones" role="tabpanel" aria-labelledby="personal-atenciones-tab" tabindex="0">
+            <ul class="nav nav-pills mb-2" id="tab-atenciones" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="5-tab" data-bs-toggle="tab" data-bs-target="#5-tab-pane" type="button" role="tab" aria-controls="5-tab-pane" aria-selected="true">
+                    <button class="nav-link active" id="aten-inicio-tab" data-bs-toggle="tab" data-bs-target="#aten-inicio" type="button" role="tab" aria-controls="aten-inicio" aria-selected="true">
                         <i class="fa-solid fa-house-user"></i> Inicio
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="6-tab" data-bs-toggle="tab" data-bs-target="#6-tab-pane" type="button" role="tab" aria-controls="6-tab-pane" aria-selected="false">
+                    <button class="nav-link" id="aten-inactivos-tab" data-bs-toggle="tab" data-bs-target="#aten-inactivos" type="button" role="tab" aria-controls="aten-inactivos" aria-selected="false">
                         <i class="fa-solid fa-house-circle-xmark"></i> Inactivos
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="7-tab" data-bs-toggle="tab" data-bs-target="#7-tab-pane" type="button" role="tab" aria-controls="7-tab-pane" aria-selected="false">
+                    <button class="nav-link" id="aten-reportes-tab" data-bs-toggle="tab" data-bs-target="#aten-reportes" type="button" role="tab" aria-controls="aten-reportes" aria-selected="false">
                         <i class="fa-solid fa-chart-pie"></i> Reportes
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="8-tab" data-bs-toggle="tab" data-bs-target="#8-tab-pane" type="button" role="tab" aria-controls="8-tab-pane" aria-selected="false">
+                    <button class="nav-link" id="aten-auditoria-tab" data-bs-toggle="tab" data-bs-target="#aten-auditoria" type="button" role="tab" aria-controls="aten-auditoria" aria-selected="false">
                         <i class="fa-solid fa-audio-description"></i> Auditoría
                     </button>
                 </li>
             </ul>
 
-            <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="5-tab-pane" role="tabpanel" aria-labelledby="5-tab" tabindex="0">
-                    {{-- <livewire:informatica.firmas.pc.activos /> --}}
+            <div class="tab-content" id="tab-content-atenciones">
+                <div class="tab-pane fade show active" id="aten-inicio" role="tabpanel" aria-labelledby="aten-inicio-tab" tabindex="0">
+                    {{-- <livewire:intranet.atenciones.activos /> --}}
                 </div>
-                <div class="tab-pane fade" id="6-tab-pane" role="tabpanel" aria-labelledby="6-tab" tabindex="0">
-                    
-                </div>
-                <div class="tab-pane fade" id="7-tab-pane" role="tabpanel" aria-labelledby="7-tab" tabindex="0">
-                </div>
-                <div class="tab-pane fade" id="8-tab-pane" role="tabpanel" aria-labelledby="8-tab" tabindex="0">
-
-                </div>
+                <div class="tab-pane fade" id="aten-inactivos" role="tabpanel" aria-labelledby="aten-inactivos-tab" tabindex="0"></div>
+                <div class="tab-pane fade" id="aten-reportes" role="tabpanel" aria-labelledby="aten-reportes-tab" tabindex="0"></div>
+                <div class="tab-pane fade" id="aten-auditoria" role="tabpanel" aria-labelledby="aten-auditoria-tab" tabindex="0"></div>
             </div>
         </div>
-    </div>
-        
+    </div>        
 @endsection
 
 @push('scripts')
@@ -124,5 +112,22 @@
                 timer: 1800
             });
         });
+    </script>
+
+    <script>
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = btn.querySelector('i');
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = "password";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
     </script>
 @endpush
