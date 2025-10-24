@@ -93,7 +93,7 @@
 
             <div class="tab-content" id="tab-content-atenciones">
                 <div class="tab-pane fade show active" id="aten-inicio" role="tabpanel" aria-labelledby="aten-inicio-tab" tabindex="0">
-                    {{-- <livewire:intranet.atenciones.activos /> --}}
+                    <livewire:intranet.atenciones.activos />
                 </div>
                 <div class="tab-pane fade" id="aten-inactivos" role="tabpanel" aria-labelledby="aten-inactivos-tab" tabindex="0"></div>
                 <div class="tab-pane fade" id="aten-reportes" role="tabpanel" aria-labelledby="aten-reportes-tab" tabindex="0"></div>

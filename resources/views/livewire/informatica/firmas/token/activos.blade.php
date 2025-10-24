@@ -90,9 +90,9 @@
 
             <div class="table-responsive small">
                 <div class="input-group mb-3">
-                    <input type="text" id="txtsearcha" class="form-control form-control-sm" wire:model.live="searcha" placeholder="Buscar por DNI o Datos del Personal">
+                    <input type="text" id="txtsearcha" class="form-control form-control-sm" wire:model.live="searchtokens" placeholder="Buscar por DNI o Datos del Personal">
                     <button type="button" id="btnnuevo" class="btn btn-outline-primary btn-sm" wire:click="nuevo">
-                        <i class="fa-solid fa-file"></i> Nuevo {{ $searcha }}
+                        <i class="fa-solid fa-file"></i> Nuevo
                     </button>
                 </div>
                 <table class="table table-striped table-hover table-sm table-xsmall">
@@ -119,7 +119,7 @@
                                 <th class="text-primary">{{ $activo->dni }}</th>
                                 <td>{{ $activo->datos }}</td>
                                 <td><b>{{ $activo->sede_origen }}</b> <br> {{ $activo->dependencia_origen }}</td>
-                                <td>{{ $activo->dependencia }}</td>
+                                <td><b>{{ $activo->sede_destino }}</b> <br> {{ $activo->dependencia_destino }}</td>
                                 <td>{{ $activo->cargo }}</td>
                                 <td>{{ $activo->codtoken }}</td>
                                 <td>{{ $activo->fecha_expiracion }}</td>
@@ -245,6 +245,10 @@
                                 </fieldset>  
                             </div>
                             <div class="col-xl-8 col-sm-12">
+                                <fieldset class="border p-3 rounded" disabled>
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Datos</legend>
+                                    @include('livewire.partials.personal-datos-institucionales-mir')
+                                </fieldset>
                                 <fieldset class="border p-3 rounded">
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Datos Institucionales</legend>
                                     @include('livewire.partials.personal-datos-institucionales')

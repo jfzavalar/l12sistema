@@ -102,12 +102,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
 <div class="flex flex-col gap-6">
 
-    <div class="bg-white shadow-md rounded-full p-6 w-full max-w-md mx-auto border border-gray-200">
-        <div class="flex flex-col gap-6">
-            <img src="{{ asset('img/logotipo_mpfn.png') }}" alt="Logo MPFN" class="mx-auto w-[90px] md:w-[120px] lg:w-[150px]">
-        </div>
-    </div>
-
+    <img src="{{ asset('img/logotipo_mpfn.png') }}" alt="Logo MPFN" class="mx-auto w-[90px] md:w-[120px] lg:w-[150px]">
 
     {{-- <x-auth-header :title="__('Inicia Sesión en tu cuenta')" :description="__('Ingrese su DNI y contraseña a continuación para iniciar sesión')" /> --}}
 

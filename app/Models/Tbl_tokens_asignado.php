@@ -10,8 +10,17 @@ class Tbl_tokens_asignado extends Model
         //'id',
         'dni',
         'datos',
-        'sede',
-        'dependencia',
+
+        'codsede_origen',
+        'sede_origen',
+        'coddependencia_origen',
+        'dependencia_origen',
+
+        'codsede_destino',
+        'sededestino',
+        'coddependencia_destino',
+        'dependencia_destino',
+        
         'regimen',
         'cargo',
         'correo_personal',

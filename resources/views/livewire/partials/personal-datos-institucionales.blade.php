@@ -1,5 +1,4 @@
 <div class="row">
-    <hr>
     <div class="col-xl-4 col-sm-12">
         <label for="cmbcodsede" class="fw-bold fs-6">Sede</label>
         <div class="input-group">
@@ -18,7 +17,7 @@
             <select id="cmbcoddependencia" class="form-select form-select-sm" wire:model="coddependencia_destino">
                 <option value="">Seleccionar...</option>
                 @foreach ($lista_dependencias as $dependencia)
-                    <option value="{{ $dependencia->coddepofi }}" @selected($dependencia->coddepofi == $coddependencia_destino)>{{ $dependencia->coddepofi . '-' .$dependencia->nomdepofi }}</option>
+                    <option value="{{ $dependencia->coddepofi }}" @selected($dependencia->coddepofi == $coddependencia_destino)>{{ $dependencia->nomdepofi }}</option>
                 @endforeach
             </select>
             {{-- {{ $coddependencia_destino }} --}}

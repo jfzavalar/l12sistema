@@ -35,7 +35,9 @@ class Activos extends Component
     
 
     public $id_token,$codtoken,$operativo,$asignacion,$actaruta,$fecha_expiracion,$observacion,$created_user,$updated_user,$activo;
-    public $idpersonal,$dni,$datos,$codsede_origen,$sede_origen,$coddependencia_origen,$dependencia_origen,$codsede_destino,$sede_destino,$coddependencia_destino,$dependencia_destino,$despacho,$regimen,$cargo,$correo_personal,$correo_institucional,$cel_personal,$cel_institucional;
+    public $idpersonal,$dni,$datos,
+        $codsede_origen,$sede_origen,$coddependencia_origen,$dependencia_origen,$codsede_destino,$sede_destino,$coddependencia_destino,$dependencia_destino,
+        $despacho,$regimen,$cargo,$correo_personal,$correo_institucional,$cel_personal,$cel_institucional;
     
     public $pdf;
     public $filtro_asignados, $filtro_usuarios, $filtro_rutas;
@@ -43,22 +45,22 @@ class Activos extends Component
     public $avatar;
 
     //Buscar
-    public $searcha;
-    public function updatingSearcha(){
-        $this->resetPage();
+    public $searchtokens;
+    public function updatingSearchtokens(){
+        $this->resetPage('tokensPage');
     }
-    public $searchpersonal;
-    public function updatingSearchpersonal(){
-        $this->resetPage();
+    public $searchbuscarpersonal;
+    public function updatingSearchbuscarpersonal(){
+        $this->resetPage('personalPage');
     }
 
     public function render()
     {
         $lista_activos = Tbl_tokens_asignado::where('activo','1')
-            ->when($this->searcha !== '', function ($query) {
+            ->when($this->searchtokens !== '', function ($query) {
                 $query->where(function ($q) {
-                    $q->where('dni', 'like', '%' . $this->searcha. '%')
-                    ->orWhere('datos', 'like', '%' . $this->searcha . '%');
+                    $q->where('dni', 'like', '%' . $this->searchtokens. '%')
+                    ->orWhere('datos', 'like', '%' . $this->searchtokens . '%');
                 });
             })
             // Filtro por rutas
@@ -80,7 +82,7 @@ class Activos extends Component
                 });
             })
             ->orderBy('id', 'desc')
-            ->paginate(10);
+            ->paginate(10,['*'],'tokensPage');
         
         $totales_asignados = Tbl_tokens_asignado::select(
                 'created_user',
@@ -117,14 +119,14 @@ class Activos extends Component
             ->get();
 
         $lista_personal = Tbl_personale::where('activo','1')
-            ->when($this->searchpersonal !== '', function ($query) {
+            ->when($this->searchbuscarpersonal !== '', function ($query) {
                 $query->where(function ($q) {
-                    $q->where('dni', 'like', '%' . $this->searchpersonal . '%')
-                    ->orWhere('datos', 'like', '%' . $this->searchpersonal . '%');
+                    $q->where('dni', 'like', '%' . $this->searchbuscarpersonal . '%')
+                    ->orWhere('datos', 'like', '%' . $this->searchbuscarpersonal . '%');
                 });
             })
             ->orderBy('datos')
-            ->paginate(10);
+            ->paginate(10,['*'],'personalPage');
 
         return view('livewire.informatica.firmas.token.activos',
             compact('lista_activos','totales_asignados','conteo_rutas','lista_historial','lista_personal',
@@ -163,8 +165,17 @@ class Activos extends Component
             // 'id',
             'dni' => $this->dni,
             'datos' => $this->datos,
-            'sede' => $this->sede,
-            'dependencia' => $this->dependencia,
+
+            'codsede_origen' => $this->codsede_origen,
+            'sede_origen' => $this->sede_origen,
+            'coddependencia_origen' => $this->coddependencia_origen,
+            'dependencia_origen' => $this->dependencia_origen,
+
+            'codsede_destino' => $this->codsede_destino,
+            'sede_destino' => $this->sede_destino,
+            'coddependencia_destino' => $this->coddependencia_destino,
+            'dependencia_destino' => $this->dependencia_destino,
+
             'regimen' => $this->regimen,
             'cargo' => $this->cargo,
             'correo_personal' => $this->correo_personal,
@@ -210,8 +221,17 @@ class Activos extends Component
         $this->id_token = $instanciaTbl->id;
         $this->dni = $instanciaTbl->dni;
         $this->datos = $instanciaTbl->datos;
+
+        $this->codsede_origen = $instanciaTbl->codsede_origen;
+        $this->sede_origen = $instanciaTbl->sede_origen;
+        $this->coddependencia_origen = $instanciaTbl->coddependencia_origen;
+        $this->dependencia_origen = $instanciaTbl->dependencia_origen;
+
+        $this->codsede_destino = $instanciaTbl->codsede_destino;
         $this->sede_destino = $instanciaTbl->sede_destino;
+        $this->coddependencia_destino = $instanciaTbl->coddependencia_destino;
         $this->dependencia_destino = $instanciaTbl->dependencia_destino;
+
         $this->regimen = $instanciaTbl->regimen;
         $this->cargo = $instanciaTbl->cargo;
         $this->correo_personal = $instanciaTbl->correo_personal;
@@ -236,8 +256,17 @@ class Activos extends Component
             // 'id',
             'dni' => $this->dni,
             'datos' => $this->datos,
-            'sede' => $this->sede,
-            'dependencia' => $this->dependencia,
+
+            'codsede_origen' => $this->codsede_origen,
+            'sede_origen' => $this->sede_origen,
+            'coddependencia_origen' => $this->coddependencia_origen,
+            'dependencia_origen' => $this->dependencia_origen,
+
+            'codsede_destino' => $this->codsede_destino,
+            'sede_destino' => $this->sede_destino,
+            'coddependencia_destino' => $this->coddependencia_destino,
+            'dependencia_destino' => $this->dependencia_destino,
+            
             'regimen' => $this->regimen,
             'cargo' => $this->cargo,
             'correo_personal' => $this->correo_personal,
@@ -339,7 +368,7 @@ class Activos extends Component
 
     public function cerrar_PDF(){
         //Reiniciar variables
-        $this->reset('searchpersonal');
+        $this->reset('searchbuscarpersonal');
 
         $this->modal_abierto_pdf_cargar  = false;
     }
@@ -367,8 +396,17 @@ class Activos extends Component
         $this->idpersonal = $ipersonal->id;
         $this->dni = $ipersonal->dni;
         $this->datos = $ipersonal->datos;
-        $this->sede = $ipersonal->sede;
-        $this->dependencia = $ipersonal->dependencia;
+
+        $this->codsede_origen = $ipersonal->codsede_origen;
+        $this->sede_origen = $ipersonal->sede_origen;
+        $this->coddependencia_origen = $ipersonal->coddependencia_origen;
+        $this->dependencia_origen = $ipersonal->dependencia_origen;
+        
+        $this->codsede_destino = $ipersonal->codsede_destino;
+        $this->sede_destino = $ipersonal->sede;
+        $this->coddependencia_destino = $ipersonal->coddependencia_destino;
+        $this->dependencia_destino = $ipersonal->dependencia_destino;
+
         $this->regimen = $ipersonal->regimen;
         $this->cargo = $ipersonal->cargo;
         $this->correo_personal = $ipersonal->correo_personal;
@@ -376,7 +414,7 @@ class Activos extends Component
         $this->cel_personal = $ipersonal->cel_personal;
         $this->cel_institucional = $ipersonal->cel_institucional;
 
-        $this->reset('searchpersonal');
+        $this->reset('searchbuscarpersonal');
 
         $this->modal_abierto_personal_buscar = false;
     }

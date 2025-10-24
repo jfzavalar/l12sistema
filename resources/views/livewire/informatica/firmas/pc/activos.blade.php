@@ -62,7 +62,7 @@
 
                 <div class="table-responsive small">
                     <div class="input-group mb-3">
-                        <input type="text" id="txtsearcha2" class="form-control form-control-sm" wire:model.live="searcha2" placeholder="Buscar por DNI o Datos del Personal">
+                        <input type="text" id="txtsearcha2" class="form-control form-control-sm" wire:model.live="searchafirmapc" placeholder="Buscar por DNI o Datos del Personal">
                         <button type="button" id="btnnuevo" class="btn btn-outline-primary btn-sm" wire:click="nuevo">
                             <i class="fa-solid fa-file"></i> Nuevo
                         </button>
@@ -90,7 +90,7 @@
                                     <th class="text-primary">{{ $item->dni }}</th>
                                     <td>{{ $item->datos }}</td>
                                     <td><b>{{ $item->sede_origen }}</b> <br> {{ $item->dependencia_origen }}</td>
-                                    <td></td>
+                                    <td><b>{{ $item->sede_destino }}</b> <br> {{ $item->dependencia_destino }}</td>
                                     <td>{{ $item->cargo }}</td>
                                     <td>{{ $item->codtoken }}</td>
                                     <td>{{ $item->fecha_expiracion }}</td>
@@ -185,6 +185,10 @@
                                 </fieldset>  
                             </div>
                             <div class="col-xl-8 col-sm-12">
+                                <fieldset class="border p-3 rounded" disabled>
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Datos</legend>
+                                    @include('livewire.partials.personal-datos-institucionales-mir')
+                                </fieldset>
                                 <fieldset class="border p-3 rounded">
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Datos Institucionales</legend>
                                     @include('livewire.partials.personal-datos-institucionales')
