@@ -19,18 +19,18 @@ class Inactivos extends Component
     protected $paginationTheme = "bootstrap";
 
     //Buscar
-    public $searchi;
-    public function updatingSearchi(){
+    public $searchusuarioi;
+    public function updatingSearchusuarioi(){
         $this->resetPage();
     }
     
     public function render()
     {
         $lista_inactivos = User::where('activo','0')
-            ->when($this->searchi !== '', function ($query) {
+            ->when($this->searchusuarioi !== '', function ($query) {
                 $query->where(function ($q) {
-                    $q->where('dni', 'like', '%' . $this->searchi . '%')
-                    ->orWhere('datos', 'like', '%' . $this->searchi . '%');
+                    $q->where('dni', 'like', '%' . $this->searchusuarioi . '%')
+                    ->orWhere('datos', 'like', '%' . $this->searchusuarioi . '%');
                 });
             })
             ->orderBy('datos')

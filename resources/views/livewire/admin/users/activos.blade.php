@@ -18,9 +18,9 @@
         <div class="card-body">
             <div class="table-responsive small">
                 <div class="input-group mb-3">
-                    <input type="text" id="txtsearcha" class="form-control form-control-sm" wire:model.live="searcha" placeholder="Buscar">
-                    <button type="button" id="btnnuevo" class="btn btn-outline-primary btn-sm" wire:click="nuevo">
-                        <i class="fa-solid fa-file"></i> Nuevo {{ $searcha }}
+                    <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="searchusuario" placeholder="Buscar">
+                    <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" wire:click="nuevo">
+                        <i class="fa-solid fa-file"></i> Nuevo
                     </button>
                 </div>
                 <table class="table table-striped table-hover table-sm table-xsmall">
@@ -59,7 +59,7 @@
                                         <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar({{ $item->id }})">
                                             <i class="fa-solid fa-pen-to-square"></i><br>Editar
                                         </button>
-                                        <button type="button" class="btn btn-outline-warning btn-xs">
+                                        <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#intranet-password-Modal" wire:click="editar_password({{ $item->dni }})">
                                             <i class="fa-solid fa-pen-to-square"></i><br>Password
                                         </button>
                                         {{-- <button type="button" class="btn btn-outline-info btn-sm">
@@ -178,6 +178,8 @@
     @include('livewire.partials.personal-modal-foto')
     
     @include('livewire.partials.personal-modal-buscar')
+
+    @include('livewire.partials.usuario-modal-password')
 
 </div>
 

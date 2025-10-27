@@ -7,6 +7,8 @@ use App\Models\Tbl_sede;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 
+use Illuminate\Support\Facades\Hash;
+
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
@@ -32,12 +34,12 @@ class Activos extends Component
     public $modal_abierto_imagen = false;
 
     //Buscar
-    public $searcha;
-    public function updatingSearcha(){
-        $this->resetPage();
+    public $searchusuario;
+    public function updatingSearchusuario(){
+        $this->resetPage('usuarioPage');
     }
-    public $searchpersonal;
-    public function updatingSearchpersonal(){
+    public $searchbuscarpersonal;
+    public function updatingSearchbuscarpersonal(){
         $this->resetPage();
     }
 
@@ -64,6 +66,7 @@ class Activos extends Component
         $cel_institucional,
         $observacion,
         $avatar,
+        $password,
         $activo,
         $created_user,
         $updated_user;
@@ -71,14 +74,14 @@ class Activos extends Component
     public function render()
     {
         $lista_activos = User::where('activo','1')
-            ->when($this->searcha !== '', function ($query) {
+            ->when($this->searchusuario !== '', function ($query) {
                 $query->where(function ($q) {
-                    $q->where('dni', 'like', '%' . $this->searcha . '%')
-                    ->orWhere('datos', 'like', '%' . $this->searcha . '%');
+                    $q->where('dni', 'like', '%' . $this->searchusuario . '%')
+                    ->orWhere('datos', 'like', '%' . $this->searchusuario . '%');
                 });
             })
             ->orderBy('datos')
-            ->paginate(10);
+            ->paginate();
 
         $lista_sedes = Tbl_sede::select('codsedeofi','nomsedeofi')
             ->where('activo','1')
@@ -94,8 +97,8 @@ class Activos extends Component
             ->get();
 
         $lista_personal = Tbl_personale::where('activo','1')
-            ->where('dni','like','%' .$this->searchpersonal .'%')
-            ->orwhere('datos','like','%' .$this->searchpersonal .'%')
+            ->where('dni','like','%' .$this->searchbuscarpersonal .'%')
+            ->orwhere('datos','like','%' .$this->searchbuscarpersonal .'%')
             ->paginate(5);
 
         return view('livewire.admin.users.activos',
@@ -193,7 +196,7 @@ class Activos extends Component
         }        
 
         // Reiniciamos todas la variable excepto:
-        $this->resetExcept('searcha');
+        $this->resetExcept('searchusuario');
         
         // Cerramos modal
         $this->modal_abierto_personal = false;
@@ -277,5 +280,39 @@ class Activos extends Component
 
     public function cerrar_personal(){
         $this->modal_abierto_personal_buscar = false;
+    }
+
+    // PASSWORD
+    // ---------------------------------------------------------
+    public function editar_password( $dni)
+    {
+        $this->dni = $dni;
+        $this->password = $dni;
+    }
+
+    public function actualizar_password()
+    {
+        try {
+            $iActualizarpass = User::where('dni', $this->dni)->firstOrFail();
+
+            $iActualizarpass->update([
+                'password' => Hash::make($this->dni),
+                'updated_user' => auth()->user()->datos,
+            ]);
+
+            // ✅ Limpiar la propiedad del componente
+            $this->reset(['dni','password']);
+
+            // ✅ Emitir evento de éxito para SweetAlert
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Contraseña actualizada',
+                mensaje: 'La contraseña se ha restablecido correctamente.',
+                tipo: 'success' // success | error | warning | info
+            );
+
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error al actualizar la contraseña: ' . $e->getMessage());
+        }
     }
 }

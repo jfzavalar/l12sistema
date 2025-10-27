@@ -18,7 +18,7 @@
         <div class="card-body">
             <div class="table-responsive small">
                 <div class="input-group mb-3">
-                    <input type="text" id="txtsearchi" class="form-control form-control-sm" wire:model.live="searchi" placeholder="Buscar">
+                    <input type="text" id="txtsearchi" class="form-control form-control-sm" wire:model.live="searchusuarioi" placeholder="Buscar">
                 </div>
                 <table class="table table-striped table-hover table-sm table-xsmall">
                     <thead class="table-primary text-center align-middle">

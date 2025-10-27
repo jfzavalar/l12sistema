@@ -50,8 +50,20 @@
 
 @push('scripts')
     <script>
-        // Escucha el evento que despacha el componente después de actualizar
         Livewire.on('alerta-actualizado', (data) => {
+            // Cerrar el modal usando la API de Bootstrap 5
+            const modalElement = document.getElementById('intranet-password-Modal');
+            const modalInstance = bootstrap.Modal.getInstance(modalElement);
+            
+            // Si el modal aún no tiene instancia (a veces pasa), la creamos
+            if (modalInstance) {
+                modalInstance.hide();
+            } else {
+                const newModal = new bootstrap.Modal(modalElement);
+                newModal.hide();
+            }
+
+            // Mostrar la alerta SweetAlert
             Swal.fire({
                 position: "center",
                 icon: data.tipo ?? "success",

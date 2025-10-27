@@ -502,4 +502,8 @@ class Activos extends Component
 
         $this->modal_abierto_pdf_cargar  = false;
     }
+
+    public function buscar_personal(){
+        
+    }
 }

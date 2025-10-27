@@ -49,6 +49,7 @@ class User extends Authenticatable
         'password',
         'avatar',
         'observacion',
+        'password',
         'activo',
         //
         'created_user',
