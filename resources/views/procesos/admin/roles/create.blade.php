@@ -11,7 +11,7 @@
     <div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom flex-wrap">
         <h1 class="h2"><i class="fa-solid fa-users-gear"></i> ROLES Y PERMISOS</h1>
         <div class="btn-group">
-            @include('layouts.bootstrap5.btnlogin')
+            {{-- @include('layouts.bootstrap5.btnlogin') --}}
         </div>
     </div>
 

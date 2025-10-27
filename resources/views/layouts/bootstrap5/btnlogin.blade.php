@@ -1,4 +1,4 @@
-<button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+<button type="button" class="btn btn-primary btn-sm dropdown-toggle me-3" data-bs-toggle="dropdown" aria-expanded="false">
     {{ auth()->user()->datos }}
 </button>
 

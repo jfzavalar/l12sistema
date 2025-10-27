@@ -2,10 +2,10 @@
     <div class="card-body">
         <div class="row">
             <div class="col-xl-6">
-                <div class="card">
-                    <div class="card-header">
+                <div class="card border-2 shadow-sm" style="border-top: 4px solid var(--bs-primary);">
+                    {{-- <div class="card-header">
                         DATOS DEL PERSONAL
-                    </div>
+                    </div> --}}
                     <div class="card-body">
                         {{-- Aquí puedes poner la info del usuario --}}
                     </div>
@@ -17,11 +17,11 @@
                     <div class="alert alert-success">{{ session('message') }}</div>
                 @endif
 
-                <div class="card">
+                <div class="card border-2 shadow-sm" style="border-top: 4px solid var(--bs-primary);">
                     <form wire:submit.prevent="actualizar_password">
-                        <div class="card-header">
+                        {{-- <div class="card-header">
                             CAMBIAR PASSWORD
-                        </div>
+                        </div> --}}
                         <div class="card-body">                          
                             <div class="row g-3">
                                 {{-- Contraseña anterior --}}

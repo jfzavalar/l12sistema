@@ -8,7 +8,7 @@
             <i class="fa-solid fa-users"></i> Permisos
         </h1>
         <div class="btn-group">
-            @include('layouts.bootstrap5.btnlogin')
+            {{-- @include('layouts.bootstrap5.btnlogin') --}}
         </div>
     </div>
 

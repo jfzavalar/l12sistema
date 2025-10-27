@@ -321,8 +321,10 @@
                     alt="Logo" 
                     width="24" height="24" 
                     class="me-2 rounded p-1" 
-                    style="background-color: white;"> SISTEMA
+                    style="background-color: white;">
             </a>
+
+            @include('layouts.bootstrap5.btnlogin')
 
             <ul class="navbar-nav flex-row d-md-none">
                 {{-- <li class="nav-item text-nowrap">
@@ -342,9 +344,11 @@
                     </button>
                 </li>
             </ul>
+            
             <div id="navbarSearch" class="navbar-search w-100 collapse">
                 <input id="txtsearch" class="form-control w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search"/>
             </div>
+            
         </header>
 
         <div class="container-fluid">
