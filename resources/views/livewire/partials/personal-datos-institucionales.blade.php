@@ -38,15 +38,15 @@
 <div class="row">
     <div class="col-xl-4 col-sm-12">
         <label for="txtdespacho" class="fw-bold fs-6">Regimen</label>
-        <div class="form-group">
+        <div class="d-flex gap-2">
             <input type="radio" id="regimen276" name="regimen" class="btn-check" value="DL.276" autocomplete="off" wire:model.live="regimen">
-            <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-sm" for="regimen276">D.L.276</label>
+            <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-sm flex-fill" for="regimen276">D.L.276</label>
 
             <input type="radio" id="regimen728" name="regimen" class="btn-check" value="DL.728" autocomplete="off" wire:model.live="regimen">
-            <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-sm" for="regimen728">D.L.728</label>
+            <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-sm flex-fill" for="regimen728">D.L.728</label>
 
             <input type="radio" id="regimenCAS" name="regimen" class="btn-check" value="CAS" autocomplete="off" wire:model.live="regimen">
-            <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-sm" for="regimenCAS">CAS</label>
+            <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-sm flex-fill" for="regimenCAS">CAS</label>
         </div>
     </div>
     <div class="col-xl-8 col-sm-12">

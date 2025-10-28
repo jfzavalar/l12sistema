@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-body">
         <div class="row mt-3">
-            <div class="col-xl-4">
+            <div class="col-xl-6">
                 <table class="table">
                     <thead class="table-dark">
                         <tr>
@@ -20,19 +20,19 @@
                                             <button class="input-group-text bg-success text-white">
                                                 <i class="fa-solid fa-check me-2"></i>Con IP
                                             </button>
-                                            <input type="text" id=txt_asignados class="form-control text-end" value="{{ $tactivos->con_ip }}" readonly>
+                                            <input type="text" class="form-control text-end" value="{{ $tactivos->con_ip }}" readonly>
                                         </div>
                                         <div class="input-group input-group-xs">
                                             <button class="input-group-text bg-danger text-white">
                                                 <i class="fa-solid fa-triangle-exclamation me-2"></i>Sin IP
                                             </button>
-                                            <input type="text" id="txt_devueltos" class="form-control text-end" value="{{ $tactivos->sin_ip }}" readonly>
+                                            <input type="text" class="form-control text-end" value="{{ $tactivos->sin_ip }}" readonly>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="input-group input-group-xs">
-                                        <input type="text" id="txt_total" class="form-control fw-bold text-end" value="{{ $tactivos->total }}" readonly>
+                                        <input type="text"class="form-control fw-bold text-end" value="{{ $tactivos->total }}" readonly>
                                     </div>
                                 </td>
                             </tr>
@@ -42,7 +42,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-xl-8">
+            {{-- <div class="col-xl-6">
                 <div class="row">
                     <div class="col-xl-4 col-lg-4 col-sm-4">
                         <div class="alert alert-primary" role="alert">
@@ -84,7 +84,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>

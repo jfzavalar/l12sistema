@@ -140,18 +140,18 @@
                         <div class="row">
                             <div class="row">
                                 <div class="col-xl-4 col-sm-12">
-                                    <fieldset class="border p-3 rounded text-center">
-                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Foto de perfil</legend>
+                                    <fieldset class="border p-3 rounded text-center" disabled>
+                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">FOTO DE PERFIL</legend>
                                         @include('livewire.partials.personal-datos-foto')
                                     </fieldset>
                                     <fieldset class="border p-3 rounded">
-                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Datos Personales</legend>
+                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">DATOS PERSONALES</legend>
                                         @include('livewire.partials.personal-datos-personales')
                                     </fieldset>  
                                 </div>
                                 <div class="col-xl-8 col-sm-12">
                                     <fieldset class="border p-3 rounded">
-                                        <legend class="float-none w-outo px-3 fs-6">Datos Institucionales</legend>
+                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">DATOS INSTITUCIONALES</legend>
                                         @include('livewire.partials.personal-datos-institucionales')
                                     </fieldset>
                                 </div>

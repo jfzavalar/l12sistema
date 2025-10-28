@@ -26,7 +26,7 @@
                             <div class="row g-3">
                                 {{-- Contraseña anterior --}}
                                 <div class="col-xl-12">
-                                    <label for="txt_pass_anterior" class="fw-bold">Contraseña anterior:</label>
+                                    <label for="txt_pass_anterior" class="fw-bold">Contraseña actual:</label>
                                     <div class="input-group input-group-sm">
                                         <input 
                                             type="password" 

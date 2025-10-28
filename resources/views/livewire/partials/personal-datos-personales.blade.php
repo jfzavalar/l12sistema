@@ -17,8 +17,6 @@
             <label for="txt_datos" class="fw-bold fs-6">Personal</label>
             <input type="text" id="txt_datos" class="form-control form-control-sm" wire:model="datos">
         </div>
-    </div>   
-    <div class="row">
         <div class="col-xl-12 col-sm-12">
             <label for="txt_celular_personal" class="fw-bold fs-6">Celular personal</label>
             <input type="text" id="txt_celular_personal" class="form-control form-control-sm" wire:model="cel_personal">

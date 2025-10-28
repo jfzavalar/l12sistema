@@ -107,7 +107,30 @@ class Activos extends Component
             );
     }
 
+    protected function rules(){
+        return [
+            'dni' => 'required|string|unique:users,dni,' . $this->id_usuario,
+            'datos' => 'required',
+            'codsede_destino' => 'required',
+            'coddependencia_destino' => 'required',
+            'regimen' => 'required',
+            'cargo' => 'required',
+        ];
+    }
+
+    protected $messages = [
+        'dni.required' => 'El dni es obligatorio.',
+        'dni.unique' => 'El dni ya fue registrado.',
+        'datos.required' => '',
+        'sede.required' => '',
+        'dependencia.required' => '',
+        'regimen.required' => '',
+        'cargo.required' => '',
+    ];
+
     public function nuevo(){
+        $this->reset([]);
+
         $this->modal_abierto_personal = true;
 
         $this->modal_header_titulo = 'nuevo';
@@ -117,7 +140,7 @@ class Activos extends Component
     }
 
     public function guardar(){
-
+        $validated = $this->validate(); 
     }
 
 
@@ -273,7 +296,7 @@ class Activos extends Component
         $this->cel_personal = $ipersonal->cel_personal;
         $this->cel_institucional = $ipersonal->cel_institucional;
 
-        $this->reset('searchpersonal');
+        $this->reset('searchbuscarpersonal');
 
         $this->modal_abierto_personal_buscar = false;
     }
