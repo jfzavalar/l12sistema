@@ -156,7 +156,7 @@ class Activos extends Component
         // Datos
         $this->id_usuario = $iEditar->id;
         $this->dni = $iEditar->dni;
-        $this->datos = $iEditar->datos;
+        $this->datos = strtoupper($iEditar->datos);
 
         // Origen
         $this->codsede_origen = $iEditar->codsede_origen;
@@ -174,9 +174,9 @@ class Activos extends Component
         $this->regimen = $iEditar->regimen;
         $this->cargo = $iEditar->cargo;
         $this->cel_personal = $iEditar->cel_personal;
-        $this->correo_personal = $iEditar->correo_personal;
+        $this->correo_personal = strtolower($iEditar->correo_personal);
         $this->cel_institucional = $iEditar->cel_institucional;
-        $this->correo_institucional = $iEditar->correo_institucional;
+        $this->correo_institucional = strtolower($iEditar->correo_institucional);
         $this->avatar = $iEditar->avatar;
         $this->activo = $iEditar->activo;
         $this->created_user = $iEditar->created_user;
@@ -189,7 +189,7 @@ class Activos extends Component
         try {
             $iActualizar->update([            
                 'dni' => $this->dni,
-                'datos' => $this->datos,
+                'datos' => strtoupper($this->datos),
 
                 'codsede_origen' => $this->codsede_origen,
                 'sede_origen' => $this->sede_origen,
@@ -204,9 +204,9 @@ class Activos extends Component
                 'regimen' => $this->regimen,
                 'cargo' => $this->cargo,
                 'cel_personal' => $this->cel_personal,
-                'correo_personal' => $this->correo_personal,
+                'correo_personal' => strtolower($this->correo_personal),
                 'cel_institucional' => $this->cel_institucional,
-                'correo_institucional' => $this->correo_institucional,
+                'correo_institucional' => strtolower($this->correo_institucional),
                 'avatar' => $this->avatar,
                 'activo' => $this->activo,
                 

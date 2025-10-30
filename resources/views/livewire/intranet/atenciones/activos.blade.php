@@ -144,17 +144,20 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="row">
-                                <div class="col-xl-2 col-sm-12">
+                                <div class="col-xl-3 col-sm-12">
                                     <fieldset class="border p-3 rounded text-center mb-3" disabled>
-                                        {{-- <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-decoration-underline">FOTO DE PERFIL</legend> --}}
+                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">FOTO DE PERFIL</legend>
                                         @include('livewire.partials.personal-datos-foto')
                                     </fieldset>
                                 </div>
-                                <div class="col-xl-10 col-sm-12">
-                                    <fieldset class="border p-3 rounded mb-3" disabled>
-                                        {{-- <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center text-decoration-underline">DATOS INSTITUCIONALES</legend> --}}
+                                <div class="col-xl-9 col-sm-12">
+                                    {{-- <fieldset class="border p-3 rounded mb-3" disabled>
+                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center text-decoration-underline">DATOS INSTITUCIONALES</legend>
                                         @include('livewire.partials.personal-datos-institucionales-mir')
-                                    </fieldset> 
+                                    </fieldset> --}}
+
+                                    @include('livewire.partials.personal-datos-institucionales-mir')
+                                    
                                     <div class="row">
                                         <div class="col-xl-3">
                                             <fieldset class="border p-3 rounded mb-3">
@@ -163,7 +166,7 @@
                                             </fieldset> 
                                         </div>
                                         <div class="col-xl-9">
-                                            <fieldset class="border p-3 rounded mb-3">
+                                            <fieldset class="border p-3 rounded mb-3" disabled>
                                                 {{-- <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center text-decoration-underline">DATOS INSTITUCIONALES</legend> --}}
                                                 @include('livewire.partials.personal-datos-institucionales')
                                             </fieldset>
@@ -174,11 +177,11 @@
                             <div class="row">
                                 <div class="col">
                                     <fieldset class="border p-3 rounded mb-3">
-                                        {{-- <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center text-decoration-underline">DETALLE DE LA ATENCIÓN</legend> --}}
+                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DETALLE DE LA ATENCIÓN</legend>
                                         <div class="row">
                                             <div class="col-xl-2">
                                                 <label for="" class="fw-bold fs-6">REPORTADO POR</label>
-                                                <select name="" id="" class="form-select form-select-sm">
+                                                <select name="" id="" class="form-select form-select-xs">
                                                     <option value="">Seleccionar...</option>
                                                     <option value="CEA">CEA</option>
                                                     <option value="CORREO">CORREO</option>
@@ -193,60 +196,60 @@
                                                 <label for="" class="fw-bold fs-6">TIPO</label>
                                                 <div class="d-flex gap-2">
                                                     <input type="radio" id="tipoi" name="tipo" class="btn-check" value="INCIDENCIA" autocomplete="off" checked>
-                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-sm flex-fill" for="tipoi">INCIDENCIA</label>
+                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="tipoi">INCIDENCIA</label>
 
                                                     <input type="radio" id="tipos" name="tipo" class="btn-check" value="SOLICITUD" autocomplete="off">
-                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-sm flex-fill" for="tipos">SOLICITUD</label>
+                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="tipos">SOLICITUD</label>
                                                 </div>
                                             </div>
                                             <div class="col-xl-2">
                                                 <label for="" class="fw-bold fs-6">INDICENCIA/SOLICITUD</label>
                                                 <div class="input-group">
-                                                    <button type="button" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-sm">
+                                                    <button type="button" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-xs">
                                                         <i class="fa-solid fa-magnifying-glass"></i>
                                                     </button>
-                                                    <input type="text" class="form-control form-control-sm">
+                                                    <input type="text" class="form-control form-control-xs">
                                                 </div>
                                             </div>
                                             <div class="col-xl-6">
                                                 <label for="" class="fw-bold fs-6">ESPECIFICACIÓN (Incidencia / Solicitud)</label>
                                                 <div class="input-group">
-                                                    <button type="button" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-sm">
+                                                    <button type="button" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-xs">
                                                         <i class="fa-solid fa-magnifying-glass"></i>
                                                     </button>
-                                                    <input type="text" class="form-control form-control-sm">
+                                                    <input type="text" class="form-control form-control-xs">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-xl-3">
                                                 <label for="" class="fw-bold fs-6">CEA</label>
-                                                <input type="text" class="form-control form-control-sm">
+                                                <input type="text" class="form-control form-control-xs">
                                             </div>
                                             <div class="col-xl-4">
                                                 <label for="" class="fw-bold fs-6">Carpeta Fiscal</label>
-                                                <input type="text" class="form-control form-control-sm">
+                                                <input type="text" class="form-control form-control-xs">
                                             </div>
                                             <div class="col-xl-2">
                                                 <label for="txtdespacho" class="fw-bold fs-6">Enviado a Lima</label>
                                                 <div class="d-flex gap-2">
                                                     <input type="radio" id="enviadoSi" name="enviadoLima" class="btn-check" value="SI" autocomplete="off" checked>
-                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-sm flex-fill" for="enviadoSi">Sí</label>
+                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="enviadoSi">Sí</label>
 
                                                     <input type="radio" id="enviadoNo" name="enviadoLima" class="btn-check" value="NO" autocomplete="off">
-                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-sm flex-fill" for="enviadoNo">No</label>
+                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="enviadoNo">No</label>
                                                 </div>
                                             </div>
 
                                             <div class="col-xl-3">
                                                 <label for="" class="fw-bold fs-6">GLPI</label>
-                                                <input type="text" class="form-control form-control-sm">
+                                                <input type="text" class="form-control form-control-xs">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-xl-12">
                                                 <label for="" class="fw-bold fs-6">DESCRIPCIÓN (Opcional)</label>
-                                                <input type="text" class="form-control form-control-sm">
+                                                <input type="text" class="form-control form-control-xs">
                                             </div>
                                         </div>
                                     </fieldset>
@@ -256,36 +259,36 @@
                                                 <label for="txtdespacho" class="fw-bold fs-6">ATENDIDO</label>
                                                 <div class="d-flex gap-2">
                                                     <input type="radio" id="atendidoSi" name="atendido" class="btn-check" value="SI" autocomplete="off" checked>
-                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-sm flex-fill" for="atendidoSi">Sí</label>
+                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="atendidoSi">Sí</label>
 
                                                     <input type="radio" id="atendidoNo" name="atendido" class="btn-check" value="NO" autocomplete="off">
-                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-sm flex-fill" for="atendidoNo">No</label>
+                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="atendidoNo">No</label>
                                                 </div>
                                             </div>
                                             <div class="col-xl-8">
                                                 <label for="txtdespacho" class="fw-bold fs-6">TIEMPO DE ATENCIÓN</label>
                                                 <div class="d-flex gap-2">
                                                     <input type="radio" id="normal" name="tiempo" class="btn-check" value="NORMAL" autocomplete="off" checked>
-                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-sm flex-fill" for="normal">NORMAL (1 día)</label>
+                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="normal">NORMAL (1 día)</label>
 
                                                     <input type="radio" id="regular" name="tiempo" class="btn-check" value="REGULAR" autocomplete="off">
-                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-sm flex-fill" for="regular">REGULAR (2 a 5 días)</label>
+                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="regular">REGULAR (2 a 5 días)</label>
 
                                                     <input type="radio" id="complejo" name="tiempo" class="btn-check" value="COMPLEJO" autocomplete="off">
-                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-sm flex-fill" for="complejo">COMPLEJO (mayor a 6 días)</label>
+                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="complejo">COMPLEJO (mayor a 6 días)</label>
                                                 </div>
                                             </div>
                                             <div class="col-xl-2">
                                                 <label for="txtdespacho" class="fw-bold fs-6">ADJUNTAR ARCHIVOS</label>
                                                 <div class="d-flex gap-2">
-                                                    <button type="button" class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-sm flex-fill"> Seleccionar...</button>
+                                                    <button type="button" class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill"> Seleccionar...</button>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-xl-12">
                                                 <label for="" class="fw-bold fs-6">SOLUCIÓN / RESPUESTA</label>
-                                                <input type="text" class="form-control form-control-sm">
+                                                <input type="text" class="form-control form-control-xs">
                                             </div>
                                         </div>
                                     </fieldset>
@@ -296,7 +299,7 @@
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-sm">
                             @if ($btn_guardar_actualizar === "guardar")
-                                <i class="fa-solid fa-floppy-disk"></i> Guardar Y enviar resultado
+                                <i class="fa-solid fa-floppy-disk"></i> Guardar y Responder <i class="fa-solid fa-envelope"></i>
                             @else
                                 <i class="fa-solid fa-floppy-disk"></i> Actualizar
                             @endif    

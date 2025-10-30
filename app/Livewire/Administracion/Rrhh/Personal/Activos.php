@@ -3,8 +3,10 @@
 namespace App\Livewire\Administracion\Rrhh\Personal;
 
 use App\Models\Tbl_personale;
+use App\Models\Tbl_personales_biene;
 use App\Models\Tbl_personales_contrato;
 use App\Models\Tbl_sede;
+use App\Models\Tblsede;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -82,7 +84,7 @@ class Activos extends Component
                     ->orWhere('datos', 'like', '%' . $this->searchpersonal . '%');
                 });
             })
-            ->orderBy('datos')
+            ->orderBy('id','desc')
             ->paginate(10);
         
         $lista_historial = Tbl_personales_contrato::where('dni',$this->dni)
@@ -116,27 +118,13 @@ class Activos extends Component
         return [
             'dni' => 'required|string|unique:tbl_personales,dni,' . $this->id_personal,
             'datos' => 'required',
-            'sede' => 'required',
-            'dependencia' => 'required',
-            'regimen' => 'required',
-            'cargo' => 'required',
-            'fecha_inicio' => 'required',
-            'fecha_fin' => 'required',
-            'causal' => 'required',
         ];
     }
 
     protected $messages = [
         'dni.required' => 'El dni es obligatorio.',
         'dni.unique' => 'El dni ya fue registrado.',
-        'datos.required' => '',
-        'sede.required' => '',
-        'dependencia.required' => '',
-        'regimen.required' => '',
-        'cargo.required' => '',
-        'fecha_inicio.required' => '',
-        'fecha_fin.required' => '',
-        'causal.required' => '',
+        'datos.required' => 'El datos es obligatorio.',
     ];
 
     public function nuevo(){
@@ -152,7 +140,73 @@ class Activos extends Component
     }
 
     public function guardar(){
-        $validated = $this->validate(); 
+        $validated = $this->validate();
+        
+        try {
+            Tbl_personale::create([
+                'dni' => $this->dni,
+                'datos' => strtoupper($this->datos),
+
+                'codsede_origen' => $this->codsede_origen,
+                'sede_origen' => $this->sede_origen,
+                'coddependencia_origen' => $this->coddependencia_origen,
+                'dependencia_origen' => $this->dependencia_origen,
+
+                'codsede_destino' => $this->codsede_destino,
+                'sede_destino' => Tbl_sede::where('codsedeofi',$this->codsede_destino)->value('nomsedeofi'),
+                'coddependencia_destino' => $this->coddependencia_destino,
+                'dependencia_destino' => Tbl_sede::where('coddepofi',$this->coddependencia_destino)->value('nomdepofi'),
+
+                'regimen' => $this->regimen,
+                'cargo' => $this->cargo,
+                'cel_personal' => $this->cel_personal,
+                'correo_personal' => strtolower($this->correo_personal),
+                'cel_institucional' => $this->cel_institucional,
+                'correo_institucional' => strtolower($this->correo_institucional),
+
+                'avatar' => $this->avatar,
+                'activo' => '1',
+                
+                'created_user' => $this->created_user,
+                'updated_user' => $this->updated_user,
+            ]);
+            Tbl_personales_contrato::create([
+                'dni' => $this->dni,
+                'datos' => strtoupper($this->datos),
+
+                'codsede_destino' => $this->codsede_destino,
+                'sede_destino' => $this->sede_destino,
+                'coddependencia_destino' => $this->coddependencia_destino,
+                'dependencia_destino' => $this->dependencia_destino,
+
+                'regimen' => $this->regimen,
+                'cargo' => $this->cargo,
+                'cel_personal' => $this->cel_personal,
+                'correo_personal' => strtolower($this->correo_personal),
+                'cel_institucional' => $this->cel_institucional,
+                'correo_institucional' => strtolower($this->correo_institucional),
+
+                'fecha_inicio' => $this->fecha_inicio,
+                'fecha_fin' => $this->fecha_fin,
+                'causal' => $this->causal,
+                'observacion' => $this->observacion_contrato,
+            ]);
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error al actualizar los datos del personal: ' . $e->getMessage());
+        }
+
+        $this->reset();
+
+        // Cerramos modal
+        $this->modal_abierto_personal = false;
+
+        // Emitimos un evento para mostrar el SweetAlert
+        $this->dispatch(
+            'alerta-actualizado',
+            titulo: 'Datos guardados',
+            mensaje: 'Los datos se han guardado correctamente.',
+            tipo: 'success' // success | error | warning | info
+        );
     }
 
 
@@ -196,13 +250,14 @@ class Activos extends Component
         $this->updated_user = $iEditar->updated_user;
 
         // Variable de contrato
-        $iContrato = Tbl_personales_contrato::where('dni', $iEditar->dni)->orderBy('id','desc')->firstOrFail();
-        
-        $this->id_personal_contrato = $iContrato->id;
-        $this->fecha_inicio = $iContrato->fecha_inicio;
-        $this->fecha_fin = $iContrato->fecha_fin;
-        $this->causal = $iContrato->causal;
-        $this->observacion_contrato = $iContrato->observacion;
+        $iContrato = Tbl_personales_contrato::where('dni', $iEditar->dni)->orderBy('id','desc')->first();
+        if ($iContrato) {
+            $this->id_personal_contrato = $iContrato->id;
+            $this->fecha_inicio = $iContrato->fecha_inicio;
+            $this->fecha_fin = $iContrato->fecha_fin;
+            $this->causal = $iContrato->causal;
+            $this->observacion_contrato = $iContrato->observacion;
+        }
 
         // Refrescar visualmente el select
         // $this->dispatch('refresh');
@@ -212,12 +267,10 @@ class Activos extends Component
     public function actualizar(){
         $iActualizar = Tbl_personale::where('dni', $this->dni)->firstOrFail();
 
-        $iContrato = Tbl_personales_contrato::where('id', $this->id_personal_contrato)->firstOrFail();
-
         try {
             $iActualizar->update([            
                 'dni' => $this->dni,
-                'datos' => $this->datos,
+                'datos' => strtoupper($this->datos),
 
                 'codsede_origen' => $this->codsede_origen,
                 'sede_origen' => $this->sede_origen,
@@ -225,40 +278,44 @@ class Activos extends Component
                 'dependencia_origen' => $this->dependencia_origen,
 
                 'codsede_destino' => $this->codsede_destino,
-                'sede_destino' => $this->sede_destino,
+                'sede_destino' => Tbl_sede::where('codsedeofi',$this->codsede_destino)->value('nomsedeofi'),
                 'coddependencia_destino' => $this->coddependencia_destino,
-                'dependencia_destino' => $this->dependencia_destino,
+                'dependencia_destino' => Tbl_sede::where('coddepofi',$this->coddependencia_destino)->value('nomdepofi'),
 
                 'regimen' => $this->regimen,
                 'cargo' => $this->cargo,
                 'cel_personal' => $this->cel_personal,
-                'correo_personal' => $this->correo_personal,
+                'correo_personal' => strtolower($this->correo_personal),
                 'cel_institucional' => $this->cel_institucional,
-                'correo_institucional' => $this->correo_institucional,
+                'correo_institucional' => strtolower($this->correo_institucional),
                 'avatar' => $this->avatar,
                 'activo' => $this->activo,
                 
-                'created_user' => $this->created_user,
-                'updated_user' => $this->updated_user,
+                // 'created_user' => $this->created_user,
+                'updated_user' => auth()->user()->datos,
             ]);
 
-            $iContrato->update([
-                'codsede_destino' => $this->codsede_destino,
-                'sede_destino' => $this->sede_destino,
-                'coddependencia_destino' => $this->coddependencia_destino,
-                'dependencia_destino' => $this->dependencia_destino,
+            $iContrato = Tbl_personales_contrato::where('id', $this->id_personal_contrato)->first();
 
-                'regimen' => $this->regimen,
-                'cargo' => $this->cargo,
+            if ($iContrato) {
+                $iContrato->update([
+                    'codsede_destino' => $this->codsede_destino,
+                    'sede_destino' => $this->sede_destino,
+                    'coddependencia_destino' => $this->coddependencia_destino,
+                    'dependencia_destino' => $this->dependencia_destino,
 
-                'fecha_inicio' => $this->fecha_inicio,
-                'fecha_fin' => $this->fecha_fin,
-                'causal' => $this->causal,
-                'observacion' => $this->observacion_contrato,
-            ]);
+                    'regimen' => $this->regimen,
+                    'cargo' => $this->cargo,
+
+                    'fecha_inicio' => $this->fecha_inicio,
+                    'fecha_fin' => $this->fecha_fin,
+                    'causal' => $this->causal,
+                    'observacion' => $this->observacion_contrato,
+                ]);
+            }
 
         } catch (\Exception $e) {
-            session()->flash('error', 'Error al desactivar el usuario: ' . $e->getMessage());
+            session()->flash('error', 'Error al actualizar los datos del personal: ' . $e->getMessage());
         }        
 
         // Reiniciamos todas la variable excepto:

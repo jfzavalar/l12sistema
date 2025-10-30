@@ -13,7 +13,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="input-group mt-3 mb-3">
-                                    <input type="text" id="txt_searchbien" class="form-control form-control-sm" placeholder="Buscar por código patrimonial" wire:model.live="searchbuscarpersonal">
+                                    <input type="text" id="txt_searchbien" class="form-control form-control-sm" placeholder="Buscar por DNI o Datos del personal" wire:model.live="searchbuscarpersonal">
                                 </div>
                             </div>
                         </div>

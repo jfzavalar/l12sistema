@@ -49,7 +49,7 @@
                                         <td>
                                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                 <div class="btn-group" role="group">
-                                                   <button type="button" class="btn btn-outline-success"  wire:click="agregar_bienes({{ $bieninformatico->id}})" @disabled(($bieninformatico->desplazamiento == '1' && $traslado == '1') || ($bieninformatico->desplazamiento == '0' && $traslado == '0'))>
+                                                   <button type="button" class="btn btn-outline-success btn-sm"  wire:click="agregar_bienes({{ $bieninformatico->id}})" @disabled(($bieninformatico->desplazamiento == '1' && $traslado == '1') || ($bieninformatico->desplazamiento == '0' && $traslado == '0'))>
                                                         <i class="fa-solid fa-share-from-square"></i>
                                                     </button>
                                                 </div>

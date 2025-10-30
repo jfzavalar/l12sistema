@@ -47,9 +47,9 @@
                                     <strong> <i class="fa-solid fa-filter"></i>Buscar por DNI - Código Patrimonial - IP</strong>
                                 </label>
                                 <div class="input-group">
-                                    <input type="text" id="txt_searcha" class="form-control form-control-sm" placeholder="Buscar por DNI - CÓDIGO PATRIMONIAL - IP" wire:model.live="searcha">
+                                    <input type="text" id="txt_searcha" class="form-control form-control-sm me-2" placeholder="Buscar por DNI - CÓDIGO PATRIMONIAL - IP" wire:model.live="searcha">
                                     @can('procesos.informatica.ips.destroy')
-                                        <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-2" wire:click="nuevo">
+                                        <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-2 me-2" wire:click="nuevo">
                                             <i class="fa-solid fa-file"></i> Nuevo <i class="fa-solid fa-desktop"></i>
                                         </button>
                                         <button type="button" id="btnnuevo" class="btn btn-success btn-sm rounded-2" wire:click="nuevo_impresora">
@@ -69,11 +69,11 @@
                         <tr>
                             <th  scope="col">#</th>
                             <th scope="col">
-                                <i class="fa-solid fa-user"></i> DNI
+                                <i class="fa-solid fa-user"></i> DNI - PERSONAL
                             </th>
-                            <th scope="col">PERSONAL</th>
-                            <th scope="col">COD PATRIMONIAL</th>
-                            <th scope="col">DESCRIPCION</th>
+                            <th scope="col">SEDE</th>
+                            <th scope="col">COD PATRIMONIAL - BIEN</th>
+                            <th scope="col">FAMILIA</th>
                             <th scope="col">IP</th>
                             <th scope="col">MARCA</th>
                             <th scope="col">MODELO</th>
@@ -87,10 +87,10 @@
                         @forelse ($lista_activos as $item)
                             <tr @if (is_null($item->ip)) class="text-danger" @endif>
                                 <th @if (is_null($item->ip)) class="text-danger" @endif>{{ $loop->iteration }}</th>
-                                <th @if (is_null($item->ip)) class="text-danger" @endif>{{ $item->cod_usuario}}</th>
-                                <td @if (is_null($item->ip)) class="text-danger" @endif>{{ $item->desc_usuario }}</td>
-                                <td @if (is_null($item->ip)) class="text-danger" @endif>{{ $item->cod_pat }}</td>
-                                <td @if (is_null($item->ip)) class="text-danger" @endif>{{ $item->bien }}</td>
+                                <td @if (is_null($item->ip)) class="text-danger" @endif> <b> {{ $item->cod_usuario}} </b> <br> {{ $item->desc_usuario }}</td>
+                                <td @if (is_null($item->ip)) class="text-danger" @endif>{{ $item->nomsedeofi }}</td>
+                                <td @if (is_null($item->ip)) class="text-danger" @endif> <b> {{ $item->cod_pat }} </b> <br> {{ $item->bien }}</td>
+                                <td @if (is_null($item->ip)) class="text-danger" @endif>{{ $item->familia }}</td>
                                 <td @if (is_null($item->ip)) class="text-danger" @endif>{{ $item->ip }}</td>
                                 <td @if (is_null($item->ip)) class="text-danger" @endif>{{ $item->marca}}</td>
                                 <td @if (is_null($item->ip)) class="text-danger" @endif>{{ $item->modelo }}</td>
@@ -156,23 +156,35 @@
 
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-xl-4 col-sm-12" >
+                            <div class="col-xl-2 col-sm-12" >
                                 <fieldset class="border p-3 rounded text-center" disabled>
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted rounded bg-{{ $modal_header_color }}">FOTO DE PERFIL</legend>
                                     @include('livewire.partials.personal-datos-foto')
-                                </fieldset>
+                                </fieldset>                           
+                            </div>
+                            <div class="col-xl-3 col-sm-12" >
                                 <fieldset class="border p-3 rounded" disabled>
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DATOS PERSONALES</legend>
                                     @include('livewire.partials.personal-datos-personales')
-                                </fieldset>                              
+                                </fieldset>   
                             </div>
-                            <div class="col-xl-8 col-sm-12">
-                                <fieldset class="border p-4 rounded">
+                            <div class="col-xl-7 col-sm-12">
+                                <fieldset class="border p-3 rounded mb-3" disabled>
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DATOS INSTITUCIONALES</legend>
+                                    @include('livewire.partials.personal-datos-institucionales')
+                                </fieldset>
+                            </div>                        
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-12 col-sm-12">
+                                {{-- <fieldset class="border p-4 rounded">
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">BIEN INFORMATICO - IP</legend>
                                     @include('livewire.partials.bienes-datos-informaticos-ip')
-                                </fieldset>
+                                </fieldset> --}}
                                 <fieldset class="border p-4 rounded">
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DETALLES DE BIEN INFORMATICO</legend>
+                                    @include('livewire.partials.bienes-datos-informaticos-ip')
+                                    <hr>
                                     @include('livewire.partials.bienes-datos-informaticos-ip-detalle')
                                 </fieldset>
                             </div>
