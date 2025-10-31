@@ -129,7 +129,7 @@
                 @can('procesos.intranet.index')
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('procesos.intranet.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.intranet.index') }}">
-                            <i class="fa-solid fa-globe"></i> Intranet
+                            <i class="fa-solid fa-gear"></i> Configuración
                         </a>
                     </li>
                 @endcan

@@ -5,7 +5,7 @@
 <ul class="dropdown-menu dropdown-menu-end">
     {{-- <li><button class="dropdown-item" type="button">Action</button></li> --}}
     <li>
-        <a href="#" class="dropdown-item" type="button">
+        <a href="{{ route('procesos.intranet.index') }}" class="dropdown-item" type="button">
             <i class="fa-solid fa-gear"></i> Configuración
         </a>
     </li>

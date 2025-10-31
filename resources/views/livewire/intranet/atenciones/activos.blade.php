@@ -14,6 +14,122 @@
     @endif
     <div class="card">
         <div class="card-body">
+            <div class="row mt-3">
+                <div class="col-xl-4 col-gl-6 col-sm-12">
+                    <table class="table">
+                        <thead class="table-dark">
+                            <tr>
+                                <th scope="col">Informatica</th>
+                                <th scope="col" colspan="3" class="text-center">Tickets</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{-- @forelse ($totales_asignados as $tactivos) --}}
+                                <tr class="align-middle" style="font-size: 12px;">
+                                    <th scope="row">Usuario</th>
+                                    <th style="white-space: nowrap;"></th>
+                                    <td>
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                            <div class="input-group input-group-xs">
+                                                <button class="input-group-text bg-success text-white">
+                                                    <i class="fa-solid fa-check me-2"></i>Atendidos
+                                                </button>
+                                                <label class="form-control form-control-xs"></label>
+                                            </div>
+                                            <div class="input-group input-group-xs">
+                                                <button class="input-group-text bg-danger text-white">
+                                                    <i class="fa-solid fa-triangle-exclamation me-2"></i>Pendientes
+                                                </button>
+                                                <label class="form-control form-control-xs"></label>
+                                            </div>
+                                            <div class="input-group input-group-xs">
+                                                <button class="input-group-text bg-info text-white">
+                                                    <i class="fa-solid fa-envelope"></i>Lima
+                                                </button>
+                                                <label class="form-control form-control-xs"></label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {{-- @empty
+                                <tr class="align-middle"><td colspan="3">Sin registros.</td></tr>
+                            @endforelse --}}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-xl-4 col-gl-6 col-sm-12">
+                    <table class="table">
+                        <thead class="table-dark">
+                            <tr>
+                                <th scope="col">Digitalizadores</th>
+                                <th scope="col" colspan="3" class="text-center">Tickets</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{-- @forelse ($totales_asignados as $tactivos) --}}
+                                <tr class="align-middle" style="font-size: 12px;">
+                                    <th scope="row">Usuario</th>
+                                    <th style="white-space: nowrap;"></th>
+                                    <td>
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                            <div class="input-group input-group-xs">
+                                                <button class="input-group-text bg-success text-white">
+                                                    <i class="fa-solid fa-check me-2"></i>Atendidos
+                                                </button>
+                                                <label class="form-control form-control-xs"></label>
+                                            </div>
+                                            <div class="input-group input-group-xs">
+                                                <button class="input-group-text bg-info text-white">
+                                                    <i class="fa-solid fa-file-pdf"></i>Folios
+                                                </button>
+                                                <label class="form-control form-control-xs"></label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {{-- @empty
+                                <tr class="align-middle"><td colspan="3">Sin registros.</td></tr>
+                            @endforelse --}}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-xl-4 col-gl-6 col-sm-12">
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-sm-4">
+                            <div class="alert alert-primary" role="alert">
+                                <h5 class="card-title">
+                                    Total
+                                </h5>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h1><i class="fa-solid fa-chart-simple text-primary"></i></h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-sm-4">
+                            <div class="alert alert-success" role="alert">
+                                <h5 class="card-title">
+                                    A
+                                </h5>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h1><i class="fa-solid fa-file-signature text-success"></i></h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-sm-4">
+                            <div class="alert alert-danger" role="alert">
+                                <h5 class="card-title">
+                                    B
+                                </h5>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h1><i class="fa-solid fa-signature text-danger"></i></h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="table-responsive small">
                 {{-- <div class="input-group mb-3"> --}}
                     <div class="row g-3">
@@ -180,8 +296,8 @@
                                         <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DETALLE DE LA ATENCIÓN</legend>
                                         <div class="row">
                                             <div class="col-xl-2">
-                                                <label for="" class="fw-bold fs-6">REPORTADO POR</label>
-                                                <select name="" id="" class="form-select form-select-xs">
+                                                <label for="cmb_reportado" class="fw-bold fs-6">REPORTADO POR</label>
+                                                <select id="cmb_reportado" class="form-select form-select-xs">
                                                     <option value="">Seleccionar...</option>
                                                     <option value="CEA">CEA</option>
                                                     <option value="CORREO">CORREO</option>
@@ -193,7 +309,7 @@
                                                 </select>
                                             </div>
                                             <div class="col-xl-2">
-                                                <label for="" class="fw-bold fs-6">TIPO</label>
+                                                <label for="tipoi" class="fw-bold fs-6">TIPO</label>
                                                 <div class="d-flex gap-2">
                                                     <input type="radio" id="tipoi" name="tipo" class="btn-check" value="INCIDENCIA" autocomplete="off" checked>
                                                     <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="tipoi">INCIDENCIA</label>
@@ -203,35 +319,35 @@
                                                 </div>
                                             </div>
                                             <div class="col-xl-2">
-                                                <label for="" class="fw-bold fs-6">INDICENCIA/SOLICITUD</label>
+                                                <label for="txt_ind_sol" class="fw-bold fs-6">INDICENCIA/SOLICITUD</label>
                                                 <div class="input-group">
                                                     <button type="button" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-xs">
                                                         <i class="fa-solid fa-magnifying-glass"></i>
                                                     </button>
-                                                    <input type="text" class="form-control form-control-xs">
+                                                    <input type="text" id="txt_ind_sol" class="form-control form-control-xs">
                                                 </div>
                                             </div>
                                             <div class="col-xl-6">
-                                                <label for="" class="fw-bold fs-6">ESPECIFICACIÓN (Incidencia / Solicitud)</label>
+                                                <label for="txt_especificacion" class="fw-bold fs-6">ESPECIFICACIÓN (Incidencia / Solicitud)</label>
                                                 <div class="input-group">
                                                     <button type="button" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-xs">
                                                         <i class="fa-solid fa-magnifying-glass"></i>
                                                     </button>
-                                                    <input type="text" class="form-control form-control-xs">
+                                                    <input type="text" id="txt_especificacion" class="form-control form-control-xs">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-xl-3">
-                                                <label for="" class="fw-bold fs-6">CEA</label>
-                                                <input type="text" class="form-control form-control-xs">
+                                                <label for="txt_cea" class="fw-bold fs-6">CEA</label>
+                                                <input type="text" id="txt_cea" class="form-control form-control-xs">
                                             </div>
                                             <div class="col-xl-4">
-                                                <label for="" class="fw-bold fs-6">Carpeta Fiscal</label>
-                                                <input type="text" class="form-control form-control-xs">
+                                                <label for="txt_cf" class="fw-bold fs-6">Carpeta Fiscal</label>
+                                                <input type="text" id="txt_cf" class="form-control form-control-xs">
                                             </div>
                                             <div class="col-xl-2">
-                                                <label for="txtdespacho" class="fw-bold fs-6">Enviado a Lima</label>
+                                                <label for="enviadoSi" class="fw-bold fs-6">Enviado a Lima</label>
                                                 <div class="d-flex gap-2">
                                                     <input type="radio" id="enviadoSi" name="enviadoLima" class="btn-check" value="SI" autocomplete="off" checked>
                                                     <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="enviadoSi">Sí</label>
@@ -242,21 +358,21 @@
                                             </div>
 
                                             <div class="col-xl-3">
-                                                <label for="" class="fw-bold fs-6">GLPI</label>
-                                                <input type="text" class="form-control form-control-xs">
+                                                <label for="txt_glpi" class="fw-bold fs-6">GLPI</label>
+                                                <input type="text" id="txt_glpi" class="form-control form-control-xs">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-xl-12">
-                                                <label for="" class="fw-bold fs-6">DESCRIPCIÓN (Opcional)</label>
-                                                <input type="text" class="form-control form-control-xs">
+                                                <label for="text_descripcion" class="fw-bold fs-6">DESCRIPCIÓN (Opcional)</label>
+                                                <input type="text" id="text_descripcion" class="form-control form-control-xs">
                                             </div>
                                         </div>
                                     </fieldset>
                                     <fieldset class="border p-3 rounded mb-3">
                                         <div class="row">
                                             <div class="col-xl-2">
-                                                <label for="txtdespacho" class="fw-bold fs-6">ATENDIDO</label>
+                                                <label for="atendidoSi" class="fw-bold fs-6">ATENDIDO</label>
                                                 <div class="d-flex gap-2">
                                                     <input type="radio" id="atendidoSi" name="atendido" class="btn-check" value="SI" autocomplete="off" checked>
                                                     <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="atendidoSi">Sí</label>
@@ -279,16 +395,16 @@
                                                 </div>
                                             </div>
                                             <div class="col-xl-2">
-                                                <label for="txtdespacho" class="fw-bold fs-6">ADJUNTAR ARCHIVOS</label>
+                                                <label for="txtdespacho" class="fw-bold fs-6">ADJUNTAR</label>
                                                 <div class="d-flex gap-2">
-                                                    <button type="button" class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill"> Seleccionar...</button>
+                                                    <button type="button" class="btn btn-outline-dark btn-xs flex-fill" wire:click="cargarPDF1"> Seleccionar...</button>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-xl-12">
-                                                <label for="" class="fw-bold fs-6">SOLUCIÓN / RESPUESTA</label>
-                                                <input type="text" class="form-control form-control-xs">
+                                                <label for="txt_sol_res" class="fw-bold fs-6">SOLUCIÓN / RESPUESTA</label>
+                                                <input type="text" id="txt_sol_res" class="form-control form-control-xs">
                                             </div>
                                         </div>
                                     </fieldset>
@@ -312,6 +428,76 @@
             </div>
         </div>
     </div>
+
+    {{-- Cargar varios documentos y e imágenes --}}
+
+    <!-- Modal Cargar PDF -->
+    <div class="modal fade @if($modal_abierto_pdf_cargar) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form wire:submit.prevent="cargarPDF2">
+                    <div class="modal-header bg-warning-subtle">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">
+                            <i class="fa-solid fa-file-pdf"></i> CARGAR PDF
+                        </h1>
+                        <button type="button" class="btn-close" wire:click="cerrar_PDF" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="input-group mt-3 mb-3">
+                            <input 
+                                type="file" 
+                                class="form-control" 
+                                id="input-pdf" 
+                                wire:model="pdfs" 
+                                accept="application/pdf" 
+                                multiple 
+                                required
+                            >
+                            @error('pdfs.*') 
+                                <span class="text-danger small">{{ $message }}</span> 
+                            @enderror
+                            {{-- Vista previa opcional --}}
+                        </div>
+                        @if ($pdfs)
+                            <ul class="list-group mt-2">
+                                @foreach ($pdfs as $index => $file)
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="text-truncate" style="max-width: 75%;">
+                                            <i class="fa-solid fa-file-zipper"></i>
+                                            {{ $file->getClientOriginalName() }}
+                                            <span class="badge bg-light text-dark">
+                                                {{ number_format($file->getSize() / 1024, 1) }} KB
+                                            </span>
+                                        </div>
+                                        <button 
+                                            type="button" 
+                                            class="btn btn-outline-danger btn-sm rounded-circle"
+                                            title="Quitar este archivo"
+                                            wire:click="eliminarPDF({{ $index }})"
+                                        >
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-outline-primary btn-sm">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            <br>Guardar
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" wire:click="cerrar_PDF">
+                            <i class="fa-solid fa-door-closed"></i>
+                            <br>Cerrar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+
 
     @include('livewire.partials.personal-modal-buscar')
 

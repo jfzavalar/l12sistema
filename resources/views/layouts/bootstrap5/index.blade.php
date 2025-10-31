@@ -26,21 +26,41 @@
         @yield('css')
 
         <style>
-            /* Hace redondeados todos los botones de paginación */
+            /* 🔵 Estilo general de los botones de paginación */
             .pagination .page-link {
-            border-radius: 50px !important; /* o prueba con .375rem */
+                border-radius: 50px !important; /* Bordes tipo pill */
+                padding: 0.25rem 0.6rem;        /* Botones más compactos */
+                font-size: 0.8rem;              /* Texto más pequeño */
+                line-height: 1;                 /* Ajusta la altura del texto */
+                color: #5e72e4;                 /* Color principal Argon */
             }
 
-            /* También puedes redondear solo los bordes de los extremos */
+            /* 🟣 Hover y enfoque */
+            .pagination .page-link:hover,
+            .pagination .page-link:focus {
+                background-color: #5e72e4;
+                color: #fff;
+                box-shadow: 0 0 6px rgba(94, 114, 228, 0.3);
+            }
+
+            /* 🟢 Estado activo */
+            .pagination .page-item.active .page-link {
+                background-color: #5e72e4 !important;
+                border-color: #5e72e4 !important;
+                color: #fff !important;
+                box-shadow: 0 0 6px rgba(94, 114, 228, 0.4);
+            }
+
+            /* 🔘 Redondeo de bordes en los extremos (opcional, por si prefieres estilo clásico) */
             .pagination .page-item:first-child .page-link {
-            border-top-left-radius: 50px;
-            border-bottom-left-radius: 50px;
+                border-top-left-radius: 50px;
+                border-bottom-left-radius: 50px;
+            }
+            .pagination .page-item:last-child .page-link {
+                border-top-right-radius: 50px;
+                border-bottom-right-radius: 50px;
             }
 
-            .pagination .page-item:last-child .page-link {
-            border-top-right-radius: 50px;
-            border-bottom-right-radius: 50px;
-            }
             
             /* ------------------------------------- */
             .bd-placeholder-img {

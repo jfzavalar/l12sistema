@@ -6,6 +6,8 @@ use App\Models\Tbl_personale;
 use App\Models\Tbl_sede;
 use Barryvdh\DomPDF\Facade\Pdf;
 
+use Illuminate\Support\Facades\Storage;
+
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
@@ -27,6 +29,7 @@ class Activos extends Component
 
     public $modal_abierto_atenciones = false;
     public $modal_abierto_personal_buscar = false;
+    public $modal_abierto_pdf_cargar = false;
 
     // Variables personal
     public $id_personal,
@@ -64,6 +67,12 @@ class Activos extends Component
     public function updatingSearchbuscarpersonal(){
         $this->resetPage();
     }
+
+    // Cargar varios docuemntos
+    public $pdfs = [];
+    protected $rules = [
+        'pdfs.*' => 'required|mimes:pdf|max:10240', // máximo 10MB por archivo
+    ];
 
     public function render()
     {
@@ -129,5 +138,24 @@ class Activos extends Component
 
         $this->modal_abierto_personal_buscar = false;
 
+    }
+
+    // PDF
+    // ---------------------------------------------------------
+    public function cargarPDF1(){
+        $this->modal_abierto_pdf_cargar = true;
+    }
+
+    public function cargarPDF2(){
+    }
+    public function eliminarPDF($index)
+    {
+        if (isset($this->pdfs[$index])) {
+            unset($this->pdfs[$index]);
+            $this->pdfs = array_values($this->pdfs); // reindexar el array
+        }
+    }
+    public function cerrar_PDF(){
+        $this->modal_abierto_pdf_cargar = false;
     }
 }

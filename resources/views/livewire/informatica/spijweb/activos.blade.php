@@ -220,16 +220,16 @@
                     </tbody>
                 </table>
                 <tfoot>
-                        {{-- Links de paginación --}}
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <div>
-                                <strong>Total de registros:</strong> {{ $lista_activos->total() }}
-                            </div>
-                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                {{ $lista_activos->links() }}
-                            </div>
+                    {{-- Links de paginación --}}
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div>
+                            <strong>Total de registros:</strong> {{ $lista_activos->total() }}
                         </div>
-                    </tfoot>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            {{ $lista_activos->links() }}
+                        </div>
+                    </div>
+                </tfoot>
             </div>
         </div>
 
