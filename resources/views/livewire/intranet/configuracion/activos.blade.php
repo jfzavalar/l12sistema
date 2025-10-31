@@ -1,17 +1,7 @@
 <div class="card min-vh-100">
     <div class="card-body">
         <div class="row">
-            <div class="col-xl-6">
-                <div class="card border-2 shadow-sm" style="border-top: 4px solid var(--bs-primary);">
-                    {{-- <div class="card-header">
-                        DATOS DEL PERSONAL
-                    </div> --}}
-                    <div class="card-body">
-                        {{-- Aquí puedes poner la info del usuario --}}
-                    </div>
-                </div>
-            </div>
-
+            
             <div class="col-xl-6">
                 @if (session('message'))
                     <div class="alert alert-success">{{ session('message') }}</div>
@@ -91,6 +81,16 @@
                             </button>
                         </div>
                     </form>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="card border-2 shadow-sm" style="border-top: 4px solid var(--bs-primary);">
+                    {{-- <div class="card-header">
+                        DATOS DEL PERSONAL
+                    </div> --}}
+                    <div class="card-body">
+                        {{-- Aquí puedes poner la info del usuario --}}
+                    </div>
                 </div>
             </div>
         </div>

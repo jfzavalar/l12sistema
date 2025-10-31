@@ -41,7 +41,7 @@
             <livewire:informatica.ips.inactivos />
         </div>
         <div class="tab-pane fade" id="3-tab-pane" role="tabpanel" aria-labelledby="3-tab" tabindex="0">
-            <livewire:informatica.ips.reportes />
+            {{-- <livewire:informatica.ips.reportes /> --}}
         </div>
         <div class="tab-pane fade" id="4-tab-pane" role="tabpanel" aria-labelledby="4-tab" tabindex="0">...</div>
     </div>

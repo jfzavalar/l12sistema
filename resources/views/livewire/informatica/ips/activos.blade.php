@@ -91,7 +91,7 @@
                                 <td @if (is_null($item->ip)) class="text-danger" @endif>{{ $item->nomsedeofi }}</td>
                                 <td @if (is_null($item->ip)) class="text-danger" @endif> <b> {{ $item->cod_pat }} </b> <br> {{ $item->bien }}</td>
                                 <td @if (is_null($item->ip)) class="text-danger" @endif>{{ $item->familia }}</td>
-                                <td @if (is_null($item->ip)) class="text-danger" @endif>{{ $item->ip }}</td>
+                                <th @if (is_null($item->ip)) class="text-danger" @endif>{{ $item->ip }}</th>
                                 <td @if (is_null($item->ip)) class="text-danger" @endif>{{ $item->marca}}</td>
                                 <td @if (is_null($item->ip)) class="text-danger" @endif>{{ $item->modelo }}</td>
                                 <td @if (is_null($item->ip)) class="text-danger" @endif>{{ $item->serie }}</td>

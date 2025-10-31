@@ -59,6 +59,7 @@
                     <option value="TASKalfa_6003i">TASKalfa_6003i</opction>
                     <option value="TASKalfa_6004i">TASKalfa_6004i</opction>
                     <option value="TASKalfa_6005i">TASKalfa_6005i</opction>
+                    <option value="TASKalfa_7001i">TASKalfa_7001i</opction>
                 </select>
             </div>
             <div class="col-xl-2 col-lg-6 col-sm-12">
@@ -76,6 +77,7 @@
                     <option value="TASKalfa_6003i">TASKalfa_6003i</opction>
                     <option value="TASKalfa_6004i">TASKalfa_6004i</opction>
                     <option value="TASKalfa_6005i">TASKalfa_6005i</opction>
+                    <option value="TASKalfa_7001i">TASKalfa_7001i</opction>
                 </select>
             </div>
             <div class="col-xl-2 col-lg-6 col-sm-12">
@@ -93,6 +95,7 @@
                     <option value="TASKalfa_6003i">TASKalfa_6003i</opction>
                     <option value="TASKalfa_6004i">TASKalfa_6004i</opction>
                     <option value="TASKalfa_6005i">TASKalfa_6005i</opction>
+                    <option value="TASKalfa_7001i">TASKalfa_7001i</opction>
                 </select>
             </div>
             <div class="col-xl-2 col-lg-6 col-sm-12">
