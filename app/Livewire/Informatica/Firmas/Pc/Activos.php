@@ -144,7 +144,7 @@ class Activos extends Component
             'cel_institucional' => $this->cel_institucional,
             //
             'idtoken' => $totalActivos,
-            'codtoken' => "token" . $totalActivos,
+            'codtoken' => "FirmaPC" . $totalActivos,
             'operativo' => "OPERATIVO",
             'asignacion' => "ASIGNACION",
             'fecha_expiracion' => $this->fecha_expiracion,
@@ -254,7 +254,7 @@ class Activos extends Component
         );
     }
 
-        public function desactivar(Tbl_firmas_pc $ibien){
+    public function desactivar(Tbl_firmas_pc $ibien){
         try {
             $ibien->update([
                 'activo' => '0',

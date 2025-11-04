@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Intranet\Atenciones;
 
+use App\Models\Tbl_incidencias_solicitude;
 use App\Models\Tbl_personale;
 use App\Models\Tbl_sede;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -31,6 +32,9 @@ class Activos extends Component
     public $modal_abierto_personal_buscar = false;
     public $modal_abierto_pdf_cargar = false;
 
+    public $modal_abierto_incidencia_solicitud = false;
+    public $modal_abierto_incidencia_solicitud_detalle = false;
+
     // Variables personal
     public $id_personal,
         $dni,
@@ -58,28 +62,50 @@ class Activos extends Component
         $created_user,
         $updated_user;
 
+    // Variables incidencias - solicitudes
+    public $id_i_s,$tipo,$tipo_desc,$descripcion,$detalle,$respuesta,$interno,$estado,$estados_desc,$activo_i_s,$created_user_i_s,$updated_user_i_s;
+
     public $filtro_anio,$filtro_mes;
+
     public $searchpersonalatenciones;
-    public function updatingSearchpersonalatenciones(){
+    public function updatingSearchpersonalatenciones()
+    {
         $this->resetPage();
     }
     public $searchbuscarpersonal;
-    public function updatingSearchbuscarpersonal(){
-        $this->resetPage();
+    public function updatingSearchbuscarpersonal()
+    {
+        $this->resetPage('personalPage');
+    }
+    public $searchincidenciasolicitud;
+    public function updatingSearchincidenciasolicitud()
+    {
+        $this->resetPage('incidenciasolicitudPage');
+    }
+    public $searchincidenciasolicituddesc;
+    public function updatingSearchincidenciasolicituddesc()
+    {
+        $this->resetPage('incidenciasolicituddescPage');
     }
 
-    // Cargar varios docuemntos
+    // Cargar varios documentos
     public $pdfs = [];
     protected $rules = [
         'pdfs.*' => 'required|mimes:pdf|max:10240', // máximo 10MB por archivo
     ];
+
+    public function mount()
+    {
+        $this->filtro_anio = date('Y');
+        $this->filtro_mes = date('n');
+    }
 
     public function render()
     {
         $lista_personal = Tbl_personale::where('activo','1')
             ->where('dni','like','%' .$this->searchbuscarpersonal .'%')
             ->orwhere('datos','like','%' .$this->searchbuscarpersonal .'%')
-            ->paginate(5);
+            ->paginate(15,['*'],'PersonalPage');
 
         $lista_sedes = Tbl_sede::select('codsedeofi','nomsedeofi')
             ->where('activo','1')
@@ -94,8 +120,23 @@ class Activos extends Component
             ->orderBy('nomdepofi')
             ->get();
 
+        $lista_indicencias_solicitudes = Tbl_incidencias_solicitude::select('descripcion')
+            ->where('activo','1')
+            ->where('descripcion', 'like', '%' . $this->searchincidenciasolicitud . '%')
+            ->distinct('descripcion')
+            ->orderBy('descripcion')
+            ->paginate(15,['*'],'incidenciassolicitudesPage');
+
+        $lista_indicencias_solicitudes_desc = Tbl_incidencias_solicitude::select('detalle')
+            ->where('activo','1')
+            ->where('descripcion',$this->descripcion)
+            ->where('detalle', 'like', '%' . $this->searchincidenciasolicituddesc . '%')
+            ->orderBy('detalle')
+            ->paginate(15,['*'],'incidenciassolicitudesdescPage');
+
         return view('livewire.intranet.atenciones.activos',
-                compact('lista_personal','lista_sedes','lista_dependencias'));
+                compact('lista_personal','lista_sedes','lista_dependencias',
+                        'lista_indicencias_solicitudes','lista_indicencias_solicitudes_desc'));
     }
 
     public function nuevo(){
@@ -138,6 +179,38 @@ class Activos extends Component
 
         $this->modal_abierto_personal_buscar = false;
 
+    }
+
+    public function cerrar_personal(){
+        $this->modal_abierto_personal_buscar = false;
+    }
+
+    // INCIDENCIAS Y SOLICITUDES
+    public function buscar_indicencia_solicitud(){
+        $this->modal_abierto_incidencia_solicitud = true;
+    }
+
+    public function agregar_indicencia_solicitud($vdescripcion){
+        $this->descripcion = $vdescripcion;
+        $this->modal_abierto_incidencia_solicitud = false;
+    }
+
+    public function cerrar_indicencia_solicitud(){
+        $this->modal_abierto_incidencia_solicitud = false;
+    }
+
+    //  DETALLES INCIDENCIAS Y SOLICITUDES
+    public function buscar_indicencia_solicitud_desc(){
+        $this->modal_abierto_incidencia_solicitud_detalle = true;
+    }
+
+    public function agregar_indicencia_solicitud_desc($vdescripcion_desc){
+        $this->detalle = $vdescripcion_desc;
+        $this->modal_abierto_incidencia_solicitud_detalle = false;
+    }
+
+    public function cerrar_indicencia_solicitud_desc(){
+        $this->modal_abierto_incidencia_solicitud_detalle = false;
     }
 
     // PDF

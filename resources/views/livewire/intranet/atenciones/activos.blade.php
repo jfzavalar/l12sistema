@@ -12,6 +12,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
+
     <div class="card">
         <div class="card-body">
             <div class="row mt-3">
@@ -136,14 +137,18 @@
                         <div class="col-lg-2 col-sm-12">
                             <label for="txtsearchpersonalatenciones" class="btn btn-outline-primary btn-sm me-2">Total:</label>
                         </div>
+                        
                         <div class="col-lg-2 col-sm-12">
                             <select name="filtro_anio" wire:model="filtro_anio" class="form-select form-select-sm me-2">
                                 <option value="">-- Año --</option>
                                 @foreach(range(date('Y'), date('Y') - 5) as $anio)
-                                    <option value="{{ $anio }}">{{ $anio }}</option>
+                                    <option value="{{ $anio }}" {{ $anio == date('Y') ? 'selected' : '' }}>
+                                        {{ $anio }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
+
                         <div class="col-lg-2 col-sm-12">
                             <select name="filtro_mes" wire:model="filtro_mes" class="form-select form-select-sm me-2">
                                 <option value="">-- Mes --</option>
@@ -152,10 +157,13 @@
                                     5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto',
                                     9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre'
                                 ] as $num => $mes)
-                                    <option value="{{ $num }}">{{ $mes }}</option>
+                                    <option value="{{ $num }}" {{ $num == date('n') ? 'selected' : '' }}>
+                                        {{ $mes }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
+
                         <div class="col-lg-6 col-sm-12">
                             <div class="input-group mb-3"> 
                                 <input type="text" id="txtsearchpersonalatenciones" class="form-control form-control-sm" wire:model.live="searchpersonalatenciones" placeholder="Buscar por DNI o Datos del Personal">
@@ -321,19 +329,19 @@
                                             <div class="col-xl-2">
                                                 <label for="txt_ind_sol" class="fw-bold fs-6">INDICENCIA/SOLICITUD</label>
                                                 <div class="input-group">
-                                                    <button type="button" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-xs">
+                                                    <button type="button" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-xs" wire:click="buscar_indicencia_solicitud">
                                                         <i class="fa-solid fa-magnifying-glass"></i>
                                                     </button>
-                                                    <input type="text" id="txt_ind_sol" class="form-control form-control-xs">
+                                                    <input type="text" id="txt_ind_sol" class="form-control form-control-xs" wire:model="descripcion">
                                                 </div>
                                             </div>
                                             <div class="col-xl-6">
                                                 <label for="txt_especificacion" class="fw-bold fs-6">ESPECIFICACIÓN (Incidencia / Solicitud)</label>
                                                 <div class="input-group">
-                                                    <button type="button" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-xs">
+                                                    <button type="button" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-xs" wire:click="buscar_indicencia_solicitud_desc">
                                                         <i class="fa-solid fa-magnifying-glass"></i>
                                                     </button>
-                                                    <input type="text" id="txt_especificacion" class="form-control form-control-xs">
+                                                    <input type="text" id="txt_especificacion" class="form-control form-control-xs" wire:model="detalle">
                                                 </div>
                                             </div>
                                         </div>
@@ -428,6 +436,129 @@
             </div>
         </div>
     </div>
+
+    {{-- Modal Incidencias y Solicitudes --}}
+    <div class="modal fade @if($modal_abierto_incidencia_solicitud) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-warning-subtle">
+                    <h1 class="modal-title fs-5" id="NuevoEditarModalLabel">
+                        BUSCAR INCIDENCIAS O SOLICITUDES
+                    </h1>
+                    <button type="button" class="btn-close" wire:click="cerrar_indicencia_solicitud"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control form-control-sm mb-2" placeholder="Buscar por incidencia o solicitud" wire:model.live="searchincidenciasolicitud">
+                    <div class="table-responsive small">
+                        <table class="table table-striped table-hover table-sm table-xsmall">
+                            <thead class="table-dark text-center align-middle">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Tipo</th>
+                                    <th>Incidencia / Solicitud</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($lista_indicencias_solicitudes as $item)
+                                    <tr>
+                                        <th>{{ $loop->iteration }}</th>
+                                        <td></td>
+                                        <td>{{ $item->descripcion }}</td>
+                                        <td>
+                                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                <div class="btn-group" role="group">
+                                                    <button type="button" class="btn btn-outline-success btn-sm" wire:click="agregar_indicencia_solicitud('{{ $item->descripcion }}')">
+                                                        <i class="fa-solid fa-share-from-square"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="12" class="text-center">
+                                            <div class="alert alert-danger" role="alert">
+                                                No se encontraron resultados!
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                        {{ $lista_indicencias_solicitudes->links() }}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" wire:click="cerrar_indicencia_solicitud">
+                        <i class="fa-solid fa-square-xmark"></i> Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Modal Incidencias y Solicitudes Detalle --}}
+    <div class="modal fade @if($modal_abierto_incidencia_solicitud_detalle) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-warning-subtle">
+                    <h1 class="modal-title fs-5" id="NuevoEditarModalLabel">
+                        BUSCAR DETALLE DE INCIDENCIAS O SOLICITUDES
+                    </h1>
+                    <button type="button" class="btn-close" wire:click="cerrar_indicencia_solicitud_desc"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control form-control-sm mb-2" placeholder="Buscar por detalle incidencia o solicitud" wire:model.live="searchincidenciasolicituddesc">
+                    <div class="table-responsive small">
+                        <table class="table table-striped table-hover table-sm table-xsmall">
+                            <thead class="table-dark text-center align-middle">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Tipo</th>
+                                    <th>Incidencia / Solicitud</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($lista_indicencias_solicitudes_desc as $item2)
+                                    <tr>
+                                        <th>{{ $loop->iteration }}</th>
+                                        <td></td>
+                                        <td>{{ $item2->detalle }}</td>
+                                        <td>
+                                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                <div class="btn-group" role="group">
+                                                    <button type="button" class="btn btn-outline-success btn-sm" wire:click="agregar_indicencia_solicitud_desc('{{ $item2->detalle }}')">
+                                                        <i class="fa-solid fa-share-from-square"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="12" class="text-center">
+                                            <div class="alert alert-danger" role="alert">
+                                                No se encontraron resultados!
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                        {{ $lista_indicencias_solicitudes_desc->links() }}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" wire:click="cerrar_indicencia_solicitud_desc">
+                        <i class="fa-solid fa-square-xmark"></i> Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     {{-- Cargar varios documentos y e imágenes --}}
 

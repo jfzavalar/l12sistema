@@ -48,7 +48,7 @@
                                         <td>
                                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                 <div class="btn-group" role="group">
-                                                    <button type="button" class="btn btn-outline-success btn-sm" wire:click="agregar_personal({{ $personal->id }})" data-bs-toggle="modal" data-bs-target="#new-edit-Modal">
+                                                    <button type="button" class="btn btn-outline-success btn-sm" wire:click="agregar_personal({{ $personal->id }})">
                                                         <i class="fa-solid fa-share-from-square"></i>
                                                     </button>
                                                 </div>
@@ -56,7 +56,7 @@
                                         </td>
                                     </tr>
                                 @empty
-                                     <tr>
+                                    <tr>
                                         <td colspan="12" class="text-center">
                                             <div class="alert alert-danger" role="alert">
                                                 No se encontraron resultados!
