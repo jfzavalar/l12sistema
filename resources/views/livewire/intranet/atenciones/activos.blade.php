@@ -135,7 +135,7 @@
                 {{-- <div class="input-group mb-3"> --}}
                     <div class="row g-3">
                         <div class="col-lg-2 col-sm-12">
-                            <label for="txtsearchpersonalatenciones" class="btn btn-outline-primary btn-sm me-2">Total:</label>
+                            <label for="txtsearchpersonalatenciones" class="btn btn-outline-primary btn-sm me-2">Total: {{ $lista_atenciones->total() }}</label>
                         </div>
                         
                         <div class="col-lg-2 col-sm-12">
@@ -194,47 +194,42 @@
                             <th scope="col"><i class="fa-solid fa-gears"></i></th>
                         </tr>
                     </thead>
-                    {{-- <tbody class="align-middle">
-                        @forelse ($lista_activos as $item)
+                    <tbody class="align-middle">
+                        @forelse ($lista_atenciones as $item)
                             <tr>
                                 <th class="text-center">{{ $loop->iteration }}</th>
-                                <th>{{ $item->dni }}</th>
-                                <td>{{ $item->datos }}</td>
+                                <td><b>{{ $item->dni }}</b> <br> {{ $item->datos }}</td>
+                                <td></td>
                                 <td>
-                                    <b>SEDE: </b>{{ $item->sede_origen }}
-                                    <br><b>DEPENDENCIA: </b>{{ $item->dependencia_origen }}
+                                    
                                 </td>
                                 <td class="text-primary">
-                                    <b>SEDE: </b>{{ $item->sede_destino }}
-                                    <br><b>DEPENDENCIA: </b>{{ $item->dependencia_destino }}
+                                    
                                 </td>
-                                <td><b>{{ $item->regimen }}</b></td>
-                                <td>{{ $item->cargo }}</td>
+                                <td>{{ $item->reportado_por }}</td>
                                 <td>
-                                    <b>CEL: </b>{{ $item->cel_personal }}
-                                    <br>{{ $item->correo_personal }}
+                                    <span class="badge rounded-pill text-bg-success">
+                                        ATENDIDO
+                                    </span>
                                 </td>
+                                <td>{{ $item->created_user }}</td>
                                 <td>
-                                    <b>CEL: </b>{{ $item->cel_institucional }}
-                                    <br>{{ $item->correo_institucional  }}
+
                                 </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-outline-secondary btn-xs" wire:click="nuevo_contrato({{ $item->id }})">
-                                            <i class="fa-solid fa-file"></i><br>Nuevo_contrato
-                                        </button>
                                         <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar({{ $item->id }})">
                                             <i class="fa-solid fa-pen-to-square"></i><br>Editar
-                                        </button>
-                                        <button type="button" class="btn btn-outline-info btn-xs" wire:click="historial('{{ $item->dni }}')">
-                                            <i class="fa-solid fa-timeline"></i><br>Historial
-                                        </button>                           
+                                        </button>                   
                                         <button type="button" class="btn btn-outline-danger btn-xs" wire:click="desactivar({{ $item->id }})">
                                             <i class="fa-solid fa-trash-can"></i><br>Eliminar
                                         </button>
                                     </div>
                                 </td>
-                            </tr>
+                            </tr>                           
                         @empty
                             <tr>
                                 <td colspan="12" class="text-center">
@@ -244,11 +239,34 @@
                                 </td>
                             </tr>
                         @endforelse
-                    </tbody> --}}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="13"><br></td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
     </div>
+
+    {{-- Barra de paginación flotante con total --}}
+    {{-- <div class="pagination-floating position-fixed bottom-0 start-50 translate-middle-x bg-white border-top shadow-sm py-2 px-4 w-100 w-md-auto" style="z-index: 1050;">
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <div class="text-muted small">
+                <strong>Total de registros:</strong> {{ $lista_atenciones->total() }}
+            </div>
+            <div class="d-inline-block">
+                {{ $lista_atenciones->links() }}
+            </div>
+        </div>
+    </div> --}}
+
+    {{-- Flotante - paginación --}}
+    <div class="dropdown position-fixed bottom-0 start-50 translate-middle-x mb-3 bg-primary-subtle shadow-sm rounded px-3 py-2">
+        {{ $lista_atenciones->links() }}
+    </div>
+
 
     <!-- Modal Nuevo-Editar-->
     <div class="modal fade @if($modal_abierto_atenciones) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
@@ -299,13 +317,13 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col">
+                                <div class="col-xl-8">
                                     <fieldset class="border p-3 rounded mb-3">
                                         <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DETALLE DE LA ATENCIÓN</legend>
                                         <div class="row">
                                             <div class="col-xl-2">
                                                 <label for="cmb_reportado" class="fw-bold fs-6">REPORTADO POR</label>
-                                                <select id="cmb_reportado" class="form-select form-select-xs">
+                                                <select id="cmb_reportado" class="form-select form-select-xs" wire:model="reportado_por">
                                                     <option value="">Seleccionar...</option>
                                                     <option value="CEA">CEA</option>
                                                     <option value="CORREO">CORREO</option>
@@ -315,92 +333,74 @@
                                                     <option value="SISTEMA">SISTEMA</option>
                                                     <option value="WHATSAPP">WHATSAPP</option>
                                                 </select>
+                                                @error('reportado_por')
+                                                    <small class="text-danger">{{ $message }}</small>
+                                                @enderror
                                             </div>
                                             <div class="col-xl-2">
                                                 <label for="tipoi" class="fw-bold fs-6">TIPO</label>
                                                 <div class="d-flex gap-2">
-                                                    <input type="radio" id="tipoi" name="tipo" class="btn-check" value="INCIDENCIA" autocomplete="off" checked>
+                                                    <input type="radio" id="tipoi" name="tipo" class="btn-check" value="1" autocomplete="off" wire:model.live="tipo">
                                                     <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="tipoi">INCIDENCIA</label>
 
-                                                    <input type="radio" id="tipos" name="tipo" class="btn-check" value="SOLICITUD" autocomplete="off">
+                                                    <input type="radio" id="tipos" name="tipo" class="btn-check" value="2" autocomplete="off" wire:model.live="tipo">
                                                     <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="tipos">SOLICITUD</label>
                                                 </div>
                                             </div>
-                                            <div class="col-xl-2">
-                                                <label for="txt_ind_sol" class="fw-bold fs-6">INDICENCIA/SOLICITUD</label>
+                                            <div class="col-xl-4">
+                                                <label for="txt_ind_sol" class="fw-bold fs-6">SERVICIO</label>
                                                 <div class="input-group">
                                                     <button type="button" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-xs" wire:click="buscar_indicencia_solicitud">
                                                         <i class="fa-solid fa-magnifying-glass"></i>
                                                     </button>
                                                     <input type="text" id="txt_ind_sol" class="form-control form-control-xs" wire:model="descripcion">
                                                 </div>
+                                                @error('descripcion')
+                                                    <small class="text-danger">{{ $message }}</small>
+                                                @enderror
                                             </div>
-                                            <div class="col-xl-6">
-                                                <label for="txt_especificacion" class="fw-bold fs-6">ESPECIFICACIÓN (Incidencia / Solicitud)</label>
+                                            <div class="col-xl-4">
+                                                <label for="txt_especificacion" class="fw-bold fs-6">INCIDENCIA / SOLICITUD</label>
                                                 <div class="input-group">
                                                     <button type="button" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-xs" wire:click="buscar_indicencia_solicitud_desc">
                                                         <i class="fa-solid fa-magnifying-glass"></i>
                                                     </button>
                                                     <input type="text" id="txt_especificacion" class="form-control form-control-xs" wire:model="detalle">
                                                 </div>
+                                                @error('detalle')
+                                                    <small class="text-danger">{{ $message }}</small>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-xl-3">
                                                 <label for="txt_cea" class="fw-bold fs-6">CEA</label>
-                                                <input type="text" id="txt_cea" class="form-control form-control-xs">
+                                                <input type="text" id="txt_cea" class="form-control form-control-xs" wire:model="cea">
                                             </div>
                                             <div class="col-xl-4">
                                                 <label for="txt_cf" class="fw-bold fs-6">Carpeta Fiscal</label>
-                                                <input type="text" id="txt_cf" class="form-control form-control-xs">
+                                                <input type="text" id="txt_cf" class="form-control form-control-xs" wire:model="cf">
                                             </div>
                                             <div class="col-xl-2">
                                                 <label for="enviadoSi" class="fw-bold fs-6">Enviado a Lima</label>
                                                 <div class="d-flex gap-2">
-                                                    <input type="radio" id="enviadoSi" name="enviadoLima" class="btn-check" value="SI" autocomplete="off" checked>
-                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="enviadoSi">Sí</label>
+                                                    <input type="radio" id="enviadoSi" name="enviadoLima" class="btn-check" value="SI" autocomplete="off" wire:model.live="enviado_lima">
+                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="enviadoSi">Si</label>
 
-                                                    <input type="radio" id="enviadoNo" name="enviadoLima" class="btn-check" value="NO" autocomplete="off">
+                                                    <input type="radio" id="enviadoNo" name="enviadoLima" class="btn-check" value="NO" autocomplete="off" wire:model.live="enviado_lima">
                                                     <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="enviadoNo">No</label>
                                                 </div>
                                             </div>
 
                                             <div class="col-xl-3">
                                                 <label for="txt_glpi" class="fw-bold fs-6">GLPI</label>
-                                                <input type="text" id="txt_glpi" class="form-control form-control-xs">
+                                                <input type="text" id="txt_glpi" class="form-control form-control-xs" wire:model=glpi>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-xl-12">
-                                                <label for="text_descripcion" class="fw-bold fs-6">DESCRIPCIÓN (Opcional)</label>
-                                                <input type="text" id="text_descripcion" class="form-control form-control-xs">
-                                            </div>
-                                        </div>
-                                    </fieldset>
-                                    <fieldset class="border p-3 rounded mb-3">
-                                        <div class="row">
-                                            <div class="col-xl-2">
-                                                <label for="atendidoSi" class="fw-bold fs-6">ATENDIDO</label>
-                                                <div class="d-flex gap-2">
-                                                    <input type="radio" id="atendidoSi" name="atendido" class="btn-check" value="SI" autocomplete="off" checked>
-                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="atendidoSi">Sí</label>
-
-                                                    <input type="radio" id="atendidoNo" name="atendido" class="btn-check" value="NO" autocomplete="off">
-                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="atendidoNo">No</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-8">
-                                                <label for="txtdespacho" class="fw-bold fs-6">TIEMPO DE ATENCIÓN</label>
-                                                <div class="d-flex gap-2">
-                                                    <input type="radio" id="normal" name="tiempo" class="btn-check" value="NORMAL" autocomplete="off" checked>
-                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="normal">NORMAL (1 día)</label>
-
-                                                    <input type="radio" id="regular" name="tiempo" class="btn-check" value="REGULAR" autocomplete="off">
-                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="regular">REGULAR (2 a 5 días)</label>
-
-                                                    <input type="radio" id="complejo" name="tiempo" class="btn-check" value="COMPLEJO" autocomplete="off">
-                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="complejo">COMPLEJO (mayor a 6 días)</label>
-                                                </div>
+                                            <div class="col-xl-10">
+                                                <label for="text_descripcion" class="fw-bold fs-6">OBSERVACIÓN (Opcional)</label>
+                                                <input type="text" id="text_descripcion" class="form-control form-control-xs" wire:model="observacion_is">
                                             </div>
                                             <div class="col-xl-2">
                                                 <label for="txtdespacho" class="fw-bold fs-6">ADJUNTAR</label>
@@ -409,10 +409,40 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-xl-4">
+                                    <fieldset class="border p-3 rounded mb-3">
+                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">ATENCIÓN</legend>
+                                        <div class="row">
+                                            <div class="col-xl-12">
+                                                <label for="atendidoSi" class="fw-bold fs-6">ATENDIDO</label>
+                                                <div class="d-flex gap-2">
+                                                    <input type="radio" id="atendidoSi" name="atendido" class="btn-check" value="SI" autocomplete="off" wire:model.live="atendido">
+                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="atendidoSi">Sí</label>
+
+                                                    <input type="radio" id="atendidoNo" name="atendido" class="btn-check" value="NO" autocomplete="off" wire:model.live="atendido">
+                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="atendidoNo">No</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-12">
+                                                <label for="txtdespacho" class="fw-bold fs-6">TIEMPO DE ATENCIÓN</label>
+                                                <div class="d-flex gap-2">
+                                                    <input type="radio" id="normal" name="tiempo" class="btn-check" value="NORMAL" autocomplete="off" wire:model.live="tiempo_atencion">
+                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="normal">NORMAL (1 día)</label>
+
+                                                    <input type="radio" id="regular" name="tiempo" class="btn-check" value="REGULAR" autocomplete="off" wire:model.live="tiempo_atencion">
+                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="regular">REGULAR (2 a 5 días)</label>
+
+                                                    <input type="radio" id="complejo" name="tiempo" class="btn-check" value="COMPLEJO" autocomplete="off" wire:model.live="tiempo_atencion">
+                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="complejo">COMPLEJO (mayor a 6 días)</label>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="row">
                                             <div class="col-xl-12">
                                                 <label for="txt_sol_res" class="fw-bold fs-6">SOLUCIÓN / RESPUESTA</label>
-                                                <input type="text" id="txt_sol_res" class="form-control form-control-xs">
+                                                <input type="text" id="txt_sol_res" class="form-control form-control-xs" wire:model="respuesta">
                                             </div>
                                         </div>
                                     </fieldset>
@@ -439,11 +469,11 @@
 
     {{-- Modal Incidencias y Solicitudes --}}
     <div class="modal fade @if($modal_abierto_incidencia_solicitud) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-warning-subtle">
                     <h1 class="modal-title fs-5" id="NuevoEditarModalLabel">
-                        BUSCAR INCIDENCIAS O SOLICITUDES
+                        BUSCAR SERVICIO
                     </h1>
                     <button type="button" class="btn-close" wire:click="cerrar_indicencia_solicitud"></button>
                 </div>
@@ -500,9 +530,9 @@
 
     {{-- Modal Incidencias y Solicitudes Detalle --}}
     <div class="modal fade @if($modal_abierto_incidencia_solicitud_detalle) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-warning-subtle">
+                <div class="modal-header bg-secondary-subtle">
                     <h1 class="modal-title fs-5" id="NuevoEditarModalLabel">
                         BUSCAR DETALLE DE INCIDENCIAS O SOLICITUDES
                     </h1>

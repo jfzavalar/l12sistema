@@ -4,6 +4,7 @@ namespace App\Livewire\Intranet\Atenciones;
 
 use App\Models\Tbl_incidencias_solicitude;
 use App\Models\Tbl_personale;
+use App\Models\Tbl_personales_atencione;
 use App\Models\Tbl_sede;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -63,14 +64,35 @@ class Activos extends Component
         $updated_user;
 
     // Variables incidencias - solicitudes
-    public $id_i_s,$tipo,$tipo_desc,$descripcion,$detalle,$respuesta,$interno,$estado,$estados_desc,$activo_i_s,$created_user_i_s,$updated_user_i_s;
+    public $id_is,
+        $reportado_por,
+        $tipo = 1, // 0-1
+        $tipo_desc,
+        $descripcion,
+        $detalle, // Detalle de la incidecnia o solicitud
+        $cea,
+        $cf,
+        $enviado_lima = 'NO', //1-0
+        $glpi,
+        $observacion_is, // Descripcion
+
+        $atendido = 'SI', // Si - No
+        $tiempo_atencion = 'NORMAL', // NORMAL - REGULAR - COMPLEJO
+        $respuesta,
+
+        $conformidad_dni_personal,
+        $conformidad_datos_personal,
+
+        $activo_is,
+        $created_user_i_s,
+        $updated_user_i_s;
 
     public $filtro_anio,$filtro_mes;
 
     public $searchpersonalatenciones;
     public function updatingSearchpersonalatenciones()
     {
-        $this->resetPage();
+        $this->resetPage('atencionesPage');
     }
     public $searchbuscarpersonal;
     public function updatingSearchbuscarpersonal()
@@ -102,10 +124,12 @@ class Activos extends Component
 
     public function render()
     {
+        $lista_atenciones = Tbl_personales_atencione::paginate(15,['*'],'atencionesPage');
+
         $lista_personal = Tbl_personale::where('activo','1')
             ->where('dni','like','%' .$this->searchbuscarpersonal .'%')
             ->orwhere('datos','like','%' .$this->searchbuscarpersonal .'%')
-            ->paginate(15,['*'],'PersonalPage');
+            ->paginate(15,['*'],'personalPage');
 
         $lista_sedes = Tbl_sede::select('codsedeofi','nomsedeofi')
             ->where('activo','1')
@@ -135,12 +159,61 @@ class Activos extends Component
             ->paginate(15,['*'],'incidenciassolicitudesdescPage');
 
         return view('livewire.intranet.atenciones.activos',
-                compact('lista_personal','lista_sedes','lista_dependencias',
+                compact('lista_atenciones',
+                        'lista_personal','lista_sedes','lista_dependencias',
                         'lista_indicencias_solicitudes','lista_indicencias_solicitudes_desc'));
     }
 
+    protected function rules(){
+        return [
+            'dni' => 'required',
+            'reportado_por' => 'required',
+            'descripcion' => 'required',
+            'detalle' => 'required',
+        ];
+    }
+
+    protected $messages = [
+        'dni.required' => 'El DNI es obligatorio',
+        'reportado_por.required' => 'Seleccionar medio',
+        'descripcion.required' => 'Seleccionar el servicio',
+        'detalle.required' => 'Seleccionar la incidencia o solicitud',
+    ];
+
     public function nuevo(){
+        // Variable de entorno
+    $this->modal_header_titulo = 'nuevo';
+    $this->modal_header_color = 'primary-subtle';
+    $this->btn_guardar_actualizar = 'guardar';
+    $this->btn_guardar_actualizar_color = 'primary';
+
+    $this->modal_abierto_atenciones = true;
+    }
+
+    public function guardar(){
+        $validated = $this->validate(); 
+
+        $this->modal_abierto_atenciones = false;
+        // Emitimos un evento para mostrar el SweetAlert
+        $this->dispatch(
+            'alerta-actualizado',
+            titulo: 'Datos Almacenados',
+            mensaje: 'Los datos se han guardado correctamente.',
+            tipo: 'success' // success | error | warning | info
+        );
+    }
+
+    public function editar(Tbl_personales_atencione $iatencion){
+        $this->modal_header_titulo = 'actualizar';
+        $this->modal_header_color = 'success-subtle';
+        $this->btn_guardar_actualizar = 'actualizar';
+        $this->btn_guardar_actualizar_color = 'success';
+
         $this->modal_abierto_atenciones = true;
+    }
+
+    public function actualizar(){
+        $validated = $this->validate(); 
     }
 
     public function cerrar(){
@@ -206,6 +279,7 @@ class Activos extends Component
 
     public function agregar_indicencia_solicitud_desc($vdescripcion_desc){
         $this->detalle = $vdescripcion_desc;
+        $this->respuesta = 'SE REALIZA: ' . $vdescripcion_desc . ' DE ' . $this->descripcion;
         $this->modal_abierto_incidencia_solicitud_detalle = false;
     }
 

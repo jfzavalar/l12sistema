@@ -218,7 +218,7 @@
     </div>
 
     {{-- Barra de paginación flotante con total --}}
-    <div class="pagination-floating position-fixed bottom-0 start-50 translate-middle-x bg-white border-top shadow-sm py-2 px-4 w-100 w-md-auto" style="z-index: 1050;">
+    {{-- <div class="pagination-floating position-fixed bottom-0 start-50 translate-middle-x bg-white border-top shadow-sm py-2 px-4 w-100 w-md-auto" style="z-index: 1050;">
         <div class="d-flex justify-content-between align-items-center flex-wrap">
             <div class="text-muted small">
                 <strong>Total de registros:</strong> {{ $lista_activos->total() }}
@@ -227,6 +227,9 @@
                 {{ $lista_activos->links() }}
             </div>
         </div>
+    </div> --}}
+    <div class="dropdown position-fixed bottom-0 start-50 translate-middle-x mb-3 bg-primary-subtle shadow-sm rounded px-3 py-2">
+        {{ $lista_activos->links() }}
     </div>
 
     <!-- Modal Nuevo-Editar-->

@@ -16,7 +16,7 @@
     <div class="card">
         <div class="card-body">
             <div class="row">
-                <div class="col-xl-6">
+                <div class="col-xl-4">
                     <table class="table">
                         <thead class="table-dark">
                             <tr>
@@ -34,7 +34,7 @@
                                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                             <div class="input-group input-group-xs">
                                                 <button class="input-group-text bg-success text-white" id="inputGroup-sizing-sm">
-                                                    <i class="fa-solid fa-check me-2"></i>Asignados
+                                                    <i class="fa-solid fa-check me-2"></i>Asignado
                                                 </button>
                                                 <input type="text" class="form-control text-end" value="{{ $tactivos->total_asignados }}" readonly>
                                             </div>
@@ -151,7 +151,7 @@
     </div>
 
     {{-- Barra de paginación flotante con total --}}
-    <div class="pagination-floating position-fixed bottom-0 start-50 translate-middle-x bg-white border-top shadow-sm py-2 px-4 w-100 w-md-auto" style="z-index: 1050;">
+    {{-- <div class="pagination-floating position-fixed bottom-0 start-50 translate-middle-x bg-white border-top shadow-sm py-2 px-4 w-100 w-md-auto" style="z-index: 1050;">
         <div class="d-flex justify-content-between align-items-center flex-wrap">
             <div class="text-muted small">
                 <strong>Total de registros:</strong> {{ $lista_activos->total() }}
@@ -160,6 +160,9 @@
                 {{ $lista_activos->links() }}
             </div>
         </div>
+    </div> --}}
+    <div class="dropdown position-fixed bottom-0 start-50 translate-middle-x mb-3 bg-primary-subtle shadow-sm rounded px-3 py-2">
+        {{ $lista_activos->links() }}
     </div>
 
     <!-- Modal Nuevo-Editar-->
@@ -180,27 +183,27 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-xl-4 col-sm-12">
+                            <div class="col-xl-3 col-sm-12">
                                 <fieldset class="border p-3 rounded text-center" disabled>
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Foto de perfil</legend>
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">Foto de perfil</legend>
                                     @include('livewire.partials.personal-datos-foto')
                                 </fieldset>
                                 <fieldset class="border p-3 rounded">
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Datos Personales</legend>
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">Datos Personales</legend>
                                     @include('livewire.partials.personal-datos-personales')
                                 </fieldset>  
                             </div>
-                            <div class="col-xl-8 col-sm-12">
-                                <fieldset class="border p-3 rounded" disabled>
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Datos</legend>
-                                    @include('livewire.partials.personal-datos-institucionales-mir')
+                            <div class="col-xl-9 col-sm-12">
+
+                                @include('livewire.partials.personal-datos-institucionales-mir')
+
                                 </fieldset>
                                 <fieldset class="border p-3 rounded">
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Datos Institucionales</legend>
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">Datos Institucionales</legend>
                                     @include('livewire.partials.personal-datos-institucionales')
                                 </fieldset>
                                 <fieldset class="border p-3 rounded">
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">Detalles de firma token</legend>
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">Detalles de firma token</legend>
                                     <div class="row">
                                         <div class="col-lg-6 col-sm-12">
                                             <label for="txt_fecha_expiracion_pc" class="form-label fw-bold fs-6">Fecha Expiración</label>

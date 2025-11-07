@@ -30,7 +30,7 @@
             .pagination .page-link {
                 border-radius: 50px !important; /* Bordes tipo pill */
                 padding: 0.25rem 0.6rem;        /* Botones más compactos */
-                font-size: 0.8rem;              /* Texto más pequeño */
+                font-size: 1rem;              /* Texto más pequeño */
                 line-height: 1;                 /* Ajusta la altura del texto */
                 color: #5e72e4;                 /* Color principal Argon */
             }

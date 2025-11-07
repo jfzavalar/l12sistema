@@ -123,7 +123,7 @@
     </div>
 
     {{-- Barra de paginación flotante con total --}}
-    <div class="pagination-floating position-fixed bottom-0 start-50 translate-middle-x bg-white border-top shadow-sm py-2 px-4 w-100 w-md-auto" style="z-index: 1050;">
+    {{-- <div class="pagination-floating position-fixed bottom-0 start-50 translate-middle-x bg-white border-top shadow-sm py-2 px-4 w-100 w-md-auto" style="z-index: 1050;">
         <div class="d-flex justify-content-between align-items-center flex-wrap">
             <div class="text-muted small">
                 <strong>Total de registros:</strong> {{ $lista_activos->total() }}
@@ -132,6 +132,9 @@
                 {{ $lista_activos->links() }}
             </div>
         </div>
+    </div> --}}
+    <div class="dropdown position-fixed bottom-0 start-50 translate-middle-x mb-3 bg-primary-subtle shadow-sm rounded px-3 py-2">
+        {{ $lista_activos->links() }}
     </div>
 
     <!-- Modal Nuevo-Editar-->
@@ -154,27 +157,42 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="row">
-                                <div class="col-xl-3 col-sm-12">
-                                    <fieldset class="border p-3 rounded text-center mb-3" {{ $fieldset_disable }}>
-                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted rounded bg-{{ $modal_header_color }}">FOTO DE PERFIL</legend>
-                                        @include('livewire.partials.personal-datos-foto')
-                                    </fieldset>
-                                    <fieldset class="border p-3 rounded mb-3" {{ $fieldset_disable }}>
-                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DATOS PERSONALES</legend>
-                                        @include('livewire.partials.personal-datos-personales')
-                                    </fieldset>  
+                            <div class="col-xl-3 col-sm-12">
+                                <fieldset class="border p-3 rounded text-center mb-3">
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">FOTO DE PERFIL</legend>
+                                    @include('livewire.partials.personal-datos-foto')
+                                </fieldset>
+                            </div>
+                            <div class="col-xl-9 col-sm-12">
+                                {{-- <fieldset class="border p-3 rounded mb-3" disabled>
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center text-decoration-underline">DATOS INSTITUCIONALES</legend>
+                                    @include('livewire.partials.personal-datos-institucionales-mir')
+                                </fieldset> --}}
+
+                                @include('livewire.partials.personal-datos-institucionales-mir')
+                                
+                                <div class="row">
+                                    <div class="col-xl-3">
+                                        <fieldset class="border p-3 rounded mb-3">
+                                            {{-- <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center text-decoration-underline">DATOS PERSONALES</legend> --}}
+                                            @include('livewire.partials.personal-datos-personales')
+                                        </fieldset> 
+                                    </div>
+                                    <div class="col-xl-9">
+                                        <fieldset class="border p-3 rounded mb-3">
+                                            {{-- <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center text-decoration-underline">DATOS INSTITUCIONALES</legend> --}}
+                                            @include('livewire.partials.personal-datos-institucionales')
+                                        </fieldset>
+                                    </div>
                                 </div>
-                                <div class="col-xl-9 col-sm-12">
-                                    <fieldset class="border p-3 rounded mb-3">
-                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DATOS INSTITUCIONALES</legend>
-                                        @include('livewire.partials.personal-datos-institucionales')
-                                    </fieldset>
-                                    <fieldset class="border p-3 rounded mb-3">
-                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DATOS DEL ÚLTIMO CONTRATO</legend>
-                                        @include('livewire.partials.personal-datos-contrato')
-                                    </fieldset> 
-                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <fieldset class="border p-3 rounded mb-3">
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DATOS DEL ÚLTIMO CONTRATO</legend>
+                                    @include('livewire.partials.personal-datos-contrato')
+                                </fieldset> 
                             </div>
                         </div>
                     </div>
