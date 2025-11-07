@@ -88,13 +88,20 @@
                 </div>
             </div>
 
-            <div class="table-responsive small">
-                <div class="input-group mb-3">
-                    <input type="text" id="txtsearcha" class="form-control form-control-sm" wire:model.live="searchtokens" placeholder="Buscar por DNI o Datos del Personal">
-                    <button type="button" id="btnnuevo" class="btn btn-outline-primary btn-sm" wire:click="nuevo">
-                        <i class="fa-solid fa-file"></i> Nuevo
-                    </button>
-                </div>
+            <div class="table-responsive small">               
+                <div class="row">
+                    <div class="col-lg-2 col-sm-12">
+                        <label for="txtsearchpersonalatenciones" class="btn btn-outline-primary btn-sm me-2">Total: {{ $lista_activos->total() }}</label>
+                    </div>
+                    <div class="col-lg-10 col-sm-12">
+                        <div class="input-group mb-3">
+                            <input type="text" id="txtsearcha" class="form-control form-control-sm" wire:model.live="searchtokens" placeholder="Buscar por DNI o Datos del Personal">
+                            <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" wire:click="nuevo">
+                                <i class="fa-solid fa-file"></i> Nuevo
+                            </button>
+                        </div>
+                    </div>
+                </div>                   
                 <table class="table table-striped table-hover table-sm table-xsmall">
                     <thead class="table-primary text-center align-middle">
                         <tr>
@@ -205,6 +212,11 @@
                             </td>
                         </tr>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="13"><br></td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>

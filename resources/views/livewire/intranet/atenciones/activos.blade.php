@@ -103,7 +103,7 @@
                                     Total
                                 </h5>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h1><i class="fa-solid fa-chart-simple text-primary"></i></h1>
+                                    <h4><i class="fa-solid fa-chart-simple text-primary"></i></h4>
                                 </div>
                             </div>
                         </div>
@@ -113,7 +113,7 @@
                                     A
                                 </h5>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h1><i class="fa-solid fa-file-signature text-success"></i></h1>
+                                    <h4><i class="fa-solid fa-file-signature text-success"></i></h4>
                                 </div>
                             </div>
                         </div>
@@ -123,7 +123,7 @@
                                     B
                                 </h5>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h1><i class="fa-solid fa-signature text-danger"></i></h1>
+                                    <h4><i class="fa-solid fa-signature text-danger"></i></h4>
                                 </div>
                             </div>
                         </div>
@@ -197,7 +197,9 @@
                     <tbody class="align-middle">
                         @forelse ($lista_atenciones as $item)
                             <tr>
-                                <th class="text-center">{{ $loop->iteration }}</th>
+                                <th class="text-center">
+                                    <i class="fa-solid fa-ticket"></i> {{ $loop->iteration }}
+                                </th>
                                 <td><b>{{ $item->dni }}</b> <br> {{ $item->datos }}</td>
                                 <td></td>
                                 <td>
