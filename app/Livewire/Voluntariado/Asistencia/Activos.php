@@ -5,7 +5,7 @@ namespace App\Livewire\Voluntariado\Asistencia;
 use App\Models\Tbl_personale;
 use App\Models\Tbl_sede;
 use App\Models\Tbl_voluntariado;
-use App\Models\tbl_voluntariado_marcacione;
+use App\Models\Tbl_voluntariado_marcacione;
 use App\Models\Tbl_voluntariado_marcacione as ModelsTbl_voluntariado_marcacione;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
