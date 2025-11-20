@@ -140,7 +140,55 @@ class Activos extends Component
     }
 
     public function guardar(){
-        $validated = $this->validate(); 
+        $validated = $this->validate();
+
+        try {
+            user::create([
+                'dni' => $this->dni,
+                'datos' => strtoupper($this->datos),
+
+                'codsede_origen' => $this->codsede_origen,
+                'sede_origen' => $this->sede_origen,
+                'coddependencia_origen' => $this->coddependencia_origen,
+                'dependencia_origen' => $this->dependencia_origen,
+
+                'codsede_destino' => $this->codsede_destino,
+                'sede_destino' => Tbl_sede::where('codsedeofi',$this->codsede_destino)->value('nomsedeofi'),
+                'coddependencia_destino' => $this->coddependencia_destino,
+                'dependencia_destino' => Tbl_sede::where('coddepofi',$this->coddependencia_destino)->value('nomdepofi'),
+
+                'regimen' => $this->regimen,
+                'cargo' => $this->cargo,
+                'cel_personal' => $this->cel_personal,
+                'correo_personal' => strtolower($this->correo_personal),
+                'cel_institucional' => $this->cel_institucional,
+                'correo_institucional' => strtolower($this->correo_institucional),
+
+                'password' => Hash::make($this->dni),
+
+                'avatar' => $this->avatar,
+                'activo' => '1',
+                
+                'created_user' => $this->created_user,
+                'updated_user' => $this->updated_user,
+            ]);
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error al actualizar los datos del personal: ' . $e->getMessage());
+        }
+
+        // Reiniciamos todas la variable excepto:
+        $this->resetExcept('searchusuario');
+        
+        // Cerramos modal
+        $this->modal_abierto_personal = false;
+
+        // Emitimos un evento para mostrar el SweetAlert
+        $this->dispatch(
+            'alerta-actualizado',
+            titulo: 'Datos almacenados',
+            mensaje: 'Los datos se han guardado correctamente.',
+            tipo: 'success' // success | error | warning | info
+        );
     }
 
 
@@ -207,6 +255,7 @@ class Activos extends Component
                 'correo_personal' => strtolower($this->correo_personal),
                 'cel_institucional' => $this->cel_institucional,
                 'correo_institucional' => strtolower($this->correo_institucional),
+
                 'avatar' => $this->avatar,
                 'activo' => $this->activo,
                 

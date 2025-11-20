@@ -123,6 +123,26 @@
 
             {{-- --------------------------------------------------------------------------- --}}
 
+            @can('procesos.voluntariado')
+                <hr class="border border-light my-3">
+
+                <h6 class="sidebar-heading px-3 mt-4 mb-1 text-uppercase text-white">
+                    VOLUNTARIADO
+                </h6>
+            @endcan
+
+            <ul class="nav flex-column mb-auto">
+                @can('procesos.voluntariado.index')
+                    <li class="nav-item ms-4">
+                        <a class="nav-link {{ request()->routeIs('procesos.voluntariado.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.voluntariado.index') }}">
+                            <i class="fa-solid fa-user-graduate"></i> Voluntariado
+                        </a>
+                    </li>
+                @endcan
+            </ul>
+
+            {{-- --------------------------------------------------------------------------- --}}
+
             <hr class="border border-light my-3">
 
             <ul class="nav flex-column mb-auto">

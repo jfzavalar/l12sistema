@@ -28,9 +28,9 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">
-                                <i class="fa-solid fa-user"></i> DNI
+                                <i class="fa-solid fa-user"></i> DNI - DATOS
                             </th>
-                            <th scope="col">DATOS</th>
+                            {{-- <th scope="col">DATOS</th> --}}
                             <th scope="col">SEDE - ORIGEN</th>
                             <th scope="col">SEDE</th>
                             <th scope="col">REGIMEN</th>
@@ -44,8 +44,8 @@
                         @forelse ($lista_activos as $item)
                             <tr>
                                 <th class="text-center">{{ $loop->iteration }}</th>
-                                <th>{{ $item->dni }}</th>
-                                <td>{{ $item->datos }}</td>
+                                <td><b>{{ $item->dni }}</b><br>{{ $item->datos }}</td>
+                                {{-- <td></td> --}}
                                 <td>
                                     <b>SEDE: </b>{{ $item->sede_origen }}
                                     <br><b>DEPENDENCIA: </b>{{ $item->dependencia_origen }}

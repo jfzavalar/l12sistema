@@ -22,8 +22,8 @@
                     <i class="fa-solid fa-ticket"></i> Atenciones
                 </button>
             @endcan
-            @can('procesos.intranet.incidencia_solicitud.index')
-                <button class="nav-link" id="registro-conformidad-tab" data-bs-toggle="tab" data-bs-target="#registro-conformidad" type="button" role="tab" aria-controls="registro-conformidad" aria-selected="false">
+            @can('procesos.intranet.incidencia.index')
+                <button class="nav-link" id="personal-incidencias-tab" data-bs-toggle="tab" data-bs-target="#personal-incidencias" type="button" role="tab" aria-controls="personal-incidencias" aria-selected="false">
                     <i class="fa-solid fa-user-pen"></i> Registro de incidencias / solicitudes
                 </button>
             @endcan
@@ -98,6 +98,41 @@
                 <div class="tab-pane fade" id="aten-inactivos" role="tabpanel" aria-labelledby="aten-inactivos-tab" tabindex="0"></div>
                 <div class="tab-pane fade" id="aten-reportes" role="tabpanel" aria-labelledby="aten-reportes-tab" tabindex="0"></div>
                 <div class="tab-pane fade" id="aten-auditoria" role="tabpanel" aria-labelledby="aten-auditoria-tab" tabindex="0"></div>
+            </div>
+        </div>
+
+        {{-- ====================== INCIDENCIAS ====================== --}}
+        <div class="tab-pane fade" id="personal-incidencias" role="tabpanel" aria-labelledby="personal-incidencias-tab" tabindex="0">
+            <ul class="nav nav-pills mb-2" id="tab-incidencias" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="incidencia-inicio-tab" data-bs-toggle="tab" data-bs-target="#incidencia-inicio" type="button" role="tab" aria-controls="incidencia-inicio" aria-selected="true">
+                        <i class="fa-solid fa-house-user"></i> Inicio
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="incidencia-inactivos-tab" data-bs-toggle="tab" data-bs-target="#incidencia-inactivos" type="button" role="tab" aria-controls="incidencia-inactivos" aria-selected="false">
+                        <i class="fa-solid fa-house-circle-xmark"></i> Inactivos
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="incidencia-reportes-tab" data-bs-toggle="tab" data-bs-target="#incidencia-reportes" type="button" role="tab" aria-controls="incidencia-reportes" aria-selected="false">
+                        <i class="fa-solid fa-chart-pie"></i> Reportes
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="incidencia-auditoria-tab" data-bs-toggle="tab" data-bs-target="#incidencia-auditoria" type="button" role="tab" aria-controls="incidencia-auditoria" aria-selected="false">
+                        <i class="fa-solid fa-audio-description"></i> Auditoría
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="tab-content-incidencias">
+                <div class="tab-pane fade show active" id="incidencia-inicio" role="tabpanel" aria-labelledby="incidencia-inicio-tab" tabindex="0">
+                    <livewire:intranet.incidencias.activos />
+                </div>
+                <div class="tab-pane fade" id="incidencia-inactivos" role="tabpanel" aria-labelledby="incidencia-inactivos-tab" tabindex="0"></div>
+                <div class="tab-pane fade" id="incidencia-reportes" role="tabpanel" aria-labelledby="incidencia-reportes-tab" tabindex="0"></div>
+                <div class="tab-pane fade" id="incidencia-auditoria" role="tabpanel" aria-labelledby="incidencia-auditoria-tab" tabindex="0"></div>
             </div>
         </div>
     </div>        
