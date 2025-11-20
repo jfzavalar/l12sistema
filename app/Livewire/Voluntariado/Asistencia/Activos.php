@@ -93,7 +93,7 @@ class Activos extends Component
 
     public function render()
     {
-        $lista_activos = tbl_voluntariado_marcacione::where('activo', '1')
+        $lista_activos = Tbl_voluntariado_marcacione::where('activo', '1')
             ->when($this->filtro_fecha, function ($query) {
                 $query->whereDate('fecha', $this->filtro_fecha);
             })
