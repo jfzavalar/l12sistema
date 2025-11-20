@@ -88,9 +88,10 @@
         <input type="date" id="fecha_actual" class="form-control form-control-xs" wire:model="fecha" disabled>
     </div>
 
-    <div class="col-xl-3 col-lg-6 col-sm-12" wire:poll.1000ms="actualizarHora">
+    {{-- <div class="col-xl-3 col-lg-6 col-sm-12" wire:poll.1000ms="actualizarHora"> --}}
+    <div class="col-xl-3 col-lg-6 col-sm-12">
         <label for="hora_actual" class="fw-bold fs-6">Hora</label>
-        <input type="time" id="hora_actual" class="form-control form-control-xs" wire:model="hora" disabled>          
+        <input type="time" id="hora_actual" class="form-control form-control-xs" step="1" wire:model="hora" disabled>          
     </div>
 
 </div>

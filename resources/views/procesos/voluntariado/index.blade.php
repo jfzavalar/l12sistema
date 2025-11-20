@@ -42,7 +42,9 @@
         <div class="tab-pane fade" id="2-tab-pane" role="tabpanel" aria-labelledby="2-tab" tabindex="0">
             {{-- <livewire:dashboard.inactivos /> --}}
         </div>
-        <div class="tab-pane fade" id="3-tab-pane" role="tabpanel" aria-labelledby="3-tab" tabindex="0">...</div>
+        <div class="tab-pane fade" id="3-tab-pane" role="tabpanel" aria-labelledby="3-tab" tabindex="0">
+            <livewire:voluntariado.asistencia.reportes />
+        </div>
         <div class="tab-pane fade" id="4-tab-pane" role="tabpanel" aria-labelledby="4-tab" tabindex="0">...</div>
     </div>
         
@@ -61,5 +63,24 @@
                 timer: 1800
             });
         });
+    </script>
+
+    <script>
+        function actualizarHora() {
+            const ahora = new Date();
+
+            // Hora local exacta con segundos
+            const horaLocal = ahora.toLocaleTimeString('es-PE', {
+                hour12: false, 
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+
+            document.getElementById('hora_actual').value = horaLocal;
+        }
+
+        setInterval(actualizarHora, 1000);
+        actualizarHora();
     </script>
 @endpush

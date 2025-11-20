@@ -202,7 +202,7 @@ class Activos extends Component
                 'dependencia_destino'    => $dependencia,
                 'entrada_salida'         => $this->entrada_salida,
                 'fecha'                  => now()->format('Y-m-d'),
-                'hora_entrada'            => now()->format('H:i:s'),
+                'hora_entrada'            => $this->hora,
                 // 'hora_salida'             => $horaSalida,
                 'observacion'            => $this->observacion,
                 'activo'                 => "1",

@@ -1,4 +1,3 @@
-
 <div>
     @if (session()->has('danger'))
         <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
@@ -16,27 +15,13 @@
 
     <div class="card">
         <div class="card-body">
-            <form wire:submit.prevent="guardar">
-                <div class="row">
-                    <div class="col-xl-4">
-                        <fieldset class="border p-3 rounded mb-3">
-                            {{-- <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center text-decoration-underline">DATOS PERSONALES</legend> --}}
-                            @include('livewire.partials.voluntarios-datos-personales')
-                        </fieldset> 
-                    </div>
-                    <div class="col-xl-8">
-                        <fieldset class="border p-3 rounded mb-3">
-                            {{-- <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center text-decoration-underline">DATOS INSTITUCIONALES</legend> --}}
-                            @include('livewire.partials.voluntarios-datos-institucionales')
-                        </fieldset>
-                    </div>
-                </div>
-            </form>
-
             <div class="table-responsive small">
                 <div class="row">
-                    <div class="col-xl-4 col-lg-6 col-sm-12">
-                        <input type="date" class="form form-control form-control-sm" wire:model="filtro_fecha">
+                    <div class="col-xl-3 col-lg-6 col-sm-12">
+                        <input type="date" class="form form-control form-control-sm" wire:model="filtro_fecha_inicio">
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-sm-12">
+                        <input type="date" class="form form-control form-control-sm" wire:model="filtro_fecha_fin">
                     </div>
                     <div class="col">
                         <div class="input-group mb-3">
@@ -101,10 +86,10 @@
                                         <span class="badge rounded-pill text-bg-danger">SALIDA</span>
                                     @endif
                                 </td>
-                                <td>{{ $item->fecha }}</td>
-                                <td>{{ $item->hora_entrada }}</td>
+                                <td></td>
+                                <td></td>
                                 {{-- <td>{{ $item->hora_salida }}</td> --}}
-                                <td>{{ $item->created_user }}</td>
+                                <td>{{ $item->total_tiempo }}</td>
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
                                         {{-- <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar({{ $item->id }})">
@@ -113,9 +98,9 @@
                                         {{-- <button type="button" class="btn btn-outline-info btn-xs" wire:click="historial('{{ $item->dni }}')">
                                             <i class="fa-solid fa-timeline"></i><br>Historial
                                         </button>                            --}}
-                                        <button type="button" class="btn btn-outline-danger btn-xs" wire:click="desactivar({{ $item->id }})">
+                                        {{-- <button type="button" class="btn btn-outline-danger btn-xs" wire:click="desactivar({{ $item->id }})">
                                             <i class="fa-solid fa-trash-can"></i><br>Eliminar
-                                        </button>
+                                        </button> --}}
                                     </div>
                                 </td>
                             </tr>
@@ -153,91 +138,4 @@
     <div class="dropdown position-fixed bottom-0 start-50 translate-middle-x mb-3 bg-primary-subtle shadow-sm rounded px-3 py-2">
         {{ $lista_activos->links() }}
     </div>
-
-    <!-- Modal Nuevo-Editar-->
-    <div class="modal fade @if($modal_abierto_personal) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
-        {{-- <div class="modal-dialog modal-xl" style="max-width:90%;"> --}}
-        <div class="modal-dialog modal-xl" style="max-width:90%;">
-            <div class="modal-content">
-                <form wire:submit.prevent="{{ $btn_guardar_actualizar }}">
-                    <div class="modal-header bg-{{ $modal_header_color }}">
-                        <h1 class="modal-title fs-5" id="NuevoEditarModalLabel">
-                            @if ($modal_header_titulo === "nuevo")
-                                <i class="fa-solid fa-file"></i> <i class="fa-solid fa-user-clock"></i> NUEVO REGISTRO DE ASISTENCIA
-                            @elseif($modal_header_titulo === "editar")
-                                <i class="fa-solid fa-pen-to-square"></i> <i class="fa-solid fa-user-clock"></i> EDITAR REGISTRO DE ASISTENCIA
-                            @endif
-                        </h1>
-                        <button type="button" class="btn-close" wire:click="cerrar"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            {{-- <div class="col-xl-3 col-sm-12">
-                                <fieldset class="border p-3 rounded text-center mb-3">
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">FOTO DE PERFIL</legend>
-                                    @include('livewire.partials.personal-datos-foto')
-                                </fieldset>
-                            </div> --}}
-                            <div class="col-xl-12 col-sm-12">
-                                {{-- <fieldset class="border p-3 rounded mb-3" disabled>
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center text-decoration-underline">DATOS INSTITUCIONALES</legend>
-                                    @include('livewire.partials.personal-datos-institucionales-mir')
-                                </fieldset> --}}
-
-                                {{-- @include('livewire.partials.personal-datos-institucionales-mir') --}}
-                                
-                                <div class="row">
-                                    <div class="col-xl-4">
-                                        <fieldset class="border p-3 rounded mb-3">
-                                            {{-- <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center text-decoration-underline">DATOS PERSONALES</legend> --}}
-                                            @include('livewire.partials.voluntarios-datos-personales')
-                                        </fieldset> 
-                                    </div>
-                                    <div class="col-xl-8">
-                                        <fieldset class="border p-3 rounded mb-3">
-                                            {{-- <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center text-decoration-underline">DATOS INSTITUCIONALES</legend> --}}
-                                            @include('livewire.partials.voluntarios-datos-institucionales')
-                                        </fieldset>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {{-- <div class="row">
-                            <div class="col">
-                                <fieldset class="border p-3 rounded mb-3">
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DATOS DEL ÚLTIMO CONTRATO</legend>
-                                    @include('livewire.partials.personal-datos-contrato')
-                                </fieldset> 
-                            </div>
-                        </div> --}}
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-sm">
-                            @if ($btn_guardar_actualizar === "guardar")
-                                <i class="fa-solid fa-floppy-disk"></i><br>Guardar
-                            @elseif($btn_guardar_actualizar === "actualizar")
-                                <i class="fa-solid fa-floppy-disk"></i><br>Actualizar
-                            @elseif($btn_guardar_actualizar === "guardar_contrato")
-                                <i class="fa-solid fa-floppy-disk"></i><br>Guardar Contrato
-                            @endif  
-                        </button>
-                        <button type="button" class="btn btn-secondary btn-sm" wire:click="cerrar">
-                            <i class="fa-solid fa-square-xmark"></i><br>Cerrar
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Foto -->
-    @include('livewire.partials.personal-modal-buscar')
-
-    <!-- Modal Foto -->
-    {{-- @include('livewire.partials.personal-modal-foto') --}}
-
-    <!-- Modal PDF -->
-    {{-- @include('livewire.partials.pdf-modal-cargar') --}}
-
 </div>
-
