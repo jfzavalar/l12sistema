@@ -77,6 +77,11 @@ class Activos extends Component
 
     // Variables filtro
     public $filtro_fecha;
+    public function updatedFiltroFecha()
+    {
+        $this->resetPage(); 
+    }
+
 
     public function mount()
     {
@@ -184,48 +189,81 @@ class Activos extends Component
                 'entrada_salida' => 'required|in:0,1',
             ]);
 
-            // Determinar las fechas según entrada o salida
-            // $horaEntrada = $this->entrada_salida === "1" ? now()->format('H:i:s') : null;
-            // $horaSalida  = $this->entrada_salida === "0" ? now()->format('H:i:s') : null;
+            // VALIDACIÓN DE DUPLICADO (Entrada o Salida)
+            $existe = Tbl_voluntariado_marcacione::where('dni', $this->dni)
+                ->whereDate('fecha', now()->format('Y-m-d'))
+                ->where('entrada_salida', $this->entrada_salida)
+                ->where('activo', '1')
+                ->exists();
 
-            // Obtener valores de sede y dependencia
+            if ($existe) {
+                $tipo = $this->entrada_salida == 1 ? 'entrada' : 'salida';
+
+                $this->dispatch(
+                    'alerta-actualizado',
+                    titulo: 'Registro duplicado',
+                    mensaje: "Ya registraste una $tipo el día de hoy.",
+                    tipo: 'error'
+                );
+                return;
+            }
+
+            // Obtener datos de sede
             $sede = Tbl_sede::where('codsedeofi', $this->codsede_destino)->value('nomsedeofi');
             $dependencia = Tbl_sede::where('coddepofi', $this->coddependencia_destino)->value('nomdepofi');
 
-            // Registrar
-            tbl_voluntariado_marcacione::create([
-                'dni'                    => $this->dni,
-                'datos'                  => strtoupper($this->datos),
-                'codsede_destino'        => $this->codsede_destino,
-                'sede_destino'           => $sede,
-                'coddependencia_destino' => $this->coddependencia_destino,
-                'dependencia_destino'    => $dependencia,
-                'entrada_salida'         => $this->entrada_salida,
-                'fecha'                  => now()->format('Y-m-d'),
-                'hora_entrada'            => $this->hora,
-                // 'hora_salida'             => $horaSalida,
-                'observacion'            => $this->observacion,
-                'activo'                 => "1",
-                'created_user'           => auth()->user()->datos,
-                'updated_user'           => auth()->user()->datos,
-            ]);
+            if ($this->entrada_salida == 1) {
 
-            // Reset solo del formulario
+                // === REGISTRAR ENTRADA ===
+                Tbl_voluntariado_marcacione::create([
+                    'dni'                    => $this->dni,
+                    'datos'                  => strtoupper($this->datos),
+                    'codsede_destino'        => $this->codsede_destino,
+                    'sede_destino'           => $sede,
+                    'coddependencia_destino' => $this->coddependencia_destino,
+                    'dependencia_destino'    => $dependencia,
+                    'entrada_salida'         => 1,
+                    'fecha'                  => now()->format('Y-m-d'),
+                    'hora_entrada'           => now()->format('H:i:s'),
+                    'observacion'            => $this->observacion,
+                    'activo'                 => "1",
+                    'created_user'           => auth()->user()->datos,
+                    'updated_user'           => auth()->user()->datos,
+                ]);
+
+            } else {
+
+                // === REGISTRAR SALIDA ===
+                $hoy = now()->format('Y-m-d');
+
+                // Buscar la ENTRADA del día
+                $instanciaTbl = Tbl_voluntariado_marcacione::where('dni', $this->dni)
+                    ->whereDate('fecha', $hoy)
+                    ->where('entrada_salida', 1) // ← IMPORTANTE
+                    ->where('activo', 1)
+                    ->firstOrFail();
+
+                $instanciaTbl->update([
+                    'hora_salida' => now()->format('H:i:s'),
+                    'updated_user' => auth()->user()->datos,
+                    // 'entrada_salida' => 0,
+                ]);
+            }
+
+            // Reset formularios
             $this->reset([
                 'dni',
                 'datos',
-                // 'codsede_destino',
                 'sede_destino',
-                // 'coddependencia_destino',
                 'dependencia_destino',
                 'entrada_salida',
                 'observacion',
             ]);
 
-            // Cerrar modal
             $this->modal_abierto_personal = false;
 
-            // Notificación
+            $this->dispatch('registroGuardado');
+
             $this->dispatch(
                 'alerta-actualizado',
                 titulo: 'Datos guardados',
@@ -234,11 +272,11 @@ class Activos extends Component
             );
 
         } catch (\Exception $e) {
-
             session()->flash('error', 'Error al guardar los datos: ' . $e->getMessage());
             $this->modal_abierto_personal = false;
         }
     }
+
 
 
     public function editar(Tbl_voluntariado_marcacione $instanciaTbl){

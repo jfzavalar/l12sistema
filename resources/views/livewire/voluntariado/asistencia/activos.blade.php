@@ -33,10 +33,10 @@
                 </div>
             </form>
 
-            <div class="table-responsive small">
+            <div class="table-responsive">
                 <div class="row">
                     <div class="col-xl-4 col-lg-6 col-sm-12">
-                        <input type="date" class="form form-control form-control-sm" wire:model="filtro_fecha">
+                        <input type="date" class="form form-control form-control-sm" wire:model.live="filtro_fecha">
                     </div>
                     <div class="col">
                         <div class="input-group mb-3">
@@ -55,17 +55,12 @@
                             <th scope="col">
                                 <i class="fa-solid fa-user"></i> DNI - DATOS
                             </th>
-                            {{-- <th scope="col">DATOS</th> --}}
-                            {{-- <th scope="col">SEDE - ORIGEN</th> --}}
+
                             <th scope="col">SEDE</th>
-                            {{-- <th scope="col">REGIMEN</th> --}}
-                            {{-- <th scope="col">CARGO</th> --}}
-                            {{-- <th scope="col">INFORMACIÓN PERSONAL</th> --}}
-                            {{-- <th scope="col">DATOS INSTITUCIONALES</th> --}}
-                            <th scope="col">TIPO</th>
+
                             <th scope="col">FECHA</th>
-                            <th scope="col">MARCACIÓN</th>
-                            {{-- <th scope="col">SALIDA</th> --}}
+                            <th scope="col">ENTRADA</th>
+                            <th scope="col">SALIDA</th>
                             <th scope="col">REGISTRA</th>
                             <th scope="col"><i class="fa-solid fa-gears"></i></th>
                         </tr>
@@ -75,35 +70,15 @@
                             <tr>
                                 <th class="text-center">{{ $loop->iteration }}</th>
                                 <td><b>{{ $item->dni }}</b><br>{{ $item->datos }}</td>
-                                {{-- <td></td> --}}
-                                {{-- <td>
-                                    <b>SEDE: </b>{{ $item->sede_origen }}
-                                    <br><b>DEPENDENCIA: </b>{{ $item->dependencia_origen }}
-                                </td> --}}
+
                                 <td class="text-primary">
                                     <b>SEDE: </b>{{ $item->sede_destino }}
                                     <br><b>DEPENDENCIA: </b>{{ $item->dependencia_destino }}
                                 </td>
-                                {{-- <td><b>{{ $item->regimen }}</b></td> --}}
-                                {{-- <td>{{ $item->cargo }}</td> --}}
-                                {{-- <td>
-                                    <b>CEL: </b>{{ $item->cel_personal }}
-                                    <br>{{ $item->correo_personal }}
-                                </td> --}}
-                                {{-- <td>
-                                    <b>CEL: </b>{{ $item->cel_institucional }}
-                                    <br>{{ $item->correo_institucional  }}
-                                </td> --}}
-                                <td>
-                                    @if ($item->entrada_salida === "1")
-                                        <span class="badge rounded-pill text-bg-success">ENTRADA</span>
-                                    @else
-                                        <span class="badge rounded-pill text-bg-danger">SALIDA</span>
-                                    @endif
-                                </td>
-                                <td>{{ $item->fecha }}</td>
-                                <td>{{ $item->hora_entrada }}</td>
-                                {{-- <td>{{ $item->hora_salida }}</td> --}}
+
+                                <th>{{ $item->fecha }}</th>
+                                <td><span class="badge rounded-pill text-bg-success fs-6">{{ $item->hora_entrada }}</span></td>
+                                <td><span class="badge rounded-pill text-bg-secondary fs-6">{{ $item->hora_salida }}</span></td>
                                 <td>{{ $item->created_user }}</td>
                                 <td class="text-end">
                                     <div class="btn-group" role="group">

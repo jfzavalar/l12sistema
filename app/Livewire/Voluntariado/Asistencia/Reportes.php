@@ -9,11 +9,13 @@ use Illuminate\Support\Facades\DB;
 
 class Reportes extends Component
 {
+    protected $listeners = ['registroGuardado' => '$refresh'];
+
     public $searchpersonal;
     public $filtro_fecha_inicio, $filtro_fecha_fin;
     public function render()
     {
-        $lista_activos = Tbl_voluntariado_marcacione::select(
+        $lista_reporte = Tbl_voluntariado_marcacione::select(
                 'dni',
                 'datos',
                 DB::raw("
@@ -43,6 +45,6 @@ class Reportes extends Component
 
 
         return view('livewire.voluntariado.asistencia.reportes',
-                compact('lista_activos'));
+                compact('lista_reporte'));
     }
 }

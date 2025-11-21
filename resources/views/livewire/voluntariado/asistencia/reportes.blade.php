@@ -15,7 +15,7 @@
 
     <div class="card">
         <div class="card-body">
-            <div class="table-responsive small">
+            <div class="table-responsive">
                 <div class="row">
                     <div class="col-xl-3 col-lg-6 col-sm-12">
                         <input type="date" class="form form-control form-control-sm" wire:model="filtro_fecha_inicio">
@@ -51,12 +51,12 @@
                             <th scope="col">FECHA</th>
                             <th scope="col">MARCACIÓN</th>
                             {{-- <th scope="col">SALIDA</th> --}}
-                            <th scope="col">REGISTRA</th>
+                            <th scope="col">TIEMPO</th>
                             <th scope="col"><i class="fa-solid fa-gears"></i></th>
                         </tr>
                     </thead>
                     <tbody class="align-middle">
-                        @forelse ($lista_activos as $item)
+                        @forelse ($lista_reporte as $item)
                             <tr>
                                 <th class="text-center">{{ $loop->iteration }}</th>
                                 <td><b>{{ $item->dni }}</b><br>{{ $item->datos }}</td>
@@ -136,6 +136,6 @@
         </div>
     </div> --}}
     <div class="dropdown position-fixed bottom-0 start-50 translate-middle-x mb-3 bg-primary-subtle shadow-sm rounded px-3 py-2">
-        {{ $lista_activos->links() }}
+        {{ $lista_reporte->links() }}
     </div>
 </div>
