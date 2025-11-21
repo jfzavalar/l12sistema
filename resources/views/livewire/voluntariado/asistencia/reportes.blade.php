@@ -47,9 +47,9 @@
                             {{-- <th scope="col">CARGO</th> --}}
                             {{-- <th scope="col">INFORMACIÓN PERSONAL</th> --}}
                             {{-- <th scope="col">DATOS INSTITUCIONALES</th> --}}
-                            <th scope="col">TIPO</th>
-                            <th scope="col">FECHA</th>
-                            <th scope="col">MARCACIÓN</th>
+                            {{-- <th scope="col">TIPO</th> --}}
+                            {{-- <th scope="col">FECHA</th> --}}
+                            {{-- <th scope="col">MARCACIÓN</th> --}}
                             {{-- <th scope="col">SALIDA</th> --}}
                             <th scope="col">TIEMPO</th>
                             <th scope="col"><i class="fa-solid fa-gears"></i></th>
@@ -79,15 +79,15 @@
                                     <b>CEL: </b>{{ $item->cel_institucional }}
                                     <br>{{ $item->correo_institucional  }}
                                 </td> --}}
-                                <td>
+                                {{-- <td>
                                     @if ($item->entrada_salida === "1")
                                         <span class="badge rounded-pill text-bg-success">ENTRADA</span>
                                     @else
                                         <span class="badge rounded-pill text-bg-danger">SALIDA</span>
                                     @endif
-                                </td>
-                                <td></td>
-                                <td></td>
+                                </td> --}}
+                                {{-- <td></td> --}}
+                                {{-- <td></td> --}}
                                 {{-- <td>{{ $item->hora_salida }}</td> --}}
                                 <td>{{ $item->total_tiempo }}</td>
                                 <td class="text-end">

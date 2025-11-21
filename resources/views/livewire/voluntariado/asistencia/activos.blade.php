@@ -62,6 +62,7 @@
                             <th scope="col">ENTRADA</th>
                             <th scope="col">SALIDA</th>
                             <th scope="col">REGISTRA</th>
+                            <th scope="col">SUBTOTAL</th>
                             <th scope="col"><i class="fa-solid fa-gears"></i></th>
                         </tr>
                     </thead>
@@ -79,7 +80,9 @@
                                 <th>{{ $item->fecha }}</th>
                                 <td><span class="badge rounded-pill text-bg-success fs-6">{{ $item->hora_entrada }}</span></td>
                                 <td><span class="badge rounded-pill text-bg-secondary fs-6">{{ $item->hora_salida }}</span></td>
+                                
                                 <td>{{ $item->created_user }}</td>
+                                <th>{{ $item->subtotal }}</th>
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
                                         {{-- <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar({{ $item->id }})">

@@ -233,21 +233,30 @@ class Activos extends Component
 
             } else {
 
-                // === REGISTRAR SALIDA ===
+               // === REGISTRAR SALIDA ===
                 $hoy = now()->format('Y-m-d');
 
                 // Buscar la ENTRADA del día
                 $instanciaTbl = Tbl_voluntariado_marcacione::where('dni', $this->dni)
                     ->whereDate('fecha', $hoy)
-                    ->where('entrada_salida', 1) // ← IMPORTANTE
+                    ->where('entrada_salida', 1)
                     ->where('activo', 1)
                     ->firstOrFail();
 
+                // Calcular el tiempo del día
+                $horaEntrada = Carbon::parse($instanciaTbl->hora_entrada);
+                $horaSalida  = now(); // ← mejor forma
+
+                $segundos = $horaEntrada->diffInSeconds($horaSalida);
+                $subtotal = gmdate("H:i:s", $segundos);
+
+                // Actualizar registro
                 $instanciaTbl->update([
-                    'hora_salida' => now()->format('H:i:s'),
+                    'hora_salida' => $horaSalida->format('H:i:s'),
+                    'subtotal'    => $subtotal,
                     'updated_user' => auth()->user()->datos,
-                    // 'entrada_salida' => 0,
                 ]);
+                
             }
 
             // Reset formularios

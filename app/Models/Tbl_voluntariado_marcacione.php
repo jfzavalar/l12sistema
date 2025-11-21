@@ -31,6 +31,7 @@ class Tbl_voluntariado_marcacione extends Model
         'fecha',
         'hora_entrada',
         'hora_salida',
+        'subtotal',
         'observacion',
         //
         'activo',

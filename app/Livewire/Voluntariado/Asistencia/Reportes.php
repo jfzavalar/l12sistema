@@ -21,10 +21,7 @@ class Reportes extends Component
                 DB::raw("
                     SEC_TO_TIME(
                         SUM(
-                            IF(entrada_salida = 0, 
-                                TIME_TO_SEC(hora_entrada), 
-                                -TIME_TO_SEC(hora_entrada)
-                            )
+                            TIMESTAMPDIFF(SECOND, hora_entrada, hora_salida)
                         )
                     ) as total_tiempo
                 ")
@@ -42,6 +39,7 @@ class Reportes extends Component
             ->groupBy('dni', 'datos')
             ->orderBy('dni')
             ->paginate(10);
+
 
 
         return view('livewire.voluntariado.asistencia.reportes',
