@@ -91,9 +91,11 @@
                                         {{-- <button type="button" class="btn btn-outline-info btn-xs" wire:click="historial('{{ $item->dni }}')">
                                             <i class="fa-solid fa-timeline"></i><br>Historial
                                         </button>                            --}}
-                                        <button type="button" class="btn btn-outline-danger btn-xs" wire:click="desactivar({{ $item->id }})">
-                                            <i class="fa-solid fa-trash-can"></i><br>Eliminar
-                                        </button>
+                                        @can('procesos.voluntariado.asistencias.destroy')
+                                            <button type="button" class="btn btn-outline-danger btn-xs" wire:click="desactivar({{ $item->id }})">
+                                                <i class="fa-solid fa-trash-can"></i><br>Eliminar
+                                            </button>
+                                        @endcan
                                     </div>
                                 </td>
                             </tr>

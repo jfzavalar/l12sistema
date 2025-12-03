@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Administracion\ArchivoController;
 use App\Http\Controllers\Administracion\PatrimonioController;
 use App\Http\Controllers\Administracion\RrhhController;
 use App\Http\Controllers\Informatica\FirmasdigitalesController;
@@ -61,6 +62,10 @@ Route::middleware(['auth','can:procesos.admin.roles.index'])->group(function () 
 });
 
 //ADMINISTRACION
+Route::middleware('auth','can:procesos.administracion.archivo.index')->group(function () {
+    Route::resource('archivo', ArchivoController::class)->names('procesos.administracion.archivo');
+});
+
 Route::middleware('auth','can:procesos.administracion.patrimonio.index')->group(function () {
     Route::resource('patrimonio', PatrimonioController::class)->names('procesos.administracion.patrimonio');
     Route::get('pdf/patrimonio/bien-asignado-acta/{id}', [PatrimonioController::class, 'exportarPDFAsignacion'])->name('pdf.patrimonio.bien-asignado-acta');

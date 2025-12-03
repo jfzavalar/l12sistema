@@ -29,8 +29,7 @@
                 </h6>
             @endcan
 
-            <ul class="nav flex-column">
-                               
+            <ul class="nav flex-column">                      
                 @can('procesos.admin.users.index')
                     <li class="nav-item ms-4">
                         <a class="nav-link {{ request()->routeIs('procesos.admin.users.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.users.index') }}">
@@ -53,7 +52,6 @@
                         </a>
                     </li>
                 @endcan
-
             </ul>
 
 
@@ -67,8 +65,14 @@
                 </h6>
             @endcan
 
-            <ul class="nav flex-column">    
-
+            <ul class="nav flex-column"> 
+                @can('procesos.administracion.archivo.index')
+                    <li class="nav-item ms-4">
+                        <a class="nav-link {{ request()->routeIs('procesos.administracion.archivo.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.administracion.archivo.index') }}">
+                            <i class="fa-solid fa-boxes-stacked"></i> Archivo
+                        </a>
+                    </li>
+                @endcan
                 @can('procesos.administracion.patrimonio.index')
                     <li class="nav-item ms-4">
                         <a class="nav-link {{ request()->routeIs('procesos.administracion.patrimonio.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.administracion.patrimonio.index') }}">
@@ -84,7 +88,6 @@
                     </li>
                 @endcan
             </ul>
-
 
             {{-- --------------------------------------------------------------------------- --}}
 
@@ -135,7 +138,7 @@
                 @can('procesos.voluntariado.index')
                     <li class="nav-item ms-4">
                         <a class="nav-link {{ request()->routeIs('procesos.voluntariado.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.voluntariado.index') }}">
-                            <i class="fa-solid fa-user-graduate"></i> Voluntariado
+                            <i class="fa-solid fa-clock"></i> Registro de asistencia
                         </a>
                     </li>
                 @endcan
