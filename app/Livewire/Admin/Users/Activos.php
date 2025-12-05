@@ -329,9 +329,9 @@ class Activos extends Component
         $this->datos = $ipersonal->datos;
 
         $this->codsede_origen = $ipersonal->codsede_origen;
-        $this->sede_origen = $ipersonal->sede;
+        $this->sede_origen = $ipersonal->sede_origen;
         $this->coddependencia_origen = $ipersonal->coddependencia_origen;
-        $this->dependencia_origen = $ipersonal->dependencia;
+        $this->dependencia_origen = $ipersonal->dependencia_origen;
 
         $this->codsede_destino = $ipersonal->codsede_destino;
         $this->sede_destino = $ipersonal->sede_destino;

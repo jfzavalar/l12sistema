@@ -59,7 +59,7 @@ class Reportes extends Component
             })
             ->groupBy('dni', 'datos','sede_destino','dependencia_destino')
             ->orderBy('datos')
-            ->paginate(10);
+            ->paginate(20);
 
         return view('livewire.voluntariado.asistencia.reportes',
                 compact('lista_reportes'));

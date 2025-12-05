@@ -156,6 +156,7 @@
                                     </fieldset>  
                                 </div>
                                 <div class="col-xl-8 col-sm-12">
+                                    @include('livewire.partials.personal-datos-institucionales-mir')
                                     <fieldset class="border p-3 rounded">
                                         <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">DATOS INSTITUCIONALES</legend>
                                         @include('livewire.partials.personal-datos-institucionales')

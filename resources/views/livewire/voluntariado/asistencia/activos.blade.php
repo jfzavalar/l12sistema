@@ -109,7 +109,7 @@
                             </tr>
                         @endforelse
                         <tr>
-                            <td>
+                            <td colspan="9">
                                 <p></p>
                             </td>
                         </tr>
