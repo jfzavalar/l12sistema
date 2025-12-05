@@ -10,6 +10,7 @@ use App\Models\Tbl_voluntariado_marcacione as ModelsTbl_voluntariado_marcacione;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\Component;
+
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
@@ -17,6 +18,7 @@ class Activos extends Component
 {
     use WithFileUploads;
     use WithPagination;
+
     protected $paginationTheme = "bootstrap";
 
     // Variable de entorno
@@ -109,7 +111,7 @@ class Activos extends Component
                 });
             })
             ->orderBy('id', 'desc')
-            ->paginate(10);
+            ->paginate(20);
 
         $lista_sedes = Tbl_sede::select('codsedeofi','nomsedeofi')
             ->where('activo','1')

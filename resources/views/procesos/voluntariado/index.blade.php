@@ -18,21 +18,25 @@
                 <i class="fa-solid fa-house-user"></i> Inicio
             </button>
         </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="2-tab" data-bs-toggle="tab" data-bs-target="#2-tab-pane" type="button" role="tab" aria-controls="2-tab-pane" aria-selected="false">
-                <i class="fa-solid fa-house-circle-xmark"></i> Inactivos
-            </button>
-        </li>
+        @can('procesos.voluntariado.asistencias.destroy')
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="2-tab" data-bs-toggle="tab" data-bs-target="#2-tab-pane" type="button" role="tab" aria-controls="2-tab-pane" aria-selected="false">
+                    <i class="fa-solid fa-house-circle-xmark"></i> Inactivos
+                </button>
+            </li>
+        @endcan
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="3-tab" data-bs-toggle="tab" data-bs-target="#3-tab-pane" type="button" role="tab" aria-controls="3-tab-pane" aria-selected="false">
                 <i class="fa-solid fa-chart-pie"></i> Reportes
             </button>
         </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="4-tab" data-bs-toggle="tab" data-bs-target="#4-tab-pane" type="button" role="tab" aria-controls="4-tab-pane" aria-selected="false">
-                <i class="fa-solid fa-audio-description"></i> Auditoría
-            </button>
-        </li>
+        @can('procesos.voluntariado.asistencias.destroy')
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="4-tab" data-bs-toggle="tab" data-bs-target="#4-tab-pane" type="button" role="tab" aria-controls="4-tab-pane" aria-selected="false">
+                    <i class="fa-solid fa-audio-description"></i> Auditoría
+                </button>
+            </li>
+        @endcan
     </ul>
 
     <div class="tab-content" id="myTabContent">

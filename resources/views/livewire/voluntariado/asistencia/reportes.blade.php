@@ -1,34 +1,12 @@
 <div>
-    @if (session()->has('danger'))
-        <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
-            {{ session('danger') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
-    @if (session()->has('error'))
-        <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
     <div class="card">
         <div class="card-body">
+
             <div class="table-responsive">
                 <div class="row">
-                    <div class="col-xl-3 col-lg-6 col-sm-12">
-                        <input type="date" class="form form-control form-control-sm" wire:model="filtro_fecha_inicio">
-                    </div>
-                    <div class="col-xl-3 col-lg-6 col-sm-12">
-                        <input type="date" class="form form-control form-control-sm" wire:model="filtro_fecha_fin">
-                    </div>
                     <div class="col">
                         <div class="input-group mb-3">
-                            <input type="text" id="txtsearcha" class="form-control form-control-sm" wire:model.live="searchpersonal" placeholder="Buscar por DNI o Datos del Personal">
-                            {{-- <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" wire:click="nuevo">
-                                <i class="fa-solid fa-file"></i> Nuevo
-                            </button> --}}
+                            <input type="text" id="txtsearcha" class="form-control form-control-sm" wire:model.live="searchpersonalr" placeholder="Buscar por DNI o Datos del Personal">
                         </div>
                     </div>
                 </div>
@@ -40,73 +18,24 @@
                             <th scope="col">
                                 <i class="fa-solid fa-user"></i> DNI - DATOS
                             </th>
-                            {{-- <th scope="col">DATOS</th> --}}
-                            {{-- <th scope="col">SEDE - ORIGEN</th> --}}
                             <th scope="col">SEDE</th>
-                            {{-- <th scope="col">REGIMEN</th> --}}
-                            {{-- <th scope="col">CARGO</th> --}}
-                            {{-- <th scope="col">INFORMACIÓN PERSONAL</th> --}}
-                            {{-- <th scope="col">DATOS INSTITUCIONALES</th> --}}
-                            {{-- <th scope="col">TIPO</th> --}}
-                            {{-- <th scope="col">FECHA</th> --}}
-                            {{-- <th scope="col">MARCACIÓN</th> --}}
-                            {{-- <th scope="col">SALIDA</th> --}}
-                            <th scope="col">TIEMPO</th>
-                            <th scope="col"><i class="fa-solid fa-gears"></i></th>
+                            <th scope="col">TOTAL</th>
                         </tr>
                     </thead>
                     <tbody class="align-middle">
-                        @forelse ($lista_reporte as $item)
+                        @forelse ($lista_reportes as $item)
                             <tr>
                                 <th class="text-center">{{ $loop->iteration }}</th>
                                 <td><b>{{ $item->dni }}</b><br>{{ $item->datos }}</td>
-                                {{-- <td></td> --}}
-                                {{-- <td>
-                                    <b>SEDE: </b>{{ $item->sede_origen }}
-                                    <br><b>DEPENDENCIA: </b>{{ $item->dependencia_origen }}
-                                </td> --}}
                                 <td class="text-primary">
                                     <b>SEDE: </b>{{ $item->sede_destino }}
                                     <br><b>DEPENDENCIA: </b>{{ $item->dependencia_destino }}
                                 </td>
-                                {{-- <td><b>{{ $item->regimen }}</b></td> --}}
-                                {{-- <td>{{ $item->cargo }}</td> --}}
-                                {{-- <td>
-                                    <b>CEL: </b>{{ $item->cel_personal }}
-                                    <br>{{ $item->correo_personal }}
-                                </td> --}}
-                                {{-- <td>
-                                    <b>CEL: </b>{{ $item->cel_institucional }}
-                                    <br>{{ $item->correo_institucional  }}
-                                </td> --}}
-                                {{-- <td>
-                                    @if ($item->entrada_salida === "1")
-                                        <span class="badge rounded-pill text-bg-success">ENTRADA</span>
-                                    @else
-                                        <span class="badge rounded-pill text-bg-danger">SALIDA</span>
-                                    @endif
-                                </td> --}}
-                                {{-- <td></td> --}}
-                                {{-- <td></td> --}}
-                                {{-- <td>{{ $item->hora_salida }}</td> --}}
-                                <td>{{ $item->total_tiempo }}</td>
-                                <td class="text-end">
-                                    <div class="btn-group" role="group">
-                                        {{-- <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar({{ $item->id }})">
-                                            <i class="fa-solid fa-pen-to-square"></i><br>Editar
-                                        </button> --}}
-                                        {{-- <button type="button" class="btn btn-outline-info btn-xs" wire:click="historial('{{ $item->dni }}')">
-                                            <i class="fa-solid fa-timeline"></i><br>Historial
-                                        </button>                            --}}
-                                        {{-- <button type="button" class="btn btn-outline-danger btn-xs" wire:click="desactivar({{ $item->id }})">
-                                            <i class="fa-solid fa-trash-can"></i><br>Eliminar
-                                        </button> --}}
-                                    </div>
-                                </td>
+                                <th>{{ $item->total_tiempo}}</th>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="12" class="text-center">
+                                <td colspan="4" class="text-center">
                                     <div class="alert alert-danger" role="alert">
                                         No se encontraron resultados!
                                     </div>
@@ -114,7 +43,7 @@
                             </tr>
                         @endforelse
                         <tr>
-                            <td>
+                            <td colspan="4">
                                 <p></p>
                             </td>
                         </tr>
@@ -124,18 +53,7 @@
         </div>
     </div>
 
-    {{-- Barra de paginación flotante con total --}}
-    {{-- <div class="pagination-floating position-fixed bottom-0 start-50 translate-middle-x bg-white border-top shadow-sm py-2 px-4 w-100 w-md-auto" style="z-index: 1050;">
-        <div class="d-flex justify-content-between align-items-center flex-wrap">
-            <div class="text-muted small">
-                <strong>Total de registros:</strong> {{ $lista_activos->total() }}
-            </div>
-            <div class="d-inline-block">
-                {{ $lista_activos->links() }}
-            </div>
-        </div>
-    </div> --}}
     <div class="dropdown position-fixed bottom-0 start-50 translate-middle-x mb-3 bg-primary-subtle shadow-sm rounded px-3 py-2">
-        {{ $lista_reporte->links() }}
+        {{ $lista_reportes->links() }}
     </div>
 </div>
