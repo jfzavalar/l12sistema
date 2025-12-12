@@ -59,7 +59,7 @@
 
             <div class="tab-content">
                 <div class="tab-pane fade show active" id="carpeta-inicio" role="tabpanel">
-                    {{-- <livewire:intranet.configuracion.activos /> --}}
+                    {{-- <livewire:administracion.archivo.desplazamiento.activos /> --}}
                 </div>
 
                 <div class="tab-pane fade" id="carpeta-inactivos" role="tabpanel"></div>
@@ -98,7 +98,9 @@
             </ul>
 
             <div class="tab-content">
-                <div class="tab-pane fade show active" id="desplazamiento-inicio" role="tabpanel"></div>
+                <div class="tab-pane fade show active" id="desplazamiento-inicio" role="tabpanel">
+                    <livewire:administracion.archivo.desplazamiento.activos />
+                </div>
                 <div class="tab-pane fade" id="desplazamiento-inactivos" role="tabpanel"></div>
                 <div class="tab-pane fade" id="desplazamiento-reportes" role="tabpanel"></div>
                 <div class="tab-pane fade" id="desplazamiento-auditoria" role="tabpanel"></div>

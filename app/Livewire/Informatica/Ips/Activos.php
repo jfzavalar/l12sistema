@@ -152,7 +152,7 @@ class Activos extends Component
             ->get();
 
         //Lista Nombre Sede Oficina
-            $lista_sedes_dependencias_despachos = Tbl_biene::select('nomsedeofi', DB::raw('COUNT(cod_pat) as total'))
+        $lista_sedes_dependencias_despachos = Tbl_biene::select('nomsedeofi', DB::raw('COUNT(cod_pat) as total'))
             ->where('activo', '1')
             ->where('clase', 'COMPUTO')
             ->whereIn('familia', [

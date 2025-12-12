@@ -250,7 +250,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-xl-4 col-sm-12">
+                            <div class="col-xl-2 col-sm-12">
                                 <fieldset class="border p-3 rounded text-center" disabled>
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted rounded bg-{{ $modal_header_color }}">FOTO DE PERFIL</legend>
                                     @include('livewire.partials.personal-datos-foto')
@@ -260,7 +260,7 @@
                                     @include('livewire.partials.personal-datos-personales')
                                 </fieldset>  
                             </div>
-                            <div class="col-xl-8 col-sm-12">
+                            <div class="col-xl-10 col-sm-12">
                                 <fieldset class="border p-3 rounded">
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DETALLES DEL BIEN</legend>
                                     @include('livewire.partials.bienes-datos-registrar')
