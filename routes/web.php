@@ -10,6 +10,7 @@ use App\Http\Controllers\Informatica\IpsController;
 use App\Http\Controllers\Informatica\SpijwebController;
 use App\Http\Controllers\IntranetController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\Rrhh\PersonalController;
 use App\Http\Controllers\Voluntariado\VoluntariadoController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -104,6 +105,13 @@ Route::middleware('auth','can:procesos.intranet.index')->group(function () {
 //VOLUNTARIADO
 Route::middleware('auth')->group(function () {
     Route::resource('voluntariado', VoluntariadoController::class)->names('procesos.voluntariado');
+});
+
+// -------------------------------------------------------------------
+
+//RRHH
+Route::middleware('auth')->group(function () {
+    Route::resource('personal', PersonalController::class)->names('mpfn.rrhh.personal');
 });
 
 
