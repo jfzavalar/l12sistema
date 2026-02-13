@@ -2,11 +2,11 @@
     <div class="col-xl-4 col-lg-6 col-sm-12">
         <label for="cmbcodsede" class="fw-bold fs-6">Sede</label>
         <div class="input-group">
-            <select id="cmbcodsede" class="form-select form-select-xs" wire:model.change="codsede_destino">
+            <select id="cmbcodsede" class="form-select form-select-xs" wire:model.change="codsedeorigen">
                 <option value="">Seleccionar...</option>
-                {{-- @foreach ($lista_sedes as $sede)
+                @foreach ($lista_sedes as $sede)
                     <option value="{{ $sede->codsedeofi }}">{{ $sede->nomsedeofi}}</option>
-                @endforeach --}}
+                @endforeach
             </select>
             @error('sede_destino')
                 <small class="text-danger">{{ $message }}</small>
@@ -16,11 +16,11 @@
     <div class="col-xl-8 col-lg-6 col-sm-12">
         <label for="cmbcoddependencia" class="fw-bold fs-6">Dependencia</label>
         <div class="input-group position-relative">
-            <select id="cmbcoddependencia" class="form-select form-select-xs" wire:model="coddependencia_destino">
+            <select id="cmbcoddependencia" class="form-select form-select-xs" wire:model="coddependenciaorigen">
                 <option value="">Seleccionar...</option>
-                {{-- @foreach ($lista_dependencias as $dependencia)
-                    <option value="{{ $dependencia->coddepofi }}" @selected($dependencia->coddepofi == $coddependencia_destino)>{{ $dependencia->nomdepofi }}</option>
-                @endforeach --}}
+                @foreach ($lista_dependencias as $dependencia)
+                    <option value="{{ $dependencia->coddepofi }}" @selected($dependencia->coddepofi == $coddependenciaorigen)>{{ $dependencia->nomdepofi }}</option>
+                @endforeach
             </select>
             @error('dependencia_destino')
                 <small class="text-danger">{{ $message }}</small>
@@ -59,19 +59,18 @@
     <div class="col-xl-8 col-lg-6 col-sm-12">
         <label for="txtdespacho" class="fw-bold fs-6">Cargo</label>
         <div class="input-group">
-            {{-- <button class="btn btn-secondary btn-sm">
+            <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" wire:click="buscar_cargo">
                 <i class="fa-solid fa-magnifying-glass"></i>
-            </button> --}}
-            <input type="text" id="txtdespacho" class="form-control form-control-xs" wire:model="cargo">
+            </button>
+            <select id="cmbcodcargo" class="form-select form-select-xs" wire:model.change="codcargo">
+                <option value="">Seleccionar...</option>
+                @foreach ($lista_cargos as $cargo)
+                    <option value="{{ $cargo->id }}">{{ $cargo->cargo}}</option>
+                @endforeach
+            </select>
         </div>
         @error('cargo')
             <small class="text-danger">{{ $message }}</small>
         @enderror
-    </div>
-</div>
-<div class="row">
-    <div class="col-xl-12 col-sm-12">
-        <label for="txtobservacion" class="fw-bold fs-6">Observación</label>
-        <input type="text" id="txtobservacion" class="form-control form-control-xs" wire:model="observacion">
     </div>
 </div>

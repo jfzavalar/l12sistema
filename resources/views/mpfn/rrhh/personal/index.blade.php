@@ -14,3 +14,21 @@
 
     <livewire:rrhh.personal.personal-component />
 @endsection
+
+@push('scripts')
+    <script>
+    document.addEventListener('livewire:init', () => {
+
+        Livewire.on('cerrar-sede-modal', () => {
+            let modal = bootstrap.Modal.getInstance(document.getElementById('sedeModal'));
+            if (modal) modal.hide();
+        });
+
+        Livewire.on('abrir-nuevo-modal', () => {
+            let modal = new bootstrap.Modal(document.getElementById('nuevoEditarModal'));
+            modal.show();
+        });
+
+    });
+    </script>
+@endpush
