@@ -87,6 +87,13 @@
                         </a>
                     </li>
                 @endcan
+                @can('procesos.administracion.rrhh.index')
+                    <li class="nav-item ms-4">
+                        <a class="nav-link {{ request()->routeIs('mpfn.rrhh.personal.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.rrhh.personal.index') }}">
+                            <i class="fa-solid fa-users-rectangle"></i> RRHHv2
+                        </a>
+                    </li>
+                @endcan
             </ul>
 
             {{-- --------------------------------------------------------------------------- --}}

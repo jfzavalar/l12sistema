@@ -1,4 +1,5 @@
-@extends('layouts.bootstrap5.index')
+{{-- @extends('layouts.bootstrap5.index') --}}
+@extends('layouts.adminlte.app')
 
 @section('title', 'roles_create')
 
