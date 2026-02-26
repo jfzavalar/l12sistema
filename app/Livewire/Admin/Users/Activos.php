@@ -2,13 +2,15 @@
 
 namespace App\Livewire\Admin\Users;
 
+use App\Models\Persona;
+use App\Models\Personale;
 use App\Models\Tbl_personale;
 use App\Models\Tbl_sede;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
@@ -21,55 +23,72 @@ class Activos extends Component
     use WithPagination;
     protected $paginationTheme = "bootstrap";
 
-    // Variable de entorno
-    public $modal_header_titulo = 'nuevo';
-    public $modal_header_color = 'primary-subtle';
-    public $btn_guardar_actualizar = 'guardar';
-    public $btn_guardar_actualizar_color = 'primary';
-    public $fieldset_disable = 'disable';
+    public $habilitarSeccion = "disable";
+    public $mostrarBtnBuscarDni = "d-none";
 
-    // Variables de Modal
-    public $modal_abierto_personal = false;
-    public $modal_abierto_personal_buscar = false;
-    public $modal_abierto_imagen = false;
+    public $colorHeaderModal, $textoHeaderModal;
+    public $colorNuevoEditar, $textoNuevoEditar;
+    public $colorGuardarActualizar, $textoGuardarActualizar;
+    public $colorAgregar;
+
+    // Variable de función Guardar o Actualizar
+    public $funcionGuardarActualizar;
 
     //Buscar
     public $searchusuario;
     public function updatingSearchusuario(){
         $this->resetPage('usuarioPage');
     }
+    public $searchinactivos;
+    public function updatingSearchinactivos(){
+        $this->resetPage('inactivosPage');
+    }
     public $searchbuscarpersonal;
     public function updatingSearchbuscarpersonal(){
         $this->resetPage();
     }
+    public $searchpersonas;
+    public function updatingSearchpersonas(){
+        $this->resetPage('personasPage');
+    }
 
     // Variables de tabla
-    public $id_usuario,
-        $dni,
-        $datos,
+    public $persona_id,
+            $dni,
+            $datos,
+            $appaterno,
+            $apmaterno,
+            $nombres,
+            $genero,
+            $estadocivil,
+            $fechanacimiento,
+            $regimen,
+            $cargo,
 
-        $codsede_origen,
-        $sede_origen,
-        $coddependencia_origen,
-        $dependencia_origen,
+            $codsedeorigen,
+            $sedeorigen,
+            $coddependenciaorigen,
+            $dependenciaorigen,
+            $coddespachoorigen,
+            $despachoorigen,
 
-        $codsede_destino,
-        $sede_destino,
-        $coddependencia_destino,
-        $dependencia_destino,
+            $codsededestino,
+            $sededestino,
+            $coddependenciadestino,
+            $dependenciadestino,
+            $coddespachodestino,
+            $despachodestino,
 
-        $regimen,
-        $cargo,
-        $correo_personal,
-        $correo_institucional,
-        $cel_personal,
-        $cel_institucional,
-        $observacion,
-        $avatar,
-        $password,
-        $activo,
-        $created_user,
-        $updated_user;
+            $celpersonal,
+            $celinstitucional,
+            $correopersonal,
+            $correoinstitucional,
+            $foto,
+            $activo,
+            $created_user,
+            $updated_user,
+            $created_at,
+            $updated_at;
 
     public function render()
     {
@@ -81,40 +100,43 @@ class Activos extends Component
                 });
             })
             ->orderBy('datos')
-            ->paginate();
+            ->paginate(10);
 
-        $lista_sedes = Tbl_sede::select('codsedeofi','nomsedeofi')
-            ->where('activo','1')
-            ->distinct()
-            ->orderBy('nomsedeofi')
-            ->get();
-            
-        $lista_dependencias = Tbl_sede::select('coddepofi','nomdepofi')
-            ->where('activo','1')
-            ->where('codsedeofi',$this->codsede_destino)
-            ->distinct()
-            ->orderBy('nomdepofi')
-            ->get();
+        $lista_inactivos = User::where('activo','0')
+            ->when($this->searchinactivos !== '', function ($query) {
+                $query->where(function ($q) {
+                    $q->where('dni', 'like', '%' . $this->searchinactivos . '%')
+                    ->orWhere('datos', 'like', '%' . $this->searchinactivos . '%');
+                });
+            })
+            ->orderBy('datos')
+            ->paginate(10,['*'],'inactivosPage');
 
-        $lista_personal = Tbl_personale::where('activo','1')
-            ->where('dni','like','%' .$this->searchbuscarpersonal .'%')
-            ->orwhere('datos','like','%' .$this->searchbuscarpersonal .'%')
-            ->paginate(5);
+        $lista_personas = Persona::where('activo','1')
+            ->when($this->searchpersonas !== '', function ($query) {
+                $query->where(function ($q) {
+                    $q->where('dni', 'like', '%' . $this->searchpersonas . '%')
+                    ->orWhere('datos', 'like', '%' . $this->searchpersonas . '%');
+                });
+            })
+            ->orderBy('datos')
+            ->paginate(10,['*'], 'personasPage');
 
         return view('livewire.admin.users.activos',
-                compact('lista_activos',
-                'lista_sedes','lista_dependencias','lista_personal')
+                compact('lista_activos','lista_inactivos','lista_personas')
             );
     }
 
     protected function rules(){
         return [
-            'dni' => 'required|string|unique:users,dni,' . $this->id_usuario,
+                    'dni' => [
+                    'required',
+                    'string',
+                    Rule::unique('personas', 'dni')
+                        ->ignore($this->persona_id, 'id')
+                ],
+
             'datos' => 'required',
-            'codsede_destino' => 'required',
-            'coddependencia_destino' => 'required',
-            'regimen' => 'required',
-            'cargo' => 'required',
         ];
     }
 
@@ -122,21 +144,24 @@ class Activos extends Component
         'dni.required' => 'El dni es obligatorio.',
         'dni.unique' => 'El dni ya fue registrado.',
         'datos.required' => '',
-        'sede.required' => '',
-        'dependencia.required' => '',
-        'regimen.required' => '',
-        'cargo.required' => '',
     ];
 
     public function nuevo(){
-        $this->reset([]);
+        $this->resetValidation();   // ← limpia los errores
+        $this->resetErrorBag();     // ← opcional extra seguridad
 
-        $this->modal_abierto_personal = true;
+        // Restablecer todas las variables
+        // $this->reset();
 
-        $this->modal_header_titulo = 'nuevo';
-        $this->modal_header_color = 'primary-subtle';
-        $this->btn_guardar_actualizar = 'guardar';
-        $this->btn_guardar_actualizar_color = 'primary';
+        $this->funcionGuardarActualizar="guardar";
+
+        $this->mostrarBtnBuscarDni = "d-none";
+
+        $this->colorHeaderModal = "primary-subtle";
+        $this->textoHeaderModal = "Nuevo";
+        $this->colorGuardarActualizar = "primary";
+        $this->textoGuardarActualizar = "Guardar";
+        $this->colorAgregar = "outline-primary";
     }
 
     public function guardar(){
@@ -147,26 +172,8 @@ class Activos extends Component
                 'dni' => $this->dni,
                 'datos' => strtoupper($this->datos),
 
-                'codsede_origen' => $this->codsede_origen,
-                'sede_origen' => $this->sede_origen,
-                'coddependencia_origen' => $this->coddependencia_origen,
-                'dependencia_origen' => $this->dependencia_origen,
-
-                'codsede_destino' => $this->codsede_destino,
-                'sede_destino' => Tbl_sede::where('codsedeofi',$this->codsede_destino)->value('nomsedeofi'),
-                'coddependencia_destino' => $this->coddependencia_destino,
-                'dependencia_destino' => Tbl_sede::where('coddepofi',$this->coddependencia_destino)->value('nomdepofi'),
-
-                'regimen' => $this->regimen,
-                'cargo' => $this->cargo,
-                'cel_personal' => $this->cel_personal,
-                'correo_personal' => strtolower($this->correo_personal),
-                'cel_institucional' => $this->cel_institucional,
-                'correo_institucional' => strtolower($this->correo_institucional),
-
                 'password' => Hash::make($this->dni),
 
-                'avatar' => $this->avatar,
                 'activo' => '1',
                 
                 'created_user' => $this->created_user,
@@ -178,9 +185,6 @@ class Activos extends Component
 
         // Reiniciamos todas la variable excepto:
         $this->resetExcept('searchusuario');
-        
-        // Cerramos modal
-        $this->modal_abierto_personal = false;
 
         // Emitimos un evento para mostrar el SweetAlert
         $this->dispatch(
@@ -193,39 +197,11 @@ class Activos extends Component
 
 
     public function editar(User $iEditar){
-        $this->modal_abierto_personal = true;
-
-        $this->modal_header_titulo = 'editar';
-        $this->modal_header_color = 'success-subtle';
-        $this->btn_guardar_actualizar = 'actualizar';
-        $this->btn_guardar_actualizar_color = 'success';
-        $this->fieldset_disable = '';
-
         // Datos
         $this->id_usuario = $iEditar->id;
         $this->dni = $iEditar->dni;
         $this->datos = strtoupper($iEditar->datos);
 
-        // Origen
-        $this->codsede_origen = $iEditar->codsede_origen;
-        $this->sede_origen = $iEditar->sede_origen;
-        $this->coddependencia_origen = $iEditar->coddependencia_origen;
-        $this->dependencia_origen = $iEditar->dependencia_origen;
-
-        // Destino
-        $this->codsede_destino = $iEditar->codsede_destino;
-        $this->sede_destino = $iEditar->sede_destino;
-        $this->coddependencia_destino = $iEditar->coddependencia_destino;
-        $this->dependencia_destino = $iEditar->dependencia_destino;
-
-        // Otros campos
-        $this->regimen = $iEditar->regimen;
-        $this->cargo = $iEditar->cargo;
-        $this->cel_personal = $iEditar->cel_personal;
-        $this->correo_personal = strtolower($iEditar->correo_personal);
-        $this->cel_institucional = $iEditar->cel_institucional;
-        $this->correo_institucional = strtolower($iEditar->correo_institucional);
-        $this->avatar = $iEditar->avatar;
         $this->activo = $iEditar->activo;
         $this->created_user = $iEditar->created_user;
         $this->updated_user = $iEditar->updated_user;
@@ -239,24 +215,6 @@ class Activos extends Component
                 'dni' => $this->dni,
                 'datos' => strtoupper($this->datos),
 
-                'codsede_origen' => $this->codsede_origen,
-                'sede_origen' => $this->sede_origen,
-                'coddependencia_origen' => $this->coddependencia_origen,
-                'dependencia_origen' => $this->dependencia_origen,
-
-                'codsede_destino' => $this->codsede_destino,
-                'sede_destino' => $this->sede_destino,
-                'coddependencia_destino' => $this->coddependencia_destino,
-                'dependencia_destino' => $this->dependencia_destino,
-
-                'regimen' => $this->regimen,
-                'cargo' => $this->cargo,
-                'cel_personal' => $this->cel_personal,
-                'correo_personal' => strtolower($this->correo_personal),
-                'cel_institucional' => $this->cel_institucional,
-                'correo_institucional' => strtolower($this->correo_institucional),
-
-                'avatar' => $this->avatar,
                 'activo' => $this->activo,
                 
                 'created_user' => $this->created_user,
@@ -269,9 +227,6 @@ class Activos extends Component
 
         // Reiniciamos todas la variable excepto:
         $this->resetExcept('searchusuario');
-        
-        // Cerramos modal
-        $this->modal_abierto_personal = false;
 
         // Emitimos un evento para mostrar el SweetAlert
         $this->dispatch(
@@ -300,58 +255,20 @@ class Activos extends Component
     }
 
     public function cerrar(){
-        $this->modal_abierto_personal = false;
 
         // Reiniciamos todas la variable excepto:
         $this->resetExcept('searcha');
     }
 
     public function editar_imagen(){
-        $this->modal_abierto_imagen = true;
+
     }
 
     public function cerrar_imagen(){
-        $this->modal_abierto_imagen = false;
+
 
         // Variable de entorno
         $this->reset(['avatar']);
-    }
-
-    // PERSONAL
-    // ---------------------------------------------------------
-    public function buscar_personal(){
-        $this->modal_abierto_personal_buscar = true;
-    }
-
-    public function agregar_personal(Tbl_personale $ipersonal){
-        $this->id_usuario = $ipersonal->id;
-        $this->dni = $ipersonal->dni;
-        $this->datos = $ipersonal->datos;
-
-        $this->codsede_origen = $ipersonal->codsede_origen;
-        $this->sede_origen = $ipersonal->sede_origen;
-        $this->coddependencia_origen = $ipersonal->coddependencia_origen;
-        $this->dependencia_origen = $ipersonal->dependencia_origen;
-
-        $this->codsede_destino = $ipersonal->codsede_destino;
-        $this->sede_destino = $ipersonal->sede_destino;
-        $this->coddependencia_destino = $ipersonal->coddependencia_destino;
-        $this->dependencia_destino = $ipersonal->depencia_destino;
-
-        $this->regimen = $ipersonal->regimen;
-        $this->cargo = $ipersonal->cargo;
-        $this->correo_personal = $ipersonal->correo_personal;
-        $this->correo_institucional = $ipersonal->correo_institucional;
-        $this->cel_personal = $ipersonal->cel_personal;
-        $this->cel_institucional = $ipersonal->cel_institucional;
-
-        $this->reset('searchbuscarpersonal');
-
-        $this->modal_abierto_personal_buscar = false;
-    }
-
-    public function cerrar_personal(){
-        $this->modal_abierto_personal_buscar = false;
     }
 
     // PASSWORD
@@ -386,5 +303,18 @@ class Activos extends Component
         } catch (\Exception $e) {
             session()->flash('error', 'Error al actualizar la contraseña: ' . $e->getMessage());
         }
+    }
+
+    // FUNCIONES AGREGAR
+    public function agregar_persona(Persona $ipersona){
+        $this->persona_id = $ipersona->id;
+        $this->dni = $ipersona->dni;
+        $this->datos = $ipersona->datos;
+
+        $this->reset('searchpersonas');
+    }
+
+    public function cerrar_personal(){
+
     }
 }

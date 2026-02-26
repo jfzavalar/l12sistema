@@ -1,46 +1,54 @@
 <div class="row">
-    <div class="col-xl-4 col-lg-6 col-sm-12">
+    <div class="col-xl-3 col-lg-6 col-sm-12">
         <label for="cmbcodsede" class="fw-bold fs-6">Sede</label>
         <div class="input-group">
-            <select id="cmbcodsede" class="form-select form-select-xs" wire:model.change="codsedeorigen">
-                <option value="">Seleccionar...</option>
-                @foreach ($lista_sedes as $sede)
-                    <option value="{{ $sede->codsedeofi }}">{{ $sede->nomsedeofi}}</option>
-                @endforeach
-            </select>
-            @error('sede_destino')
-                <small class="text-danger">{{ $message }}</small>
-            @enderror
+            <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-sedes-component">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+            <input type="text" id="txt_sede" class="form-control form-control-xs bg-light" wire:model="sedeorigen" readonly required>
         </div>
+        @error('sedeorigen')
+            <small class="text-danger">{{ $message }}</small>
+        @enderror
     </div>
-    <div class="col-xl-8 col-lg-6 col-sm-12">
+    <div class="col-xl-6 col-lg-6 col-sm-12">
         <label for="cmbcoddependencia" class="fw-bold fs-6">Dependencia</label>
         <div class="input-group position-relative">
-            <select id="cmbcoddependencia" class="form-select form-select-xs" wire:model="coddependenciaorigen">
-                <option value="">Seleccionar...</option>
-                @foreach ($lista_dependencias as $dependencia)
-                    <option value="{{ $dependencia->coddepofi }}" @selected($dependencia->coddepofi == $coddependenciaorigen)>{{ $dependencia->nomdepofi }}</option>
-                @endforeach
-            </select>
-            @error('dependencia_destino')
-                <small class="text-danger">{{ $message }}</small>
-            @enderror
+            <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-dependencias-component">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+            <input type="text" id="txt_dependencia" class="form-control form-control-xs bg-light" wire:model="dependenciaorigen" readonly required>
         </div>
+        @error('dependenciaorigen')
+            <small class="text-danger">{{ $message }}</small>
+        @enderror
+    </div>
+    <div class="col-xl-3 col-lg-6 col-sm-12">
+        <label for="cmbcoddependencia" class="fw-bold fs-6">Despacho</label>
+        <div class="input-group position-relative">
+            <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-despachos-component">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+            <input type="text" id="txt_despacho" class="form-control form-control-xs bg-light" wire:model="despachoorigen" readonly required>
+        </div>
+        @error('despachoorigen')
+            <small class="text-danger">{{ $message }}</small>
+        @enderror
     </div>
 </div>
 
 <div class="row">
-    <div class="col-xl-4 col-lg-6 col-sm-12">
+    <div class="col-xl-6 col-lg-6 col-sm-12">
         <label for="txtcelular_institucional" class="fw-bold fs-6">Celular institucional</label>
-        <input type="text" id="txtcelular_institucional" class="form-control form-control-xs" wire:model="cel_institucional">
+        <input type="text" id="txtcelular_institucional" class="form-control form-control-xs" wire:model="celinstitucional">
     </div>
-    <div class="col-xl-8 col-lg-6 col-sm-12">
+    <div class="col-xl-6 col-lg-6 col-sm-12">
         <label for="txtcorreo_institucional" class="fw-bold fs-6">Correo institucional</label>
-        <input type="text" id="txtcorreo_institucional" class="form-control form-control-xs text-lowercase" wire:model="correo_institucional">
+        <input type="text" id="txtcorreo_institucional" class="form-control form-control-xs text-lowercase" wire:model="correoinstitucional">
     </div>
 </div>
 <div class="row">
-    <div class="col-xl-4 col-lg-6 col-sm-12">
+    <div class="col-xl-6 col-lg-6 col-sm-12">
         <label for="txtdespacho" class="fw-bold fs-6">Regimen</label>
         <div class="d-flex gap-2">
             <input type="radio" id="regimen276" name="regimen" class="btn-check" value="DL.276" autocomplete="off" wire:model.live="regimen">
@@ -56,18 +64,13 @@
             <small class="text-danger">{{ $message }}</small>
         @enderror
     </div>
-    <div class="col-xl-8 col-lg-6 col-sm-12">
-        <label for="txtdespacho" class="fw-bold fs-6">Cargo</label>
+    <div class="col-xl-6 col-lg-6 col-sm-12">
+        <label for="text_cargo" class="fw-bold fs-6">Cargo</label>
         <div class="input-group">
-            <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" wire:click="buscar_cargo">
+            <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-cargos-component">
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
-            <select id="cmbcodcargo" class="form-select form-select-xs" wire:model.change="codcargo">
-                <option value="">Seleccionar...</option>
-                @foreach ($lista_cargos as $cargo)
-                    <option value="{{ $cargo->id }}">{{ $cargo->cargo}}</option>
-                @endforeach
-            </select>
+            <input type="text" id="txt_cargo" class="form-control form-control-xs bg-light" wire:model="cargo" readonly required>
         </div>
         @error('cargo')
             <small class="text-danger">{{ $message }}</small>

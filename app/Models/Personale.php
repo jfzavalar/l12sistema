@@ -7,15 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Personale extends Model
 {
     protected $fillable = [
-        // 'id',
-        'dni',
-        'datos',
-        'appaterno',
-        'apmaterno',
-        'nombres',
-        'genero',
-        'estadocivil',
-        'fechanacimiento',
+        'persona_id',
+        'persona_dni',
         'regimen',
         'cargo',
         'codsedeorigen',
@@ -30,15 +23,18 @@ class Personale extends Model
         'dependenciadestino',
         'coddespachodestino',
         'despachodestino',
-        'celpersonal',
         'celinstitucional',
-        'correopersonal',
         'correoinstitucional',
-        'foto',
+
+        'numero_convocatoria',
+        'tipo_documento',
+        'fecha_inicio',
+        'fecha_fin',
+        'ruta_documento',
+
         'activo',
+
         'created_user',
         'updated_user',
-        // 'created_at',
-        // 'updated_at',
     ];
 }

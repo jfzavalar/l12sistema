@@ -214,7 +214,7 @@
         <div class="app-wrapper">
 
             {{-- Navbar --}}
-            <nav class="app-header navbar navbar-expand bg-body">
+            <nav class="app-header navbar navbar-expand bg-body sticky-top">
                 <div class="container-fluid">
                     <ul class="navbar-nav">
                         <li class="nav-item">
@@ -229,7 +229,7 @@
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                <i class="fa-solid fa-sliders"></i> {{ Auth::user()->name ?? 'Usuario' }}
+                                <i class="fa-solid fa-sliders"></i> {{ Auth::user()->datos ?? 'Usuario' }}
                             </a>
 
                             <ul class="dropdown-menu dropdown-menu-end">
@@ -253,6 +253,8 @@
 
                 </div>
             </nav>
+
+
 
             {{-- Sidebar --}}
             {{-- <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="blue"> --}}
@@ -281,7 +283,7 @@
                                 </a> --}}
                                 <a class="nav-link {{ request()->routeIs('dashboard') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('dashboard') }}">
                                     <i class="nav-icon fa-solid fa-house"></i>
-                                    <p>Dashboard</p>
+                                    <p>DASHBOARD</p>
                                 </a>
                             </li>
 
@@ -290,7 +292,7 @@
                                 <a href="#" class="nav-link">
                                     <i class="nav-icon fa-solid fa-folder"></i>
                                     <p>
-                                        Administrador
+                                        ADMIN
                                         <i class="nav-arrow fa-solid fa-angle-left right"></i>
                                     </p>
                                 </a>
@@ -314,6 +316,114 @@
                                         <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.permissions.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.permissions.index') }}">
                                             <i class="nav-icon fa-regular fa-circle"></i>
                                             <p>Permisos</p>
+                                        </a>
+                                    </li>
+
+                                    <hr class="ms-5 border-light">
+
+                                    <li class="nav-item">
+                                        <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.permissions.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.permissions.index') }}">
+                                            <i class="nav-icon fa-regular fa-circle"></i>
+                                            <p>Cargos</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.permissions.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.permissions.index') }}">
+                                            <i class="nav-icon fa-regular fa-circle"></i>
+                                            <p>Régimen</p>
+                                        </a>
+                                    </li>
+
+                                    <hr class="ms-5 border-light">
+
+                                    <li class="nav-item">
+                                        <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.users.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.users.index') }}">
+                                            <i class="nav-icon fa-regular fa-circle"></i>
+                                            <p>Sedes</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.roles.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.roles.index') }}">
+                                            <i class="nav-icon fa-regular fa-circle"></i>
+                                            <p>Dependencias</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.permissions.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.permissions.index') }}">
+                                            <i class="nav-icon fa-regular fa-circle"></i>
+                                            <p>Despachos</p>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                            {{-- INFORMATICA --}}
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fa-solid fa-folder"></i>
+                                    <p>
+                                        INFORMÁTICA
+                                        <i class="nav-arrow fa-solid fa-angle-left right"></i>
+                                    </p>
+                                </a>
+
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a class="nav-link ms-3 {{ request()->routeIs('procesos.informatica.firmasdigitales.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.firmasdigitales.index') }}">
+                                            <i class="nav-icon fa-regular fa-circle"></i>
+                                            <p>Certificados Digitales</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link ms-3 {{ request()->routeIs('procesos.informatica.ips.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.ips.index') }}">
+                                            <i class="nav-icon fa-regular fa-circle"></i>
+                                            <p>IPs</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link ms-3 {{ request()->routeIs('procesos.informatica.spijweb.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.spijweb.index') }}">
+                                            <i class="nav-icon fa-regular fa-circle"></i>
+                                            <p>Spijweb</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            {{-- RRHH --}}
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fa-solid fa-folder"></i>
+                                    <p>
+                                        RRHH
+                                        <i class="nav-arrow fa-solid fa-angle-left right"></i>
+                                    </p>
+                                </a>
+
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.users.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.users.index') }}">
+                                            <i class="nav-icon fa-regular fa-circle"></i>
+                                            <p>Contratos</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.roles.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.roles.index') }}">
+                                            <i class="nav-icon fa-regular fa-circle"></i>
+                                            <p>Persona</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link ms-3 {{ request()->routeIs('mpfn.rrhh.personal.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.rrhh.personal.index') }}">
+                                            <i class="nav-icon fa-regular fa-circle"></i>
+                                            <p>Personal</p>
                                         </a>
                                     </li>
                                 </ul>
@@ -340,6 +450,77 @@
         </div>
 
         @livewireScripts
+
+        <!-- SweetAlert2 -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+
+                window.addEventListener('cerrar-modal', function (event) {
+
+                    const modalId = event.detail.id;
+                    const modalElement = document.getElementById(modalId);
+
+                    if (!modalElement) return;
+
+                    // 🔥 Forzar cierre con clase (100% efectivo)
+                    modalElement.classList.remove('show');
+                    modalElement.style.display = 'none';
+                    modalElement.setAttribute('aria-hidden', 'true');
+                    modalElement.removeAttribute('aria-modal');
+
+                    // 🔥 Eliminar backdrop
+                    document.querySelectorAll('.modal-backdrop')
+                        .forEach(el => el.remove());
+
+                    // 🔥 Limpiar body
+                    document.body.classList.remove('modal-open');
+                    document.body.style = '';
+                });
+
+            });
+        </script>
+
+        <script>
+            document.addEventListener('livewire:initialized', () => {
+
+                Livewire.on('alerta-actualizado', (data) => {
+
+                    Swal.fire({
+                        title: data.titulo,
+                        text: data.mensaje,
+                        icon: data.tipo,
+                        confirmButtonColor: '#3085d6',
+
+                        timer: 1500,              // 1.5 segundos
+                        showConfirmButton: false  // oculta botón OK
+                    });
+
+                });
+
+            });
+        </script>
+
+        <script>
+            document.addEventListener('livewire:initialized', () => {
+
+                Livewire.on('alerta-cancelar', (data) => {
+
+                    Swal.fire({
+                        title: data.titulo,
+                        text: data.mensaje,
+                        icon: data.tipo,
+                        confirmButtonColor: '#3085d6',
+
+                        timer: 1500,              // 1.5 segundos
+                        showConfirmButton: false  // oculta botón OK
+                    });
+
+                });
+
+            });
+        </script>
 
     </body>
 </html>
