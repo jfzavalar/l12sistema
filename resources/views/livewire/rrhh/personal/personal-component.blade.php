@@ -4,12 +4,16 @@
             <div class="table-responsive small">
                 <div class="input-group mb-2">
                     <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar">
-                    <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
-                        <i class="fa-solid fa-file"></i> Nuevo
-                    </button>
-                    <button type="button" id="btnnuevo" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#inactivosModal">
-                        <i class="fa-solid fa-ban"></i> Inactivos
-                    </button>
+                    @can('mpfn.rrhh.personal.create')
+                        <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
+                            <i class="fa-solid fa-file"></i> Nuevo
+                        </button>
+                    @endcan
+                    @can('mpfn.rrhh.personal.destroy')
+                        <button type="button" id="btnnuevo" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#inactivosModal">
+                            <i class="fa-solid fa-ban"></i> Inactivos
+                        </button>
+                    @endcan
                 </div>
                 <table class="table table-striped table-hover table-sm table-xsmall">
                     <thead class="table-primary text-center align-middle">
@@ -19,11 +23,11 @@
                                 <i class="fa-solid fa-user"></i> DNI - PERSONAL
                             </th>
                             <th scope="col" class="table-success">DEPENDENCIA ORIGEN</th>
-                            <th scope="col" class="table-success">UBICACIÓN FÍSICA</th>
-                            <th scope="col" class="table-success">REGIMEN</th>
-                            <th scope="col" class="table-success">CARGO</th>
-                            <th scope="col"><i class="fa-solid fa-gears"></i></th>
-                            <th scope="col"><i class="fa-solid fa-gears"></i></th>
+                            <th scope="col" class="table-danger">UBICACIÓN FÍSICA</th>
+                            <th scope="col" class="table-success">REGIMEN - CARGO</th>
+                            {{-- <th scope="col" class="table-success">CARGO</th> --}}
+                            <th scope="col" colspan="2"><i class="fa-solid fa-gears"></i></th>
+                            {{-- <th scope="col"><i class="fa-solid fa-gears"></i></th> --}}
                         </tr>
                     </thead>
                     <tbody class="align-middle">
@@ -36,39 +40,59 @@
                                     {{ $item->datos }}
                                 </th>
                                 <td>
-                                    SEDE: {{ $item->sedeorigen }}
+                                    <b>SEDE:</b> {{ $item->sedeorigen }}
                                     <br>
-                                    DEPENDENCIA: {{ $item->dependenciaorigen }}
+                                    <b>DEPENDENCIA:</b> {{ $item->dependenciaorigen }}
+                                    <br>
+                                    <b>DESPACHO:</b> {{ $item->despachoorigen }}
                                 </td>
-                                <td></td>
-                                <td>{{ $item->regimen }}</td>
-                                <td>{{ $item->cargo }}</td>
+                                <td>
+                                    <b>SEDE:</b> {{ $item->sededestino }}
+                                    <br>
+                                    <b>DEPENDENCIA:</b> {{ $item->dependenciadestino }}
+                                    <br>
+                                    <b>DESPACHO:</b> {{ $item->despachodestino }}
+                                </td>
+                                <td>
+                                    <b>REGIMEN:</b> {{ $item->regimen }}
+                                    <br>
+                                    <b>CARGO:</b> {{ $item->cargo }}
+                                </td>
+                                {{-- <td>{{ $item->cargo }}</td> --}}
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->id }})">
-                                            <i class="fa-solid fa-pen-to-square"></i><br>Editar
-                                        </button>
-                                        <button type="button" class="btn btn-outline-secondary btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->id }})">
+                                        @can('mpfn.rrhh.personal.edit')
+                                            <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->id }})">
+                                                <i class="fa-solid fa-pen-to-square"></i><br>Editar
+                                            </button>
+                                        @endcan                                      
+                                        <button type="button" class="btn btn-outline-secondary btn-xs" data-bs-toggle="modal" data-bs-target="#verDetallesModal" wire:click="editar({{ $item->id }})">
                                             <i class="fa-solid fa-eye"></i><br>Ver
                                         </button>
-                                        <button type="button" class="btn btn-outline-primary btn-xs" data-bs-toggle="modal" data-bs-target="#transferirPersonalModal" wire:click="editar({{ $item->id }})">
-                                            <i class="fa-solid fa-people-arrows"></i><br>Transferencia
-                                        </button>
-                                        <button type="button" class="btn btn-outline-danger btn-xs" wire:click="desactivar({{ $item->id }})">
-                                            <i class="fa-solid fa-trash-can"></i><br>Eliminar
-                                        </button>
+                                        @can('mpfn.rrhh.personal.create')
+                                            <button type="button" class="btn btn-outline-primary btn-xs" data-bs-toggle="modal" data-bs-target="#transferencia-personal-component" wire:click="nuevo_transferir_personal({{ $item->id }})">
+                                                <i class="fa-solid fa-people-arrows"></i><br>Transferencia
+                                            </button>
+                                        @endcan
+                                        @can('mpfn.rrhh.personal.destroy')
+                                            <button type="button" class="btn btn-outline-danger btn-xs" wire:click="desactivar({{ $item->id }})">
+                                                <i class="fa-solid fa-trash-can"></i><br>Eliminar
+                                            </button>
+                                        @endcan
                                     </div>
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-outline-primary btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo_adenda({{ $item->id }})">
-                                            <i class="fa-solid fa-file-shield"></i><br>Adenda
-                                        </button>
-                                        <button type="button" class="btn btn-outline-dark btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo_renuncia({{ $item->id }})">
-                                            <i class="fa-solid fa-file-shield"></i><br>Renuncia
-                                        </button>
-                                        <button type="button" class="btn btn-outline-info btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo_contrato({{ $item->id }})">
-                                            <i class="fa-solid fa-file-shield"></i><br>Contrato
-                                        </button>
+                                        @can('mpfn.rrhh.personal.create')
+                                            <button type="button" class="btn btn-outline-primary btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo_adenda({{ $item->id }})">
+                                                <i class="fa-solid fa-file-shield"></i><br>Adenda
+                                            </button>
+                                            <button type="button" class="btn btn-outline-dark btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo_renuncia({{ $item->id }})">
+                                                <i class="fa-solid fa-file-shield"></i><br>Renuncia
+                                            </button>
+                                            <button type="button" class="btn btn-outline-info btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo_contrato({{ $item->id }})">
+                                                <i class="fa-solid fa-file-shield"></i><br>Contrato
+                                            </button>
+                                        @endcan
                                         <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#historialModal" wire:click="historial_documentos('{{ $item->dni }}')">
                                             <i class="fa-solid fa-timeline"></i><br>Historial
                                         </button>
@@ -107,7 +131,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" wire:click="cerrar"></button>
                 </div>
                 <form wire:submit.prevent="{{ $funcionGuardarActualizar }}">
-                        <div class="modal-body">
+                    <div class="modal-body">
                         <div class="row">
                             <div class="col-xl-2 col-sm-12">
                                 <fieldset class="border p-3 rounded text-center mb-3" {{ $seccionFoto }}>
@@ -246,7 +270,7 @@
                 <div class="modal-body">
                     <div class="table-responsive small">
                         <div class="input-group mb-3">
-                            <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="searchdocumento" placeholder="Buscar por número de convocatoria">
+                            <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="searchhistorial" placeholder="Buscar por número de convocatoria">
                         </div>
                         <table class="table table-striped table-hover table-sm table-xsmall">
                             <thead class="table-dark text-center align-middle">
@@ -256,7 +280,7 @@
                                         <i class="fa-solid fa-user"></i> PERSONAL
                                     </th>
                                     <th scope="col">DEPENDENCIA ORIGEN</th>
-                                    <th scope="col">DEPENDENCIA DESTINO</th>
+                                    <th scope="col">UBICACIÓN FÍSICA</th>
                                     <th scope="col">REGIMEN</th>
                                     <th scope="col">CARGO</th>
                                     <th scope="col">N° DE CONVOCATORIA</th>
@@ -276,21 +300,37 @@
                                             SEDE: {{ $item3->sedeorigen }}
                                             <br>
                                             DEPENDENCIA: {{ $item3->dependenciaorigen }}
+                                            <br>
+                                            <b>DESPACHO:</b> {{ $item3->despachoorigen }}
                                         </td>
-                                        <td></td>
+                                        <td>
+                                            <b>SEDE:</b> {{ $item3->sededestino }}
+                                            <br>
+                                            <b>DEPENDENCIA:</b> {{ $item3->dependenciadestino }}
+                                            <br>
+                                            <b>DESPACHO:</b> {{ $item3->despachodestino }}
+                                        </td>
                                         <td>{{ $item3->regimen }}</td>
                                         <td>{{ $item3->cargo }}</td>
                                         <td>{{ $item3->numero_convocatoria }}</td>
-                                        <td>
+                                        <td class="@if($item3->tipo_documento == 'CONTRATO') text-success
+                                                    @elseif($item3->tipo_documento == 'RENUNCIA') text-danger
+                                                    @elseif($item3->tipo_documento == 'ADENDA') text-primary
+                                                    @endif">
                                             {{ $item3->tipo_documento }}
                                             <br>
-                                            {{ \Carbon\Carbon::parse($item3->fecha_inicio)->format('d/m/Y') . '-' . \Carbon\Carbon::parse($item->fecha_fin)->format('d/m/Y') }}
+                                            {{ \Carbon\Carbon::parse($item3->fecha_inicio)->format('d/m/Y') . '-' . \Carbon\Carbon::parse($item3->fecha_fin)->format('d/m/Y') }}
                                         </td>
                                         <td class="text-end">
                                             <div class="btn-group" role="group">
-                                                <button type="button" class="btn btn-outline-danger btn-xs" wire:click="desactivar({{ $item3->id }})">
-                                                    <i class="fa-solid fa-check-double"></i><br>Reactivar
+                                                <button type="button" class="btn btn-outline-warning btn-xs">
+                                                    <i class="fa-solid fa-upload"></i><br>Cargar
                                                 </button>
+                                                @if($item3->ruta_documento)
+                                                    <a type="button" class="btn btn-outline-info btn-xs" href="{{ asset('storage/'.$item3->ruta_documento) }}" target="_blank">
+                                                        <i class="fa-solid fa-file-signature"></i><br> Ver-Firmado
+                                                    </a>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
@@ -316,6 +356,55 @@
         </div>
     </div>
 
+    <!-- Modal Detalles de persona personal -->
+    <div wire:ignore.self class="modal fade" id="verDetallesModal" tabindex="-1" aria-labelledby="verDetallesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="verDetallesModalLabel">DETALLE PERSONA PERSONAL</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xl-3 col-sm-12">
+                            <fieldset class="border p-3 rounded text-center mb-3" disabled>
+                                <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">FOTO DE PERFIL</legend>
+                                @include('livewire.rrhh.personal.partials.foto-component')
+                            </fieldset>
+                        </div>
+                        <div class="col-xl-9 col-sm-12">
+                            <fieldset class="border p-3 rounded mb-3" disabled>
+                                <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS PERSONALES</legend>
+                                @include('livewire.rrhh.personal.partials.datos-personales-component')
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <fieldset class="border p-3 rounded mb-3" disabled>
+                                <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS INSTITUCIONALES</legend>
+                                @include('livewire.rrhh.personal.partials.datos-institucionales-component')
+                            </fieldset>
+                        </div>
+                    </div>
+                    {{-- <div class="row">
+                        <div class="col">
+                            <fieldset class="border p-3 rounded mb-3">
+                                <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS CONTRATO / ADENDA / RENUNCIA</legend>
+                                @include('livewire.rrhh.contratos.partials.datos-contrato-component')
+                            </fieldset>
+                        </div>
+                    </div> --}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-rectangle-xmark"></i> Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @include('livewire.rrhh.personal.partials.buscar-personal-component')
     @include('livewire.rrhh.personal.partials.buscar-sedes-component')
     @include('livewire.rrhh.personal.partials.buscar-dependencias-component')
@@ -323,5 +412,9 @@
     @include('livewire.rrhh.personal.partials.buscar-cargos-component')
 
     @include('livewire.rrhh.personal.partials.transferencia-personal-component')
+
+    @include('livewire.rrhh.personal.partials.2buscar-sedes-component')
+    @include('livewire.rrhh.personal.partials.2buscar-dependencias-component')
+    @include('livewire.rrhh.personal.partials.2buscar-despachos-component')
 
 </div>

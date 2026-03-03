@@ -27,7 +27,9 @@ class Personale extends Model
         'correoinstitucional',
 
         'numero_convocatoria',
+
         'tipo_documento',
+        
         'fecha_inicio',
         'fecha_fin',
         'ruta_documento',

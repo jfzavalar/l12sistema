@@ -396,38 +396,44 @@
                             </li>
 
                             {{-- RRHH --}}
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="nav-icon fa-solid fa-folder"></i>
-                                    <p>
-                                        RRHH
-                                        <i class="nav-arrow fa-solid fa-angle-left right"></i>
-                                    </p>
-                                </a>
+                            @can('mpfn.rrhh')
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fa-solid fa-folder"></i>
+                                        <p>
+                                            RRHH
+                                            <i class="nav-arrow fa-solid fa-angle-left right"></i>
+                                        </p>
+                                    </a>
 
-                                <ul class="nav nav-treeview">
-                                    <li class="nav-item">
-                                        <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.users.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.users.index') }}">
-                                            <i class="nav-icon fa-regular fa-circle"></i>
-                                            <p>Contratos</p>
-                                        </a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.roles.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.roles.index') }}">
-                                            <i class="nav-icon fa-regular fa-circle"></i>
-                                            <p>Persona</p>
-                                        </a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a class="nav-link ms-3 {{ request()->routeIs('mpfn.rrhh.personal.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.rrhh.personal.index') }}">
-                                            <i class="nav-icon fa-regular fa-circle"></i>
-                                            <p>Personal</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
+                                    <ul class="nav nav-treeview">
+                                        @can('mpfn.rrhh.persona.index')
+                                            <li class="nav-item">
+                                                <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.users.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.users.index') }}">
+                                                    <i class="nav-icon fa-regular fa-circle"></i>
+                                                    <p>Contratos</p>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('mpfn.rrhh.persona.index')
+                                            <li class="nav-item">
+                                                <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.roles.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.roles.index') }}">
+                                                    <i class="nav-icon fa-regular fa-circle"></i>
+                                                    <p>Persona</p>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('mpfn.rrhh.personal.index')
+                                            <li class="nav-item">
+                                                <a class="nav-link ms-3 {{ request()->routeIs('mpfn.rrhh.personal.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.rrhh.personal.index') }}">
+                                                    <i class="nav-icon fa-regular fa-circle"></i>
+                                                    <p>Personal</p>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                    </ul>
+                                </li>
+                            @endcan
 
                         </ul>
                     </nav>
@@ -520,6 +526,15 @@
                 });
 
             });
+        </script>
+
+        <script>
+            let tiempoInactividad = {{ env('SESSION_LIFETIME') }} * 60 * 1000;
+
+            setTimeout(() => {
+                alert("Tu sesión ha expirado");
+                window.location.href = "{{ route('login') }}";
+            }, tiempoInactividad);
         </script>
 
     </body>
