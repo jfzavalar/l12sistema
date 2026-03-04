@@ -158,7 +158,8 @@ class PersonalComponent extends Component
                 'personales.despachoorigen',
                 'personales.sededestino',
                 'personales.dependenciadestino',
-                'personales.despachodestino')
+                'personales.despachodestino',
+                'personales.tipo_documento')
             ->where('personales.activo', 1)
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
@@ -166,7 +167,7 @@ class PersonalComponent extends Component
                     ->orWhere('personas.datos', 'like', '%' . $this->search . '%');
                 });
             })
-            ->orderBy('personas.datos')
+            ->orderBy('personales.id','desc')
             ->distinct()
             ->paginate(10, ['personas.*'], 'personalesPage');
 
@@ -282,7 +283,7 @@ class PersonalComponent extends Component
             'fecha_inicio' => 'required|date|before_or_equal:fecha_fin',
             'fecha_fin'    => 'required|date|after_or_equal:fecha_inicio',
 
-            'foto' => 'nullable|image|max:2048', // 2MB máximo
+            'foto' => 'nullable|image|mimes:jpg,jpeg|max:2048', // 2MB máximo
 
             'pdf' => 'nullable|file|mimes:pdf|max:5120', // 5MB
         ];
@@ -359,6 +360,8 @@ class PersonalComponent extends Component
                     );
                 }
 
+                // GUARDAR CAMPOS DE PERSONA
+
                 $persona = Persona::create([
                     'dni' => $this->dni,
                     'appaterno' => strtoupper($this->appaterno),
@@ -376,33 +379,10 @@ class PersonalComponent extends Component
                     'updated_user' => $usuario,
                 ]);
 
-                // Guardar campos de personales
-                // 📌 Subir archivo si existe
-                $rutaDocumento = null;
+                // FUNCIÓN PARA CARGAR DOCUMENTO
+                $rutaDocumento = $this->guardar_documento();
 
-                if ($this->pdf) {
-                    // 1️⃣ Creamos nombre base
-                    $fileNameBase =
-                        $this->numero_convocatoria . '_' .
-                        $this->dni . '_' .
-                        $this->tipo_documento . '_' .
-                        $this->fecha_inicio . '_' .
-                        $this->fecha_fin;
-
-                    // 2️⃣ Limpiamos caracteres raros
-                    $fileName = Str::slug($fileNameBase) . '_' . Str::uuid();
-
-                    // 3️⃣ Agregamos extensión
-                    $fileName .= '.' . $this->pdf->getClientOriginalExtension();
-
-                    // 4️⃣ Guardamos
-                    $rutaDocumento = $this->pdf->storeAs(
-                        'archivos/rrhh/personal/documentos',
-                        $fileName,
-                        'public'
-                    );
-                }
-
+                // GUARDAR CAMPOS DE PERSONAL
                 Personale::create([
                     'persona_id' => $persona->id,
                     'persona_dni' => $persona->dni,
@@ -591,35 +571,8 @@ class PersonalComponent extends Component
                     ['persona_dni', $this->dni],
                 ])->firstOrFail();
 
-                // Mantener archivo actual
-                $rutaDocumento = $personal->ruta_documento;
-
-                // 📌 Si se sube nuevo PDF
-                if ($this->pdf) {
-
-                    // Eliminar anterior si existe
-                    if ($personal->ruta_documento &&
-                        Storage::disk('public')->exists($personal->ruta_documento)) {
-
-                        Storage::disk('public')->delete($personal->ruta_documento);
-                    }
-
-                    // Nombre limpio (sin espacios)
-                    $fileName = str_replace(' ', '_',
-                        $this->numero_convocatoria . '_' .
-                        $this->dni . '_' .
-                        $this->tipo_documento . '_' .
-                        $this->fecha_inicio . '_' .
-                        $this->fecha_fin
-                    ) . '.' . $this->pdf->getClientOriginalExtension();
-
-                    // Guardar archivo
-                    $rutaDocumento = $this->pdf->storeAs(
-                        'archivos/rrhh/personal/documentos',
-                        $fileName,
-                        'public'
-                    );
-                }
+                // Llamamos a la función privada para cargar documento
+                $rutaDocumento = $this->actualizar_documento($personal);
 
                 $personal->update([
                     'regimen' => $this->regimen,
@@ -672,6 +625,66 @@ class PersonalComponent extends Component
                 tipo: 'error'
             );
         }
+    }
+
+    private function guardar_documento(){
+        if (!$this->pdf) {
+            return null;
+        }
+
+        // 1️⃣ Crear nombre base
+        $fileNameBase =
+            $this->numero_convocatoria . '_' .
+            $this->dni . '_' .
+            $this->tipo_documento . '_' .
+            $this->fecha_inicio . '_' .
+            $this->fecha_fin;
+
+        // 2️⃣ Limpiar y hacer único
+        $fileName = Str::slug($fileNameBase) . '_' . Str::uuid();
+        $fileName .= '.' . $this->pdf->getClientOriginalExtension();
+
+        // 3️⃣ Guardar archivo
+        return $this->pdf->storeAs(
+            'archivos/rrhh/personal/documentos',
+            $fileName,
+            'public'
+        );
+    }
+
+    private function actualizar_documento($personal)
+    {
+        // Mantener archivo actual
+        $rutaDocumento = $personal->ruta_documento;
+
+        // 📌 Si se sube nuevo PDF
+        if ($this->pdf) {
+
+            // Eliminar anterior si existe
+            if ($personal->ruta_documento &&
+                Storage::disk('public')->exists($personal->ruta_documento)) {
+
+                Storage::disk('public')->delete($personal->ruta_documento);
+            }
+
+            // Nombre limpio (sin espacios)
+            $fileName = str_replace(' ', '_',
+                $this->numero_convocatoria . '_' .
+                $this->dni . '_' .
+                $this->tipo_documento . '_' .
+                $this->fecha_inicio . '_' .
+                $this->fecha_fin
+            ) . '.' . $this->pdf->getClientOriginalExtension();
+
+            // Guardar archivo
+            $rutaDocumento = $this->pdf->storeAs(
+                'archivos/rrhh/personal/documentos',
+                $fileName,
+                'public'
+            );
+        }
+
+        return $rutaDocumento; // 🔥 FALTABA ESTO
     }
 
     public function cerrar()
@@ -743,8 +756,8 @@ class PersonalComponent extends Component
         $this->resetValidation();   // ← limpia los errores
         $this->resetErrorBag();     // ← opcional extra seguridad
 
-        // Restablecer todas las variables
-        // $this->reset();
+        // RESTABLECER VARIABLES
+        $this->reset();
 
         $this->funcionGuardarActualizar="guardar_adenda";
 
@@ -761,42 +774,14 @@ class PersonalComponent extends Component
         $this->seccionPersona = "disabled";
         $this->seccionPersonal = "disabled";
 
-        // ===== DATOS PERSONA =====
-        $this->persona_id = $ipersona->id;
+        // DATOS PERSONA
+        $this->ver_persona($ipersona);
 
-        $this->dni = $ipersona->dni;
-        $this->nombres = $ipersona->nombres;
-        $this->appaterno = $ipersona->appaterno;
-        $this->apmaterno = $ipersona->apmaterno;
-        $this->celpersonal = $ipersona->celpersonal;
-        $this->correopersonal = $ipersona->correopersonal;
-
-        // ===== DATOS PERSONAL =====
+        // DATOS PERSONAL
         $ipersonal = Personale::where([['activo',"1"],['persona_dni', $this->dni],])->firstOrFail();
 
-        $this->personal_id = $ipersonal->id;
-
-        $this->regimen = $ipersonal->regimen;
-        $this->tipo_regimen = $ipersonal->tipo_regimen;
-        $this->cargo = $ipersonal->cargo;
-        $this->codsedeorigen = $ipersonal->codsedeorigen;
-        $this->sedeorigen = $ipersonal->sedeorigen;
-        $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
-        $this->dependenciaorigen = $ipersonal->dependenciaorigen;
-        $this->coddespachoorigen = $ipersonal->coddespachoorigen;
-        $this->despachoorigen = $ipersonal->despachoorigen;
-
-        $this->codsededestino = $ipersonal->codsededestino;
-        $this->sededestino = $ipersonal->sededestino;
-        $this->coddependenciadestino = $ipersonal->coddependenciadestino;
-        $this->dependenciadestino = $ipersonal->dependenciadestino;
-        $this->coddespachoorigen = $ipersonal->coddespachoorigen;
-        $this->despachodestino = $ipersonal->despachodestino;
-
-        $this->celinstitucional = $ipersonal->celinstitucional;
-        $this->correoinstitucional = $ipersonal->correoinstitucional;
-
-        $this->numero_convocatoria = $ipersonal->numero_convocatoria;
+        $this->ver_personal($ipersonal);
+        
         $this->tipo_documento = "ADENDA";
         $this->fecha_inicio = $ipersonal->fecha_fin
             ? Carbon::parse($ipersonal->fecha_fin)->addDay()->format('Y-m-d')
@@ -811,8 +796,6 @@ class PersonalComponent extends Component
         try {
 
             DB::transaction(function () {
-                $usuario = auth()->user()->datos; // Mejor que usar propiedad pública
-
                 $ipersonal = Personale::where('id', $this->personal_id)->firstOrFail();
 
                 // Actualizar Personal
@@ -820,41 +803,11 @@ class PersonalComponent extends Component
                     'activo' => "0",
                 ]);
 
-                // Crear registro dependiente desde la relación
-                Personale::create([
-                    'persona_id' => $this->persona_id,
-                    'persona_dni' => $this->dni,
+                // FUNCIÓN PARA CARGAR DOCUMENTO
+                $rutaDocumento = $this->guardar_documento();
 
-                    'regimen' => $this->regimen,
-                    'tipo_regimen' => $this->tipo_regimen,
-                    'cargo' => $this->cargo,
-                    'codsedeorigen' => $this->codsedeorigen,
-                    'sedeorigen' => $this->sedeorigen,
-                    'coddependenciaorigen' => $this->coddependenciaorigen,
-                    'dependenciaorigen' => $this->dependenciaorigen,
-                    'coddespachoorigen' => $this->coddespachoorigen,
-                    'despachoorigen' => $this->despachoorigen,
-
-                    'codsededestino' => $this->codsededestino,
-                    'sededestino' => $this->sededestino,
-                    'coddependenciadestino' => $this->coddependenciadestino,
-                    'dependenciadestino' => $this->dependenciadestino,
-                    'coddespachoorigen' => $this->coddespachoorigen,
-                    'despachodestino' => $this->despachodestino,
-
-                    'celinstitucional' => $this->celinstitucional,
-                    'correoinstitucional' => $this->correoinstitucional,
-
-                    'numero_convocatoria' => strtoupper($this->numero_convocatoria),
-                    'tipo_documento' => "ADENDA",
-                    'fecha_inicio' => $this->fecha_inicio,
-                    'fecha_fin' => $this->fecha_fin,
-                    'ruta_documento' => $this->ruta_documento,
-
-                    'activo' => '1',
-                    'created_user' => $usuario,
-                    'updated_user' => $usuario,
-                ]);
+                // GUARDAR CAMPOS DE PERSONAL
+                $this->guardar_personal($rutaDocumento);
             });
 
             $this->resetExcept('searchPersonal');
@@ -905,42 +858,16 @@ class PersonalComponent extends Component
         $this->seccionPersona = "disabled";
         $this->seccionPersonal = "disabled";
 
-        // ===== DATOS PERSONA =====
-        $this->persona_id = $ipersona->id;
-        $this->dni = $ipersona->dni;
-        $this->nombres = $ipersona->nombres;
-        $this->appaterno = $ipersona->appaterno;
-        $this->apmaterno = $ipersona->apmaterno;
-        $this->celpersonal = $ipersona->celpersonal;
-        $this->correopersonal = $ipersona->correopersonal;
+        // DATOS PERSONA
+        $this->ver_persona($ipersona);
 
-        // ===== DATOS PERSONAL =====
+        // DATOS PERSONAL
         $ipersonal = Personale::where([['activo',"1"],['persona_dni', $this->dni],])->firstOrFail();
 
-        $this->personal_id = $ipersonal->id;
-        $this->regimen = $ipersonal->regimen;
-        $this->tipo_regimen = $ipersonal->tipo_regimen;
-        $this->cargo = $ipersonal->cargo;
+        $this->ver_personal($ipersonal);
 
-        $this->codsedeorigen = $ipersonal->codsedeorigen;
-        $this->sedeorigen = $ipersonal->sedeorigen;
-        $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
-        $this->dependenciaorigen = $ipersonal->dependenciaorigen;
-        $this->coddespachoorigen = $ipersonal->coddespachoorigen;
-        $this->despachoorigen = $ipersonal->despachoorigen;
-
-        $this->codsededestino = $ipersonal->codsededestino;
-        $this->sededestino = $ipersonal->sededestino;
-        $this->coddependenciadestino = $ipersonal->coddependenciadestino;
-        $this->dependenciadestino = $ipersonal->dependenciadestino;
-        $this->coddespachodestino = $ipersonal->coddespachodestino;
-        $this->despachodestino = $ipersonal->despachodestino;
-
-        $this->celinstitucional = $ipersonal->celinstitucional;
-        $this->correoinstitucional = $ipersonal->correoinstitucional;
-
-        $this->numero_convocatoria = $ipersonal->numero_convocatoria;
         $this->tipo_documento = "RENUNCIA";
+        
         $this->fecha_inicio = $ipersonal->fecha_inicio;
     }
 
@@ -961,42 +888,11 @@ class PersonalComponent extends Component
                     'activo' => "0",
                 ]);
 
-                // Crear registro dependiente desde la relación
-                Personale::create([
-                    'persona_id' => $this->persona_id,
-                    'persona_dni' => $this->dni,
+                // FUNCIÓN PARA CARGAR DOCUMENTO
+                $rutaDocumento = $this->guardar_documento();
 
-                    'regimen' => $this->regimen,
-                    'tipo_regimen' => $this->tipo_regimen,
-                    'cargo' => $this->cargo,
-
-                    'codsedeorigen' => $this->codsedeorigen,
-                    'sedeorigen' => $this->sedeorigen,
-                    'coddependenciaorigen' => $this->coddependenciaorigen,
-                    'dependenciaorigen' => $this->dependenciaorigen,
-                    'coddespachoorigen' => $this->coddespachoorigen,
-                    'despachoorigen' => $this->despachoorigen,
-
-                    'codsededestino' => $this->codsededestino,
-                    'sededestino' => $this->sededestino,
-                    'coddependenciadestino' => $this->coddependenciadestino,
-                    'dependenciadestino' => $this->dependenciadestino,
-                    'coddespachodestino' => $this->coddespachodestino,
-                    'despachodestino' => $this->despachodestino,
-
-                    'celinstitucional' => $this->celinstitucional,
-                    'correoinstitucional' => $this->correoinstitucional,
-
-                    'numero_convocatoria' => strtoupper($this->numero_convocatoria),
-                    'tipo_documento' => "RENUNCIA",
-                    'fecha_inicio' => $this->fecha_inicio,
-                    'fecha_fin' => $this->fecha_fin,
-                    'ruta_documento' => $this->ruta_documento,
-
-                    'activo' => '1',
-                    'created_user' => $usuario,
-                    'updated_user' => $usuario,
-                ]);
+                // GUARDAR CAMPOS DE PERSONAL
+                $this->guardar_personal($rutaDocumento);
             });
 
             $this->resetExcept('searchPersonal');
@@ -1047,20 +943,17 @@ class PersonalComponent extends Component
         $this->seccionPersona = "disabled";
         $this->seccionPersonal = "";
 
-        // ===== DATOS PERSONA =====
-        $this->persona_id = $ipersona->id;
-        $this->dni = $ipersona->dni;
-        $this->nombres = $ipersona->nombres;
-        $this->appaterno = $ipersona->appaterno;
-        $this->apmaterno = $ipersona->apmaterno;
-        $this->celpersonal = $ipersona->celpersonal;
-        $this->correopersonal = $ipersona->correopersonal;
+        /// DATOS PERSONA
+        $this->ver_persona($ipersona);
 
-        // ===== DATOS PERSONAL =====
+        // DATOS PERSONAL
         $ipersonal = Personale::where([['activo',"1"],['persona_dni', $this->dni],])->firstOrFail();
 
-        $this->personal_id = $ipersonal->id;
+        $this->ver_personal($ipersonal);
+
         $this->tipo_documento = "CONTRATO";
+
+        $this->personal_id = $ipersonal->id;
     }
 
     public function guardar_contrato()
@@ -1070,8 +963,6 @@ class PersonalComponent extends Component
         try {
 
             DB::transaction(function () {
-                $usuario = auth()->user()->datos; // Mejor que usar propiedad pública
-
                 $ipersonal = Personale::where('id', $this->personal_id)->firstOrFail();
 
                 // Actualizar Personal
@@ -1079,42 +970,11 @@ class PersonalComponent extends Component
                     'activo' => "0",
                 ]);
 
-                // Crear registro dependiente desde la relación
-                Personale::create([
-                    'persona_id' => $this->persona_id,
-                    'persona_dni' => $this->dni,
+                // FUNCIÓN PARA CARGAR DOCUMENTO
+                $rutaDocumento = $this->guardar_documento();
 
-                    'regimen' => $this->regimen,
-                    'tipo_regimen' => $this->tipo_regimen,
-                    'cargo' => $this->cargo,
-
-                    'codsedeorigen' => $this->codsedeorigen,
-                    'sedeorigen' => $this->sedeorigen,
-                    'coddependenciaorigen' => $this->coddependenciaorigen,
-                    'dependenciaorigen' => $this->dependenciaorigen,
-                    'coddespachoorigen' => $this->coddespachoorigen,
-                    'despachoorigen' => $this->despachoorigen,
-
-                    'codsededestino' => $this->codsedeorigen,
-                    'sededestino' => $this->sedeorigen,
-                    'coddependenciadestino' => $this->coddependenciaorigen,
-                    'dependenciadestino' => $this->dependenciaorigen,
-                    'coddespachodestino' => $this->coddespachoorigen,
-                    'despachodestino' => $this->despachoorigen,
-
-                    'celinstitucional' => $this->celinstitucional,
-                    'correoinstitucional' => $this->correoinstitucional,
-
-                    'numero_convocatoria' => strtoupper($this->numero_convocatoria),
-                    'tipo_documento' => "CONTRATO",
-                    'fecha_inicio' => $this->fecha_inicio,
-                    'fecha_fin' => $this->fecha_fin,
-                    'ruta_documento' => $this->ruta_documento,
-
-                    'activo' => '1',
-                    'created_user' => $usuario,
-                    'updated_user' => $usuario,
-                ]);
+                // GUARDAR CAMPOS DE PERSONAL
+                $this->guardar_personal($rutaDocumento);
             });
 
             $this->resetExcept('searchPersonal');
@@ -1142,13 +1002,13 @@ class PersonalComponent extends Component
         }
     }
 
-    // Funciones de historial
+    // FUNCIONES DE HISTORIAL
     public function historial_documentos($persona_dni)
     {
         $this->dni = $persona_dni;
     }
 
-    // Trasnferir persona
+    // FUNCIONES DE TRANSFERIR PERSONAL
 
     public function nuevo_transferir_personal(Persona $ipersona)
     {
@@ -1232,12 +1092,12 @@ class PersonalComponent extends Component
         $this->reset();
     }
 
-    //Cargar PDF Historial
+    // FUNCIONES PARA HISTORIAL
     public function editar_pdf($personal_id)
     {
         $this->personal_id = $personal_id;
     }
-    public function cargar_pdf()
+    public function actualizar_pdf()
     {
         // ===== DATOS PERSONAL =====
         $ipersonal = Personale::where('id', $this->personal_id)->firstOrFail();
@@ -1290,7 +1150,7 @@ class PersonalComponent extends Component
 
             });
 
-            $this->reset('pdf'); // limpiar input
+            $this->reset('pdf');
 
             $this->dispatch(
                 'alerta-actualizado',
@@ -1312,14 +1172,87 @@ class PersonalComponent extends Component
         }
     }
 
-    public function editar_imagen(Persona $ipersona)
+    // FUNCIONES PERSONA - PERSONAL
+
+    private function ver_persona(Persona $ipersona)
     {
-        
+        $this->persona_id = $ipersona->id;
+
+        $this->dni = $ipersona->dni;
+        $this->nombres = $ipersona->nombres;
+        $this->appaterno = $ipersona->appaterno;
+        $this->apmaterno = $ipersona->apmaterno;
+        $this->celpersonal = $ipersona->celpersonal;
+        $this->correopersonal = $ipersona->correopersonal;
+
+        $this->fotoactual = $ipersona->foto;
     }
 
-    public function cargar_imagen()
-    {
+    private function ver_personal(Personale $ipersonal){
+        $this->personal_id = $ipersonal->id;
 
+        $this->regimen = $ipersonal->regimen;
+        $this->tipo_regimen = $ipersonal->tipo_regimen;
+        $this->cargo = $ipersonal->cargo;
+        $this->codsedeorigen = $ipersonal->codsedeorigen;
+        $this->sedeorigen = $ipersonal->sedeorigen;
+        $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
+        $this->dependenciaorigen = $ipersonal->dependenciaorigen;
+        $this->coddespachoorigen = $ipersonal->coddespachoorigen;
+        $this->despachoorigen = $ipersonal->despachoorigen;
+
+        $this->codsededestino = $ipersonal->codsededestino;
+        $this->sededestino = $ipersonal->sededestino;
+        $this->coddependenciadestino = $ipersonal->coddependenciadestino;
+        $this->dependenciadestino = $ipersonal->dependenciadestino;
+        $this->coddespachoorigen = $ipersonal->coddespachoorigen;
+        $this->despachodestino = $ipersonal->despachodestino;
+
+        $this->celinstitucional = $ipersonal->celinstitucional;
+        $this->correoinstitucional = $ipersonal->correoinstitucional;
+
+        $this->numero_convocatoria = $ipersonal->numero_convocatoria;
     }
 
+    private function guardar_personal($rutaDocumento)
+    {
+        $usuario = auth()->user()->datos; // Mejor que usar propiedad pública
+
+        Personale::create([
+                    'persona_id' => $this->persona_id,
+                    'persona_dni' => $this->dni,
+
+                    'regimen' => $this->regimen,
+                    'tipo_regimen' => $this->tipo_regimen,
+                    'cargo' => $this->cargo,
+                    'codsedeorigen' => $this->codsedeorigen,
+                    'sedeorigen' => $this->sedeorigen,
+                    'coddependenciaorigen' => $this->coddependenciaorigen,
+                    'dependenciaorigen' => $this->dependenciaorigen,
+                    'coddespachoorigen' => $this->coddespachoorigen,
+                    'despachoorigen' => $this->despachoorigen,
+
+                    'codsededestino' => $this->codsededestino,
+                    'sededestino' => $this->sededestino,
+                    'coddependenciadestino' => $this->coddependenciadestino,
+                    'dependenciadestino' => $this->dependenciadestino,
+                    'coddespachoorigen' => $this->coddespachoorigen,
+                    'despachodestino' => $this->despachodestino,
+
+                    'celinstitucional' => $this->celinstitucional,
+                    'correoinstitucional' => $this->correoinstitucional,
+
+                    'numero_convocatoria' => strtoupper($this->numero_convocatoria),
+                    'tipo_documento' => strtoupper($this->tipo_documento),
+                    'fecha_inicio' => $this->fecha_inicio,
+                    'fecha_fin' => $this->fecha_fin,
+
+                    // 🔥 Guardamos la ruta real del archivo
+                    'ruta_documento' => $rutaDocumento,
+
+                    'activo' => '1',
+                    'created_user' => $usuario,
+                    'updated_user' => $usuario,
+                ]);
+    }
 }

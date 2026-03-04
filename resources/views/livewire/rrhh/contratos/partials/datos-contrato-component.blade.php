@@ -34,7 +34,7 @@
             <button class="btn btn-outline-dark btn-xs" type="button" id="btnimprimircontrato">
                 <i class="fa-solid fa-print"></i> Imprimir
             </button>
-            <input type="file" class="form-control form-control-xs" id="filecontrato" aria-describedby="inputGroupFileAddon04" aria-label="Upload" wire:model="pdf">
+            <input type="file" class="form-control form-control-xs" id="filecontrato" aria-describedby="inputGroupFileAddon04" aria-label="Upload" accept="application/pdf" wire:model="pdf">
             {{-- <button class="btn btn-outline-warning btn-xs" type="button" id="btncargarcontrato">
                 <i class="fa-solid fa-arrow-up-from-bracket"></i> Cargar
             </button> --}}

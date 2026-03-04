@@ -85,7 +85,7 @@
                                         </button>
                                         @can('mpfn.rrhh.personal.create')
                                             <button type="button" class="btn btn-outline-primary btn-xs" data-bs-toggle="modal" data-bs-target="#transferencia-personal-component" wire:click="nuevo_transferir_personal({{ $item->id }})">
-                                                <i class="fa-solid fa-people-arrows"></i><br>Transferencia
+                                                <i class="fa-solid fa-people-arrows"></i><br>Ubicación
                                             </button>
                                         @endcan
                                         @can('mpfn.rrhh.personal.destroy')
@@ -97,15 +97,18 @@
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
                                         @can('mpfn.rrhh.personal.create')
-                                            <button type="button" class="btn btn-outline-primary btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo_adenda({{ $item->id }})">
+                                            @if ($item->tipo_documento === "CONTRATO")
+                                                <button type="button" class="btn btn-outline-primary btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo_adenda({{ $item->id }})">
                                                 <i class="fa-solid fa-file-shield"></i><br>Adenda
-                                            </button>
-                                            <button type="button" class="btn btn-outline-dark btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo_renuncia({{ $item->id }})">
-                                                <i class="fa-solid fa-file-shield"></i><br>Renuncia
-                                            </button>
-                                            <button type="button" class="btn btn-outline-info btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo_contrato({{ $item->id }})">
-                                                <i class="fa-solid fa-file-shield"></i><br>Contrato
-                                            </button>
+                                                </button>
+                                                <button type="button" class="btn btn-outline-dark btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo_renuncia({{ $item->id }})">
+                                                    <i class="fa-solid fa-file-shield"></i><br>Renuncia
+                                                </button>
+                                            @else
+                                                <button type="button" class="btn btn-outline-info btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo_contrato({{ $item->id }})">
+                                                    <i class="fa-solid fa-file-shield"></i><br>Contrato
+                                                </button>
+                                            @endif
                                         @endcan
                                         <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#historialModal" wire:click="historial_documentos('{{ $item->dni }}')">
                                             <i class="fa-solid fa-timeline"></i><br>Historial
@@ -404,14 +407,87 @@
                             </fieldset>
                         </div>
                     </div>
-                    {{-- <div class="row">
+                    <div class="row">
                         <div class="col">
                             <fieldset class="border p-3 rounded mb-3">
                                 <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS CONTRATO / ADENDA / RENUNCIA</legend>
-                                @include('livewire.rrhh.contratos.partials.datos-contrato-component')
+                                <table class="table table-striped table-hover table-sm table-xsmall">
+                                    <thead class="table-dark text-center align-middle">
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            {{-- <th scope="col">
+                                                <i class="fa-solid fa-user"></i> PERSONAL
+                                            </th> --}}
+                                            <th scope="col">DEPENDENCIA ORIGEN</th>
+                                            {{-- <th scope="col">UBICACIÓN FÍSICA</th> --}}
+                                            <th scope="col">REGIMEN</th>
+                                            <th scope="col">CARGO</th>
+                                            <th scope="col">N° DE CONVOCATORIA</th>
+                                            <th scope="col">DATOS</th>
+                                            {{-- <th scope="col"><i class="fa-solid fa-gears"></i></th> --}}
+                                        </tr>
+                                    </thead>
+                                    <tbody class="align-middle">
+                                        @forelse ($lista_historial as $item3)
+                                            <tr>
+                                                <th class="text-center">{{ $loop->iteration }}</th>
+                                                {{-- <th>
+                                                    {{ $item3->dni }}
+                                                    <br>{{ $item3->datos }}
+                                                </th> --}}
+                                                <td>
+                                                    <b>SEDE:</b> {{ $item3->sedeorigen }}
+                                                    <br>
+                                                    <b>DEPENDENCIA:</b> {{ $item3->dependenciaorigen }}
+                                                    <br>
+                                                    <b>DESPACHO:</b> {{ $item3->despachoorigen }}
+                                                </td>
+                                                {{-- <td>
+                                                    <b>SEDE:</b> {{ $item3->sededestino }}
+                                                    <br>
+                                                    <b>DEPENDENCIA:</b> {{ $item3->dependenciadestino }}
+                                                    <br>
+                                                    <b>DESPACHO:</b> {{ $item3->despachodestino }}
+                                                </td> --}}
+                                                <td>{{ $item3->regimen }}</td>
+                                                <td>{{ $item3->cargo }}</td>
+                                                <td>{{ $item3->numero_convocatoria }}</td>
+                                                <td class="@if($item3->tipo_documento == 'CONTRATO') text-success
+                                                            @elseif($item3->tipo_documento == 'RENUNCIA') text-danger
+                                                            @elseif($item3->tipo_documento == 'ADENDA') text-primary
+                                                            @endif">
+                                                    {{ $item3->tipo_documento }}
+                                                    <br>
+                                                    {{ \Carbon\Carbon::parse($item3->fecha_inicio)->format('d/m/Y') . '-' . \Carbon\Carbon::parse($item3->fecha_fin)->format('d/m/Y') }}
+                                                </td>
+                                                {{-- <td class="text-end">
+                                                    <div class="btn-group" role="group">
+                                                        <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#pdf-cargar-component" wire:click="editar_pdf({{ $item3->personal_id }})">
+                                                            <i class="fa-solid fa-upload"></i><br>Cargar
+                                                        </button>
+                                                        @if($item3->ruta_documento)
+                                                            <a type="button" class="btn btn-outline-info btn-xs" href="{{ asset('storage/'.$item3->ruta_documento) }}" target="_blank">
+                                                                <i class="fa-solid fa-file-signature"></i><br> Ver-Firmado
+                                                            </a>
+                                                        @endif
+                                                    </div>
+                                                </td> --}}
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="10" class="text-center">
+                                                    <div class="alert alert-danger" role="alert">
+                                                        ¡No se encontraron resultados!
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
                             </fieldset>
                         </div>
-                    </div> --}}
+                    </div>
+                    
                 </div>
                 <div class="modal-footer">
                     <a type="button" href="{{ route('pdf.rrhh.personal.reportePDF') }}" target="_blank" class="btn btn-naranja btn-sm">
