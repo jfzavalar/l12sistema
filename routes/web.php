@@ -112,6 +112,8 @@ Route::middleware('auth')->group(function () {
 //RRHH
 Route::middleware('auth')->group(function () {
     Route::resource('personal', PersonalController::class)->names('mpfn.rrhh.personal');
+    Route::get('pdf/rrhh/personal/reportePDF/', [PersonalController::class, 'reportePDF'])->name('pdf.rrhh.personal.reportePDF');
+    Route::get('pdf/rrhh/personal/reportePDFacta/{id}', [PersonalController::class, 'reportePDFacta'])->name('pdf.rrhh.personal.reportePDFacta');
 });
 
 

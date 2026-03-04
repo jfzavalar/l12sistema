@@ -20,7 +20,8 @@ class UserController extends Controller
 
     public function editRoles(User $user)
     {
-        $roles = Role::all(); // todos los roles disponibles
+        $roles = Role::orderBy('rol')->get();
+
         return view('procesos.admin.users.assign-roles', compact('user', 'roles'));
     }
 

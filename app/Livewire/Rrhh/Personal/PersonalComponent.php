@@ -12,6 +12,7 @@ use App\Models\Tbl_cargo;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -79,7 +80,7 @@ class PersonalComponent extends Component
             $fechanacimiento,
             $celpersonal,
             $correopersonal,
-            $foto,
+            $foto,$fotoactual,$inputFileKey,
             $activo,
             $created_user,
             $updated_user,
@@ -88,6 +89,7 @@ class PersonalComponent extends Component
 
     public $personal_id,
             $regimen,
+            $tipo_regimen,
             $cargo,
 
             $codsedeorigen,
@@ -115,12 +117,41 @@ class PersonalComponent extends Component
 
     public $pdf;
 
+    public function mount()
+    {
+        $this->inputFileKey = rand();
+    }
+
+    //FUNCIONES EN TIEMPO REAL
+    public function updatedRegimen($value)
+    {
+        if ($value === 'D.L.728') {
+            $this->tipo_regimen = 'INDETERMINADO';
+            $this->fecha_fin = '3000-12-31';
+        } elseif ($value === 'D.L.276') {
+            $this->tipo_regimen = 'INDETERMINADO';
+            $this->fecha_fin = '3000-12-31';
+        } else {
+            $this->tipo_regimen = 'TRANSITORIO';
+            $this->fecha_fin = null;
+        }
+    }
+    public function updatedTipoRegimen($value)
+    {
+        if ($value === 'INDETERMINADO') {
+            $this->fecha_fin = '3000-12-31';
+        } else {
+            $this->fecha_fin = null;
+        }
+    }
+
     public function render()
     {
         $lista_activos = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
             ->select('personas.*',
                 'personales.persona_id',
                 'personales.regimen',
+                'personales.tipo_regimen',
                 'personales.cargo',
                 'personales.sedeorigen',
                 'personales.dependenciaorigen',
@@ -143,6 +174,7 @@ class PersonalComponent extends Component
             ->select('personas.*',
                 'personales.persona_id',
                 'personales.regimen',
+                'personales.tipo_regimen',
                 'personales.cargo',
                 'personales.sedeorigen',
                 'personales.dependenciaorigen',
@@ -163,8 +195,10 @@ class PersonalComponent extends Component
 
         $lista_historial = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
             ->select('personas.*',
+                'personales.id as personal_id',
                 'personales.persona_id',
                 'personales.regimen',
+                'personales.tipo_regimen',
                 'personales.cargo',
                 'personales.sedeorigen',
                 'personales.dependenciaorigen',
@@ -248,6 +282,8 @@ class PersonalComponent extends Component
             'fecha_inicio' => 'required|date|before_or_equal:fecha_fin',
             'fecha_fin'    => 'required|date|after_or_equal:fecha_inicio',
 
+            'foto' => 'nullable|image|max:2048', // 2MB máximo
+
             'pdf' => 'nullable|file|mimes:pdf|max:5120', // 5MB
         ];
     }
@@ -265,6 +301,9 @@ class PersonalComponent extends Component
         'regimen.required' => 'Campo requerido',
         'cargo.required' => 'Campo requerido',
 
+        'fecha_inicio.required' => 'Campo requerido',
+        'fecha_fin.required' => 'Campo requerido',
+
         'fecha_inicio.before_or_equal' => 'La fecha de inicio no puede ser mayor a la fecha de fin.',
         'fecha_fin.after_or_equal' => 'La fecha de fin no puede ser menor a la fecha de inicio.',
 
@@ -278,7 +317,10 @@ class PersonalComponent extends Component
         $this->resetErrorBag();     // ← opcional extra seguridad
 
         // Restablecer todas las variables
-        // $this->reset();
+        $this->reset();
+        $this->foto = null;
+        $this->fotoactual = null;
+        $this->inputFileKey = rand();
 
         $this->funcionGuardarActualizar="guardar";
 
@@ -303,6 +345,20 @@ class PersonalComponent extends Component
 
                 $usuario = auth()->user()->datos; // Mejor que usar propiedad pública
 
+                // 📌 Subir FOTO si existe
+                $rutaFoto = null;
+
+                if ($this->foto) {
+
+                    $nombreFoto = time() . '_foto_' . $this->foto->getClientOriginalName();
+
+                    $rutaFoto = $this->foto->storeAs(
+                        'imagenes/rrhh/personal',
+                        $nombreFoto,
+                        'public'
+                    );
+                }
+
                 $persona = Persona::create([
                     'dni' => $this->dni,
                     'appaterno' => strtoupper($this->appaterno),
@@ -314,6 +370,7 @@ class PersonalComponent extends Component
                     'fechanacimiento' => $this->fechanacimiento,
                     'celpersonal' => $this->celpersonal,
                     'correopersonal' => $this->correopersonal,
+                    'foto' => $rutaFoto, // 🔥 GUARDAMOS FOTO
                     'activo' => '1',
                     'created_user' => $usuario,
                     'updated_user' => $usuario,
@@ -324,12 +381,24 @@ class PersonalComponent extends Component
                 $rutaDocumento = null;
 
                 if ($this->pdf) {
+                    // 1️⃣ Creamos nombre base
+                    $fileNameBase =
+                        $this->numero_convocatoria . '_' .
+                        $this->dni . '_' .
+                        $this->tipo_documento . '_' .
+                        $this->fecha_inicio . '_' .
+                        $this->fecha_fin;
 
-                    $nombreArchivo = time() . '_' . $this->pdf->getClientOriginalName();
+                    // 2️⃣ Limpiamos caracteres raros
+                    $fileName = Str::slug($fileNameBase) . '_' . Str::uuid();
 
+                    // 3️⃣ Agregamos extensión
+                    $fileName .= '.' . $this->pdf->getClientOriginalExtension();
+
+                    // 4️⃣ Guardamos
                     $rutaDocumento = $this->pdf->storeAs(
-                        'archivos/rrhh/personal',
-                        $nombreArchivo,
+                        'archivos/rrhh/personal/documentos',
+                        $fileName,
                         'public'
                     );
                 }
@@ -338,6 +407,7 @@ class PersonalComponent extends Component
                     'persona_id' => $persona->id,
                     'persona_dni' => $persona->dni,
                     'regimen' => $this->regimen,
+                    'tipo_regimen' => $this->tipo_regimen,
                     'cargo' => $this->cargo,
 
                     'codsedeorigen' => $this->codsedeorigen,
@@ -424,11 +494,14 @@ class PersonalComponent extends Component
         $this->celpersonal = $ipersona->celpersonal;
         $this->correopersonal = $ipersona->correopersonal;
 
+        $this->fotoactual = $ipersona->foto;
+
         // ===== DATOS PERSONAL =====
         $ipersonal = Personale::where('persona_dni', $this->dni)->where('activo','1')->firstOrFail();
 
         $this->personal_id = $ipersonal->id;
         $this->regimen = $ipersonal->regimen;
+        $this->tipo_regimen = $ipersonal->tipo_regimen;
         $this->cargo = $ipersonal->cargo;
         $this->codsedeorigen = $ipersonal->codsedeorigen;
         $this->sedeorigen = $ipersonal->sedeorigen;
@@ -471,6 +544,31 @@ class PersonalComponent extends Component
                 // ========================
                 $persona = Persona::findOrFail($this->persona_id);
 
+                // Mantener imagen actual
+                $rutaFoto = $persona->foto;
+
+                // 📌 Si se sube nueva imagen
+                if ($this->foto) {
+
+                    // Eliminar anterior si existe
+                    if ($persona->foto && 
+                        Storage::disk('public')->exists($persona->foto)) {
+
+                        Storage::disk('public')->delete($persona->foto);
+                    }
+
+                    // Nombre limpio
+                    $fileName = 'perfil_' . $this->dni . '.' . 
+                                $this->foto->getClientOriginalExtension();
+
+                    // Guardar imagen
+                    $rutaFoto = $this->foto->storeAs(
+                        'archivos/rrhh/personal/fotos',
+                        $fileName,
+                        'public'
+                    );
+                }
+
                 $persona->update([
                     'datos' => strtoupper($this->appaterno . ' ' . $this->apmaterno . ' ' . $this->nombres),
                     'appaterno' => strtoupper($this->appaterno),
@@ -481,6 +579,7 @@ class PersonalComponent extends Component
                     'fechanacimiento' => $this->fechanacimiento,
                     'celpersonal' => $this->celpersonal,
                     'correopersonal' => $this->correopersonal,
+                    'foto' => $rutaFoto, //AQUÏ
                     'updated_user' => $usuario,
                 ]);
 
@@ -524,6 +623,7 @@ class PersonalComponent extends Component
 
                 $personal->update([
                     'regimen' => $this->regimen,
+                    'tipo_regimen' => $this->tipo_regimen,
                     'cargo' => $this->cargo,
 
                     'codsedeorigen' => $this->codsedeorigen,
@@ -677,6 +777,7 @@ class PersonalComponent extends Component
         $this->personal_id = $ipersonal->id;
 
         $this->regimen = $ipersonal->regimen;
+        $this->tipo_regimen = $ipersonal->tipo_regimen;
         $this->cargo = $ipersonal->cargo;
         $this->codsedeorigen = $ipersonal->codsedeorigen;
         $this->sedeorigen = $ipersonal->sedeorigen;
@@ -725,6 +826,7 @@ class PersonalComponent extends Component
                     'persona_dni' => $this->dni,
 
                     'regimen' => $this->regimen,
+                    'tipo_regimen' => $this->tipo_regimen,
                     'cargo' => $this->cargo,
                     'codsedeorigen' => $this->codsedeorigen,
                     'sedeorigen' => $this->sedeorigen,
@@ -817,6 +919,7 @@ class PersonalComponent extends Component
 
         $this->personal_id = $ipersonal->id;
         $this->regimen = $ipersonal->regimen;
+        $this->tipo_regimen = $ipersonal->tipo_regimen;
         $this->cargo = $ipersonal->cargo;
 
         $this->codsedeorigen = $ipersonal->codsedeorigen;
@@ -864,6 +967,7 @@ class PersonalComponent extends Component
                     'persona_dni' => $this->dni,
 
                     'regimen' => $this->regimen,
+                    'tipo_regimen' => $this->tipo_regimen,
                     'cargo' => $this->cargo,
 
                     'codsedeorigen' => $this->codsedeorigen,
@@ -981,6 +1085,7 @@ class PersonalComponent extends Component
                     'persona_dni' => $this->dni,
 
                     'regimen' => $this->regimen,
+                    'tipo_regimen' => $this->tipo_regimen,
                     'cargo' => $this->cargo,
 
                     'codsedeorigen' => $this->codsedeorigen,
@@ -1128,8 +1233,15 @@ class PersonalComponent extends Component
     }
 
     //Cargar PDF Historial
-    public function cargar_pdf(Personale $ipersonal)
+    public function editar_pdf($personal_id)
     {
+        $this->personal_id = $personal_id;
+    }
+    public function cargar_pdf()
+    {
+        // ===== DATOS PERSONAL =====
+        $ipersonal = Personale::where('id', $this->personal_id)->firstOrFail();
+        
         // Validar solo el PDF
         $this->validate([
             'pdf' => 'required|file|mimes:pdf|max:5120'
@@ -1198,6 +1310,16 @@ class PersonalComponent extends Component
                 tipo: 'error'
             );
         }
+    }
+
+    public function editar_imagen(Persona $ipersona)
+    {
+        
+    }
+
+    public function cargar_imagen()
+    {
+
     }
 
 }

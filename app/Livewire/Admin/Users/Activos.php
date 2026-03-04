@@ -31,6 +31,9 @@ class Activos extends Component
     public $colorGuardarActualizar, $textoGuardarActualizar;
     public $colorAgregar;
 
+    //Variables bloquear de secciones
+    public $seccionFoto, $seccionPersona, $seccionPersonal;
+
     // Variable de función Guardar o Actualizar
     public $funcionGuardarActualizar;
 
@@ -52,7 +55,11 @@ class Activos extends Component
         $this->resetPage('personasPage');
     }
 
-    // Variables de tabla
+    // Variables usuario
+    Public $user_id,
+            $password;
+
+    // Variables de Persona personal
     public $persona_id,
             $dni,
             $datos,
@@ -83,7 +90,7 @@ class Activos extends Component
             $celinstitucional,
             $correopersonal,
             $correoinstitucional,
-            $foto,
+            $foto,$fotoactual,$inputFileKey,
             $activo,
             $created_user,
             $updated_user,
@@ -196,15 +203,47 @@ class Activos extends Component
     }
 
 
-    public function editar(User $iEditar){
-        // Datos
-        $this->id_usuario = $iEditar->id;
-        $this->dni = $iEditar->dni;
-        $this->datos = strtoupper($iEditar->datos);
+    public function editar(User $iusuario){
+        $this->resetValidation();
+        $this->resetErrorBag();
 
-        $this->activo = $iEditar->activo;
-        $this->created_user = $iEditar->created_user;
-        $this->updated_user = $iEditar->updated_user;
+        $this->funcionGuardarActualizar = "actualizar";
+
+        $this->mostrarBtnBuscarDni = "d-none";
+
+        $this->colorHeaderModal = "success-subtle";
+        $this->textoHeaderModal = "Editar";
+        $this->colorGuardarActualizar = "success";
+        $this->textoGuardarActualizar = "Actualizar";
+        $this->colorAgregar = "outline-success";
+
+        // ===== BLOQUEO DE SECCIONES =====
+        $this->seccionFoto = "";
+        $this->seccionPersona = "";
+        $this->seccionPersonal = "";
+
+        // Datos
+        $this->user_id = $iusuario->id;
+        $this->dni = $iusuario->dni;
+        $this->datos = strtoupper($iusuario->datos);
+
+        $ipersona = Persona::where([['activo',1],['dni',$this->dni],])->firstOrFail();
+
+        $this->appaterno = $ipersona->appaterno;
+        $this->apmaterno = $ipersona->apmaterno;
+        $this->nombres = $ipersona->nombres;
+        $this->celpersonal = $ipersona->celpersonal;
+        $this->correopersonal = $ipersona->correopersonal;
+
+        $ipersonal = Personale::where([['activo',1],['persona_dni',$this->dni],])->firstOrFail();
+
+        $this->sedeorigen = $ipersonal->sedeorigen;
+        $this->dependenciaorigen = $ipersonal->dependenciaorigen;
+        $this->despachoorigen = $ipersonal->despachoorigen;
+        $this->celinstitucional = $ipersonal->celinstitucional;
+        $this->correoinstitucional = $ipersonal->correoinstitucional;
+        $this->regimen = $ipersonal->regimen;
+        $this->cargo = $ipersonal->cargo;
     }
 
     public function actualizar(){
@@ -238,6 +277,11 @@ class Activos extends Component
         
     }
 
+    public function cerrar()
+    {
+        $this->reset();
+    }
+
     public function desactivar(User $iusuario){
         try {
             $iusuario->update([
@@ -254,12 +298,6 @@ class Activos extends Component
         }
     }
 
-    public function cerrar(){
-
-        // Reiniciamos todas la variable excepto:
-        $this->resetExcept('searcha');
-    }
-
     public function editar_imagen(){
 
     }
@@ -273,10 +311,10 @@ class Activos extends Component
 
     // PASSWORD
     // ---------------------------------------------------------
-    public function editar_password( $dni)
+    public function editar_password( User $iusuario)
     {
-        $this->dni = $dni;
-        $this->password = $dni;
+        $this->dni = $iusuario->dni;
+        $this->password = $iusuario->dni;
     }
 
     public function actualizar_password()
@@ -309,7 +347,24 @@ class Activos extends Component
     public function agregar_persona(Persona $ipersona){
         $this->persona_id = $ipersona->id;
         $this->dni = $ipersona->dni;
+        $this->appaterno = $ipersona->appaterno;
+        $this->apmaterno = $ipersona->apmaterno;
+        $this->nombres = $ipersona->nombres;
+
         $this->datos = $ipersona->datos;
+
+        $this->celpersonal = $ipersona->celpersonal;
+        $this->correopersonal = $ipersona->correopersonal;
+
+        $ipersonal = Personale::where([['activo',1],['persona_dni',$this->dni],])->firstOrFail();
+
+        $this->sedeorigen = $ipersonal->sedeorigen;
+        $this->dependenciaorigen = $ipersonal->dependenciaorigen;
+        $this->despachoorigen = $ipersonal->despachoorigen;
+        $this->celinstitucional = $ipersonal->celinstitucional;
+        $this->correoinstitucional = $ipersonal->correoinstitucional;
+        $this->regimen = $ipersonal->regimen;
+        $this->cargo = $ipersonal->cargo;
 
         $this->reset('searchpersonas');
     }

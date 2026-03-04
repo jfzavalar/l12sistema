@@ -45,10 +45,10 @@
                                 <td>{{ $item->getRoleNames()->implode(' | ') }}</td>
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar({{ $item->id }})">
+                                        <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->id }})">
                                             <i class="fa-solid fa-pen-to-square"></i><br>Editar
                                         </button>
-                                        <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#intranet-password-Modal" wire:click="editar_password({{ $item->dni }})">
+                                        <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#user-password-component" wire:click="editar_password({{ $item->id }})">
                                             <i class="fa-solid fa-pen-to-square"></i><br>Password
                                         </button>
                                         <a href="{{ route('procesos.admin.users.roles.edit', $item->id) }}" class="btn btn-outline-primary btn-xs">
@@ -90,7 +90,7 @@
                     <h1 class="modal-title fs-5" id="nuevoEditarModalLabel">
                         <i class="fa-solid fa-file"></i> {{ $textoHeaderModal }}
                     </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" wire:click="cerrar"></button>
                 </div>
                 <form wire:submit.prevent="{{ $funcionGuardarActualizar }}">
                         <div class="modal-body">
@@ -98,7 +98,7 @@
                             <div class="col-xl-2 col-sm-12">
                                 <fieldset class="border p-3 rounded text-center mb-3" disabled>
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">FOTO DE PERFIL</legend>
-                                    @include('livewire.rrhh.personal.partials.foto-component')
+                                    @include('livewire.rrhh.personal.partials.datos-foto-component')
                                 </fieldset>
                             </div>
                             
@@ -127,7 +127,7 @@
                         <button type="submit" class="btn btn-{{ $colorGuardarActualizar }} btn-sm">
                             <i class="fa-solid fa-floppy-disk"></i> {{ $textoGuardarActualizar }}
                         </button>
-                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" wire:click="cerrar">
                             <i class="fa-solid fa-rectangle-xmark"></i> Cerrar
                         </button>
                     </div>
@@ -274,11 +274,10 @@
 
     {{-- @include('livewire.partials.personal-modal-foto')
     
-    @include('livewire.partials.personal-modal-buscar')
-
-    @include('livewire.partials.usuario-modal-password') --}}
-
+    @include('livewire.partials.personal-modal-buscar')--}}
     @include('livewire.rrhh.personal.partials.buscar-personal-component')
+
+    @include('livewire.admin.partials.user-password-component') 
 
 </div>
 

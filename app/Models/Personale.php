@@ -9,6 +9,7 @@ class Personale extends Model
     protected $fillable = [
         'persona_id',
         'persona_dni',
+        'tipo_regimen',
         'regimen',
         'cargo',
         'codsedeorigen',

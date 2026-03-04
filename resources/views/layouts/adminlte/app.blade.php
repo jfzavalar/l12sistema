@@ -298,26 +298,30 @@
                                 </a>
 
                                 <ul class="nav nav-treeview">
-                                    <li class="nav-item">
-                                        <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.users.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.users.index') }}">
-                                            <i class="nav-icon fa-regular fa-circle"></i>
-                                            <p>Usuarios</p>
-                                        </a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.roles.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.roles.index') }}">
-                                            <i class="nav-icon fa-regular fa-circle"></i>
-                                            <p>Roles</p>
-                                        </a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.permissions.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.permissions.index') }}">
-                                            <i class="nav-icon fa-regular fa-circle"></i>
-                                            <p>Permisos</p>
-                                        </a>
-                                    </li>
+                                    @can('procesos.admin.users.index')
+                                        <li class="nav-item">
+                                            <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.users.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.users.index') }}">
+                                                <i class="nav-icon fa-regular fa-circle"></i>
+                                                <p>Usuarios</p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('procesos.admin.roles.index')
+                                        <li class="nav-item">
+                                            <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.roles.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.roles.index') }}">
+                                                <i class="nav-icon fa-regular fa-circle"></i>
+                                                <p>Roles</p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('procesos.admin.permissions.index')
+                                        <li class="nav-item">
+                                            <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.permissions.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.permissions.index') }}">
+                                                <i class="nav-icon fa-regular fa-circle"></i>
+                                                <p>Permisos</p>
+                                            </a>
+                                        </li>
+                                    @endcan
 
                                     <hr class="ms-5 border-light">
 

@@ -2,18 +2,32 @@
     <div class="card">
         <div class="card-body">
             <div class="table-responsive small">
-                <div class="input-group mb-2">
-                    <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar">
-                    @can('mpfn.rrhh.personal.create')
-                        <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
-                            <i class="fa-solid fa-file"></i> Nuevo
-                        </button>
-                    @endcan
-                    @can('mpfn.rrhh.personal.destroy')
-                        <button type="button" id="btnnuevo" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#inactivosModal">
-                            <i class="fa-solid fa-ban"></i> Inactivos
-                        </button>
-                    @endcan
+                <div class="row">
+                    {{-- <div class="col-xl-2">
+                        <div class="input-group mb-2">
+                            <button type="button" id="btnreporte" class="btn btn-outline-naranja btn-sm">
+                                <i class="fa-regular fa-file-pdf"></i> PDF
+                            </button>
+                            <button type="button" id="btnreporteexcel" class="btn btn-outline-success btn-sm">
+                                <i class="fa-regular fa-file-excel"></i> Excel
+                            </button>
+                        </div>
+                    </div> --}}
+                    <div class="col-xl-12">
+                        <div class="input-group mb-2">
+                            <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar">
+                            @can('mpfn.rrhh.personal.create')
+                                <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
+                                    <i class="fa-solid fa-file"></i> Nuevo
+                                </button>
+                            @endcan
+                            @can('mpfn.rrhh.personal.destroy')
+                                <button type="button" id="btnnuevo" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#inactivosModal">
+                                    <i class="fa-solid fa-ban"></i> Inactivos
+                                </button>
+                            @endcan
+                        </div>
+                    </div>
                 </div>
                 <table class="table table-striped table-hover table-sm table-xsmall">
                     <thead class="table-primary text-center align-middle">
@@ -65,7 +79,7 @@
                                             <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->id }})">
                                                 <i class="fa-solid fa-pen-to-square"></i><br>Editar
                                             </button>
-                                        @endcan                                      
+                                        @endcan
                                         <button type="button" class="btn btn-outline-secondary btn-xs" data-bs-toggle="modal" data-bs-target="#verDetallesModal" wire:click="editar({{ $item->id }})">
                                             <i class="fa-solid fa-eye"></i><br>Ver
                                         </button>
@@ -136,7 +150,7 @@
                             <div class="col-xl-2 col-sm-12">
                                 <fieldset class="border p-3 rounded text-center mb-3" {{ $seccionFoto }}>
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">FOTO DE PERFIL</legend>
-                                    @include('livewire.rrhh.personal.partials.foto-component')
+                                    @include('livewire.rrhh.personal.partials.datos-foto-component')
                                 </fieldset>
                             </div>
 
@@ -190,7 +204,7 @@
                     <h1 class="modal-title fs-5" id="inactivosModalLabel">
                         <i class="fa-solid fa-trash"></i> INACTIVOS
                     </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" wire:click="cerrar"></button>
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive small">
@@ -249,7 +263,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" wire:click="cerrar">
                         <i class="fa-solid fa-rectangle-xmark"></i> Cerrar
                     </button>
                 </div>
@@ -271,6 +285,9 @@
                     <div class="table-responsive small">
                         <div class="input-group mb-3">
                             <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="searchhistorial" placeholder="Buscar por número de convocatoria">
+                            <a type="button" href="{{ route('pdf.rrhh.personal.reportePDF') }}" target="_blank" class="btn btn-outline-naranja btn-sm">
+                                <i class="fa-regular fa-file-pdf"></i> PDF
+                            </a>
                         </div>
                         <table class="table table-striped table-hover table-sm table-xsmall">
                             <thead class="table-dark text-center align-middle">
@@ -323,7 +340,7 @@
                                         </td>
                                         <td class="text-end">
                                             <div class="btn-group" role="group">
-                                                <button type="button" class="btn btn-outline-warning btn-xs">
+                                                <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#pdf-cargar-component" wire:click="editar_pdf({{ $item3->personal_id }})">
                                                     <i class="fa-solid fa-upload"></i><br>Cargar
                                                 </button>
                                                 @if($item3->ruta_documento)
@@ -369,7 +386,7 @@
                         <div class="col-xl-3 col-sm-12">
                             <fieldset class="border p-3 rounded text-center mb-3" disabled>
                                 <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">FOTO DE PERFIL</legend>
-                                @include('livewire.rrhh.personal.partials.foto-component')
+                                @include('livewire.rrhh.personal.partials.datos-foto-component')
                             </fieldset>
                         </div>
                         <div class="col-xl-9 col-sm-12">
@@ -397,10 +414,43 @@
                     </div> --}}
                 </div>
                 <div class="modal-footer">
+                    <a type="button" href="{{ route('pdf.rrhh.personal.reportePDF') }}" target="_blank" class="btn btn-naranja btn-sm">
+                        <i class="fa-regular fa-file-pdf"></i> PDF
+                    </a>
                     <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
                         <i class="fa-solid fa-rectangle-xmark"></i> Cerrar
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- ModalTransferencia de Personal - Ubicación Física --}}
+    <div wire:ignore.self class="modal fade" id="transferencia-personal-component" tabindex="-1" aria-labelledby="transferir-Personal-componentLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <form wire:submit.prevent="{{ $funcionGuardarActualizar }}">
+                    <div class="modal-header bg-{{ $colorHeaderModal }}">
+                        <h1 class="modal-title fs-5" id="transferir-Personal-componentLabel">
+                            <i class="fa-brands fa-searchengin"></i> {{ $textoHeaderModal }}
+                        </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" wire:click = "cerrar_transferir_personal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <fieldset class="border p-3 rounded mb-3" {{ $seccionPersona }}>
+                            <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS DE UBICACIÓN FÍSICA</legend>
+                            @include('livewire.rrhh.personal.partials.sede-dependencia-despacho-component')
+                        </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary btn-sm" data-bs-dismiss="modal">
+                            <i class="fa-solid fa-floppy-disk"></i> Guardar
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" wire:click = "cerrar_transferir_personal">
+                            <i class="fa-solid fa-door-closed"></i> Cerrar
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -411,10 +461,10 @@
     @include('livewire.rrhh.personal.partials.buscar-despachos-component')
     @include('livewire.rrhh.personal.partials.buscar-cargos-component')
 
-    @include('livewire.rrhh.personal.partials.transferencia-personal-component')
-
     @include('livewire.rrhh.personal.partials.2buscar-sedes-component')
     @include('livewire.rrhh.personal.partials.2buscar-dependencias-component')
     @include('livewire.rrhh.personal.partials.2buscar-despachos-component')
+
+    @include('livewire.rrhh.contratos.partials.pdf-cargar-component')
 
 </div>

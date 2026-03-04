@@ -48,13 +48,13 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-xl-6 col-lg-6 col-sm-12">
+    <div class="col-xl-3 col-lg-6 col-sm-12">
         <label for="txtdespacho" class="fw-bold fs-6">Regimen</label>
         <div class="d-flex gap-2">
-            <input type="radio" id="regimen276" name="regimen" class="btn-check" value="DL.276" autocomplete="off" wire:model.live="regimen">
+            <input type="radio" id="regimen276" name="regimen" class="btn-check" value="D.L.276" autocomplete="off" wire:model.live="regimen">
             <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="regimen276">D.L.276</label>
 
-            <input type="radio" id="regimen728" name="regimen" class="btn-check" value="DL.728" autocomplete="off" wire:model.live="regimen">
+            <input type="radio" id="regimen728" name="regimen" class="btn-check" value="D.L.728" autocomplete="off" wire:model.live="regimen">
             <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="regimen728">D.L.728</label>
 
             <input type="radio" id="regimenCAS" name="regimen" class="btn-check" value="CAS" autocomplete="off" wire:model.live="regimen">
@@ -63,6 +63,15 @@
         @error('regimen')
             <small class="text-danger">{{ $message }}</small>
         @enderror
+    </div>
+    <div class="col-xl-3 col-lg-6 col-sm-12">
+        <label for="txtdespacho" class="fw-bold fs-6">Tipo</label>
+        <select name="cmbtiporegimen" id="tiporegimen" class="form-select form-select-xs" wire:model.live="tipo_regimen">
+            <option value="">Seleccionar...</option>
+            <option value="INDETERMINADO">INDETERMINADO</option>
+            <option value="TRANSITORIO">TRANSITORIO</option>
+            <option value="SUPLENCIA">SUPLENCIA</option>
+        </select>
     </div>
     <div class="col-xl-6 col-lg-6 col-sm-12">
         <label for="text_cargo" class="fw-bold fs-6">Cargo</label>

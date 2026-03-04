@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Rrhh;
 
 use App\Http\Controllers\Controller;
+use App\Models\Persona;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class PersonalController extends Controller
@@ -61,5 +63,29 @@ class PersonalController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function reportePDF()
+    {
+        $ipersonal = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
+            ->select('personas.*',
+                'personales.persona_id',
+                'personales.regimen',
+                'personales.tipo_regimen',
+                'personales.cargo',
+                'personales.sedeorigen',
+                'personales.dependenciaorigen',
+                'personales.despachoorigen',
+                'personales.sededestino',
+                'personales.dependenciadestino',
+                'personales.despachodestino')
+            ->where([['personas.activo',1],['personales.activo', 1]])
+            ->orderBy('personas.datos')
+            ->get();
+
+        $pdf = Pdf::loadView('pdf.rrhh.personal.reportePDF', compact('ipersonal'));
+
+        //Mostrar PDF
+        return $pdf->stream('reportePDF'.'.pdf');
     }
 }

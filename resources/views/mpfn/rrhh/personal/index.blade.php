@@ -9,7 +9,12 @@
             <i class="fa-solid fa-users-between-lines"></i> Personal
         </h1>
         <div class="btn-group">
-            {{-- @include('layouts.bootstrap5.btnlogin') --}}
+            <a type="button" href="{{ route('pdf.rrhh.personal.reportePDF') }}" target="_blank" class="btn btn-outline-naranja btn-sm">
+                <i class="fa-regular fa-file-pdf"></i> PDF
+            </a>
+            <button type="button" id="btnreporteexcel" class="btn btn-outline-success btn-sm">
+                <i class="fa-regular fa-file-excel"></i> Excel
+            </button>
         </div>
     </div>
 
