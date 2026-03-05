@@ -242,9 +242,9 @@
                                     </form>
                                 </li>
                                 <li>
-                                    <button class="dropdown-item">
+                                    <a class="dropdown-item" href="{{ route('procesos.intranet.index') }}">
                                         <i class="fa-solid fa-gears"></i> Configuración
-                                    </button>
+                                    </a>
                                 </li>
                             </ul>
                         </li>
