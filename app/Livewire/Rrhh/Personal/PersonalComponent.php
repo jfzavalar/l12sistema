@@ -66,6 +66,8 @@ class PersonalComponent extends Component
     public function updatingSearchcargos(){
         $this->resetPage('cargosPage');
     }
+    public $filtrotipodocumento;
+    public $filtroregimen;
 
     public $user_login;
 
@@ -167,6 +169,18 @@ class PersonalComponent extends Component
                     ->orWhere('personas.datos', 'like', '%' . $this->search . '%');
                 });
             })
+            ->when($this->filtrotipodocumento, function ($query) {
+                $query->where(function ($q) {
+                    $q->where('personales.tipo_documento', 'like', '%' . $this->filtrotipodocumento . '%');
+                    // ->orWhere('', 'like', '%' . $this->search . '%');
+                });
+            })
+            ->when($this->filtroregimen, function ($query) {
+                $query->where(function ($q) {
+                    $q->where('personales.regimen', 'like', '%' . $this->filtroregimen . '%');
+                    // ->orWhere('', 'like', '%' . $this->search . '%');
+                });
+            })
             ->orderBy('personales.id','desc')
             ->distinct()
             ->paginate(10, ['personas.*'], 'personalesPage');
@@ -204,6 +218,9 @@ class PersonalComponent extends Component
                 'personales.sedeorigen',
                 'personales.dependenciaorigen',
                 'personales.despachoorigen',
+                'personales.sededestino',
+                'personales.dependenciadestino',
+                'personales.despachodestino',
                 'personales.numero_convocatoria',
                 'personales.tipo_documento',
                 'personales.fecha_inicio',
@@ -751,6 +768,8 @@ class PersonalComponent extends Component
 
 
     // FUNCIONES PARA NUEVOS DOCUMENTOS
+
+
     public function nuevo_adenda(Persona $ipersona)
     {
         $this->resetValidation();   // ← limpia los errores
@@ -764,7 +783,7 @@ class PersonalComponent extends Component
         $this->mostrarBtnBuscarDni = "d-none";
 
         $this->colorHeaderModal = "primary-subtle";
-        $this->textoHeaderModal = "Adenda";
+        $this->textoHeaderModal = "ADENDA";
         $this->colorGuardarActualizar = "primary";
         $this->textoGuardarActualizar = "Guardar adenda";
         $this->colorAgregar = "outline-primary";
@@ -848,7 +867,7 @@ class PersonalComponent extends Component
         $this->mostrarBtnBuscarDni = "d-none";
 
         $this->colorHeaderModal = "dark-subtle";
-        $this->textoHeaderModal = "Renuncia";
+        $this->textoHeaderModal = "RENUNCIA";
         $this->colorGuardarActualizar = "dark";
         $this->textoGuardarActualizar = "Guardar renuncia";
         $this->colorAgregar = "outline-dark";
@@ -920,6 +939,91 @@ class PersonalComponent extends Component
         }
     }
 
+    public function nuevo_licencia(Persona $ipersona)
+    {
+        $this->resetValidation();   // ← limpia los errores
+        $this->resetErrorBag();     // ← opcional extra seguridad
+
+        // Restablecer todas las variables
+        // $this->reset();
+
+        $this->funcionGuardarActualizar="guardar_licencia";
+
+        $this->mostrarBtnBuscarDni = "d-none";
+
+        $this->colorHeaderModal = "danger-subtle";
+        $this->textoHeaderModal = "LICENCIA";
+        $this->colorGuardarActualizar = "danger";
+        $this->textoGuardarActualizar = "Guardar licencia";
+        $this->colorAgregar = "outline-danger";
+
+        // ===== BLOQUEO DE SECCIONES =====
+        $this->seccionFoto = "disabled";
+        $this->seccionPersona = "disabled";
+        $this->seccionPersonal = "disabled";
+
+        // DATOS PERSONA
+        $this->ver_persona($ipersona);
+
+        // DATOS PERSONAL
+        $ipersonal = Personale::where([['activo',"1"],['persona_dni', $this->dni],])->firstOrFail();
+
+        $this->ver_personal($ipersonal);
+
+        $this->tipo_documento = "LICENCIA";
+        
+        $this->fecha_inicio = $ipersonal->fecha_inicio;
+    }
+
+    public function guardar_licencia()
+    {
+        $this->validate();
+
+        try {
+
+            DB::transaction(function () {
+                $usuario = auth()->user()->datos; // Mejor que usar propiedad pública
+
+                $ipersonal = Personale::where('id', $this->personal_id)->firstOrFail();
+
+                // Actualizar Personal
+                $ipersonal->update([
+                    'fecha_fin' => $this->fecha_fin,
+                    'activo' => "0",
+                ]);
+
+                // FUNCIÓN PARA CARGAR DOCUMENTO
+                $rutaDocumento = $this->guardar_documento();
+
+                // GUARDAR CAMPOS DE PERSONAL
+                $this->guardar_personal($rutaDocumento);
+            });
+
+            $this->resetExcept('searchPersonal');
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Datos actualizados',
+                mensaje: 'Los datos se han actualizado correctamente.',
+                tipo: 'success'
+            );
+
+            // Evento para cerrar el modal
+            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
+
+        } catch (\Throwable $e) {
+
+            report($e);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'Ocurrió un error al guardar.',
+                tipo: 'error'
+            );
+        }
+    }
+
     public function nuevo_contrato(Persona $ipersona)
     {
         $this->resetValidation();   // ← limpia los errores
@@ -933,7 +1037,7 @@ class PersonalComponent extends Component
         $this->mostrarBtnBuscarDni = "d-none";
 
         $this->colorHeaderModal = "info-subtle";
-        $this->textoHeaderModal = "Contrato";
+        $this->textoHeaderModal = "CONTRATO";
         $this->colorGuardarActualizar = "info";
         $this->textoGuardarActualizar = "Guardar contrato";
         $this->colorAgregar = "outline-info";
@@ -957,6 +1061,88 @@ class PersonalComponent extends Component
     }
 
     public function guardar_contrato()
+    {
+        $this->validate();
+
+        try {
+
+            DB::transaction(function () {
+                $ipersonal = Personale::where('id', $this->personal_id)->firstOrFail();
+
+                // Actualizar Personal
+                $ipersonal->update([
+                    'activo' => "0",
+                ]);
+
+                // FUNCIÓN PARA CARGAR DOCUMENTO
+                $rutaDocumento = $this->guardar_documento();
+
+                // GUARDAR CAMPOS DE PERSONAL
+                $this->guardar_personal($rutaDocumento);
+            });
+
+            $this->resetExcept('searchPersonal');
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Datos actualizados',
+                mensaje: 'Los datos se han actualizado correctamente.',
+                tipo: 'success'
+            );
+
+            // Evento para cerrar el modal
+            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
+
+        } catch (\Throwable $e) {
+
+            report($e);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'Ocurrió un error al guardar.',
+                tipo: 'error'
+            );
+        }
+    }
+
+    public function nuevo_incorporacion(Persona $ipersona)
+    {
+        $this->resetValidation();   // ← limpia los errores
+        $this->resetErrorBag();     // ← opcional extra seguridad
+
+        // Restablecer todas las variables
+        // $this->reset();
+
+        $this->funcionGuardarActualizar="guardar_incorporacion";
+
+        $this->mostrarBtnBuscarDni = "d-none";
+
+        $this->colorHeaderModal = "danger-subtle";
+        $this->textoHeaderModal = "INCORPORACIÓN";
+        $this->colorGuardarActualizar = "danger";
+        $this->textoGuardarActualizar = "Guardar incorporación";
+        $this->colorAgregar = "outline-danger";
+
+        // ===== BLOQUEO DE SECCIONES =====
+        $this->seccionFoto = "disabled";
+        $this->seccionPersona = "disabled";
+        $this->seccionPersonal = "disabled";
+
+        /// DATOS PERSONA
+        $this->ver_persona($ipersona);
+
+        // DATOS PERSONAL
+        $ipersonal = Personale::where([['activo',"1"],['persona_dni', $this->dni],])->firstOrFail();
+
+        $this->ver_personal($ipersonal);
+
+        $this->tipo_documento = "INCORPORACION";
+
+        $this->personal_id = $ipersonal->id;
+    }
+
+    public function guardar_incorporacion()
     {
         $this->validate();
 
@@ -1205,7 +1391,7 @@ class PersonalComponent extends Component
         $this->sededestino = $ipersonal->sededestino;
         $this->coddependenciadestino = $ipersonal->coddependenciadestino;
         $this->dependenciadestino = $ipersonal->dependenciadestino;
-        $this->coddespachoorigen = $ipersonal->coddespachoorigen;
+        $this->coddespachoorigen = $ipersonal->coddespachodestino;
         $this->despachodestino = $ipersonal->despachodestino;
 
         $this->celinstitucional = $ipersonal->celinstitucional;
@@ -1219,40 +1405,40 @@ class PersonalComponent extends Component
         $usuario = auth()->user()->datos; // Mejor que usar propiedad pública
 
         Personale::create([
-                    'persona_id' => $this->persona_id,
-                    'persona_dni' => $this->dni,
+            'persona_id' => $this->persona_id,
+            'persona_dni' => $this->dni,
 
-                    'regimen' => $this->regimen,
-                    'tipo_regimen' => $this->tipo_regimen,
-                    'cargo' => $this->cargo,
-                    'codsedeorigen' => $this->codsedeorigen,
-                    'sedeorigen' => $this->sedeorigen,
-                    'coddependenciaorigen' => $this->coddependenciaorigen,
-                    'dependenciaorigen' => $this->dependenciaorigen,
-                    'coddespachoorigen' => $this->coddespachoorigen,
-                    'despachoorigen' => $this->despachoorigen,
+            'regimen' => $this->regimen,
+            'tipo_regimen' => $this->tipo_regimen,
+            'cargo' => $this->cargo,
+            'codsedeorigen' => $this->codsedeorigen,
+            'sedeorigen' => $this->sedeorigen,
+            'coddependenciaorigen' => $this->coddependenciaorigen,
+            'dependenciaorigen' => $this->dependenciaorigen,
+            'coddespachoorigen' => $this->coddespachoorigen,
+            'despachoorigen' => $this->despachoorigen,
 
-                    'codsededestino' => $this->codsededestino,
-                    'sededestino' => $this->sededestino,
-                    'coddependenciadestino' => $this->coddependenciadestino,
-                    'dependenciadestino' => $this->dependenciadestino,
-                    'coddespachoorigen' => $this->coddespachoorigen,
-                    'despachodestino' => $this->despachodestino,
+            'codsededestino' => $this->codsededestino,
+            'sededestino' => $this->sededestino,
+            'coddependenciadestino' => $this->coddependenciadestino,
+            'dependenciadestino' => $this->dependenciadestino,
+            'coddespachoorigen' => $this->coddespachoorigen,
+            'despachodestino' => $this->despachodestino,
 
-                    'celinstitucional' => $this->celinstitucional,
-                    'correoinstitucional' => $this->correoinstitucional,
+            'celinstitucional' => $this->celinstitucional,
+            'correoinstitucional' => $this->correoinstitucional,
 
-                    'numero_convocatoria' => strtoupper($this->numero_convocatoria),
-                    'tipo_documento' => strtoupper($this->tipo_documento),
-                    'fecha_inicio' => $this->fecha_inicio,
-                    'fecha_fin' => $this->fecha_fin,
+            'numero_convocatoria' => strtoupper($this->numero_convocatoria),
+            'tipo_documento' => strtoupper($this->tipo_documento),
+            'fecha_inicio' => $this->fecha_inicio,
+            'fecha_fin' => $this->fecha_fin,
 
-                    // 🔥 Guardamos la ruta real del archivo
-                    'ruta_documento' => $rutaDocumento,
+            // 🔥 Guardamos la ruta real del archivo
+            'ruta_documento' => $rutaDocumento,
 
-                    'activo' => '1',
-                    'created_user' => $usuario,
-                    'updated_user' => $usuario,
-                ]);
+            'activo' => '1',
+            'created_user' => $usuario,
+            'updated_user' => $usuario,
+        ]);
     }
 }

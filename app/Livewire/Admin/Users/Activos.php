@@ -159,6 +159,9 @@ class Activos extends Component
 
         // Restablecer todas las variables
         // $this->reset();
+        $this->foto = null;
+        $this->fotoactual = null;
+        $this->inputFileKey = rand();
 
         $this->funcionGuardarActualizar="guardar";
 
@@ -228,6 +231,8 @@ class Activos extends Component
         $this->datos = strtoupper($iusuario->datos);
 
         $ipersona = Persona::where([['activo',1],['dni',$this->dni],])->firstOrFail();
+
+        $this->fotoactual = $ipersona->foto;
 
         $this->appaterno = $ipersona->appaterno;
         $this->apmaterno = $ipersona->apmaterno;

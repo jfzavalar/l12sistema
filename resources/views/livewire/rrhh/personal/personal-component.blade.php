@@ -3,19 +3,35 @@
         <div class="card-body">
             <div class="table-responsive small">
                 <div class="row">
-                    {{-- <div class="col-xl-2">
-                        <div class="input-group mb-2">
-                            <button type="button" id="btnreporte" class="btn btn-outline-naranja btn-sm">
-                                <i class="fa-regular fa-file-pdf"></i> PDF
-                            </button>
-                            <button type="button" id="btnreporteexcel" class="btn btn-outline-success btn-sm">
-                                <i class="fa-regular fa-file-excel"></i> Excel
-                            </button>
+                    <div class="col-xl-3">
+                        <div class="input-group input-group-sm mb-2">
+                            <span class="input-group-text bg-primary text-white" id="basic-addon1">CONDICIÓN:</span>
+                            <select name="cmdfiltrotipodocumento" id="cmbfiltrotipodocumento" class="form-select form-select-sm" wire:model.live="filtrotipodocumento">
+                                <option value="">TOTAL </option>
+                                <option value="ADENDA">ADENDA </option>
+                                <option value="CONTRATO">CONTRATO </option>
+                                <option value="INCORPORACION">INCORPORACION </option>
+                                <option value="LICENCIA">LICENCIA </option>
+                                <option value="RENUNCIA">RENUNCIA </option>
+                            </select>
+                            <span class="input-group-text" id="basic-addon2">{{ $lista_activos->total() }}</span>
                         </div>
-                    </div> --}}
-                    <div class="col-xl-12">
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="input-group input-group-sm mb-2">
+                            <span class="input-group-text bg-success text-white" id="basic-addon1">RÉGIMEN:</span>
+                            <select name="cmdfiltrotipodocumento" id="cmbfiltrotipodocumento" class="form-select form-select-sm" wire:model.live="filtroregimen">
+                                <option value="">TOTAL </option>
+                                <option value="CAS">CAS </option>
+                                <option value="D.L.276">D.L.276</option>
+                                <option value="D.L.728">D.L.728 </option>
+                            </select>
+                            <span class="input-group-text" id="basic-addon2">{{ $lista_activos->total() }}</span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
                         <div class="input-group mb-2">
-                            <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar">
+                            <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar por DNI o Apellidos y Nombres">
                             @can('mpfn.rrhh.personal.create')
                                 <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
                                     <i class="fa-solid fa-file"></i> Nuevo
@@ -39,7 +55,7 @@
                             <th scope="col" class="table-success">DEPENDENCIA ORIGEN</th>
                             <th scope="col" class="table-danger">UBICACIÓN FÍSICA</th>
                             <th scope="col" class="table-success">REGIMEN - CARGO</th>
-                            {{-- <th scope="col" class="table-success">CARGO</th> --}}
+                            <th scope="col">CONDICIÓN</th>
                             <th scope="col" colspan="2"><i class="fa-solid fa-gears"></i></th>
                             {{-- <th scope="col"><i class="fa-solid fa-gears"></i></th> --}}
                         </tr>
@@ -47,32 +63,38 @@
                     <tbody class="align-middle">
                         @forelse ($lista_activos as $item)
                             <tr>
-                                <th class="text-center">{{ $loop->iteration }}</th>
-                                <th>
+                                <th @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>{{ $loop->iteration }}</th>
+                                <th @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
                                     DNI: {{ $item->dni }}
                                     <br>
                                     {{ $item->datos }}
                                 </th>
-                                <td>
+                                <td @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
                                     <b>SEDE:</b> {{ $item->sedeorigen }}
                                     <br>
                                     <b>DEPENDENCIA:</b> {{ $item->dependenciaorigen }}
                                     <br>
                                     <b>DESPACHO:</b> {{ $item->despachoorigen }}
                                 </td>
-                                <td>
+                                <td @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
                                     <b>SEDE:</b> {{ $item->sededestino }}
                                     <br>
                                     <b>DEPENDENCIA:</b> {{ $item->dependenciadestino }}
                                     <br>
                                     <b>DESPACHO:</b> {{ $item->despachodestino }}
                                 </td>
-                                <td>
+                                <td @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
                                     <b>REGIMEN:</b> {{ $item->regimen }}
                                     <br>
                                     <b>CARGO:</b> {{ $item->cargo }}
                                 </td>
-                                {{-- <td>{{ $item->cargo }}</td> --}}
+                                <td class="text-center">
+                                    <span class="badge @if($item->tipo_documento == 'CONTRATO') text-bg-success
+                                                    @elseif($item->tipo_documento == 'LICENCIA') text-bg-danger
+                                                    @elseif($item->tipo_documento == 'RENUNCIA') text-bg-dark
+                                                    @elseif($item->tipo_documento == 'ADENDA') text-bg-primary
+                                                    @endif">{{ $item->tipo_documento }}</span>
+                                </td>
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
                                         @can('mpfn.rrhh.personal.edit')
@@ -97,18 +119,80 @@
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
                                         @can('mpfn.rrhh.personal.create')
-                                            @if ($item->tipo_documento === "CONTRATO")
-                                                <button type="button" class="btn btn-outline-primary btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo_adenda({{ $item->id }})">
-                                                <i class="fa-solid fa-file-shield"></i><br>Adenda
+                                            <div class="dropdown">
+                                                <button class="btn btn-outline-dark btn-xs dropdown-toggle" 
+                                                        type="button" 
+                                                        data-bs-toggle="dropdown" 
+                                                        aria-expanded="false">
+                                                    <i class="fa-solid fa-list"></i></i><br>Trámite
                                                 </button>
-                                                <button type="button" class="btn btn-outline-dark btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo_renuncia({{ $item->id }})">
-                                                    <i class="fa-solid fa-file-shield"></i><br>Renuncia
-                                                </button>
-                                            @else
-                                                <button type="button" class="btn btn-outline-info btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo_contrato({{ $item->id }})">
-                                                    <i class="fa-solid fa-file-shield"></i><br>Contrato
-                                                </button>
-                                            @endif
+
+                                                <ul class="dropdown-menu">
+
+                                                    @if ($item->tipo_documento === "CONTRATO")
+
+                                                        <li>
+                                                            <button class="dropdown-item text-dark"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#nuevoEditarModal"
+                                                                    wire:click="nuevo_adenda({{ $item->id }})">
+                                                                <i class="fa-solid fa-circle-check"></i> Adenda
+                                                            </button>
+                                                        </li>
+
+                                                        <li>
+                                                            <button class="dropdown-item text-dark"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#nuevoEditarModal"
+                                                                    wire:click="nuevo_licencia({{ $item->id }})">
+                                                                <i class="fa-solid fa-circle-check"></i> Licencia
+                                                            </button>
+                                                        </li>
+
+                                                        <li>
+                                                            <button class="dropdown-item text-dark"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#nuevoEditarModal"
+                                                                    wire:click="nuevo_renuncia({{ $item->id }})">
+                                                                <i class="fa-solid fa-circle-check"></i> Renuncia
+                                                            </button>
+                                                        </li>                                                       
+
+                                                    @elseif($item->tipo_documento === "LICENCIA")
+
+                                                        <li>
+                                                            <button class="dropdown-item text-dark"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#nuevoEditarModal"
+                                                                    wire:click="nuevo_incorporacion({{ $item->id }})">
+                                                                <i class="fa-solid fa-circle-check"></i> Incorporación
+                                                            </button>
+                                                        </li>
+
+                                                        <li>
+                                                            <button class="dropdown-item text-dark"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#nuevoEditarModal"
+                                                                    wire:click="nuevo_renuncia({{ $item->id }})">
+                                                                <i class="fa-solid fa-circle-check"></i> Renuncia
+                                                            </button>
+                                                        </li>
+
+                                                    @else
+
+                                                        <li>
+                                                            <button class="dropdown-item text-dark"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#nuevoEditarModal"
+                                                                    wire:click="nuevo_contrato({{ $item->id }})">
+                                                                <i class="fa-solid fa-circle-check"></i> Contrato
+                                                            </button>
+                                                        </li>
+
+                                                    @endif
+
+                                                </ul>
+                                            </div>
                                         @endcan
                                         <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#historialModal" wire:click="historial_documentos('{{ $item->dni }}')">
                                             <i class="fa-solid fa-timeline"></i><br>Historial
@@ -317,9 +401,9 @@
                                             <br>{{ $item3->datos }}
                                         </th>
                                         <td>
-                                            SEDE: {{ $item3->sedeorigen }}
+                                            <b>SEDE:</b> {{ $item3->sedeorigen }}
                                             <br>
-                                            DEPENDENCIA: {{ $item3->dependenciaorigen }}
+                                            <b>DEPENDENCIA:</b> {{ $item3->dependenciaorigen }}
                                             <br>
                                             <b>DESPACHO:</b> {{ $item3->despachoorigen }}
                                         </td>
@@ -334,7 +418,8 @@
                                         <td>{{ $item3->cargo }}</td>
                                         <td>{{ $item3->numero_convocatoria }}</td>
                                         <td class="@if($item3->tipo_documento == 'CONTRATO') text-success
-                                                    @elseif($item3->tipo_documento == 'RENUNCIA') text-danger
+                                                    @elseif($item3->tipo_documento == 'LICENCIA') text-danger
+                                                    @elseif($item3->tipo_documento == 'RENUNCIA') text-dark
                                                     @elseif($item3->tipo_documento == 'ADENDA') text-primary
                                                     @endif">
                                             {{ $item3->tipo_documento }}
@@ -381,7 +466,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="verDetallesModalLabel">DETALLE PERSONA PERSONAL</h1>
+                    <h1 class="modal-title fs-5" id="verDetallesModalLabel"><i class="fa-solid fa-file-lines"></i> DETALLE: PERSONA - PERSONAL</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -453,6 +538,7 @@
                                                 <td>{{ $item3->cargo }}</td>
                                                 <td>{{ $item3->numero_convocatoria }}</td>
                                                 <td class="@if($item3->tipo_documento == 'CONTRATO') text-success
+                                                            @elseif($item3->tipo_documento == 'LICENCIA') text-danger
                                                             @elseif($item3->tipo_documento == 'RENUNCIA') text-danger
                                                             @elseif($item3->tipo_documento == 'ADENDA') text-primary
                                                             @endif">
