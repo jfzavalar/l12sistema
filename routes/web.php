@@ -7,8 +7,10 @@ use App\Http\Controllers\Administracion\PatrimonioController;
 use App\Http\Controllers\Administracion\RrhhController;
 use App\Http\Controllers\Informatica\FirmasdigitalesController;
 use App\Http\Controllers\Informatica\IpsController;
+use App\Http\Controllers\Informatica\soporteController;
 use App\Http\Controllers\Informatica\SpijwebController;
-use App\Http\Controllers\IntranetController;
+use App\Http\Controllers\Intranet\AtencionesController;
+use App\Http\Controllers\Intranet\ConfiguracionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Rrhh\PersonalController;
 use App\Http\Controllers\Voluntariado\VoluntariadoController;
@@ -80,6 +82,13 @@ Route::middleware('auth','can:procesos.administracion.rrhh.index')->group(functi
 
 
 //INFORMATICA
+
+Route::middleware('auth','can:procesos.informatica.firmasdigitales.index')->group(function () {
+    Route::resource('soporte', soporteController::class)->names('mpfn.informatica.soporte');
+    // Route::get('pdf/informatica/token-acta/{id}', [FirmasdigitalesController::class, 'exportarPDF'])->name('pdf.informatica.token-acta');
+});
+
+
 Route::middleware('auth','can:procesos.informatica.firmasdigitales.index')->group(function () {
     Route::resource('firmas', FirmasdigitalesController::class)->names('procesos.informatica.firmasdigitales');
     Route::get('pdf/informatica/token-acta/{id}', [FirmasdigitalesController::class, 'exportarPDF'])->name('pdf.informatica.token-acta');
@@ -98,7 +107,11 @@ Route::middleware('auth','can:procesos.informatica.spijweb.index')->group(functi
 
 //INTRANET
 Route::middleware('auth','can:procesos.intranet.index')->group(function () {
-    Route::resource('intranet', IntranetController::class)->names('procesos.intranet');
+    Route::resource('atenciones', AtencionesController::class)->names('mpfn.intranet.atenciones');
+});
+
+Route::middleware('auth','can:procesos.intranet.index')->group(function () {
+    Route::resource('configuracion', ConfiguracionController::class)->names('mpfn.intranet.configuracion');
 });
 
 

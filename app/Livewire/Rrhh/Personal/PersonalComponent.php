@@ -38,7 +38,6 @@ class PersonalComponent extends Component
     // Variable de función Guardar o Actualizar
     public $funcionGuardarActualizar;
 
-    //Variable mostrar modal al cerrar buscadores de sede, dependencia y despacho
 
     // Variables de búsqueda
     public $search, $searchi,$searchhistorial, $searchpersonas, $searchsedes,$searchdependencias,$searchdespachos,$searchcargos;

@@ -242,7 +242,7 @@
                                     </form>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('procesos.intranet.index') }}">
+                                    <a class="dropdown-item" href="{{ route('mpfn.intranet.configuracion.index') }}">
                                         <i class="fa-solid fa-gears"></i> Configuración
                                     </a>
                                 </li>
@@ -365,6 +365,31 @@
                                 </ul>
                             </li>
 
+
+                            {{-- ATENCIONES --}}
+                            @can('mpfn.rrhh')
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fa-solid fa-folder"></i>
+                                        <p>
+                                            ATENCIONES
+                                            <i class="nav-arrow fa-solid fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+
+                                    <ul class="nav nav-treeview">
+                                        @can('mpfn.rrhh.personal.index')
+                                            <li class="nav-item">
+                                                <a class="nav-link ms-3 {{ request()->routeIs('mpfn.intranet.atenciones.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.intranet.atenciones.index') }}">
+                                                    <i class="nav-icon fa-regular fa-circle"></i>
+                                                    <p>Tickets</p>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                    </ul>
+                                </li>
+                            @endcan
+
                             {{-- INFORMATICA --}}
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
@@ -387,6 +412,13 @@
                                         <a class="nav-link ms-3 {{ request()->routeIs('procesos.informatica.ips.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.ips.index') }}">
                                             <i class="nav-icon fa-regular fa-circle"></i>
                                             <p>IPs</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link ms-3 {{ request()->routeIs('mpfn.informatica.soporte.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.informatica.soporte.index') }}">
+                                            <i class="nav-icon fa-regular fa-circle"></i>
+                                            <p>Soporte</p>
                                         </a>
                                     </li>
 
