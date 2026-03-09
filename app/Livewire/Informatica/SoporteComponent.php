@@ -3,7 +3,7 @@
 namespace App\Livewire\Informatica;
 
 use App\Models\InformaticasSoporte;
-use App\Models\patrimonios_biene;
+use App\Models\Patrimonios_biene;
 use App\Models\Persona;
 use App\Models\Personale;
 use App\Models\Personales_cargo;
@@ -241,7 +241,7 @@ class SoporteComponent extends Component
             ->orderBy('nombre')
             ->paginate(10,['*'], 'cargosPage');
 
-        $lista_bienes = patrimonios_biene::where('activo','1')
+        $lista_bienes = Patrimonios_biene::where('activo','1')
             ->where('cod_patrimonial','like','%' . $this->searchbienes . '%')
             ->distinct()
             ->orderBy('bien')
