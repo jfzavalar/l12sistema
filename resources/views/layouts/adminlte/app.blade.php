@@ -289,7 +289,7 @@
 
                             {{-- Administrador --}}
                             <li class="nav-item">
-                                <a role="button" class="nav-link">
+                                <a href="#" class="nav-link">
                                     <i class="nav-icon fa-solid fa-folder"></i>
                                     <p>
                                         ADMIN
@@ -369,7 +369,7 @@
                             {{-- ATENCIONES --}}
                             @can('mpfn.rrhh')
                                 <li class="nav-item">
-                                    <a role="button" class="nav-link">
+                                    <a href="#" class="nav-link">
                                         <i class="nav-icon fa-solid fa-folder"></i>
                                         <p>
                                             ATENCIONES
@@ -392,7 +392,7 @@
 
                             {{-- INFORMATICA --}}
                             <li class="nav-item">
-                                <a role="button" class="nav-link">
+                                <a href="#" class="nav-link">
                                     <i class="nav-icon fa-solid fa-folder"></i>
                                     <p>
                                         INFORMÁTICA
@@ -434,7 +434,7 @@
                             {{-- RRHH --}}
                             @can('mpfn.rrhh')
                                 <li class="nav-item">
-                                    <a role="button" class="nav-link">
+                                    <a href="#" class="nav-link">
                                         <i class="nav-icon fa-solid fa-folder"></i>
                                         <p>
                                             RRHH

@@ -13,7 +13,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
 
-new #[Layout('layouts.adminlte.app-login')] class extends Component {
+new #[Layout('components.layouts.auth')] class extends Component {
     #[Validate('required|digits:8')]
     public string $dni = '';
 
@@ -100,30 +100,60 @@ new #[Layout('layouts.adminlte.app-login')] class extends Component {
     }
 }; ?>
 
-<div>
-    <x-auth-session-status :status="session('status')" />
+<div class="flex flex-col gap-6">
 
-    <form wire:submit.prevent="login">
-        <div class="input-group mb-3">
-            <input type="text" wire:model="dni" class="form-control @error('dni') is-invalid @enderror" placeholder="DNI" required autofocus>
-            <div class="input-group-append">
-                <div class="input-group-text"><span class="fas fa-id-card"></span></div>
-            </div>
-            @error('dni') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
+    <img src="{{ asset('img/logotipo_mpfn.png') }}" alt="Logo MPFN" class="mx-auto w-[90px] md:w-[120px] lg:w-[150px]">
+
+    {{-- <x-auth-header :title="__('Inicia Sesión en tu cuenta')" :description="__('Ingrese su DNI y contraseña a continuación para iniciar sesión')" /> --}}
+
+    <!-- Session Status -->
+    <x-auth-session-status class="text-center" :status="session('status')" />
+
+    <form method="POST" wire:submit="login" class="flex flex-col gap-6">
+        <!-- DNI-->
+        <flux:input
+            wire:model="dni"
+            :label="__('DNI')"
+            type="text"
+            required
+            autofocus
+            autocomplete="dni"
+            placeholder="Ingrese su DNI"
+        />
+
+        <!-- Password -->
+        <div class="relative">
+            <flux:input
+                wire:model="password"
+                :label="__('Password')"
+                type="password"
+                required
+                autocomplete="current-password"
+                :placeholder="__('Password')"
+                viewable
+            />
+
+            {{-- @if (Route::has('password.request'))
+                <flux:link class="absolute top-0 text-sm end-0" :href="route('password.request')" wire:navigate>
+                    {{ __('Forgot your password?') }}
+                </flux:link>
+            @endif --}}
         </div>
 
-        <div class="input-group mb-3">
-            <input type="password" wire:model="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password" required>
-            <div class="input-group-append">
-                <div class="input-group-text"><span class="fas fa-lock"></span></div>
-            </div>
-            @error('password') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
-        </div>
+        <!-- Remember Me -->
+        {{-- <flux:checkbox wire:model="remember" :label="__('Remember me')" /> --}}
 
-        <div class="row">
-            <div class="col-12">
-                <button type="submit" class="btn btn-login btn-block">Iniciar Sesión</button>
-            </div>
+        <div class="flex items-center justify-end">
+            <flux:button variant="primary" type="submit" class="w-full" data-test="login-button">
+                {{ __('Iniciar Sesión') }}
+            </flux:button>
         </div>
     </form>
+
+    {{-- @if (Route::has('register'))
+        <div class="space-x-1 text-sm text-center rtl:space-x-reverse text-zinc-600 dark:text-zinc-400">
+            <span>{{ __('Don\'t have an account?') }}</span>
+            <flux:link :href="route('register')" wire:navigate>{{ __('Sign up') }}</flux:link>
+        </div>
+    @endif --}}
 </div>
