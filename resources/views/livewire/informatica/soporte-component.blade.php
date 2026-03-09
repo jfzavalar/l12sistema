@@ -6,7 +6,7 @@
                     <div class="col-xl-3">
                         <div class="input-group input-group-sm mb-2">
                             <span class="input-group-text bg-primary text-white" id="basic-addon1">CONDICIÓN:</span>
-                            <select name="cmdfiltrotipodocumento" id="cmbfiltrotipodocumento" class="form-select form-select-sm" wire:model.live="filtrotipodocumento">
+                            <select name="cmdfiltrocondicion" id="cmbfiltrocondicion" class="form-select form-select-sm" wire:model.live="filtrotipodocumento">
                                 <option value="">TOTAL </option>
                                 <option value="ADENDA">ADENDA </option>
                                 <option value="CONTRATO">CONTRATO </option>
@@ -63,37 +63,35 @@
                     <tbody class="align-middle">
                         @forelse ($lista_activos as $item)
                             <tr>
-                                <th @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>{{ $loop->iteration }}</th>
-                                <th @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
+                                <th>{{ $loop->iteration }}</th>
+                                <th>
                                     DNI: {{ $item->dni }}
                                     <br>
                                     {{ $item->datos }}
                                 </th>
-                                <td @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
+                                <td>
                                     <b>SEDE:</b> {{ $item->sedeorigen }}
                                     <br>
                                     <b>DEPENDENCIA:</b> {{ $item->dependenciaorigen }}
                                     <br>
                                     <b>DESPACHO:</b> {{ $item->despachoorigen }}
                                 </td>
-                                <td @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
+                                <td>
                                     <b>SEDE:</b> {{ $item->sededestino }}
                                     <br>
                                     <b>DEPENDENCIA:</b> {{ $item->dependenciadestino }}
                                     <br>
                                     <b>DESPACHO:</b> {{ $item->despachodestino }}
                                 </td>
-                                <td @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
+                                <td>
                                     <b>REGIMEN:</b> {{ $item->regimen }}
                                     <br>
                                     <b>CARGO:</b> {{ $item->cargo }}
                                 </td>
                                 <td class="text-center">
-                                    <span class="badge @if($item->tipo_documento == 'CONTRATO') text-bg-success
-                                                    @elseif($item->tipo_documento == 'LICENCIA') text-bg-danger
-                                                    @elseif($item->tipo_documento == 'RENUNCIA') text-bg-dark
-                                                    @elseif($item->tipo_documento == 'ADENDA') text-bg-primary
-                                                    @endif">{{ $item->tipo_documento }}</span>
+                                    {{ $item->bien_cod_patrimonial }}
+                                    <br>
+                                    {{ $item->bien }}
                                 </td>
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
@@ -117,7 +115,7 @@
                                         @endcan
                                     </div>
                                 <td class="text-end">
-                                    <div class="btn-group" role="group">
+                                    {{-- <div class="btn-group" role="group">
                                         @can('mpfn.rrhh.personal.create')
                                             <div class="dropdown">
                                                 <button class="btn btn-outline-dark btn-xs dropdown-toggle" 
@@ -197,8 +195,7 @@
                                         <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#historialModal" wire:click="historial_documentos('{{ $item->dni }}')">
                                             <i class="fa-solid fa-timeline"></i><br>Historial
                                         </button>
-                                    </div>
-                                </td>
+                                    </div> --}}
                                 </td>
                             </tr>
                         @empty
@@ -263,7 +260,7 @@
                         </div>
                         <div class="row">
                             <div class="col-xl-4">
-                                <fieldset class="border p-3 rounded mb-3">
+                                <fieldset class="border p-3 rounded mb-3" {{ $seccionBienpatrimonial }}>
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">BIEN PATRIMONIAL</legend>
                                     @include('livewire.patrimonio.bienes.partials.datos-bienes-component')
                                 </fieldset>

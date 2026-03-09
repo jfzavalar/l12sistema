@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Informatica;
 
+use App\Models\InformaticasSoporte;
 use App\Models\patrimonios_biene;
 use App\Models\Persona;
 use App\Models\Personale;
@@ -33,7 +34,7 @@ class SoporteComponent extends Component
     public $colorAgregar;
 
     //Variables bloquear de secciones
-    public $seccionFoto, $seccionPersona, $seccionPersonal;
+    public $seccionFoto="disabled", $seccionPersona="disabled", $seccionPersonal="disabled",$seccionBienpatrimonial="disabled";
 
     // Variable de función Guardar o Actualizar
     public $funcionGuardarActualizar;
@@ -120,6 +121,29 @@ class SoporteComponent extends Component
             $fecha_fin,
             $ruta_documento;
 
+    public $soporte_id,
+            $preventivo,
+            $p01,
+            $p02,
+            $p03,
+            $p04,
+            $p05,
+            $p06,
+            $p07,
+            $potros,
+            $correctivo,
+            $c01,
+            $c02,
+            $c03,
+            $c04,
+            $c05,
+            $c06,
+            $c07,
+            $cotros,
+            $operativo,
+            $observacion_usuario,
+            $recomendacion_usuario;
+
     Public $bien_id,
             $cod,
             $cod_patrimonial,
@@ -127,6 +151,7 @@ class SoporteComponent extends Component
             $marca,
             $modelo,
             $serie,
+            $medida,
             $medidas,
             $color,
             $estado,
@@ -137,19 +162,45 @@ class SoporteComponent extends Component
 
     public function render()
     {
-        $lista_activos = patrimonios_biene::join('informaticas_soportes', 'patrimonios_bienes.id', '=', 'informaticas_soportes.bien_id')
-            ->select('patrimonios_bienes.*',
-                'informatica_soportes.tipo_mantenimiento')
-            ->where([['patrimonios_bienes.activo',1],['informaticas_soportes.activo', 1]])
+        $lista_activos = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
+            ->join('informaticas_soportes','personas.id','=','informaticas_soportes.persona_id')
+            ->join('patrimonios_bienes','informaticas_soportes.bien_id','patrimonios_bienes.id')
+            ->select('personas.*',
+                'personales.persona_id',
+                'personales.regimen',
+                'personales.tipo_regimen',
+                'personales.cargo',
+                'personales.sedeorigen',
+                'personales.dependenciaorigen',
+                'personales.despachoorigen',
+                'personales.sededestino',
+                'personales.dependenciadestino',
+                'personales.despachodestino',
+                'personales.tipo_documento',
+                'informaticas_soportes.bien_cod_patrimonial',
+                'patrimonios_bienes.bien')
+            ->where('personales.activo', 1)
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('patrimonios_bienes.cod', 'like', '%' . $this->search . '%')
-                    ->orWhere('patrimonios_bienes.cod_patrimonial', 'like', '%' . $this->search . '%');
+                    $q->where('personas.dni', 'like', '%' . $this->search . '%')
+                    ->orWhere('personas.datos', 'like', '%' . $this->search . '%');
                 });
             })
-            ->orderBy('patrimonios_bienes.cod_patrimonial')
+            ->when($this->filtrotipodocumento, function ($query) {
+                $query->where(function ($q) {
+                    $q->where('personales.tipo_documento', 'like', '%' . $this->filtrotipodocumento . '%');
+                    // ->orWhere('', 'like', '%' . $this->search . '%');
+                });
+            })
+            ->when($this->filtroregimen, function ($query) {
+                $query->where(function ($q) {
+                    $q->where('personales.regimen', 'like', '%' . $this->filtroregimen . '%');
+                    // ->orWhere('', 'like', '%' . $this->search . '%');
+                });
+            })
+            ->orderBy('personales.id','desc')
             ->distinct()
-            ->paginate(10, ['*'], 'bienesPage');
+            ->paginate(10, ['personas.*'], 'personalesPage');
 
         $lista_personas = Persona::where('activo','1')
             ->when($this->searchpersonas !== '', function ($query) {
@@ -201,6 +252,39 @@ class SoporteComponent extends Component
                                     'lista_bienes'));
     }
 
+    protected function rules(){
+        return [
+                    'dni' => 'required',
+            'nombres' => 'required',
+            'appaterno' => 'required',
+            'apmaterno' => 'required',
+
+            'sedeorigen' => 'required',
+            'dependenciaorigen' => 'required',
+            'despachoorigen' => 'required',
+            'regimen' => 'required',
+            'cargo' => 'required',
+
+            'pdf' => 'nullable|file|mimes:pdf|max:5120', // 5MB
+        ];
+    }
+
+    protected $messages = [
+        'dni.required' => 'El dni es obligatorio.',
+        'nombres.required' => 'Campo requerido',
+        'appaterno.required' => 'Campo requerido',
+        'apmaterno.required' => 'Campo requerido',
+
+        'sedeorigen.required' => 'Campo requerido',
+        'dependenciaorigen.required' => 'Campo requerido',
+        'despachoorigen.required' => 'Campo requerido',
+        'regimen.required' => 'Campo requerido',
+        'cargo.required' => 'Campo requerido',
+
+        'pdf.mimes' => 'Solo se permiten archivos PDF.',
+        'pdf.max' => 'El archivo no debe superar 5MB.',
+    ];
+
     public function nuevo()
     {
         $this->resetValidation();   // ← limpia los errores
@@ -217,7 +301,7 @@ class SoporteComponent extends Component
         $this->mostrarBtnBuscarDni = "d-none";
 
         $this->colorHeaderModal = "primary-subtle";
-        $this->textoHeaderModal = "Nuevo";
+        $this->textoHeaderModal = "NUEVO";
         $this->colorGuardarActualizar = "primary";
         $this->textoGuardarActualizar = "Guardar";
         $this->colorAgregar = "outline-primary";
@@ -228,7 +312,112 @@ class SoporteComponent extends Component
         $this->seccionFoto = "disabled";
         $this->seccionPersona = "disabled";
         $this->seccionPersonal = "disabled";
+        $this->seccionPersonal = "disabled";
     }
+
+    public function guardar()
+    {
+        $this->validate();
+        
+        try {
+
+            DB::transaction(function () {
+
+                $usuario = auth()->user()->datos; // Mejor que usar propiedad pública
+
+                // GUARDAR CAMPOS DE SOPORTE
+
+                $persona = InformaticasSoporte::create([
+                    'bien_id' => $this->bien_id,
+                    'bien_cod' => $this->cod,
+                    'bien_cod_patrimonial' => $this->cod_patrimonial,
+                    'persona_id' => $this->persona_id,
+                    'persona_dni' => $this->dni,
+                    'persona_datos' => $this->datos,
+                    'personal_id' => $this->personal_id,
+                    'preventivo' => $this->preventivo,
+                    'p01' => $this->p01,
+                    'p02' => $this->p02,
+                    'p03' => $this->p03,
+                    'p04' => $this->p04,
+                    'p05' => $this->p05,
+                    'p06' => $this->p06,
+                    'p07' => $this->p07,
+                    'potros' => $this->potros,
+                    'correctivo' => $this->correctivo,
+                    'c01' => $this->c01,
+                    'c02' => $this->c02,
+                    'c03' => $this->c03,
+                    'c04' => $this->c04,
+                    'c05' => $this->c05,
+                    'c06' => $this->c06,
+                    'c07' => $this->c07,
+                    'cotros' => $this->cotros,
+                    'operativo' => $this->operativo,
+                    'observacion_usuario' => $this->observacion_usuario,
+                    'recomendacion_usuario' => $this->recomendacion_usuario,
+
+                    'activo' => '1',
+                    'created_user' => $usuario,
+                    'updated_user' => $usuario,
+                ]);
+            });
+
+            // $this->resetExcept('searchPersonal');
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Datos actualizados',
+                mensaje: 'Los datos se han actualizado correctamente.',
+                tipo: 'success'
+            );
+
+            // Evento para cerrar el modal
+            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
+
+        } catch (\Throwable $e) {
+
+            report($e);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'Ocurrió un error al guardar.',
+                tipo: 'error'
+            );
+        }
+    }
+
+    public function editar()
+    {
+        $this->resetValidation();   // ← limpia los errores
+        $this->resetErrorBag();     // ← opcional extra seguridad
+
+        // Restablecer todas las variables
+        $this->reset();
+        $this->foto = null;
+        $this->fotoactual = null;
+        $this->inputFileKey = rand();
+
+        $this->funcionGuardarActualizar="actualizar";
+
+        $this->mostrarBtnBuscarDni = "d-none";
+
+        $this->colorHeaderModal = "success-subtle";
+        $this->textoHeaderModal = "EDITAR";
+        $this->colorGuardarActualizar = "success";
+        $this->textoGuardarActualizar = "Actualizar";
+        $this->colorAgregar = "outline-success";
+
+        // $this->tipo_documento = "CONTRATO";
+
+        // ===== BLOQUEO DE SECCIONES =====
+        $this->seccionFoto = "disabled";
+        $this->seccionPersona = "disabled";
+        $this->seccionPersonal = "disabled";
+        $this->seccionPersonal = "disabled";
+    }
+
 
     public function cerrar()
     {
@@ -284,6 +473,7 @@ class SoporteComponent extends Component
         $this->marca = $ibien->marca;
         $this->modelo = $ibien->modelo;
         $this->serie = $ibien->serie;
+        $this->medida = $ibien->medida;
         $this->color = $ibien->color;
         $this->estado = $ibien->estado;
 

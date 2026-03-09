@@ -564,14 +564,24 @@
             });
         </script>
 
-        <script>
-            let tiempoInactividad = {{ env('SESSION_LIFETIME') }} * 60 * 1000;
+        {{-- <script>
+            let tiempo = {{ config('session.lifetime') }} * 60 * 1000;
+            let temporizador;
 
-            setTimeout(() => {
-                alert("Tu sesión ha expirado");
-                window.location.href = "{{ route('login') }}";
-            }, tiempoInactividad);
-        </script>
+            function reiniciarSesion() {
+                clearTimeout(temporizador);
+
+                temporizador = setTimeout(() => {
+                    alert("⚠️ Tu sesión ha expirado");
+                    window.location.href = "/login";
+                }, tiempo);
+            }
+
+            window.onload = reiniciarSesion;
+            document.onmousemove = reiniciarSesion;
+            document.onkeypress = reiniciarSesion;
+            document.onclick = reiniciarSesion;
+        </script> --}}
 
     </body>
 </html>

@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-xl-3 col-lg-6 col-sm-12">
-        <label for="cmbcodsede" class="fw-bold fs-6">Sede</label>
+        <label for="txt_sede" class="fw-bold fs-6">Sede</label>
         <div class="input-group">
             <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-sedes-component">
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -12,7 +12,7 @@
         @enderror
     </div>
     <div class="col-xl-6 col-lg-6 col-sm-12">
-        <label for="cmbcoddependencia" class="fw-bold fs-6">Dependencia</label>
+        <label for="txt_dependencia" class="fw-bold fs-6">Dependencia</label>
         <div class="input-group position-relative">
             <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-dependencias-component">
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -24,7 +24,7 @@
         @enderror
     </div>
     <div class="col-xl-3 col-lg-6 col-sm-12">
-        <label for="cmbcoddependencia" class="fw-bold fs-6">Despacho</label>
+        <label for="txt_despacho" class="fw-bold fs-6">Despacho</label>
         <div class="input-group position-relative">
             <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-despachos-component">
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -49,7 +49,7 @@
 </div>
 <div class="row">
     <div class="col-xl-3 col-lg-6 col-sm-12">
-        <label for="txtdespacho" class="fw-bold fs-6">Regimen</label>
+        <label for="regimen276" class="fw-bold fs-6">Regimen</label>
         <div class="d-flex gap-2">
             <input type="radio" id="regimen276" name="regimen" class="btn-check" value="D.L.276" autocomplete="off" wire:model.live="regimen">
             <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="regimen276">D.L.276</label>
@@ -65,8 +65,8 @@
         @enderror
     </div>
     <div class="col-xl-3 col-lg-6 col-sm-12">
-        <label for="txtdespacho" class="fw-bold fs-6">Tipo</label>
-        <select name="cmbtiporegimen" id="tiporegimen" class="form-select form-select-xs" wire:model.live="tipo_regimen">
+        <label for="tiporegimen" class="fw-bold fs-6">Tipo</label>
+        <select name="tiporegimen" id="tiporegimen" class="form-select form-select-xs" wire:model.live="tipo_regimen">
             <option value="">Seleccionar...</option>
             <option value="INDETERMINADO">INDETERMINADO</option>
             <option value="TRANSITORIO">TRANSITORIO</option>
@@ -74,7 +74,7 @@
         </select>
     </div>
     <div class="col-xl-6 col-lg-6 col-sm-12">
-        <label for="text_cargo" class="fw-bold fs-6">Cargo</label>
+        <label for="txt_cargo" class="fw-bold fs-6">Cargo</label>
         <div class="input-group">
             <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-cargos-component">
                 <i class="fa-solid fa-magnifying-glass"></i>
