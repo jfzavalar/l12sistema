@@ -33,6 +33,9 @@ class SoporteComponent extends Component
     public $colorGuardarActualizar, $textoGuardarActualizar;
     public $colorAgregar;
 
+    //Variables PARA OCULTAR Y MOSTRAR TXT_OTROS
+    public $mostrarotrosp = "d-none", $mostrarotrosc = "d-none";
+
     //Variables bloquear de secciones
     public $seccionFoto="disabled", $seccionPersona="disabled", $seccionPersonal="disabled",$seccionBienpatrimonial="disabled";
 
@@ -160,6 +163,22 @@ class SoporteComponent extends Component
 
     public $pdf;
 
+    public function updatedp07($value)
+    {
+        $this->mostrarotrosp = $value ? '' : 'd-none';
+        if (!$value) {
+            $this->cotros = '';
+        }
+    }
+
+    public function updatedC07($value)
+    {
+        $this->mostrarotrosc = $value ? '' : 'd-none';
+        if (!$value) {
+            $this->cotros = '';
+        }
+    }
+
     public function render()
     {
         $lista_activos = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
@@ -177,6 +196,7 @@ class SoporteComponent extends Component
                 'personales.dependenciadestino',
                 'personales.despachodestino',
                 'personales.tipo_documento',
+                'informaticas_soportes.id as soporte_id',
                 'informaticas_soportes.bien_cod_patrimonial',
                 'patrimonios_bienes.bien')
             ->where('personales.activo', 1)
@@ -343,7 +363,7 @@ class SoporteComponent extends Component
                     'p05' => $this->p05,
                     'p06' => $this->p06,
                     'p07' => $this->p07,
-                    'potros' => $this->potros,
+                    'potros' => strtoupper($this->potros),
                     'correctivo' => $this->correctivo,
                     'c01' => $this->c01,
                     'c02' => $this->c02,
@@ -352,10 +372,10 @@ class SoporteComponent extends Component
                     'c05' => $this->c05,
                     'c06' => $this->c06,
                     'c07' => $this->c07,
-                    'cotros' => $this->cotros,
+                    'cotros' => strtoupper($this->cotros),
                     'operativo' => $this->operativo,
-                    'observacion_usuario' => $this->observacion_usuario,
-                    'recomendacion_usuario' => $this->recomendacion_usuario,
+                    'observacion_usuario' => strtoupper($this->observacion_usuario),
+                    'recomendacion_usuario' => strtoupper($this->recomendacion_usuario),
 
                     'activo' => '1',
                     'created_user' => $usuario,
@@ -388,7 +408,7 @@ class SoporteComponent extends Component
         }
     }
 
-    public function editar()
+    public function editar($soporte_id)
     {
         $this->resetValidation();   // ← limpia los errores
         $this->resetErrorBag();     // ← opcional extra seguridad
@@ -416,6 +436,162 @@ class SoporteComponent extends Component
         $this->seccionPersona = "disabled";
         $this->seccionPersonal = "disabled";
         $this->seccionPersonal = "disabled";
+
+        // ===== DATOS SOPORTE =====
+        $isoporte = InformaticasSoporte::findOrFail($soporte_id);
+
+        $this->soporte_id = $isoporte->id;
+        $this->bien_id = $isoporte->bien_id;
+        $this->cod = $isoporte->bien_cod;
+        $this->persona_id = $isoporte->persona_id;
+        $this->datos = $isoporte->persona_datos;
+        $this->personal_id = $isoporte->personal_id;
+        
+
+        $this->p01 = (bool) $isoporte->p01;
+        $this->p02 = (bool) $isoporte->p02;
+        $this->p03 = (bool) $isoporte->p03;
+        $this->p04 = (bool) $isoporte->p04;
+        $this->p05 = (bool) $isoporte->p05;
+        $this->p06 = (bool) $isoporte->p06;
+        $this->p07 = (bool) $isoporte->p07;
+        $this->potros = $isoporte->potros;
+
+        $this->c01 = (bool) $isoporte->c01;
+        $this->c02 = (bool) $isoporte->c02;
+        $this->c03 = (bool) $isoporte->c03;
+        $this->c04 = (bool) $isoporte->c04;
+        $this->c05 = (bool) $isoporte->c05;
+        $this->c06 = (bool) $isoporte->c06;
+        $this->c07 = (bool) $isoporte->c07;
+        $this->cotros = $isoporte->cotros;
+        $this->observacion_usuario = $isoporte->observacion_usuario;
+        $this->recomendacion_usuario = $isoporte->recomendacion_usuario;
+        
+
+        $this->cod_patrimonial = $isoporte->bien_cod_patrimonial;
+
+        // ===== DATOS PERSONA =====
+        $ipersona = Persona::where('id', $isoporte->persona_id)->where('activo','1')->firstOrFail();
+
+        $this->persona_id = $isoporte->ipersona_id;
+        $this->dni = $ipersona->dni;
+        $this->nombres = $ipersona->nombres;
+        $this->appaterno = $ipersona->appaterno;
+        $this->apmaterno = $ipersona->apmaterno;
+        $this->celpersonal = $ipersona->celpersonal;
+        $this->correopersonal = $ipersona->correopersonal;
+
+        $this->fotoactual = $ipersona->foto;
+
+        // ===== DATOS PERSONAL =====
+        $ipersonal = Personale::where('persona_dni', $this->dni)->where('activo','1')->firstOrFail();
+
+        $this->personal_id = $ipersonal->id;
+        $this->regimen = $ipersonal->regimen;
+        $this->tipo_regimen = $ipersonal->tipo_regimen;
+        $this->cargo = $ipersonal->cargo;
+        $this->codsedeorigen = $ipersonal->codsedeorigen;
+        $this->sedeorigen = $ipersonal->sedeorigen;
+        $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
+        $this->dependenciaorigen = $ipersonal->dependenciaorigen;
+        $this->coddespachoorigen = $ipersonal->coddespachoorigen;
+        $this->despachoorigen = $ipersonal->despachoorigen;
+
+        $this->codsededestino = $ipersonal->codsededestino;
+        $this->sededestino = $ipersonal->sededestino;
+        $this->coddependenciadestino = $ipersonal->coddependenciadestino;
+        $this->dependenciadestino = $ipersonal->dependenciadestino;
+        $this->coddespachodestino = $ipersonal->coddespachodestino;
+        $this->despachodestino = $ipersonal->despachodestino;
+
+        $this->celinstitucional = $ipersonal->celinstitucional;
+        $this->correoinstitucional = $ipersonal->correoinstitucional;
+
+        // ===== DATOS BIEN PATRIMONIAL =====
+
+        $ibien = Patrimonios_biene::where('id', $isoporte->bien_id)->where('activo','1')->firstOrFail();
+
+        $this->cod_patrimonial = $ibien->cod_patrimonial;
+        $this->bien = $ibien->bien;
+        $this->marca = $ibien->marca;
+        $this->modelo = $ibien->modelo;
+        $this->serie = $ibien->serie;
+        $this->medida = $ibien->medida;
+        $this->color = $ibien->color;
+        $this->estado = $ibien->estado;
+    }
+
+    public function actualizar()
+    {
+        $this->validate();
+
+        try {
+
+            DB::transaction(function () {
+
+                $usuario = auth()->user()->datos;
+
+                // ========================
+                // ACTUALIZAR SOPORTE
+                // ========================
+                $soporte = InformaticasSoporte::findOrFail($this->soporte_id);
+
+                $soporte->update([
+                    'bien_id' => $this->bien_id,
+                    'bien_cod' => $this->cod,
+                    'bien_cod_patrimonial' => $this->cod_patrimonial,
+                    'persona_id' => $this->persona_id,
+                    'persona_dni' => $this->dni,
+                    'persona_datos' => $this->datos,
+                    'personal_id' => $this->personal_id,
+                    'preventivo' => $this->preventivo,
+                    'p01' => $this->p01,
+                    'p02' => $this->p02,
+                    'p03' => $this->p03,
+                    'p04' => $this->p04,
+                    'p05' => $this->p05,
+                    'p06' => $this->p06,
+                    'p07' => $this->p07,
+                    'potros' => strtoupper($this->potros),
+                    'correctivo' => $this->correctivo,
+                    'c01' => $this->c01,
+                    'c02' => $this->c02,
+                    'c03' => $this->c03,
+                    'c04' => $this->c04,
+                    'c05' => $this->c05,
+                    'c06' => $this->c06,
+                    'c07' => $this->c07,
+                    'cotros' => strtoupper($this->cotros),
+                    'operativo' => $this->operativo,
+                    'observacion_usuario' => strtoupper($this->observacion_usuario),
+                    'recomendacion_usuario' => strtoupper($this->recomendacion_usuario),
+
+                    'activo' => '1',
+                    'updated_user' => $usuario,
+                ]);
+            });
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Datos actualizados',
+                mensaje: 'Los datos se han actualizado correctamente.',
+                tipo: 'success'
+            );
+
+            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
+
+        } catch (\Throwable $e) {
+
+            report($e);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'Ocurrió un error al actualizar.',
+                tipo: 'error'
+            );
+        }
     }
 
 

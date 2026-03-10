@@ -1,5 +1,11 @@
 <div class="row">
-    <div class="col-xl-12 col-sm-12">
+    <div class="col-xl-4 col-sm-12">
+        <label for="txt_codp" class="fw-bold fs-6">Código</label>
+        <div class="input-group">
+            <input type="text" id="txt_codp" class="form-control form-control-xs" wire:model="cod_patrimonial">
+        </div>                   
+    </div>
+    <div class="col-xl-8 col-sm-12">
         <label for="txt_bien" class="fw-bold fs-6">Bien patrimonial</label>
         <div class="input-group">
             <input type="text" id="txt_bien" class="form-control form-control-xs" wire:model="bien">

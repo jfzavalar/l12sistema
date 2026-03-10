@@ -83,7 +83,7 @@ Route::middleware('auth','can:procesos.administracion.rrhh.index')->group(functi
 
 //INFORMATICA
 
-Route::middleware('auth','can:procesos.informatica.firmasdigitales.index')->group(function () {
+Route::middleware('auth','can:mpfn.informatica.soporte.index')->group(function () {
     Route::resource('soporte', soporteController::class)->names('mpfn.informatica.soporte');
     // Route::get('pdf/informatica/token-acta/{id}', [FirmasdigitalesController::class, 'exportarPDF'])->name('pdf.informatica.token-acta');
 });

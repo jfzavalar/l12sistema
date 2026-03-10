@@ -288,82 +288,84 @@
                             </li>
 
                             {{-- Administrador --}}
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="nav-icon fa-solid fa-folder"></i>
-                                    <p>
-                                        ADMIN
-                                        <i class="nav-arrow fa-solid fa-angle-left right"></i>
-                                    </p>
-                                </a>
+                            @can('procesos.admin.users.index')
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fa-solid fa-folder"></i>
+                                        <p>
+                                            ADMIN
+                                            <i class="nav-arrow fa-solid fa-angle-left right"></i>
+                                        </p>
+                                    </a>
 
-                                <ul class="nav nav-treeview">
-                                    @can('procesos.admin.users.index')
-                                        <li class="nav-item">
-                                            <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.users.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.users.index') }}">
-                                                <i class="nav-icon fa-regular fa-circle"></i>
-                                                <p>Usuarios</p>
-                                            </a>
-                                        </li>
-                                    @endcan
-                                    @can('procesos.admin.roles.index')
-                                        <li class="nav-item">
-                                            <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.roles.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.roles.index') }}">
-                                                <i class="nav-icon fa-regular fa-circle"></i>
-                                                <p>Roles</p>
-                                            </a>
-                                        </li>
-                                    @endcan
-                                    @can('procesos.admin.permissions.index')
+                                    <ul class="nav nav-treeview">
+                                        @can('procesos.admin.users.index')
+                                            <li class="nav-item">
+                                                <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.users.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.users.index') }}">
+                                                    <i class="nav-icon fa-regular fa-circle"></i>
+                                                    <p>Usuarios</p>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('procesos.admin.roles.index')
+                                            <li class="nav-item">
+                                                <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.roles.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.roles.index') }}">
+                                                    <i class="nav-icon fa-regular fa-circle"></i>
+                                                    <p>Roles</p>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('procesos.admin.permissions.index')
+                                            <li class="nav-item">
+                                                <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.permissions.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.permissions.index') }}">
+                                                    <i class="nav-icon fa-regular fa-circle"></i>
+                                                    <p>Permisos</p>
+                                                </a>
+                                            </li>
+                                        @endcan
+
+                                        <hr class="ms-5 border-light">
+
                                         <li class="nav-item">
                                             <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.permissions.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.permissions.index') }}">
                                                 <i class="nav-icon fa-regular fa-circle"></i>
-                                                <p>Permisos</p>
+                                                <p>Cargos</p>
                                             </a>
                                         </li>
-                                    @endcan
 
-                                    <hr class="ms-5 border-light">
+                                        <li class="nav-item">
+                                            <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.permissions.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.permissions.index') }}">
+                                                <i class="nav-icon fa-regular fa-circle"></i>
+                                                <p>Régimen</p>
+                                            </a>
+                                        </li>
 
-                                    <li class="nav-item">
-                                        <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.permissions.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.permissions.index') }}">
-                                            <i class="nav-icon fa-regular fa-circle"></i>
-                                            <p>Cargos</p>
-                                        </a>
-                                    </li>
+                                        <hr class="ms-5 border-light">
 
-                                    <li class="nav-item">
-                                        <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.permissions.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.permissions.index') }}">
-                                            <i class="nav-icon fa-regular fa-circle"></i>
-                                            <p>Régimen</p>
-                                        </a>
-                                    </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.users.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.users.index') }}">
+                                                <i class="nav-icon fa-regular fa-circle"></i>
+                                                <p>Sedes</p>
+                                            </a>
+                                        </li>
 
-                                    <hr class="ms-5 border-light">
+                                        <li class="nav-item">
+                                            <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.roles.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.roles.index') }}">
+                                                <i class="nav-icon fa-regular fa-circle"></i>
+                                                <p>Dependencias</p>
+                                            </a>
+                                        </li>
 
-                                    <li class="nav-item">
-                                        <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.users.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.users.index') }}">
-                                            <i class="nav-icon fa-regular fa-circle"></i>
-                                            <p>Sedes</p>
-                                        </a>
-                                    </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.permissions.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.permissions.index') }}">
+                                                <i class="nav-icon fa-regular fa-circle"></i>
+                                                <p>Despachos</p>
+                                            </a>
+                                        </li>
 
-                                    <li class="nav-item">
-                                        <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.roles.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.roles.index') }}">
-                                            <i class="nav-icon fa-regular fa-circle"></i>
-                                            <p>Dependencias</p>
-                                        </a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.permissions.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.permissions.index') }}">
-                                            <i class="nav-icon fa-regular fa-circle"></i>
-                                            <p>Despachos</p>
-                                        </a>
-                                    </li>
-
-                                </ul>
-                            </li>
+                                    </ul>
+                                </li>
+                            @endcan
 
 
                             {{-- ATENCIONES --}}
@@ -399,35 +401,40 @@
                                         <i class="nav-arrow fa-solid fa-angle-left right"></i>
                                     </p>
                                 </a>
-
+                                
                                 <ul class="nav nav-treeview">
-                                    <li class="nav-item">
-                                        <a class="nav-link ms-3 {{ request()->routeIs('procesos.informatica.firmasdigitales.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.firmasdigitales.index') }}">
-                                            <i class="nav-icon fa-regular fa-circle"></i>
-                                            <p>Certificados Digitales</p>
-                                        </a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a class="nav-link ms-3 {{ request()->routeIs('procesos.informatica.ips.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.ips.index') }}">
-                                            <i class="nav-icon fa-regular fa-circle"></i>
-                                            <p>IPs</p>
-                                        </a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a class="nav-link ms-3 {{ request()->routeIs('mpfn.informatica.soporte.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.informatica.soporte.index') }}">
-                                            <i class="nav-icon fa-regular fa-circle"></i>
-                                            <p>Soporte</p>
-                                        </a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a class="nav-link ms-3 {{ request()->routeIs('procesos.informatica.spijweb.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.spijweb.index') }}">
-                                            <i class="nav-icon fa-regular fa-circle"></i>
-                                            <p>Spijweb</p>
-                                        </a>
-                                    </li>
+                                    @can('procesos.informatica.firmasdigitales.index')
+                                        <li class="nav-item">
+                                            <a class="nav-link ms-3 {{ request()->routeIs('procesos.informatica.firmasdigitales.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.firmasdigitales.index') }}">
+                                                <i class="nav-icon fa-regular fa-circle"></i>
+                                                <p>Certificados Digitales</p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('procesos.informatica.ips.index')
+                                        <li class="nav-item">
+                                            <a class="nav-link ms-3 {{ request()->routeIs('procesos.informatica.ips.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.ips.index') }}">
+                                                <i class="nav-icon fa-regular fa-circle"></i>
+                                                <p>IPs</p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('mpfn.informatica.soporte.index')
+                                        <li class="nav-item">
+                                            <a class="nav-link ms-3 {{ request()->routeIs('mpfn.informatica.soporte.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.informatica.soporte.index') }}">
+                                                <i class="nav-icon fa-regular fa-circle"></i>
+                                                <p>Soporte</p>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('procesos.informatica.spijweb.index')
+                                        <li class="nav-item">
+                                            <a class="nav-link ms-3 {{ request()->routeIs('procesos.informatica.spijweb.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.spijweb.index') }}">
+                                                <i class="nav-icon fa-regular fa-circle"></i>
+                                                <p>Spijweb</p>
+                                            </a>
+                                        </li>
+                                    @endcan
                                 </ul>
                             </li>
 

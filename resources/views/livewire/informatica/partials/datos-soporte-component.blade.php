@@ -28,10 +28,12 @@
             </div>
             <div class="input-group">
                 <div class="form-check form-check-sm me-3">
-                    <input id="p7" class="form-check-input" type="checkbox" wire:model="p07">
+                    <input id="p7" class="form-check-input" type="checkbox" wire:model.live="p07">
                     <label for="p7" class="form-check-label small">Otros: </label></label>
                 </div>
-                <input id="txt_potros" type="text" class="form-control form-control-xs" wire:model="potros">
+                @if($p07)
+                    <input id="txt_potros" type="text" class="form-control form-control-xs text-uppercase {{ $mostrarotrosp }}" wire:model="potros">
+                @endif
             </div>
         </fieldset>
     </div>
@@ -64,10 +66,12 @@
             </div>
             <div class="input-group">
                 <div class="form-check form-check-sm me-3">
-                    <input id="c7" class="form-check-input" type="checkbox" wire:model="c07">
-                    <label for="c7" class="form-check-label small">Otros: </label></label>
+                    <input id="c7" class="form-check-input" type="checkbox" wire:model.live="c07">
+                    <label for="c7" class="form-check-label small">Otros: </label>
                 </div>
-                <input id="txt_cotros" type="text" class="form-control form-control-xs" wire:model="cotros">
+                @if($c07)
+                    <input id="txt_cotros" type="text" class="form-control form-control-xs text-uppercase {{ $mostrarotrosc }}" wire:model="cotros">
+                @endif
             </div>
         </fieldset>
     </div>

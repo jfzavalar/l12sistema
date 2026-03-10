@@ -32,12 +32,12 @@
                     <div class="col-xl-6">
                         <div class="input-group mb-2">
                             <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar por DNI o Apellidos y Nombres">
-                            @can('mpfn.rrhh.personal.create')
+                            @can('mpfn.informatica.soporte.create')
                                 <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
                                     <i class="fa-solid fa-file"></i> Nuevo
                                 </button>
                             @endcan
-                            @can('mpfn.rrhh.personal.destroy')
+                            @can('mpfn.informatica.soporte.destroy')
                                 <button type="button" id="btnnuevo" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#inactivosModal">
                                     <i class="fa-solid fa-ban"></i> Inactivos
                                 </button>
@@ -95,20 +95,12 @@
                                 </td>
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
-                                        @can('mpfn.rrhh.personal.edit')
-                                            <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->id }})">
+                                        @can('mpfn.informatica.soporte.edit')
+                                            <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->soporte_id }})">
                                                 <i class="fa-solid fa-pen-to-square"></i><br>Editar
                                             </button>
                                         @endcan
-                                        <button type="button" class="btn btn-outline-secondary btn-xs" data-bs-toggle="modal" data-bs-target="#verDetallesModal" wire:click="editar({{ $item->id }})">
-                                            <i class="fa-solid fa-eye"></i><br>Ver
-                                        </button>
-                                        @can('mpfn.rrhh.personal.create')
-                                            <button type="button" class="btn btn-outline-primary btn-xs" data-bs-toggle="modal" data-bs-target="#transferencia-personal-component" wire:click="nuevo_transferir_personal({{ $item->id }})">
-                                                <i class="fa-solid fa-people-arrows"></i><br>Ubicación
-                                            </button>
-                                        @endcan
-                                        @can('mpfn.rrhh.personal.destroy')
+                                        @can('mpfn.informatica.soporte.destroy')
                                             <button type="button" class="btn btn-outline-danger btn-xs" wire:click="desactivar({{ $item->id }})">
                                                 <i class="fa-solid fa-trash-can"></i><br>Eliminar
                                             </button>
