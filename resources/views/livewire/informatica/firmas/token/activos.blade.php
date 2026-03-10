@@ -49,7 +49,7 @@
                             <div class="alert alert-primary" role="alert">
                                 <h5 class="card-title">
                                     Total Tokens
-                                </h5>
+                                </h5><br>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h1><i class="fa-solid fa-chart-simple text-primary"></i> {{ $conteo_rutas->con_ruta + $conteo_rutas->sin_ruta }}</h1>
                                     <button class="btn btn-outline-primary btn-sm" wire:click="$set('filtro_rutas','')">
@@ -62,7 +62,7 @@
                             <div class="alert alert-success" role="alert">
                                 <h5 class="card-title">
                                     Actas Firmadas
-                                </h5>
+                                </h5><br>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h1><i class="fa-solid fa-file-signature text-success"></i> {{ $conteo_rutas->con_ruta }}</h1>
                                     <button class="btn btn-outline-success btn-sm" wire:click="$set('filtro_rutas','con')">
@@ -75,7 +75,7 @@
                             <div class="alert alert-danger" role="alert">
                                 <h5 class="card-title">
                                     Actas sin Firmar
-                                </h5>
+                                </h5><br>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h1><i class="fa-solid fa-signature text-danger"></i> {{ $conteo_rutas->sin_ruta }}</h1>
                                     <button class="btn btn-outline-danger btn-sm" wire:click="$set('filtro_rutas','sin')">
@@ -95,6 +95,11 @@
                     </div>
                     <div class="col-lg-10 col-sm-12">
                         <div class="input-group mb-3">
+                            <select name="cmbfiltroAsignacion" id="cmbfiltroAsignacion" class="form-select form-select-xs" wire:model.live="filtroasignacion">
+                                <option value="">TOTAL</option>
+                                <option value="ASIGNACION">ASIGNACION</option>
+                                <option value="DEVOLUCION">DEVOLUCION</option>
+                            </select>
                             <input type="text" id="txtsearcha" class="form-control form-control-sm" wire:model.live="searchtokens" placeholder="Buscar por DNI o Datos del Personal">
                             <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" wire:click="nuevo">
                                 <i class="fa-solid fa-file"></i> Nuevo

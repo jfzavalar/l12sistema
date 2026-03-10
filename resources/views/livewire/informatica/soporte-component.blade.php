@@ -3,7 +3,7 @@
         <div class="card-body">
             <div class="table-responsive small">
                 <div class="row">
-                    <div class="col-xl-3">
+                    {{-- <div class="col-xl-3">
                         <div class="input-group input-group-sm mb-2">
                             <span class="input-group-text bg-primary text-white" id="basic-addon1">CONDICIÓN:</span>
                             <select name="cmdfiltrocondicion" id="cmbfiltrocondicion" class="form-select form-select-sm" wire:model.live="filtrotipodocumento">
@@ -28,8 +28,8 @@
                             </select>
                             <span class="input-group-text" id="basic-addon2">{{ $lista_activos->total() }}</span>
                         </div>
-                    </div>
-                    <div class="col-xl-6">
+                    </div> --}}
+                    <div class="col-xl-12">
                         <div class="input-group mb-2">
                             <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar por DNI o Apellidos y Nombres">
                             @can('mpfn.informatica.soporte.create')

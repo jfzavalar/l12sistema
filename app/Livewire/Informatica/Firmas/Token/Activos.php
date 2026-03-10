@@ -44,6 +44,8 @@ class Activos extends Component
 
     public $avatar;
 
+    public $filtroasignacion="";
+
     //Buscar
     public $searchtokens;
     public function updatingSearchtokens(){
@@ -54,35 +56,46 @@ class Activos extends Component
         $this->resetPage('personalPage');
     }
 
+    //FUNCIONES EN TIEMPO REAL
+    // public function updatedFiltroasignacion($value)
+    // {
+    //     if ($value === 'ASIGNACION') {
+    //         $this->asignacion = 'ASIGNACION';
+    //     } elseif ($value === 'DEVOLUCION') {
+    //         $this->asignacion = 'DEVOLUCION';
+    //     } else {
+    //         $this->asignacion = '';
+    //     }
+    // }
+
     public function render()
     {
-        $lista_activos = Tbl_tokens_asignado::where('activo','1')
+        $lista_activos = Tbl_tokens_asignado::where('activo', '1')
             ->when($this->searchtokens !== '', function ($query) {
                 $query->where(function ($q) {
-                    $q->where('dni', 'like', '%' . $this->searchtokens. '%')
+                    $q->where('dni', 'like', '%' . $this->searchtokens . '%')
                     ->orWhere('datos', 'like', '%' . $this->searchtokens . '%');
                 });
             })
+
             // Filtro por rutas
             ->when($this->filtro_rutas === 'con', function ($query) {
                 $query->whereNotNull('actaruta')->where('actaruta', '<>', '');
             })
             ->when($this->filtro_rutas === 'sin', function ($query) {
                 $query->where(function ($subquery) {
-                    $subquery->whereNull('actaruta')->orWhere('actaruta', '');
+                    $subquery->whereNull('actaruta')
+                            ->orWhere('actaruta', '');
                 });
             })
-            // Filtro por usuarios y asignacion
-            ->when($this->filtro_asignados === 'ASIGNACION', function ($query) {
-                $query->whereNotNull('asignacion')->where('asignacion', '=', 'ASIGNACION')->where('created_user','=',$this->filtro_usuarios);
-            })            
-            ->when($this->filtro_asignados === 'DEVOLUCION', function ($query) {
-                $query->where(function ($subquery) {
-                    $subquery->whereNull('asignacion')->orWhere('asignacion', '=','DEVOLUCION')->where('created_user','=',$this->filtro_usuarios);
-                });
+
+            // Filtro por asignación
+            ->when($this->filtroasignacion !== '', function ($query) {
+                $query->where('asignacion', $this->filtroasignacion);
             })
+
             ->orderBy('id', 'desc')
-            ->paginate(10,['*'],'tokensPage');
+            ->paginate(10, ['*'], 'tokensPage');
         
         $totales_asignados = Tbl_tokens_asignado::select(
                 'created_user',

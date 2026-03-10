@@ -204,7 +204,8 @@ class SoporteComponent extends Component
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('personas.dni', 'like', '%' . $this->search . '%')
-                    ->orWhere('personas.datos', 'like', '%' . $this->search . '%');
+                    ->orWhere('personas.datos', 'like', '%' . $this->search . '%')
+                    ->orWhere('informaticas_soportes.bien_cod_patrimonial', 'like', '%' . $this->search . '%');
                 });
             })
             ->when($this->filtrotipodocumento, function ($query) {
