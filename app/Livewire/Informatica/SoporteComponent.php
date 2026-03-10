@@ -34,7 +34,7 @@ class SoporteComponent extends Component
     public $colorAgregar;
 
     //Variables PARA OCULTAR Y MOSTRAR TXT_OTROS
-    public $mostrarotrosp = "d-none", $mostrarotrosc = "d-none";
+    public $mostrarotrosp = "d-none", $mostrarotrosc = "d-none",$mostrarcargafoto = "d-none";
 
     //Variables bloquear de secciones
     public $seccionFoto="disabled", $seccionPersona="disabled", $seccionPersonal="disabled",$seccionBienpatrimonial="disabled";
@@ -126,6 +126,9 @@ class SoporteComponent extends Component
 
     public $soporte_id,
             $preventivo,
+            $sede_ubicacion,
+            $dependencia_ubicacion,
+            $despacho_ubicacion,
             $p01,
             $p02,
             $p03,
@@ -159,7 +162,8 @@ class SoporteComponent extends Component
             $color,
             $estado,
             $clase,
-            $familia;
+            $familia,
+            $ip;
 
     public $pdf;
 
@@ -358,6 +362,9 @@ class SoporteComponent extends Component
                     'persona_datos' => $this->datos,
                     'personal_id' => $this->personal_id,
                     'preventivo' => $this->preventivo,
+                    'sede_ubicacion' => $this->sedeorigen,
+                    'dependencia_ubicacion' => $this->dependenciaorigen,
+                    'despacho_ubicacion' => $this->despachoorigen,
                     'p01' => $this->p01,
                     'p02' => $this->p02,
                     'p03' => $this->p03,
@@ -450,6 +457,9 @@ class SoporteComponent extends Component
         $this->datos = $isoporte->persona_datos;
         $this->personal_id = $isoporte->personal_id;
         
+        $this->sede_ubicacion = $isoporte->sede_ubicacion;
+        $this->dependencia_ubicacion = $isoporte->dependencia_ubicacion;
+        $this->despacho_ubicacion = $isoporte->despacho_ubicacion;
 
         $this->p01 = (bool) $isoporte->p01;
         $this->p02 = (bool) $isoporte->p02;
@@ -494,6 +504,7 @@ class SoporteComponent extends Component
         $this->regimen = $ipersonal->regimen;
         $this->tipo_regimen = $ipersonal->tipo_regimen;
         $this->cargo = $ipersonal->cargo;
+
         $this->codsedeorigen = $ipersonal->codsedeorigen;
         $this->sedeorigen = $ipersonal->sedeorigen;
         $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
@@ -643,6 +654,41 @@ class SoporteComponent extends Component
         $this->reset('searchpersonas');
     }
 
+    public function agregar_sede(Personales_sede $isede)
+    {
+        $this->codsedeorigen = $isede->id;
+        $this->sedeorigen = $isede->nombre;
+
+        $this->codsededestino = $isede->id;
+        $this->sededestino = $isede->nombre;
+
+        $this->reset(['dependenciaorigen','despachoorigen']);
+
+        $this->reset(['searchdependencias','searchdespachos']);
+    }
+
+    public function agregar_dependencia(Personales_dependencia $idependencia)
+    {
+        $this->coddependenciaorigen = $idependencia->id;
+        $this->dependenciaorigen = $idependencia->nombre;
+
+        $this->coddependenciadestino = $idependencia->id;
+        $this->dependenciadestino = $idependencia->nombre;
+
+        $this->reset('despachoorigen');
+
+        $this->reset('searchdespachos');
+    }
+
+    public function agregar_despacho(Personales_despacho $idespacho)
+    {
+        $this->coddespachoorigen = $idespacho->id;
+        $this->despachoorigen = $idespacho->nombre;
+
+        $this->coddespachodestino = $idespacho->id;
+        $this->despachodestino = $idespacho->nombre;
+    }
+
     public function agregar_bien(patrimonios_biene $ibien)
     {
         $this->bien_id = $ibien->id;
@@ -655,6 +701,7 @@ class SoporteComponent extends Component
         $this->medida = $ibien->medida;
         $this->color = $ibien->color;
         $this->estado = $ibien->estado;
+        $this->ip = $ibien->ip;
 
         $this->reset('searchbienes');
     }
@@ -735,5 +782,90 @@ class SoporteComponent extends Component
                 tipo: 'error'
             );
         }
+    }
+
+
+    // FUNCIONES DE TRANSFERIR PERSONAL
+
+    public function nuevo_transferir_personal(Persona $ipersona)
+    {
+        $this->resetValidation();   // ← limpia los errores
+        $this->resetErrorBag();     // ← opcional extra seguridad
+
+        // Restablecer todas las variables
+        // $this->reset();
+
+        $this->funcionGuardarActualizar="guardar_transferir_personal";
+
+        $this->mostrarBtnBuscarDni = "d-none";
+
+        $this->colorHeaderModal = "primary-subtle";
+        $this->textoHeaderModal = "Nuevo ubicación de personal";
+        $this->colorGuardarActualizar = "primary";
+        $this->textoGuardarActualizar = "Guardar";
+        $this->colorAgregar = "outline-primary";
+        
+        $this->dni = $ipersona->dni;
+
+        $this->codsededestino = "";
+        $this->sededestino = "";
+        $this->coddependenciadestino = "";
+        $this->dependenciadestino = "";
+        $this->coddespachodestino = "";
+        $this->despachodestino = "";
+
+    }
+
+    public function guardar_transferir_personal()
+    {
+        try {
+
+            DB::transaction(function () {
+
+                $usuario = auth()->user()->datos;
+
+                // Buscar Personal
+                // ===== DATOS PERSONAL =====
+                $personal = Personale::where([['activo',"1"],['persona_dni', $this->dni],])->firstOrFail();
+
+                // Actualizar Personal
+                $personal->update([
+                    'codsededestino' => $this->codsedeorigen,
+                    'sededestino' => $this->sedeorigen,
+                    'coddependenciadestino' => $this->coddependenciaorigen,
+                    'dependenciadestino' => $this->dependenciaorigen,
+                    'coddespachodestino' => $this->coddespachoorigen,
+                    'despachodestino' => $this->despachoorigen,
+                    'updated_user' => $usuario,
+                ]);
+            });
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Datos actualizados',
+                mensaje: 'Los datos se han actualizado correctamente.',
+                tipo: 'success'
+            );
+
+            // Evento para cerrar el modal
+            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
+
+        } catch (\Throwable $e) {
+
+            report($e);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'Ocurrió un error al actualizar.',
+                tipo: 'error'
+            );
+        }
+    }
+
+    public function cerrar_transferir_personal()
+    {
+        // Restablecer todas las variables
+        // $this->reset();
     }
 }

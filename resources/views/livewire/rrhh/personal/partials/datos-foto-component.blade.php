@@ -12,5 +12,5 @@
 @endif
 
 <div class="col-lg-12">
-    <input type="file" id="fileimagen" class="form-control form-control-xs" accept=".jpg,.jpeg,image/jpeg" wire:model="foto" wire:key="file-{{ $inputFileKey }}">
+    <input type="file" id="fileimagen" class="form-control form-control-xs {{ $mostrarcargafoto }}" accept=".jpg,.jpeg,image/jpeg" wire:model="foto" wire:key="file-{{ $inputFileKey }}">
 </div>

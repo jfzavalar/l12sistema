@@ -178,6 +178,22 @@
                                             <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS INSTITUCIONALES</legend>
                                             @include('livewire.rrhh.personal.partials.datos-institucionales-component')
                                         </fieldset>
+                                        <div class="row">
+                                            <div class="col">
+                                                <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#transferencia-personal-component" wire:click="nuevo_transferir_personal({{ $item->id }})">
+                                                    <i class="fa-solid fa-people-arrows"></i> Cambiar Ubicación
+                                                </button>
+                                            </div>
+                                            <div class="col">
+                                                <input type="text" class="form-control form-control-xs" wire:model="sededestino" disabled>                                      
+                                            </div>
+                                            <div class="col">
+                                                <input type="text" class="form-control form-control-xs" wire:model="dependenciadestino" disabled>
+                                            </div>
+                                            <div class="col">
+                                                <input type="text" class="form-control form-control-xs" wire:model="despachodestino" disabled>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -214,10 +230,42 @@
         </div>
     </div>
 
-    @include('livewire.rrhh.contratos.partials.pdf-cargar-component')
-
-    @include('livewire.rrhh.personal.partials.buscar-personal-component')
+    {{-- ModalTransferencia de Personal - Ubicación Física --}}
+    <div wire:ignore.self class="modal fade" id="transferencia-personal-component" tabindex="-1" aria-labelledby="transferir-Personal-componentLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <form wire:submit.prevent="{{ $funcionGuardarActualizar }}">
+                    <div class="modal-header bg-{{ $colorHeaderModal }}">
+                        <h1 class="modal-title fs-5" id="transferir-Personal-componentLabel">
+                            <i class="fa-brands fa-searchengin"></i> {{ $textoHeaderModal }}
+                        </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <fieldset class="border p-3 rounded mb-3">
+                            <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS DE UBICACIÓN FÍSICA</legend>
+                            @include('livewire.rrhh.personal.partials.sede-dependencia-despacho-component')
+                        </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary btn-sm" data-bs-dismiss="modal">
+                            <i class="fa-solid fa-floppy-disk"></i> Guardar
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
+                            <i class="fa-solid fa-door-closed"></i> Cerrar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     @include('livewire.patrimonio.bienes.partials.buscar-bienes-component')
+
+    @include('livewire.rrhh.contratos.partials.pdf-cargar-component')
+    @include('livewire.rrhh.personal.partials.buscar-personal-component')
+    @include('livewire.rrhh.personal.partials.2buscar-sedes-component')
+    @include('livewire.rrhh.personal.partials.2buscar-dependencias-component')
+    @include('livewire.rrhh.personal.partials.2buscar-despachos-component')
 
 </div>

@@ -76,3 +76,18 @@
         </fieldset>
     </div>
 </div>
+<div class="row">
+    <div class="col-xl-4">
+        <div class="input-group">
+            <span class="input-group-text form-control form-control-xs" id="basic-addon1">Equipor en estado operativo:</span>
+            <select name="cmdoperativo" id="cmdoperativo" class="form-select form-select-xs">
+                <option value="SI">SI</option>
+                <option value="NO">NO</option>
+                <option value="PENDIENTE">PENDIENTE</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xl-8">
+        <input type="file" class="form-control form-control-xs" id="filecontrato" aria-describedby="inputGroupFileAddon04" aria-label="Upload" accept="application/pdf" wire:model="pdf">
+    </div>
+</div>
