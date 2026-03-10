@@ -198,6 +198,7 @@ class SoporteComponent extends Component
                 'personales.tipo_documento',
                 'informaticas_soportes.id as soporte_id',
                 'informaticas_soportes.bien_cod_patrimonial',
+                'informaticas_soportes.ruta_documento',
                 'patrimonios_bienes.bien')
             ->where('personales.activo', 1)
             ->when($this->search, function ($query) {
@@ -421,7 +422,8 @@ class SoporteComponent extends Component
 
         $this->funcionGuardarActualizar="actualizar";
 
-        $this->mostrarBtnBuscarDni = "d-none";
+        $this->mostrarotrosp = "";
+        $this->mostrarotrosc = "";
 
         $this->colorHeaderModal = "success-subtle";
         $this->textoHeaderModal = "EDITAR";
@@ -654,5 +656,83 @@ class SoporteComponent extends Component
         $this->estado = $ibien->estado;
 
         $this->reset('searchbienes');
+    }
+
+
+    // FUNCIONES CARGAR PDF
+    public function editar_pdf($soporte_id)
+    {
+        $this->soporte_id = $soporte_id;
+    }
+    public function actualizar_pdf()
+    {
+        // ===== DATOS PERSONAL =====
+        $isoporte = InformaticasSoporte::findOrFail($this->soporte_id);
+        
+        // Validar solo el PDF
+        $this->validate([
+            'pdf' => 'required|file|mimes:pdf|max:5120'
+        ]);
+
+        try {
+
+            DB::transaction(function () use ($isoporte) {
+
+                $usuario = auth()->user()->datos;
+
+                // Ruta actual
+                $rutaDocumento = $isoporte->ruta_documento;
+
+                if ($this->pdf) {
+
+                    // Eliminar anterior si existe
+                    if ($rutaDocumento &&
+                        Storage::disk('public')->exists($rutaDocumento)) {
+
+                        Storage::disk('public')->delete($rutaDocumento);
+                    }
+
+                    // Generar nombre limpio
+                    $fileName = str_replace(now()->format('Ymd'), '_',
+                        $isoporte->bien_cod_patrimonial . '_' .
+                        $isoporte->persona_dni . '_' 
+                    ) . '.pdf';
+
+                    // Guardar archivo
+                    $rutaDocumento = $this->pdf->storeAs(
+                        'archivos/informatica/soporte',
+                        $fileName,
+                        'public'
+                    );
+
+                    // Actualizar solo si se subió archivo
+                    $isoporte->update([
+                        'ruta_documento' => $rutaDocumento,
+                        'updated_user' => $usuario,
+                    ]);
+                }
+
+            });
+
+            $this->reset('pdf');
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Documento cargado',
+                mensaje: 'El PDF se cargó correctamente.',
+                tipo: 'success'
+            );
+
+        } catch (\Throwable $e) {
+
+            report($e);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'Ocurrió un error al cargar el PDF.',
+                tipo: 'error'
+            );
+        }
     }
 }

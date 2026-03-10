@@ -9,8 +9,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" wire:click = "cerrar_transferir_personal"></button>
                 </div>
                 <div class="modal-body">
-                    <fieldset class="border p-3 rounded mb-3" {{ $seccionPersona }}>
-                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">CARGA CONTRATO - ADENDA - RENUNCIA</legend>
+                    <fieldset class="border p-3 rounded mb-3">
+                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">CARGA DOCUMENTO</legend>
                         <input type="file" class="form-control form-control-xs" id="filecontrato" aria-describedby="inputGroupFileAddon04" aria-label="Upload" accept="application/pdf" wire:model="pdf">
                     </fieldset>      
                 </div>

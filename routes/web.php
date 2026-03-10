@@ -14,6 +14,7 @@ use App\Http\Controllers\Intranet\ConfiguracionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Rrhh\PersonalController;
 use App\Http\Controllers\Voluntariado\VoluntariadoController;
+use App\Models\InformaticasSoporte;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
@@ -85,7 +86,7 @@ Route::middleware('auth','can:procesos.administracion.rrhh.index')->group(functi
 
 Route::middleware('auth','can:mpfn.informatica.soporte.index')->group(function () {
     Route::resource('soporte', soporteController::class)->names('mpfn.informatica.soporte');
-    // Route::get('pdf/informatica/token-acta/{id}', [FirmasdigitalesController::class, 'exportarPDF'])->name('pdf.informatica.token-acta');
+    Route::get('pdf/informatica/soporte-acta/{id}', [soporteController::class, 'exportarPDF'])->name('pdf.informatica.soporte-acta');
 });
 
 

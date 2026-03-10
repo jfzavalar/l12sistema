@@ -35,6 +35,7 @@ class InformaticasSoporte extends Model
         'operativo',
         'observacion_usuario',
         'recomendacion_usuario',
+        'ruta_documento',
         'activo',
         'created_user',
         'updated_user',

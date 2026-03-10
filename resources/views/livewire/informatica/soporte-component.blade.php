@@ -107,87 +107,19 @@
                                         @endcan
                                     </div>
                                 <td class="text-end">
-                                    {{-- <div class="btn-group" role="group">
-                                        @can('mpfn.rrhh.personal.create')
-                                            <div class="dropdown">
-                                                <button class="btn btn-outline-dark btn-xs dropdown-toggle" 
-                                                        type="button" 
-                                                        data-bs-toggle="dropdown" 
-                                                        aria-expanded="false">
-                                                    <i class="fa-solid fa-list"></i></i><br>Trámite
-                                                </button>
-
-                                                <ul class="dropdown-menu">
-
-                                                    @if ($item->tipo_documento === "CONTRATO")
-
-                                                        <li>
-                                                            <button class="dropdown-item text-dark"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#nuevoEditarModal"
-                                                                    wire:click="nuevo_adenda({{ $item->id }})">
-                                                                <i class="fa-solid fa-circle-check"></i> Adenda
-                                                            </button>
-                                                        </li>
-
-                                                        <li>
-                                                            <button class="dropdown-item text-dark"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#nuevoEditarModal"
-                                                                    wire:click="nuevo_licencia({{ $item->id }})">
-                                                                <i class="fa-solid fa-circle-check"></i> Licencia
-                                                            </button>
-                                                        </li>
-
-                                                        <li>
-                                                            <button class="dropdown-item text-dark"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#nuevoEditarModal"
-                                                                    wire:click="nuevo_renuncia({{ $item->id }})">
-                                                                <i class="fa-solid fa-circle-check"></i> Renuncia
-                                                            </button>
-                                                        </li>                                                       
-
-                                                    @elseif($item->tipo_documento === "LICENCIA")
-
-                                                        <li>
-                                                            <button class="dropdown-item text-dark"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#nuevoEditarModal"
-                                                                    wire:click="nuevo_incorporacion({{ $item->id }})">
-                                                                <i class="fa-solid fa-circle-check"></i> Incorporación
-                                                            </button>
-                                                        </li>
-
-                                                        <li>
-                                                            <button class="dropdown-item text-dark"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#nuevoEditarModal"
-                                                                    wire:click="nuevo_renuncia({{ $item->id }})">
-                                                                <i class="fa-solid fa-circle-check"></i> Renuncia
-                                                            </button>
-                                                        </li>
-
-                                                    @else
-
-                                                        <li>
-                                                            <button class="dropdown-item text-dark"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#nuevoEditarModal"
-                                                                    wire:click="nuevo_contrato({{ $item->id }})">
-                                                                <i class="fa-solid fa-circle-check"></i> Contrato
-                                                            </button>
-                                                        </li>
-
-                                                    @endif
-
-                                                </ul>
-                                            </div>
-                                        @endcan
-                                        <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#historialModal" wire:click="historial_documentos('{{ $item->dni }}')">
-                                            <i class="fa-solid fa-timeline"></i><br>Historial
+                                    <div class="btn-group" role="group">
+                                        <a type="button" class="btn btn-outline-naranja btn-xs" href="{{ route('pdf.informatica.soporte-acta', $item->soporte_id) }}" target="_blank">
+                                            <i class="fa-solid fa-file-pdf"></i><br>Acta
+                                        </a>
+                                        <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#pdf-cargar-component" wire:click="editar_pdf({{ $item->soporte_id }})">
+                                            <i class="fa-solid fa-upload"></i><br>Cargar
                                         </button>
-                                    </div> --}}
+                                        @if($item->ruta_documento)
+                                            <a type="button" class="btn btn-outline-info btn-xs" href="{{ asset('storage/'.$item->ruta_documento) }}" target="_blank">
+                                                <i class="fa-solid fa-file-signature"></i><br> Firmado
+                                            </a>
+                                        @endif
+                                    </div>
                                 </td>
                             </tr>
                         @empty
@@ -282,7 +214,10 @@
         </div>
     </div>
 
+    @include('livewire.rrhh.contratos.partials.pdf-cargar-component')
+
     @include('livewire.rrhh.personal.partials.buscar-personal-component')
 
     @include('livewire.patrimonio.bienes.partials.buscar-bienes-component')
+
 </div>
