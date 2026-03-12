@@ -1,5 +1,5 @@
-@extends('layouts.bootstrap5.index')
-{{-- @extends('layouts.adminlte.app') --}}
+{{-- @extends('layouts.bootstrap5.index') --}}
+@extends('layouts.adminlte.app')
 
 @section('title', 'Dashboard')
 
