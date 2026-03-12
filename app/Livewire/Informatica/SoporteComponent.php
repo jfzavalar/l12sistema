@@ -121,8 +121,7 @@ class SoporteComponent extends Component
             $numero_convocatoria,
             $tipo_documento,
             $fecha_inicio,
-            $fecha_fin,
-            $ruta_documento;
+            $fecha_fin;
 
     public $soporte_id,
             $preventivo,
@@ -148,7 +147,9 @@ class SoporteComponent extends Component
             $cotros,
             $operativo,
             $observacion_usuario,
-            $recomendacion_usuario;
+            $recomendacion_usuario,
+            $ruta_evidencia,
+            $ruta_documento;
 
     Public $bien_id,
             $cod,
@@ -163,9 +164,10 @@ class SoporteComponent extends Component
             $estado,
             $clase,
             $familia,
-            $ip;
+            $bien_ip;
 
-    public $pdf;
+    public $pdf_acta;
+    public $bandera_documento="EVIDENCIA";
 
     public function updatedp07($value)
     {
@@ -196,10 +198,10 @@ class SoporteComponent extends Component
                 'personales.sedeorigen',
                 'personales.dependenciaorigen',
                 'personales.despachoorigen',
-                'personales.sededestino',
-                'personales.dependenciadestino',
-                'personales.despachodestino',
                 'personales.tipo_documento',
+                'informaticas_soportes.sede_ubicacion',
+                'informaticas_soportes.dependencia_ubicacion',
+                'informaticas_soportes.despacho_ubicacion',
                 'informaticas_soportes.id as soporte_id',
                 'informaticas_soportes.bien_cod_patrimonial',
                 'informaticas_soportes.ruta_documento',
@@ -224,7 +226,7 @@ class SoporteComponent extends Component
                     // ->orWhere('', 'like', '%' . $this->search . '%');
                 });
             })
-            ->orderBy('personales.id','desc')
+            ->orderBy('informaticas_soportes.id','desc')
             ->distinct()
             ->paginate(10, ['personas.*'], 'personalesPage');
 
@@ -291,7 +293,7 @@ class SoporteComponent extends Component
             'regimen' => 'required',
             'cargo' => 'required',
 
-            'pdf' => 'nullable|file|mimes:pdf|max:5120', // 5MB
+            'pdf_acta' => 'nullable|file|mimes:pdf|max:5120', // 5MB
         ];
     }
 
@@ -344,55 +346,60 @@ class SoporteComponent extends Component
     public function guardar()
     {
         $this->validate();
-        
+
         try {
 
-            DB::transaction(function () {
+            $usuario = auth()->user()?->datos;
 
-                $usuario = auth()->user()->datos; // Mejor que usar propiedad pública
+            // FUNCIÓN PARA CARGAR DOCUMENTO
+            $rutaDocumento = $this->guardar_acta();
 
-                // GUARDAR CAMPOS DE SOPORTE
+            InformaticasSoporte::create([
+                'bien_id' => $this->bien_id,
+                'bien_cod' => $this->cod,
+                'bien_cod_patrimonial' => $this->cod_patrimonial,
+                'persona_id' => $this->persona_id,
+                'persona_dni' => $this->dni,
+                'persona_datos' => $this->datos,
+                'personal_id' => $this->personal_id,
+                'preventivo' => $this->preventivo,
 
-                $persona = InformaticasSoporte::create([
-                    'bien_id' => $this->bien_id,
-                    'bien_cod' => $this->cod,
-                    'bien_cod_patrimonial' => $this->cod_patrimonial,
-                    'persona_id' => $this->persona_id,
-                    'persona_dni' => $this->dni,
-                    'persona_datos' => $this->datos,
-                    'personal_id' => $this->personal_id,
-                    'preventivo' => $this->preventivo,
-                    'sede_ubicacion' => $this->sedeorigen,
-                    'dependencia_ubicacion' => $this->dependenciaorigen,
-                    'despacho_ubicacion' => $this->despachoorigen,
-                    'p01' => $this->p01,
-                    'p02' => $this->p02,
-                    'p03' => $this->p03,
-                    'p04' => $this->p04,
-                    'p05' => $this->p05,
-                    'p06' => $this->p06,
-                    'p07' => $this->p07,
-                    'potros' => strtoupper($this->potros),
-                    'correctivo' => $this->correctivo,
-                    'c01' => $this->c01,
-                    'c02' => $this->c02,
-                    'c03' => $this->c03,
-                    'c04' => $this->c04,
-                    'c05' => $this->c05,
-                    'c06' => $this->c06,
-                    'c07' => $this->c07,
-                    'cotros' => strtoupper($this->cotros),
-                    'operativo' => $this->operativo,
-                    'observacion_usuario' => strtoupper($this->observacion_usuario),
-                    'recomendacion_usuario' => strtoupper($this->recomendacion_usuario),
+                'sede_ubicacion' => $this->sedeorigen,
+                'dependencia_ubicacion' => $this->dependenciaorigen,
+                'despacho_ubicacion' => $this->despachoorigen,
 
-                    'activo' => '1',
-                    'created_user' => $usuario,
-                    'updated_user' => $usuario,
-                ]);
-            });
+                'p01' => $this->p01,
+                'p02' => $this->p02,
+                'p03' => $this->p03,
+                'p04' => $this->p04,
+                'p05' => $this->p05,
+                'p06' => $this->p06,
+                'p07' => $this->p07,
+                'potros' => mb_strtoupper($this->potros),
 
-            // $this->resetExcept('searchPersonal');
+                'correctivo' => $this->correctivo,
+                'c01' => $this->c01,
+                'c02' => $this->c02,
+                'c03' => $this->c03,
+                'c04' => $this->c04,
+                'c05' => $this->c05,
+                'c06' => $this->c06,
+                'c07' => $this->c07,
+                'cotros' => mb_strtoupper($this->cotros),
+
+                'operativo' => $this->operativo,
+
+                'observacion_usuario' => mb_strtoupper($this->observacion_usuario),
+                'recomendacion_usuario' => mb_strtoupper($this->recomendacion_usuario),
+
+                'bien_ip' => $this->bien_id,
+
+                'ruta_evidencia' => $rutaDocumento,
+
+                'activo' => 1,
+                'created_user' => $usuario,
+                'updated_user' => $usuario,
+            ]);
 
             $this->dispatch(
                 'alerta-actualizado',
@@ -401,7 +408,6 @@ class SoporteComponent extends Component
                 tipo: 'success'
             );
 
-            // Evento para cerrar el modal
             $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
 
         } catch (\Throwable $e) {
@@ -478,8 +484,12 @@ class SoporteComponent extends Component
         $this->c06 = (bool) $isoporte->c06;
         $this->c07 = (bool) $isoporte->c07;
         $this->cotros = $isoporte->cotros;
+        $this->operativo = $isoporte->operativo;
         $this->observacion_usuario = $isoporte->observacion_usuario;
         $this->recomendacion_usuario = $isoporte->recomendacion_usuario;
+        $this->bien_ip = $isoporte->bien_ip;
+        $this->ruta_evidencia = $isoporte->ruta_evidencia;
+        // $this->ruta_documento = $isoporte->ruta_documento;
         
 
         $this->cod_patrimonial = $isoporte->bien_cod_patrimonial;
@@ -487,7 +497,7 @@ class SoporteComponent extends Component
         // ===== DATOS PERSONA =====
         $ipersona = Persona::where('id', $isoporte->persona_id)->where('activo','1')->firstOrFail();
 
-        $this->persona_id = $isoporte->ipersona_id;
+        $this->persona_id = $ipersona->id;
         $this->dni = $ipersona->dni;
         $this->nombres = $ipersona->nombres;
         $this->appaterno = $ipersona->appaterno;
@@ -513,11 +523,11 @@ class SoporteComponent extends Component
         $this->despachoorigen = $ipersonal->despachoorigen;
 
         $this->codsededestino = $ipersonal->codsededestino;
-        $this->sededestino = $ipersonal->sededestino;
+        $this->sededestino = $isoporte->sede_ubicacion;
         $this->coddependenciadestino = $ipersonal->coddependenciadestino;
-        $this->dependenciadestino = $ipersonal->dependenciadestino;
+        $this->dependenciadestino = $isoporte->dependencia_ubicacion;
         $this->coddespachodestino = $ipersonal->coddespachodestino;
-        $this->despachodestino = $ipersonal->despachodestino;
+        $this->despachodestino = $isoporte->despacho_ubicacion;
 
         $this->celinstitucional = $ipersonal->celinstitucional;
         $this->correoinstitucional = $ipersonal->correoinstitucional;
@@ -546,12 +556,14 @@ class SoporteComponent extends Component
 
                 $usuario = auth()->user()->datos;
 
-                // ========================
-                // ACTUALIZAR SOPORTE
-                // ========================
-                $soporte = InformaticasSoporte::findOrFail($this->soporte_id);
+                $isoporte = InformaticasSoporte::findOrFail($this->soporte_id);
 
-                $soporte->update([
+                $this->soporte_id = $isoporte->id;
+
+                // FUNCIÓN PARA CARGAR DOCUMENTO
+                $rutaDocumento = $this->actualizar_acta();
+
+                $data = [
                     'bien_id' => $this->bien_id,
                     'bien_cod' => $this->cod,
                     'bien_cod_patrimonial' => $this->cod_patrimonial,
@@ -560,6 +572,7 @@ class SoporteComponent extends Component
                     'persona_datos' => $this->datos,
                     'personal_id' => $this->personal_id,
                     'preventivo' => $this->preventivo,
+
                     'p01' => $this->p01,
                     'p02' => $this->p02,
                     'p03' => $this->p03,
@@ -567,7 +580,8 @@ class SoporteComponent extends Component
                     'p05' => $this->p05,
                     'p06' => $this->p06,
                     'p07' => $this->p07,
-                    'potros' => strtoupper($this->potros),
+                    'potros' => mb_strtoupper($this->potros),
+
                     'correctivo' => $this->correctivo,
                     'c01' => $this->c01,
                     'c02' => $this->c02,
@@ -576,14 +590,25 @@ class SoporteComponent extends Component
                     'c05' => $this->c05,
                     'c06' => $this->c06,
                     'c07' => $this->c07,
-                    'cotros' => strtoupper($this->cotros),
-                    'operativo' => $this->operativo,
-                    'observacion_usuario' => strtoupper($this->observacion_usuario),
-                    'recomendacion_usuario' => strtoupper($this->recomendacion_usuario),
+                    'cotros' => mb_strtoupper($this->cotros),
 
-                    'activo' => '1',
+                    'operativo' => $this->operativo,
+
+                    'observacion_usuario' => mb_strtoupper($this->observacion_usuario),
+                    'recomendacion_usuario' => mb_strtoupper($this->recomendacion_usuario),
+
+                    'bien_ip' => $this->bien_ip,
+
+                    'activo' => 1,
                     'updated_user' => $usuario,
-                ]);
+                ];
+
+                // SOLO SI SE SUBIÓ ARCHIVO
+                if ($this->pdf_acta) {
+                    $data['ruta_evidencia'] = $rutaDocumento;
+                }
+
+                $isoporte->update($data);
             });
 
             $this->dispatch(
@@ -691,35 +716,95 @@ class SoporteComponent extends Component
 
     public function agregar_bien(patrimonios_biene $ibien)
     {
+        $this->reset([
+            'dni','datos','appaterno','apmaterno','nombres','genero','estadocivil',
+            'fechanacimiento','celpersonal','correopersonal','foto',
+            'tipo_regimen','regimen','cargo',
+            'codsedeorigen','sedeorigen',
+            'coddependenciaorigen','dependenciaorigen',
+            'coddespachoorigen','despachoorigen',
+            'codsededestino','sededestino',
+            'coddependenciadestino','dependenciadestino',
+            'coddespachodestino','despachodestino',
+            'celinstitucional','correoinstitucional'
+        ]);
+
+        // Datos del bien
         $this->bien_id = $ibien->id;
-        $this->cod = $ibien->cod;
-        $this->cod_patrimonial = $ibien->cod_patrimonial;
-        $this->bien = $ibien->bien;
-        $this->marca = $ibien->marca;
-        $this->modelo = $ibien->modelo;
-        $this->serie = $ibien->serie;
-        $this->medida = $ibien->medida;
-        $this->color = $ibien->color;
-        $this->estado = $ibien->estado;
-        $this->ip = $ibien->ip;
+
+        $this->fill([
+            'cod' => $ibien->cod,
+            'cod_patrimonial' => $ibien->cod_patrimonial,
+            'bien' => $ibien->bien,
+            'marca' => $ibien->marca,
+            'modelo' => $ibien->modelo,
+            'serie' => $ibien->serie,
+            'medida' => $ibien->medida,
+            'color' => $ibien->color,
+            'estado' => $ibien->estado,
+            'bien_ip' => $ibien->ip,
+        ]);
+
+        $dni = $ibien->persona_dni;
+
+        // Persona
+        if ($persona = Persona::where('activo',1)->where('dni',$dni)->first()) {
+
+            $this->fill([
+                'persona_id' => $persona->id,
+                'dni' => $persona->dni,
+                'appaterno' => $persona->appaterno,
+                'apmaterno' => $persona->apmaterno,
+                'nombres' => $persona->nombres,
+                'datos' => $persona->datos,
+                'celpersonal' => $persona->celpersonal,
+                'correopersonal' => $persona->correopersonal,
+            ]);
+
+            $this->fotoactual = $persona->foto;
+        }
+
+        // Personal
+        if ($personal = Personale::where('activo',1)->where('persona_dni',$dni)->first()) {
+
+            $this->fill([
+                'personal_id' => $personal->id,
+                'sedeorigen' => $personal->sedeorigen,
+                'dependenciaorigen' => $personal->dependenciaorigen,
+                'despachoorigen' => $personal->despachoorigen,
+                'celinstitucional' => $personal->celinstitucional,
+                'correoinstitucional' => $personal->correoinstitucional,
+                'regimen' => $personal->regimen,
+                'tipo_regimen' => $personal->tipo_regimen,
+                'cargo' => $personal->cargo,
+            ]);
+        }
 
         $this->reset('searchbienes');
     }
 
 
-    // FUNCIONES CARGAR PDF
+    // FUNCIONES PARA CARGAR PDF
+
+
     public function editar_pdf($soporte_id)
     {
         $this->soporte_id = $soporte_id;
+        
+        $this->bandera_documento = "ACTA";
     }
+
     public function actualizar_pdf()
     {
         // ===== DATOS PERSONAL =====
-        $isoporte = InformaticasSoporte::findOrFail($this->soporte_id);
+        $isoporte = InformaticasSoporte::where('id', $this->soporte_id)->firstOrFail();
+
+        $this->dni = $isoporte->persona_dni;
+        $this->cod_patrimonial = $isoporte->bien_cod_patrimonial;
         
         // Validar solo el PDF
         $this->validate([
-            'pdf' => 'required|file|mimes:pdf|max:5120'
+            'pdf_acta' => 'required|file|mimes:pdf|max:5120'
         ]);
 
         try {
@@ -729,40 +814,16 @@ class SoporteComponent extends Component
                 $usuario = auth()->user()->datos;
 
                 // Ruta actual
-                $rutaDocumento = $isoporte->ruta_documento;
+                $rutaDocumento = $this->actualizar_acta();
 
-                if ($this->pdf) {
-
-                    // Eliminar anterior si existe
-                    if ($rutaDocumento &&
-                        Storage::disk('public')->exists($rutaDocumento)) {
-
-                        Storage::disk('public')->delete($rutaDocumento);
-                    }
-
-                    // Generar nombre limpio
-                    $fileName = str_replace(now()->format('Ymd'), '_',
-                        $isoporte->bien_cod_patrimonial . '_' .
-                        $isoporte->persona_dni . '_' 
-                    ) . '.pdf';
-
-                    // Guardar archivo
-                    $rutaDocumento = $this->pdf->storeAs(
-                        'archivos/informatica/soporte',
-                        $fileName,
-                        'public'
-                    );
-
-                    // Actualizar solo si se subió archivo
-                    $isoporte->update([
-                        'ruta_documento' => $rutaDocumento,
-                        'updated_user' => $usuario,
-                    ]);
-                }
+                $isoporte->update([
+                    'ruta_documento' => $rutaDocumento,
+                    'updated_user' => $usuario,
+                ]);
 
             });
 
-            $this->reset('pdf');
+            $this->reset('pdf_acta');
 
             $this->dispatch(
                 'alerta-actualizado',
@@ -785,7 +846,7 @@ class SoporteComponent extends Component
     }
 
 
-    // FUNCIONES DE TRANSFERIR PERSONAL
+    // FUNCIONES UBICACION FISICA
 
     public function nuevo_transferir_personal(Persona $ipersona)
     {
@@ -867,5 +928,82 @@ class SoporteComponent extends Component
     {
         // Restablecer todas las variables
         // $this->reset();
+    }
+
+
+
+
+    private function guardar_acta()
+    {
+        if (!$this->pdf_acta) {
+            return null;
+        }
+
+        if ($this->bandera_documento === "EVIDENCIA") {
+            $fileName =
+            now()->timestamp.'_'
+            .$this->dni.'_'
+            .$this->cod_patrimonial.'_'
+            ."EVIDENCIA"
+            .'.pdf';
+
+            return $this->pdf_acta->storeAs(
+                'archivos/informatica/soporte/evidencias',
+                $fileName,
+                'public'
+            );
+        } else {
+            $fileName =
+            now()->timestamp.'_'
+            .$this->dni.'_'
+            .$this->cod_patrimonial.'_'
+            ."ACTA"
+            .'.pdf';
+
+            return $this->pdf_acta->storeAs(
+                'archivos/informatica/soporte/actas',
+                $fileName,
+                'public'
+            );
+        }
+        
+    }
+
+    private function editar_acta($personal_id)
+    {
+        $this->personal_id = $personal_id;
+    }
+
+    private function actualizar_acta()
+    {
+        $isoporte = InformaticasSoporte::findOrFail($this->soporte_id);
+
+        if ($this->bandera_documento === "EVIDENCIA") {
+            $rutaDocumento = $isoporte->ruta_evidencia;
+        } else {
+            $rutaDocumento = $isoporte->ruta_documento;
+        }
+
+        if (!$this->pdf_acta) {
+            return $rutaDocumento;
+        }
+
+        // Si no existe archivo previo
+        if (!$rutaDocumento) {
+            return $this->guardar_acta();
+        }
+
+        $fileName = basename($rutaDocumento);
+        $directory = dirname($rutaDocumento);
+
+        if (Storage::disk('public')->exists($rutaDocumento)) {
+            Storage::disk('public')->delete($rutaDocumento);
+        }
+
+        return $this->pdf_acta->storeAs(
+            $directory,
+            $fileName,
+            'public'
+        );
     }
 }

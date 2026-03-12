@@ -34,13 +34,15 @@
             <button class="btn btn-outline-dark btn-xs" type="button" id="btnimprimircontrato">
                 <i class="fa-solid fa-print"></i> Imprimir
             </button>
-            <input type="file" class="form-control form-control-xs" id="filecontrato" aria-describedby="inputGroupFileAddon04" aria-label="Upload" accept="application/pdf" wire:model="pdf">
+            <input type="file" class="form-control form-control-xs" id="filecontrato" aria-describedby="inputGroupFileAddon04" aria-label="Upload" accept="application/pdf" wire:model="pdf_acta">
             {{-- <button class="btn btn-outline-warning btn-xs" type="button" id="btncargarcontrato">
                 <i class="fa-solid fa-arrow-up-from-bracket"></i> Cargar
             </button> --}}
-            <button class="btn btn-{{ $colorAgregar }} btn-xs" type="button" id="btnvercontrato">
-                <i class="fa-solid fa-file-pdf"></i> Ver firmado
-            </button>
+            @if ($ruta_documento)
+                <a class="btn btn-{{ $colorAgregar }} btn-xs" type="button" id="btnverevidencia" href="{{ asset('storage/'.$ruta_documento) }}" target="_blank">
+                    <i class="fa-solid fa-file-pdf"></i> Ver firmado
+                </a>
+            @endif
         </div>
     </div>
 </div>

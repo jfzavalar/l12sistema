@@ -119,7 +119,7 @@ class PersonalComponent extends Component
             $fecha_fin,
             $ruta_documento;
 
-    public $pdf;
+    public $pdf_acta;
 
     public function mount()
     {
@@ -184,7 +184,7 @@ class PersonalComponent extends Component
                 });
             })
             ->orderBy('personales.id','desc')
-            ->distinct()
+            // ->distinct()
             ->paginate(10, ['personas.*'], 'personalesPage');
 
         $lista_inactivos = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
@@ -248,12 +248,12 @@ class PersonalComponent extends Component
             ->orderBy('datos')
             ->paginate(10,['*'],'personasPage');
 
-        $lista_sedes = Personales_sede::select('id','nombre')
+        $lista_sedes = Personales_sede::select('id','nombre','nombred')
             ->where('activo','1')
             ->where('nombre','like','%' . $this->searchsedes . '%')
             ->distinct()
             ->orderBy('nombre')
-            ->paginate(10,['*'], 'sedesPage');
+            ->paginate(15,['*'], 'sedesPage');
             
         $lista_dependencias = Personales_dependencia::select('id','nombre')
             ->where('activo','1')
@@ -304,7 +304,7 @@ class PersonalComponent extends Component
 
             'foto' => 'nullable|image|mimes:jpg,jpeg|max:2048', // 2MB máximo
 
-            'pdf' => 'nullable|file|mimes:pdf|max:5120', // 5MB
+            'pdf_acta' => 'nullable|file|mimes:pdf|max:5120', // 5MB            
         ];
     }
 
@@ -327,8 +327,8 @@ class PersonalComponent extends Component
         'fecha_inicio.before_or_equal' => 'La fecha de inicio no puede ser mayor a la fecha de fin.',
         'fecha_fin.after_or_equal' => 'La fecha de fin no puede ser menor a la fecha de inicio.',
 
-        'pdf.mimes' => 'Solo se permiten archivos PDF.',
-        'pdf.max' => 'El archivo no debe superar 5MB.',
+        'pdf_acta.mimes' => 'Solo se permiten archivos PDF.',
+        'pdf_acta.max' => 'El archivo no debe superar 5MB.',
     ];
 
     public function nuevo()
@@ -370,10 +370,13 @@ class PersonalComponent extends Component
 
                 if ($this->foto) {
 
-                    $nombreFoto = time() . '_foto_' . $this->foto->getClientOriginalName();
+                    $nombreFoto =
+                        now()->timestamp.'_foto_'.
+                        Str::slug(pathinfo($this->foto->getClientOriginalName(), PATHINFO_FILENAME)).
+                        '.'.$this->foto->getClientOriginalExtension();
 
                     $rutaFoto = $this->foto->storeAs(
-                        'imagenes/rrhh/personal',
+                        'imagenes/rrhh/personal/fotos',
                         $nombreFoto,
                         'public'
                     );
@@ -399,7 +402,7 @@ class PersonalComponent extends Component
                 ]);
 
                 // FUNCIÓN PARA CARGAR DOCUMENTO
-                $rutaDocumento = $this->guardar_documento();
+                $rutaDocumento = $this->guardar_acta();
 
                 // GUARDAR CAMPOS DE PERSONAL
                 Personale::create([
@@ -439,7 +442,7 @@ class PersonalComponent extends Component
                 ]);
             });
 
-            $this->resetExcept('searchPersonal');
+            // $this->resetExcept('searchPersonal');
 
             $this->dispatch(
                 'alerta-actualizado',
@@ -590,8 +593,10 @@ class PersonalComponent extends Component
                     ['persona_dni', $this->dni],
                 ])->firstOrFail();
 
+                $this->personal_id = $personal->id;
+
                 // Llamamos a la función privada para cargar documento
-                $rutaDocumento = $this->actualizar_documento($personal);
+                $rutaDocumento = $this->actualizar_acta();
 
                 $personal->update([
                     'regimen' => $this->regimen,
@@ -644,66 +649,6 @@ class PersonalComponent extends Component
                 tipo: 'error'
             );
         }
-    }
-
-    private function guardar_documento(){
-        if (!$this->pdf) {
-            return null;
-        }
-
-        // 1️⃣ Crear nombre base
-        $fileNameBase =
-            $this->numero_convocatoria . '_' .
-            $this->dni . '_' .
-            $this->tipo_documento . '_' .
-            $this->fecha_inicio . '_' .
-            $this->fecha_fin;
-
-        // 2️⃣ Limpiar y hacer único
-        $fileName = Str::slug($fileNameBase) . '_' . Str::uuid();
-        $fileName .= '.' . $this->pdf->getClientOriginalExtension();
-
-        // 3️⃣ Guardar archivo
-        return $this->pdf->storeAs(
-            'archivos/rrhh/personal/documentos',
-            $fileName,
-            'public'
-        );
-    }
-
-    private function actualizar_documento($personal)
-    {
-        // Mantener archivo actual
-        $rutaDocumento = $personal->ruta_documento;
-
-        // 📌 Si se sube nuevo PDF
-        if ($this->pdf) {
-
-            // Eliminar anterior si existe
-            if ($personal->ruta_documento &&
-                Storage::disk('public')->exists($personal->ruta_documento)) {
-
-                Storage::disk('public')->delete($personal->ruta_documento);
-            }
-
-            // Nombre limpio (sin espacios)
-            $fileName = str_replace(' ', '_',
-                $this->numero_convocatoria . '_' .
-                $this->dni . '_' .
-                $this->tipo_documento . '_' .
-                $this->fecha_inicio . '_' .
-                $this->fecha_fin
-            ) . '.' . $this->pdf->getClientOriginalExtension();
-
-            // Guardar archivo
-            $rutaDocumento = $this->pdf->storeAs(
-                'archivos/rrhh/personal/documentos',
-                $fileName,
-                'public'
-            );
-        }
-
-        return $rutaDocumento; // 🔥 FALTABA ESTO
     }
 
     public function cerrar()
@@ -825,13 +770,13 @@ class PersonalComponent extends Component
                 ]);
 
                 // FUNCIÓN PARA CARGAR DOCUMENTO
-                $rutaDocumento = $this->guardar_documento();
+                $rutaDocumento = $this->guardar_acta();
 
                 // GUARDAR CAMPOS DE PERSONAL
                 $this->guardar_personal($rutaDocumento);
             });
 
-            $this->resetExcept('searchPersonal');
+            // $this->resetExcept('searchPersonal');
 
             $this->dispatch(
                 'alerta-actualizado',
@@ -910,7 +855,7 @@ class PersonalComponent extends Component
                 ]);
 
                 // FUNCIÓN PARA CARGAR DOCUMENTO
-                $rutaDocumento = $this->guardar_documento();
+                $rutaDocumento = $this->guardar_acta();
 
                 // GUARDAR CAMPOS DE PERSONAL
                 $this->guardar_personal($rutaDocumento);
@@ -995,7 +940,7 @@ class PersonalComponent extends Component
                 ]);
 
                 // FUNCIÓN PARA CARGAR DOCUMENTO
-                $rutaDocumento = $this->guardar_documento();
+                $rutaDocumento = $this->guardar_acta();
 
                 // GUARDAR CAMPOS DE PERSONAL
                 $this->guardar_personal($rutaDocumento);
@@ -1077,7 +1022,7 @@ class PersonalComponent extends Component
                 ]);
 
                 // FUNCIÓN PARA CARGAR DOCUMENTO
-                $rutaDocumento = $this->guardar_documento();
+                $rutaDocumento = $this->guardar_acta();
 
                 // GUARDAR CAMPOS DE PERSONAL
                 $this->guardar_personal($rutaDocumento);
@@ -1159,7 +1104,7 @@ class PersonalComponent extends Component
                 ]);
 
                 // FUNCIÓN PARA CARGAR DOCUMENTO
-                $rutaDocumento = $this->guardar_documento();
+                $rutaDocumento = $this->guardar_acta();
 
                 // GUARDAR CAMPOS DE PERSONAL
                 $this->guardar_personal($rutaDocumento);
@@ -1280,19 +1225,28 @@ class PersonalComponent extends Component
         $this->reset();
     }
 
-    // FUNCIONES PARA HISTORIAL
+
+
+
+    // FUNCIONES PARA CARGAR PDF
+
+
     public function editar_pdf($personal_id)
     {
         $this->personal_id = $personal_id;
     }
+
     public function actualizar_pdf()
     {
         // ===== DATOS PERSONAL =====
         $ipersonal = Personale::where('id', $this->personal_id)->firstOrFail();
+
+        $this->tipo_documento = $ipersonal->tipo_documento;
+        $this->numero_convocatoria = $ipersonal->numero_convocatoria;
         
         // Validar solo el PDF
         $this->validate([
-            'pdf' => 'required|file|mimes:pdf|max:5120'
+            'pdf_acta' => 'required|file|mimes:pdf|max:5120'
         ]);
 
         try {
@@ -1302,43 +1256,16 @@ class PersonalComponent extends Component
                 $usuario = auth()->user()->datos;
 
                 // Ruta actual
-                $rutaDocumento = $ipersonal->ruta_documento;
+                $rutaDocumento = $this->actualizar_acta();
 
-                if ($this->pdf) {
-
-                    // Eliminar anterior si existe
-                    if ($rutaDocumento &&
-                        Storage::disk('public')->exists($rutaDocumento)) {
-
-                        Storage::disk('public')->delete($rutaDocumento);
-                    }
-
-                    // Generar nombre limpio
-                    $fileName = str_replace(' ', '_',
-                        $ipersonal->numero_convocatoria . '_' .
-                        $ipersonal->persona_dni . '_' .
-                        $ipersonal->tipo_documento . '_' .
-                        $ipersonal->fecha_inicio . '_' .
-                        $ipersonal->fecha_fin
-                    ) . '.pdf';
-
-                    // Guardar archivo
-                    $rutaDocumento = $this->pdf->storeAs(
-                        'archivos/rrhh/personal/documentos',
-                        $fileName,
-                        'public'
-                    );
-
-                    // Actualizar solo si se subió archivo
-                    $ipersonal->update([
-                        'ruta_documento' => $rutaDocumento,
-                        'updated_user' => $usuario,
-                    ]);
-                }
+                $ipersonal->update([
+                    'ruta_documento' => $rutaDocumento,
+                    'updated_user' => $usuario,
+                ]);
 
             });
 
-            $this->reset('pdf');
+            $this->reset('pdf_acta');
 
             $this->dispatch(
                 'alerta-actualizado',
@@ -1360,7 +1287,9 @@ class PersonalComponent extends Component
         }
     }
 
-    // FUNCIONES PERSONA - PERSONAL
+
+
+    // FUNCIONES PRIVADAS PARA REUTILIZAR
 
     private function ver_persona(Persona $ipersona)
     {
@@ -1393,7 +1322,7 @@ class PersonalComponent extends Component
         $this->sededestino = $ipersonal->sededestino;
         $this->coddependenciadestino = $ipersonal->coddependenciadestino;
         $this->dependenciadestino = $ipersonal->dependenciadestino;
-        $this->coddespachoorigen = $ipersonal->coddespachodestino;
+        $this->coddespachodestino = $ipersonal->coddespachodestino;
         $this->despachodestino = $ipersonal->despachodestino;
 
         $this->celinstitucional = $ipersonal->celinstitucional;
@@ -1424,7 +1353,7 @@ class PersonalComponent extends Component
             'sededestino' => $this->sededestino,
             'coddependenciadestino' => $this->coddependenciadestino,
             'dependenciadestino' => $this->dependenciadestino,
-            'coddespachoorigen' => $this->coddespachoorigen,
+            'coddespachodestino' => $this->coddespachodestino,
             'despachodestino' => $this->despachodestino,
 
             'celinstitucional' => $this->celinstitucional,
@@ -1442,5 +1371,59 @@ class PersonalComponent extends Component
             'created_user' => $usuario,
             'updated_user' => $usuario,
         ]);
+    }
+
+    private function guardar_acta()
+    {
+        if (!$this->pdf_acta) {
+            return null;
+        }
+
+        $fileName =
+            now()->timestamp.'_'
+            .$this->dni.'_'
+            .Str::slug($this->tipo_documento).'_'
+            .$this->numero_convocatoria
+            .'.pdf';
+
+        return $this->pdf_acta->storeAs(
+            'archivos/rrhh/personal/contratos',
+            $fileName,
+            'public'
+        );
+    }
+
+    private function editar_acta($personal_id)
+    {
+        $this->personal_id = $personal_id;
+    }
+
+    private function actualizar_acta()
+    {
+        $ipersonal = Personale::findOrFail($this->personal_id);
+
+        $rutaDocumento = $ipersonal->ruta_documento;
+
+        if (!$this->pdf_acta) {
+            return $rutaDocumento;
+        }
+
+        // Si no existe archivo previo
+        if (!$rutaDocumento) {
+            return $this->guardar_acta();
+        }
+
+        $fileName = basename($rutaDocumento);
+        $directory = dirname($rutaDocumento);
+
+        if (Storage::disk('public')->exists($rutaDocumento)) {
+            Storage::disk('public')->delete($rutaDocumento);
+        }
+
+        return $this->pdf_acta->storeAs(
+            $directory,
+            $fileName,
+            'public'
+        );
     }
 }

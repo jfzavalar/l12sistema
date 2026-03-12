@@ -52,9 +52,9 @@
                             <th scope="col">
                                 <i class="fa-solid fa-user"></i> DNI - PERSONAL
                             </th>
-                            <th scope="col" class="table-success">DEPENDENCIA ORIGEN</th>
+                            <th scope="col">DEPENDENCIA ORIGEN</th>
+                            <th scope="col">REGIMEN - CARGO</th>
                             <th scope="col" class="table-danger">UBICACIÓN FÍSICA</th>
-                            <th scope="col" class="table-success">REGIMEN - CARGO</th>
                             <th scope="col">CONDICIÓN</th>
                             <th scope="col" colspan="2"><i class="fa-solid fa-gears"></i></th>
                             {{-- <th scope="col"><i class="fa-solid fa-gears"></i></th> --}}
@@ -77,23 +77,24 @@
                                     <b>DESPACHO:</b> {{ $item->despachoorigen }}
                                 </td>
                                 <td @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
+                                    <b>REGIMEN:</b> {{ $item->regimen }}
+                                    <br>
+                                    <b>CARGO:</b> {{ $item->cargo }}
+                                </td>
+                                <td @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
                                     <b>SEDE:</b> {{ $item->sededestino }}
                                     <br>
                                     <b>DEPENDENCIA:</b> {{ $item->dependenciadestino }}
                                     <br>
                                     <b>DESPACHO:</b> {{ $item->despachodestino }}
                                 </td>
-                                <td @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
-                                    <b>REGIMEN:</b> {{ $item->regimen }}
-                                    <br>
-                                    <b>CARGO:</b> {{ $item->cargo }}
-                                </td>
                                 <td class="text-center">
-                                    <span class="badge @if($item->tipo_documento == 'CONTRATO') text-bg-success
-                                                    @elseif($item->tipo_documento == 'LICENCIA') text-bg-danger
-                                                    @elseif($item->tipo_documento == 'RENUNCIA') text-bg-dark
-                                                    @elseif($item->tipo_documento == 'ADENDA') text-bg-primary
-                                                    @endif">{{ $item->tipo_documento }}</span>
+                                    <span class="badge @if(in_array($item->tipo_documento, ['ADENDA','CONTRATO','INCORPORACION'])) text-bg-primary
+                                        @elseif(in_array($item->tipo_documento, ['LICENCIA','RENUNCIA']))
+                                            text-bg-danger
+                                        @endif">
+                                        {{ $item->tipo_documento }}
+                                    </span>
                                 </td>
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
@@ -177,6 +178,35 @@
                                                                 <i class="fa-solid fa-circle-check"></i> Renuncia
                                                             </button>
                                                         </li>
+
+                                                    @elseif($item->tipo_documento === "ADENDA")
+
+                                                        <li>
+                                                            <button class="dropdown-item text-dark"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#nuevoEditarModal"
+                                                                    wire:click="nuevo_adenda({{ $item->id }})">
+                                                                <i class="fa-solid fa-circle-check"></i> Adenda
+                                                            </button>
+                                                        </li>
+
+                                                        <li>
+                                                            <button class="dropdown-item text-dark"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#nuevoEditarModal"
+                                                                    wire:click="nuevo_licencia({{ $item->id }})">
+                                                                <i class="fa-solid fa-circle-check"></i> Licencia
+                                                            </button>
+                                                        </li>
+
+                                                        <li>
+                                                            <button class="dropdown-item text-dark"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#nuevoEditarModal"
+                                                                    wire:click="nuevo_renuncia({{ $item->id }})">
+                                                                <i class="fa-solid fa-circle-check"></i> Renuncia
+                                                            </button>
+                                                        </li> 
 
                                                     @else
 
@@ -417,10 +447,9 @@
                                         <td>{{ $item3->regimen }}</td>
                                         <td>{{ $item3->cargo }}</td>
                                         <td>{{ $item3->numero_convocatoria }}</td>
-                                        <td class="@if($item3->tipo_documento == 'CONTRATO') text-success
-                                                    @elseif($item3->tipo_documento == 'LICENCIA') text-danger
-                                                    @elseif($item3->tipo_documento == 'RENUNCIA') text-dark
-                                                    @elseif($item3->tipo_documento == 'ADENDA') text-primary
+                                    
+                                        <td class="@if(in_array($item3->tipo_documento, ['ADENDA','CONTRATO','INCORPORACION'])) text-primary
+                                                    @elseif(in_array($item3->tipo_documento, ['LICENCIA','RENUNCIA'])) text-danger
                                                     @endif">
                                             {{ $item3->tipo_documento }}
                                             <br>
@@ -433,7 +462,7 @@
                                                 </button>
                                                 @if($item3->ruta_documento)
                                                     <a type="button" class="btn btn-outline-info btn-xs" href="{{ asset('storage/'.$item3->ruta_documento) }}" target="_blank">
-                                                        <i class="fa-solid fa-file-signature"></i><br> Ver-Firmado
+                                                        <i class="fa-solid fa-file-signature"></i><br> Firmado
                                                     </a>
                                                 @endif
                                             </div>

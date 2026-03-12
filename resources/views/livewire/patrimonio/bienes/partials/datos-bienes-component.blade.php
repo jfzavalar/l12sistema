@@ -54,7 +54,7 @@
     <div class="col-xl-12 col-sm-12">
         <label for="txt_estado" class="fw-bold fs-6">IP</label>
         <div class="input-group">
-            <input type="text" id="txt_estado" class="form-control form-control-xs" wire:model="ip">
+            <input type="text" id="txt_estado" class="form-control form-control-xs" wire:model="bien_ip">
         </div>
     </div>
 </div>

@@ -25,6 +25,7 @@
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">SEDE</th>
+                                    <th scope="col">DETALLE</th>
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
@@ -33,6 +34,7 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $sede->nombre }}</td>
+                                        <td>{{ $sede->nombred }}</td>
                                         <td>
                                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                 <div class="btn-group" role="group">
@@ -49,7 +51,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="3">{{ $lista_sedes->links() }}</td>
+                                    <td colspan="4">{{ $lista_sedes->links() }}</td>
                                 </tr>
                             </tfoot>
                         </table>                      

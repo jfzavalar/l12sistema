@@ -52,11 +52,11 @@
                             <th scope="col">
                                 <i class="fa-solid fa-user"></i> DNI - PERSONAL
                             </th>
-                            <th scope="col" class="table-success">DEPENDENCIA ORIGEN</th>
-                            <th scope="col" class="table-danger">BIEN UBICACIÓN FÍSICA</th> 
-                            <th scope="col" class="table-success">REGIMEN - CARGO</th>                        
-                            <th scope="col">BIENES PATRIMONIALES</th>
-                            <th scope="col" colspan="2"><i class="fa-solid fa-gears"></i></th>
+                            <th scope="col">REGIMEN - CARGO</th> 
+                            {{-- <th scope="col" class="table-success">DEPENDENCIA ORIGEN</th> --}}
+                            <th scope="col" class="table-success">UBICACIÓN FÍSICA</th>                                   
+                            <th scope="col" class="table-danger">EQUIPO INFORMÁTICO</th>
+                            <th scope="col" colspan="2" class="table-dark"><i class="fa-solid fa-gears"></i></th>
                             {{-- <th scope="col"><i class="fa-solid fa-gears"></i></th> --}}
                         </tr>
                     </thead>
@@ -70,29 +70,29 @@
                                     {{ $item->datos }}
                                 </th>
                                 <td>
+                                    <b>REGIMEN:</b> {{ $item->regimen }}
+                                    <br>
+                                    <b>CARGO:</b> {{ $item->cargo }}
+                                </td>
+                                {{-- <td>
                                     <b>SEDE:</b> {{ $item->sedeorigen }}
                                     <br>
                                     <b>DEPENDENCIA:</b> {{ $item->dependenciaorigen }}
                                     <br>
                                     <b>DESPACHO:</b> {{ $item->despachoorigen }}
-                                </td>
+                                </td> --}}
                                 <td>
-                                    <b>SEDE:</b> {{ $item->sededestino }}
+                                    <b>SEDE:</b> {{ $item->sede_ubicacion }}
                                     <br>
-                                    <b>DEPENDENCIA:</b> {{ $item->dependenciadestino }}
+                                    <b>DEPENDENCIA:</b> {{ $item->dependencia_ubicacion }}
                                     <br>
-                                    <b>DESPACHO:</b> {{ $item->despachodestino }}
+                                    <b>DESPACHO:</b> {{ $item->despacho_ubicacion }}
                                 </td>
-                                <td>
-                                    <b>REGIMEN:</b> {{ $item->regimen }}
-                                    <br>
-                                    <b>CARGO:</b> {{ $item->cargo }}
-                                </td>
-                                <td class="text-center">
+                                <th class="text-primary">
                                     {{ $item->bien_cod_patrimonial }}
                                     <br>
                                     {{ $item->bien }}
-                                </td>
+                                </th>
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
                                         @can('mpfn.informatica.soporte.edit')
@@ -180,11 +180,13 @@
                                         </fieldset>
                                         <div class="row">
                                             <div class="col">
-                                                <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#transferencia-personal-component" wire:click="nuevo_transferir_personal({{ $item->id }})">
-                                                    <i class="fa-solid fa-people-arrows"></i> Cambiar Ubicación
-                                                </button>
+                                                @if ($dni)
+                                                    <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#transferencia-personal-component" wire:click="nuevo_transferir_personal({{ $persona_id }})">
+                                                        <i class="fa-solid fa-people-arrows"></i> Cambiar Ubicación
+                                                    </button>
+                                                @endif
                                             </div>
-                                            <div class="col">
+                                            {{-- <div class="col">
                                                 <input type="text" class="form-control form-control-xs" wire:model="sededestino" disabled>                                      
                                             </div>
                                             <div class="col">
@@ -192,7 +194,7 @@
                                             </div>
                                             <div class="col">
                                                 <input type="text" class="form-control form-control-xs" wire:model="despachodestino" disabled>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -204,8 +206,8 @@
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">BIEN PATRIMONIAL</legend>
                                     @include('livewire.patrimonio.bienes.partials.datos-bienes-component')
                                 </fieldset>
-                                <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-bienes-component">
-                                    <i class="fa-solid fa-magnifying-glass"></i> Buscar patrimonio
+                                <button type="button" class="btn btn-success btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-bienes-component">
+                                    <i class="fa-solid fa-magnifying-glass"></i> Buscar bien patrimonial
                                 </button>
                             </div>
                             <div class="col-xl-8">
@@ -248,11 +250,11 @@
                         </fieldset>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary btn-sm" data-bs-dismiss="modal">
+                        {{-- <button type="submit" class="btn btn-primary btn-sm" data-bs-dismiss="modal">
                             <i class="fa-solid fa-floppy-disk"></i> Guardar
-                        </button>
+                        </button> --}}
                         <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
-                            <i class="fa-solid fa-door-closed"></i> Cerrar
+                            <i class="fa-solid fa-door-closed"></i> Actualizar
                         </button>
                     </div>
                 </form>
