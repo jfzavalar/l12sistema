@@ -54,7 +54,7 @@
                             </th>
                             <th scope="col">DEPENDENCIA ORIGEN</th>
                             <th scope="col">REGIMEN - CARGO</th>
-                            <th scope="col" class="table-danger">UBICACIÓN FÍSICA</th>
+                            <th scope="col" class="table-danger">ROTACIÓN: UBICACIÓN FÍSICA</th>
                             <th scope="col">CONDICIÓN</th>
                             <th scope="col" colspan="2"><i class="fa-solid fa-gears"></i></th>
                             {{-- <th scope="col"><i class="fa-solid fa-gears"></i></th> --}}
@@ -226,7 +226,7 @@
                                                         type="button" 
                                                         data-bs-toggle="dropdown" 
                                                         aria-expanded="false">
-                                                    <i class="fa-solid fa-list"></i></i> <i class="fa-solid fa-people-arrows"></i><br>Traslado
+                                                    <i class="fa-solid fa-list"></i></i> <i class="fa-solid fa-people-arrows"></i><br>Rotación
                                                 </button>
 
                                                 <ul class="dropdown-menu">

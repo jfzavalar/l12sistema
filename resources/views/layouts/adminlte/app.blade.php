@@ -127,7 +127,7 @@
             .btn-xs {
             --bs-btn-padding-y: .25rem !important;
             --bs-btn-padding-x: .5rem !important;
-            --bs-btn-font-size: .75rem !important;
+            --bs-btn-font-size: .70rem !important;
             }
 
             .btn-naranja {
@@ -393,54 +393,56 @@
                             @endcan
 
                             {{-- INFORMATICA --}}
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="nav-icon fa-solid fa-folder"></i>
-                                    <p>
-                                        INFORMÁTICA
-                                        <i class="nav-arrow fa-solid fa-angle-left right"></i>
-                                    </p>
-                                </a>
-                                
-                                <ul class="nav nav-treeview">
-                                    @can('procesos.informatica.firmasdigitales.index')
-                                        <li class="nav-item">
-                                            <a class="nav-link ms-3 {{ request()->routeIs('procesos.informatica.firmasdigitales.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.firmasdigitales.index') }}">
-                                                <i class="nav-icon fa-regular fa-circle"></i>
-                                                <p>Certificados Digitales</p>
-                                            </a>
-                                        </li>
-                                    @endcan
-                                    @can('procesos.informatica.ips.index')
-                                        <li class="nav-item">
-                                            <a class="nav-link ms-3 {{ request()->routeIs('procesos.informatica.ips.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.ips.index') }}">
-                                                <i class="nav-icon fa-regular fa-circle"></i>
-                                                <p>IPs</p>
-                                            </a>
-                                        </li>
-                                    @endcan
-                                    @can('mpfn.informatica.soporte.index')
-                                        <li class="nav-item">
-                                            <a class="nav-link ms-3 {{ request()->routeIs('mpfn.informatica.soporte.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.informatica.soporte.index') }}">
-                                                <i class="nav-icon fa-regular fa-circle"></i>
-                                                <p>Soporte</p>
-                                            </a>
-                                        </li>
-                                    @endcan
-                                    @can('procesos.informatica.spijweb.index')
-                                        <li class="nav-item">
-                                            <a class="nav-link ms-3 {{ request()->routeIs('procesos.informatica.spijweb.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.spijweb.index') }}">
-                                                <i class="nav-icon fa-regular fa-circle"></i>
-                                                <p>Spijweb</p>
-                                            </a>
-                                        </li>
-                                    @endcan
-                                </ul>
-                            </li>
+                            @can('mpfn.informatica')
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fa-solid fa-folder"></i>
+                                        <p>
+                                            INFORMÁTICA
+                                            <i class="nav-arrow fa-solid fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    
+                                    <ul class="nav nav-treeview">
+                                        @can('procesos.informatica.firmasdigitales.index')
+                                            <li class="nav-item">
+                                                <a class="nav-link ms-3 {{ request()->routeIs('procesos.informatica.firmasdigitales.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.firmasdigitales.index') }}">
+                                                    <i class="nav-icon fa-regular fa-circle"></i>
+                                                    <p>Certificados Digitales</p>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('procesos.informatica.ips.index')
+                                            <li class="nav-item">
+                                                <a class="nav-link ms-3 {{ request()->routeIs('procesos.informatica.ips.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.ips.index') }}">
+                                                    <i class="nav-icon fa-regular fa-circle"></i>
+                                                    <p>IPs</p>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('mpfn.informatica.soporte.index')
+                                            <li class="nav-item">
+                                                <a class="nav-link ms-3 {{ request()->routeIs('mpfn.informatica.soporte.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.informatica.soporte.index') }}">
+                                                    <i class="nav-icon fa-regular fa-circle"></i>
+                                                    <p>Soporte</p>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('procesos.informatica.spijweb.index')
+                                            <li class="nav-item">
+                                                <a class="nav-link ms-3 {{ request()->routeIs('procesos.informatica.spijweb.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.spijweb.index') }}">
+                                                    <i class="nav-icon fa-regular fa-circle"></i>
+                                                    <p>Spijweb</p>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                    </ul>
+                                </li>
+                            @endcan
 
                             {{-- PATRIMONIO --}}
-
-                            <li class="nav-item">
+                            @can('mpfn.patrimonio')
+                                <li class="nav-item">
                                     <a href="#" class="nav-link">
                                         <i class="nav-icon fa-solid fa-folder"></i>
                                         <p>
@@ -458,6 +460,7 @@
                                         </li>
                                     </ul>
                                 </li>
+                                @endcan
 
                             {{-- RRHH --}}
                             @can('mpfn.rrhh')
