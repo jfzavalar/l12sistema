@@ -4,7 +4,7 @@
         <div class="card-body">
             <div class="table-responsive small">
                 <div class="input-group mb-3">
-                    <input type="text" id="txt_searchabienesdesplazamientoa" class="form-control form-control-sm" wire:model.live="searchabienesdesplazamientoa" placeholder="Buscar por código patrimonial">
+                    <input type="text" id="txt_searchabienesdesplazamientoa" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar por código patrimonial">
                     <button type="button" id="btnnuevo" class="btn btn-outline-primary btn-sm" wire:click="nuevo">
                         <i class="fa-solid fa-file"></i> Nuevo
                     </button>
@@ -139,19 +139,15 @@
     </div>
 
     <!-- Modal Nuevo-Editar-->
-    <div class="modal fade @if($modal_abierto_bien_desplazamiento) show d-block @endif" tabindex="-1">
+    <div wire:ignore.self class="modal fade" id="nuevoEditarModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="nuevoEditarModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" style="max-width:90%;">
             <div class="modal-content">
-                <form wire:submit.prevent={{ $btn_guardar_actualizar }}>
-                    <div class="modal-header bg-{{ $modal_header_color }}">
-                        <h1 class="modal-title fs-5" id="NuevoEditarModalLabel">
-                            @if ($modal_header_titulo === "nuevo")
-                                <i class="fa-solid fa-file"></i> NUEVO - DESPLAZAMIENTO
-                            @else
-                                <i class="fa-solid fa-pen-to-square"></i> EDITAR - DESPLAZAMIENTO
-                            @endif
+                <form wire:submit.prevent="{{ $funcionGuardarActualizar }}">
+                    <div class="modal-header bg-{{ $colorHeaderModal }}">
+                        <h1 class="modal-title fs-5" id="nuevoEditarModalLabel">
+                            <i class="fa-solid fa-file"></i> {{ $textoHeaderModal }}
                         </h1>
-                        <button type="button" class="btn-close" wire:click="cerrar" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" wire:click="cerrar"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
@@ -163,7 +159,7 @@
                                         <div class="col-sm-9">
                                             <div class="input-group mb-3">
                                                 <input type="text" id="txt_solicitante" class="form-control form-control-sm bg-light" wire:model="solicitante" readonly required>
-                                                <button type="button" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-sm" wire:click="buscar_personal('solicitante')">
+                                                <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-sm" wire:click="buscar_personal('solicitante')">
                                                     <i class="fa-brands fa-searchengin"></i>
                                                 </button>
                                             </div>
@@ -174,7 +170,7 @@
                                         <div class="col-sm-9">
                                             <div class="input-group mb-3">
                                                 <input type="text" id="txt_responsable_traslado" class="form-control form-control-sm bg-light" wire:model="responsabletraslado" readonly>
-                                                <button type="button" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-sm" wire:click="buscar_personal('traslado')">
+                                                <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-sm" wire:click="buscar_personal('traslado')">
                                                     <i class="fa-brands fa-searchengin"></i>
                                                 </button>
                                             </div>
@@ -232,9 +228,9 @@
                                             <div class="input-group mb-3">
                                                 <select id="cmb_dependencia_destino" class="form-select form-select-sm" wire:model.live="dependencia_destino">
                                                     <option value="">Seleccionar...</option>
-                                                    @foreach ($lista_dependencias2 as $item_dependencia)
+                                                    {{-- @foreach ($lista_dependencias2 as $item_dependencia)
                                                         <option value="{{ $item_dependencia->coddepofi }}" @selected($item_dependencia->coddepofi == $coddependencia)>{{ $item_dependencia->nomdepofi }}</option>
-                                                    @endforeach
+                                                    @endforeach --}}
                                                 </select>
                                                 {{-- <button type="button" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-sm" data-bs-toggle="modal" data-bs-target="#dependencia2-buscar-Modal">
                                                     <i class="fa-brands fa-searchengin"></i>
@@ -276,7 +272,7 @@
                                         <h6><strong>DETALLE DE BIENES INFORMÁTICOS</strong></h6>
                                         {{-- @if ($vdni && $vlocal && $vdependencia && $vcargo) --}}
                                             {{-- <button type="button" class="btn btn-success btn-sm" wire:click="$set('btnaccion2','guardarbiendetalletemp')" data-bs-toggle="modal" data-bs-target="#agregarpatrimoniobieninformaticoModal"> --}}
-                                            <button type="button" class="btn btn-success btn-sm" wire:click="buscar_bien" {{ $habilitar_btn_agregar_bienes }}>
+                                            <button type="button" class="btn btn-success btn-sm" wire:click="buscar_bien">
                                                 <i class="fas fa-plus-square fa-fw"></i> Agregar bienes
                                             </button>
                                         {{-- @endif --}}
@@ -305,7 +301,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($tempbienesinformaticos as $itemtemp => $tempbieninfo)
+                                                {{-- @foreach ($tempbienesinformaticos as $itemtemp => $tempbieninfo)
                                                     <tr>
                                                         <th scope="row">{{ $loop->iteration }}</th>
                                                         <td>{{ $tempbieninfo['cod_patrimonial'] }}</td>
@@ -324,7 +320,7 @@
                                                             </div>
                                                         </td>
                                                     </tr>
-                                                @endforeach
+                                                @endforeach --}}
                                             </tbody>
                                         </table>
                                     </div>
@@ -351,15 +347,11 @@
                         </div>         
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-sm">
-                            @if ($btn_guardar_actualizar === "guardar")
-                                <i class="fa-solid fa-floppy-disk"></i> Guardar
-                            @else
-                                <i class="fa-solid fa-floppy-disk"></i> Actualizar
-                            @endif    
+                        <button type="submit" class="btn btn-{{ $colorGuardarActualizar }} btn-sm">
+                            <i class="fa-solid fa-floppy-disk"></i> {{ $textoGuardarActualizar }}
                         </button>
-                        <button type="button" class="btn btn-secondary btn-sm" wire:click="cerrar">
-                            <i class="fa-solid fa-square-xmark"></i> Cerrar
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" wire:click="cerrar">
+                            <i class="fa-solid fa-rectangle-xmark"></i> Cerrar
                         </button>
                     </div>
                 </form>
@@ -368,12 +360,12 @@
     </div>
 
     <!-- MODAL DETALLE REGISTRO-->
-    <div class="modal fade @if($modal_abierto_bien_desplazamiento_detalle) show d-block @endif" tabindex="-1">
+    <div wire:ignore.self class="modal fade" id="detalleModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="detalleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 {{-- <form wire:submit.prevent={{ $guardar_actualizar }}> --}}
                     <div class="modal-header bg-secondary-subtle">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">
+                        <h1 class="modal-title fs-5" id="detalleModalLabel">
                             <i class="fa-solid fa-bars"></i> DETALLE DE BIENES TRANSFERIDOS
                         </h1>
                         <button type="button" class="btn-close" wire:click="cerrar" aria-label="Close"></button>
@@ -445,10 +437,10 @@
         </div>
     </div>
 
-    @include('livewire.partials.personal-modal-buscar')
+    {{-- @include('livewire.partials.personal-modal-buscar')
     @include('livewire.partials.bienes-modal-buscar')
     @include('livewire.partials.pdf-modal-cargar')
-    @include('livewire.partials.pdf-modal-vista-previa')
+    @include('livewire.partials.pdf-modal-vista-previa') --}}
 
 </div>
 

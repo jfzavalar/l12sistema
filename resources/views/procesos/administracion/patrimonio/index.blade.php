@@ -1,14 +1,31 @@
-@extends('layouts.bootstrap5.index')
+{{-- @extends('layouts.bootstrap5.index') --}}
+@extends('layouts.adminlte.app')
 
 @section('title', 'Patrimonio')
 
 @section('content')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
+            <i class="fa-solid fa-users-between-lines"></i> TRASLADO TEMPORAL DE BIENES PATRIMONIALES
+        </h1>
+        <div class="btn-group">
+            <a type="button" href="{{ route('pdf.rrhh.personal.reportePDF') }}" target="_blank" class="btn btn-outline-naranja btn-sm">
+                <i class="fa-regular fa-file-pdf"></i> PDF
+            </a>
+            <button type="button" id="btnreporteexcel" class="btn btn-outline-success btn-sm">
+                <i class="fa-regular fa-file-excel"></i> Excel
+            </button>
+        </div>
+    </div>
+
+    <livewire:administracion.patrimonio.desplazamiento.activos />
+
+    {{-- <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">
             <i class="fa-solid fa-boxes-stacked"></i> Patrimonio
         </h1>
         <div class="btn-group">
-            {{-- @include('layouts.bootstrap5.btnlogin') --}}
+            
         </div>
     </div>
 
@@ -144,12 +161,12 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
         
 @endsection
 
 @push('scripts')
-    <script>
+    {{-- <script>
         // Escucha el evento que despacha el componente después de actualizar
         Livewire.on('alerta-actualizado', (data) => {
             Swal.fire({
@@ -161,5 +178,5 @@
                 timer: 1800
             });
         });
-    </script>
+    </script> --}}
 @endpush

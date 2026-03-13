@@ -8,6 +8,7 @@ use App\Models\Personales_cargo;
 use App\Models\Personales_dependencia;
 use App\Models\Personales_despacho;
 use App\Models\Personales_sede;
+use App\Models\PersonalesHistorialesUbicaciones;
 use App\Models\Tbl_cargo;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
@@ -119,7 +120,14 @@ class PersonalComponent extends Component
             $fecha_fin,
             $ruta_documento;
 
+    public $num_expediente,
+            $fecha_iniciou,
+            $fecha_finu,
+            $motivo_ubicacion;
+
     public $pdf_acta;
+
+    public $bandera_documento="CONTRATO";
 
     public function mount()
     {
@@ -299,8 +307,8 @@ class PersonalComponent extends Component
             'regimen' => 'required',
             'cargo' => 'required',
 
-            'fecha_inicio' => 'required|date|before_or_equal:fecha_fin',
-            'fecha_fin'    => 'required|date|after_or_equal:fecha_inicio',
+            // 'fecha_inicio' => 'required|date|before_or_equal:fecha_fin',
+            // 'fecha_fin'    => 'required|date|after_or_equal:fecha_inicio',
 
             'foto' => 'nullable|image|mimes:jpg,jpeg|max:2048', // 2MB máximo
 
@@ -321,11 +329,11 @@ class PersonalComponent extends Component
         'regimen.required' => 'Campo requerido',
         'cargo.required' => 'Campo requerido',
 
-        'fecha_inicio.required' => 'Campo requerido',
-        'fecha_fin.required' => 'Campo requerido',
+        // 'fecha_inicio.required' => 'Campo requerido',
+        // 'fecha_fin.required' => 'Campo requerido',
 
-        'fecha_inicio.before_or_equal' => 'La fecha de inicio no puede ser mayor a la fecha de fin.',
-        'fecha_fin.after_or_equal' => 'La fecha de fin no puede ser menor a la fecha de inicio.',
+        // 'fecha_inicio.before_or_equal' => 'La fecha de inicio no puede ser mayor a la fecha de fin.',
+        // 'fecha_fin.after_or_equal' => 'La fecha de fin no puede ser menor a la fecha de inicio.',
 
         'pdf_acta.mimes' => 'Solo se permiten archivos PDF.',
         'pdf_acta.max' => 'El archivo no debe superar 5MB.',
@@ -353,6 +361,7 @@ class PersonalComponent extends Component
         $this->colorAgregar = "outline-primary";
 
         $this->tipo_documento = "CONTRATO";
+        $this->bandera_documento = "CONTRATO";
     }
 
     public function guardar()
@@ -486,6 +495,8 @@ class PersonalComponent extends Component
         $this->seccionFoto = "";
         $this->seccionPersona = "";
         $this->seccionPersonal = "";
+
+        $this->bandera_documento = "CONTRATO";
 
         // ===== DATOS PERSONA =====
         $this->persona_id = $ipersona->id;
@@ -740,6 +751,8 @@ class PersonalComponent extends Component
         $this->seccionPersona = "disabled";
         $this->seccionPersonal = "disabled";
 
+        $this->bandera_documento = "CONTRATO";
+
         // DATOS PERSONA
         $this->ver_persona($ipersona);
 
@@ -823,6 +836,8 @@ class PersonalComponent extends Component
         $this->seccionFoto = "disabled";
         $this->seccionPersona = "disabled";
         $this->seccionPersonal = "disabled";
+
+        $this->bandera_documento = "CONTRATO";
 
         // DATOS PERSONA
         $this->ver_persona($ipersona);
@@ -909,6 +924,8 @@ class PersonalComponent extends Component
         $this->seccionPersona = "disabled";
         $this->seccionPersonal = "disabled";
 
+        $this->bandera_documento = "CONTRATO";
+
         // DATOS PERSONA
         $this->ver_persona($ipersona);
 
@@ -994,6 +1011,8 @@ class PersonalComponent extends Component
         $this->seccionPersona = "disabled";
         $this->seccionPersonal = "";
 
+        $this->bandera_documento = "CONTRATO";
+
         /// DATOS PERSONA
         $this->ver_persona($ipersona);
 
@@ -1075,6 +1094,8 @@ class PersonalComponent extends Component
         $this->seccionFoto = "disabled";
         $this->seccionPersona = "disabled";
         $this->seccionPersonal = "disabled";
+
+        $this->bandera_documento = "CONTRATO";
 
         /// DATOS PERSONA
         $this->ver_persona($ipersona);
@@ -1170,6 +1191,8 @@ class PersonalComponent extends Component
         $this->coddespachodestino = "";
         $this->despachodestino = "";
 
+        $this->bandera_documento = "RESOLUCION";
+
     }
 
     public function guardar_transferir_personal()
@@ -1194,6 +1217,30 @@ class PersonalComponent extends Component
                     'despachodestino' => $this->despachoorigen,
                     'updated_user' => $usuario,
                 ]);
+
+                // FUNCIÓN PARA CARGAR DOCUMENTO
+                $rutaDocumento = $this->guardar_acta();
+
+                //Insertar datos en la tabla historial ubicaciones
+                PersonalesHistorialesUbicaciones::create([
+                    'persona_id' => $personal->persona_id,
+                    'persona_dni' => $personal->persona_dni,
+                    'personal_id' => $personal->id,
+                    'sede_id' => $this->codsedeorigen,
+                    'sede' => $this->sedeorigen,
+                    'dependencia_id' => $this->coddependenciaorigen,
+                    'dependencia' => $this->dependenciaorigen,
+                    'despacho_id' => $this->coddespachoorigen,
+                    'despacho' => $this->despachoorigen,
+                    'num_expediente' => $this->num_expediente,
+                    'fecha_iniciou' => $this->fecha_iniciou,
+                    'fecha_finu' => $this->fecha_finu,
+                    'motivo_ubicacion' => $this->motivo_ubicacion,
+                    'ruta_documento' => $rutaDocumento,
+                    'created_user' => $usuario,
+                    'updated_user' => $usuario,
+                ]);
+
             });
 
             $this->dispatch(
@@ -1379,18 +1426,33 @@ class PersonalComponent extends Component
             return null;
         }
 
-        $fileName =
-            now()->timestamp.'_'
-            .$this->dni.'_'
-            .Str::slug($this->tipo_documento).'_'
-            .$this->numero_convocatoria
-            .'.pdf';
+        if($this->bandera_documento === "CONTRATO"){
+            $fileName =
+            now()->timestamp . '_'
+            . $this->dni . '_'
+            . Str::slug($this->tipo_documento) . '_'
+            . Str::slug($this->numero_convocatoria) 
+            . '.pdf';
 
-        return $this->pdf_acta->storeAs(
-            'archivos/rrhh/personal/contratos',
-            $fileName,
-            'public'
-        );
+            return $this->pdf_acta->storeAs(
+                'archivos/rrhh/personal/contratos',
+                $fileName,
+                'public'
+            );
+        }else{
+            $fileName =
+            now()->timestamp . '_'
+            . $this->dni . '_'
+            . Str::slug($this->num_expediente) . '_'
+            . Str::slug($this->numero_convocatoria) 
+            . '.pdf';
+
+            return $this->pdf_acta->storeAs(
+                'archivos/rrhh/personal/traslados',
+                $fileName,
+                'public'
+            );
+        }
     }
 
     private function editar_acta($personal_id)

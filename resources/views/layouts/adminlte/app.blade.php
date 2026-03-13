@@ -438,6 +438,27 @@
                                 </ul>
                             </li>
 
+                            {{-- PATRIMONIO --}}
+
+                            <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fa-solid fa-folder"></i>
+                                        <p>
+                                            PATRIMONIO
+                                            <i class="nav-arrow fa-solid fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a class="nav-link ms-3 {{ request()->routeIs('procesos.administracion.patrimonio.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.administracion.patrimonio.index') }}">
+                                                <i class="nav-icon fa-regular fa-circle"></i>
+                                                <p>Traslado temporal</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
                             {{-- RRHH --}}
                             @can('mpfn.rrhh')
                                 <li class="nav-item">

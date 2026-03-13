@@ -10,7 +10,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-toggle="modal" data-bs-target="#transferencia-personal-component"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="table-responsive">
+                    <div class="table-responsive-xl">
                         <form>
                             <div class="row">
                                 <div class="col-12">

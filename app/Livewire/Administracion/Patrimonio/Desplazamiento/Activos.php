@@ -2,12 +2,14 @@
 
 namespace App\Livewire\Administracion\Patrimonio\Desplazamiento;
 
-use App\Models\Tbl_biene;
-use App\Models\Tbl_cargo;
-use App\Models\Tbl_patrimonio_bienes_desplazamiento;
-use App\Models\Tbl_patrimonio_bienes_desplazamientos_detalle;
-use App\Models\Tbl_personale;
-use App\Models\Tbl_sede;
+use App\Models\PatrimoniosBienesDesplazamiento;
+use App\Models\Patrimonios_biene;
+use App\Models\Persona;
+use App\Models\Personales_cargo;
+use App\Models\Personale;
+use App\Models\Personales_despacho;
+use App\Models\Personales_dependencia;
+use App\Models\Personales_sede;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -16,141 +18,157 @@ use Livewire\WithPagination;
 class Activos extends Component
 {
     use WithFileUploads;
-
     use WithPagination;
     protected $paginationTheme = "bootstrap";
 
-     // Variable de entorno
-    public $modal_header_titulo = 'nuevo';
-    public $modal_header_color = 'primary-subtle';
-    public $btn_guardar_actualizar = 'guardar';
-    public $btn_guardar_actualizar_color = 'primary';
+    public $mostrarBtnBuscarDni = "d-none";
 
-    // Variables de Modal
-    public $modal_abierto_bien_desplazamiento = false;
-    Public $modal_abierto_bien_desplazamiento_detalle = false;
-    public $modal_abierto_personal_buscar = false;
-    public $modal_abierto_imagen = false;
-    public $modal_abierto_bienes = false;
-    public $modal_abierto_pdf_cargar = false; 
-    public $modal_abierto_pdf_vista_previa = false;
+    public $colorHeaderModal, $textoHeaderModal;
+    public $colorNuevoEditar, $textoNuevoEditar;
+    public $colorGuardarActualizar, $textoGuardarActualizar;
+    public $colorAgregar;
 
-    //Buscar
-    // public $searcha;
-    // public function updatingSearcha(){
-    //     $this->resetPage();
-    // }
-    public $searchabienesdesplazamientoa;
-    public function updatingSearchabienesdesplazamientoa(){
-        $this->resetPage();
+    //Variables PARA OCULTAR Y MOSTRAR TXT_OTROS
+    public $mostrarotrosp = "d-none", $mostrarotrosc = "d-none",$mostrarcargafoto = "d-none";
+
+    //Variables bloquear de secciones
+    public $seccionFoto="disabled", $seccionPersona="disabled", $seccionPersonal="disabled",$seccionBienpatrimonial="disabled";
+
+    // Variable de función Guardar o Actualizar
+    public $funcionGuardarActualizar;
+
+    // Variables de búsqueda
+    public $search, $searchi,$searchpersonal,$searchhistorial, $searchpersonas, $searchsedes,$searchdependencias,$searchdespachos,$searchcargos,
+            $searchbienes;
+    public function updatingSearch(){
+        $this->resetPage('bienesPage');
     }
-    public $searchpersonal;
     public function updatingSearchpersonal(){
-        $this->resetPage();
+        $this->resetPage('personalesPage');
     }
-    public $searchcargo;
-    public function updatingSearchcargo(){
-        $this->resetPage();
+    public function updatingSearchhistorial(){
+        $this->resetPage('historialPage');
     }
-    public $searchbien;
-    public function updatingSearchbien(){
-        $this->resetPage();
+    public function updatingSearchpersonas(){
+        $this->resetPage('personasPage');
+    }
+    public function updatingSearchsedes(){
+        $this->resetPage('sedesPage');
+    }
+    public function updatingSearchdependencias(){
+        $this->resetPage('dependenciasPage');
+    }
+    public function updatingSearchdespachos(){
+        $this->resetPage('despachosPage');
+    }
+    public function updatingSearchcargos(){
+        $this->resetPage('cargosPage');
+    }
+    public function updatingSearchbienes(){
+        $this->resetPage('bienesPage');
     }
 
+    public $filtrotipodocumento;
+    public $filtroregimen;
 
-    public $id_index;
-    public $solicitante_traslado;
+    public $user_login;
 
-    // Variables de tabla
-    public $cod_patrimonial,
-        $cod_barra,
-        $desc_bien,
-        $anio_asig,
-        $sec_ejec,
-        $secuencia,
-        $cod_sede,
-        $desc_sede,
-        $tipo_ubi_fisica,
-        $cod_ubi_fisica,
-        $desc_ubicacion_fisica,
-        $cod_usuario_fin,
-        $desc_usuario_fin,
-        $desc_cargo,
-        $desc_grupo,
-        $desc_clase,
-        $desc_familia,
-        $desc_item,
-        $condicion_bien,
-        $observaciones,
-        $caracteristicas,
-        $desc_marca,
-        $modelo,
-        $nro_serie,
-        $medidas,
-        $desc_color,
-        $nro_motor,
-        $nro_chasis,
-        $anio_fabricacion,
-        $nro_placa,
-        $nro_pecosa,
-        $sigla_doc_adq,
-        $nro_doc_adq,
-        $fecha_adq,
-        $fecha_alta,
-        $fecha_asig,
-        $des_estado_conservacion,
-        $motivo_asig,
-        $doc_ref_asig,
-        $nro_doc_desplazamiento,
-        $sw_parque_informatico,
-        $sw_almacen,
-        $activo_bieninformatico,
-        $desplazamiento;
+    public $persona_id,
+            $dni,
+            $datos,
+            $appaterno,
+            $apmaterno,
+            $nombres,
+            $genero,
+            $estadocivil,
+            $fechanacimiento,
+            $celpersonal,
+            $correopersonal,
+            $foto,$fotoactual,$inputFileKey,
+            $activo,
+            $created_user,
+            $updated_user,
+            $created_at,
+            $updated_at;
 
-    // Variables de traslado del bien informático
-    public $iddesplazamiento,
-        $solicitante,
-        $responsabletraslado,
-        $codsede_origen,
-        $sede_origen,
-        $coddependencia_origen,
-        $dependencia_origen,
-        $codsede_destino,
-        $sede_destino,
-        $coddependencia_destino,
-        $dependencia_destino,
-        $motivo_traslado,
-        $tipotraslado,
-        $fechasalida,
-        $fecharetorno,
-        $observacion,
-        $traslado,
-        $actaruta,
-        $activo_traslado,
-        $lista_equipos_traslado,
-        $iddesplazamientodetalle,
-        $traslado_detalle,
-        $activo_trasladodetalle;
-    
-    //Variables Personal
-    public $idpersonal,$dni,$datos,$sede,$dependencia,$despacho,$regimen,$cargo,$correo_personal,$correo_institucional,$cel_personal,$cel_institucional,$activo_personal;
-    public $idpersonal2,$dni2,$datos2,$sede2,$dependencia2,$despacho2,$regimen2,$cargo2,$correo_personal2,$correo_institucional2,$cel_personal2,$cel_institucional2,$activo_personal2;
+    public $personal_id,
+            $regimen,
+            $tipo_regimen,
+            $cargo,
 
-    //Variable tabla temporal
-    Public $tempbienesinformaticos = [];
+            $codsedeorigen,
+            $sedeorigen,
+            $coddependenciaorigen,
+            $dependenciaorigen,
+            $coddespachoorigen,
+            $despachoorigen,
 
-    //PDF
-    public $pdf;
+            $codsededestino,
+            $sededestino,
+            $coddependenciadestino,
+            $dependenciadestino,
+            $coddespachodestino,
+            $despachodestino,
+            
+            $celinstitucional,            
+            $correoinstitucional,            
 
-    //Variable para habilitar el agregar equipo informático
-    public $habilitar_btn_agregar_bienes = "disabled";
+            $numero_convocatoria,
+            $tipo_documento,
+            $fecha_inicio,
+            $fecha_fin;
 
-    public $avatar;
-    public $codsede,$coddependencia;
+    public $soporte_id,
+            $preventivo,
+            $sede_ubicacion,
+            $dependencia_ubicacion,
+            $despacho_ubicacion,
+            $p01,
+            $p02,
+            $p03,
+            $p04,
+            $p05,
+            $p06,
+            $p07,
+            $potros,
+            $correctivo,
+            $c01,
+            $c02,
+            $c03,
+            $c04,
+            $c05,
+            $c06,
+            $c07,
+            $cotros,
+            $operativo,
+            $observacion_usuario,
+            $recomendacion_usuario,
+            $ruta_evidencia,
+            $ruta_documento;
+
+    Public $bien_id,
+            $cod,
+            $cod_patrimonial,
+            $bien,
+            $marca,
+            $modelo,
+            $serie,
+            $medida,
+            $medidas,
+            $color,
+            $estado,
+            $clase,
+            $familia,
+            $bien_ip;
+
+    public $desplazamiento_id;
+
+    public $pdf_acta;
+    public $bandera_documento="EVIDENCIA";
     
     public function render()
     {
-        $lista_activos = Tbl_patrimonio_bienes_desplazamiento::select(
+        $lista_activos = PatrimoniosBienesDesplazamiento::select(
                 'id',
                 'dni_solicitante',
                 'solicitante',
@@ -172,7 +190,7 @@ class Activos extends Component
                 'created_user',
                 'updated_user')
             ->where('activo','1')
-            ->where('lista_equipos_traslado','like','%' . $this->searchabienesdesplazamientoa . '%')
+            // ->where('lista_equipos_traslado','like','%' . $this->searchabienesdesplazamientoa . '%')
             ->orderBy('id','desc')
             ->paginate(30);
 
@@ -195,72 +213,80 @@ class Activos extends Component
                 'b.est_cons'
             )
             ->where('d.activo', '1')
-            ->where('d.id_biendesplazamiento', $this->iddesplazamiento)
+            ->where('d.id_biendesplazamiento', $this->desplazamiento_id)
             ->paginate(30);
 
-        $lista_personal = Tbl_personale::where('Activo','1')
-            ->where('dni','like','%' .$this->searchpersonal .'%')
-            ->orwhere('datos','like','%' .$this->searchpersonal .'%')
-            ->paginate(5);
+        $lista_personas = Persona::where('activo','1')
+            ->when($this->searchpersonas !== '', function ($query) {
+                $query->where(function ($q) {
+                    $q->where('dni', 'like', '%' . $this->searchpersonas . '%')
+                    ->orWhere('datos', 'like', '%' . $this->searchpersonas . '%');
+                });
+            })
+            ->orderBy('datos')
+            ->paginate(10,['*'],'personasPage');
         
-        $lista_cargo = Tbl_cargo::where('activo','1')
-            ->where('cargo','like','%' . $this->searchcargo . '%')
-            ->orderBy('cargo')
-            ->paginate(30);
-
-        $lista_bienes = Tbl_biene::where('activo','1')
-            ->where('cod_pat','like','%' . $this->searchbien . '%')
-            ->orderBy('id','desc')
-            ->paginate(10);
-
-        $lista_sedes = Tbl_sede::select('codsedeofi','nomsedeofi')
+        $lista_sedes = Personales_sede::select('id','nombre')
             ->where('activo','1')
+            ->where('nombre','like','%' . $this->searchsedes . '%')
             ->distinct()
-            ->orderBy('nomsedeofi')
-            ->get();
+            ->orderBy('nombre')
+            ->paginate(10,['*'], 'sedesPage');
             
-        $lista_dependencias = Tbl_sede::select('coddepofi','nomdepofi')
+        $lista_dependencias = Personales_dependencia::select('id','nombre')
             ->where('activo','1')
-            ->when($this->sede_origen, function($query, $sede_origen) {
-                $query->where('codsedeofi', $sede_origen);
-            })
+            ->where('sede_id',$this->codsedeorigen)
+            ->where('nombre','like','%' . $this->searchdependencias . '%')
             ->distinct()
-            ->orderBy('nomdepofi')
-            ->get();
+            ->orderBy('nombre')
+            ->paginate(10,['*'], 'dependenciasPage');
 
-        $lista_dependencias2 = Tbl_sede::select('coddepofi','nomdepofi')
+        $lista_despachos = Personales_despacho::select('id','nombre')
             ->where('activo','1')
-            ->when($this->sede_destino, function($query, $sede_destino) {
-                $query->where('codsedeofi', $sede_destino);
-            })
+            ->where('nombre','like','%' . $this->searchdespachos . '%')
             ->distinct()
-            ->orderBy('nomdepofi')
-            ->get();
+            ->orderBy('nombre')
+            ->paginate(10,['*'], 'despachosPage');
+
+        $lista_cargos = Personales_cargo::select('id','nombre')
+            ->where('activo','1')
+            ->where('nombre','like','%' . $this->searchcargos . '%')
+            ->distinct()
+            ->orderBy('nombre')
+            ->paginate(10,['*'], 'cargosPage');
+
+        $lista_bienes = Patrimonios_biene::where('activo','1')
+            ->where('cod_patrimonial','like','%' . $this->searchbienes . '%')
+            ->distinct()
+            ->orderBy('bien')
+            ->paginate(10,['*'],'bienesPage');
         
         return view('livewire.administracion.patrimonio.desplazamiento.activos',
-                    compact('lista_activos','lista_desplazamientos_detalle','lista_personal','lista_cargo','lista_bienes',
-                        'lista_sedes','lista_dependencias','lista_dependencias2')
+                    compact('lista_activos','lista_desplazamientos_detalle','lista_personas','lista_cargos','lista_bienes',
+                        'lista_sedes','lista_dependencias')
                 );
     }
 
     public function nuevo(){
 
-        $this->modal_abierto_bien_desplazamiento = true;
+        $this->resetValidation();   // ← limpia los errores
+        $this->resetErrorBag();     // ← opcional extra seguridad
 
-        $this->modal_header_titulo = 'nuevo';
-        $this->modal_header_color = 'primary-subtle';
-        $this->btn_guardar_actualizar = 'guardar';
-        $this->btn_guardar_actualizar_color = 'primary';
+        // Restablecer todas las variables
+        $this->reset();
+        $this->foto = null;
+        $this->fotoactual = null;
+        $this->inputFileKey = rand();
 
-        $this->idpersonal = auth()->user()->id;
-        $this->dni = auth()->user()->dni;
-        $this->datos = auth()->user()->datos;
-        $this->sede = auth()->user()->sede;
-        $this->dependencia = auth()->user()->dependencia;
-        $this->regimen = auth()->user()->regimen;
-        $this->cargo = auth()->user()->cargo;
+        $this->funcionGuardarActualizar="guardar";
 
-        $this->solicitante = auth()->user()->dni . ' - ' . auth()->user()->datos . ' - ' . auth()->user()->cargo . ' - ' . auth()->user()->regimen ;
+        $this->mostrarBtnBuscarDni = "d-none";
+
+        $this->colorHeaderModal = "primary-subtle";
+        $this->textoHeaderModal = "Nuevo";
+        $this->colorGuardarActualizar = "primary";
+        $this->textoGuardarActualizar = "Guardar";
+        $this->colorAgregar = "outline-primary";
     }
 
     public function guardar(){

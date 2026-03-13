@@ -1,7 +1,7 @@
 <div>
     <div class="card">
         <div class="card-body">
-            <div class="table-responsive small">
+            <div class="table-responsive-xl">
                 <div class="row">
                     <div class="col-xl-3">
                         <div class="input-group input-group-sm mb-2">
@@ -87,6 +87,9 @@
                                     <b>DEPENDENCIA:</b> {{ $item->dependenciadestino }}
                                     <br>
                                     <b>DESPACHO:</b> {{ $item->despachodestino }}
+                                    <br>
+                                    <b>De:</b>
+                                    <b>Hasta:</b>
                                 </td>
                                 <td class="text-center">
                                     <span class="badge @if(in_array($item->tipo_documento, ['ADENDA','CONTRATO','INCORPORACION'])) text-bg-primary
@@ -103,29 +106,13 @@
                                                 <i class="fa-solid fa-pen-to-square"></i><br>Editar
                                             </button>
                                         @endcan
-                                        <button type="button" class="btn btn-outline-secondary btn-xs" data-bs-toggle="modal" data-bs-target="#verDetallesModal" wire:click="editar({{ $item->id }})">
-                                            <i class="fa-solid fa-eye"></i><br>Ver
-                                        </button>
-                                        @can('mpfn.rrhh.personal.create')
-                                            <button type="button" class="btn btn-outline-primary btn-xs" data-bs-toggle="modal" data-bs-target="#transferencia-personal-component" wire:click="nuevo_transferir_personal({{ $item->id }})">
-                                                <i class="fa-solid fa-people-arrows"></i><br>Ubicación
-                                            </button>
-                                        @endcan
-                                        @can('mpfn.rrhh.personal.destroy')
-                                            <button type="button" class="btn btn-outline-danger btn-xs" wire:click="desactivar({{ $item->id }})">
-                                                <i class="fa-solid fa-trash-can"></i><br>Eliminar
-                                            </button>
-                                        @endcan
-                                    </div>
-                                <td class="text-end">
-                                    <div class="btn-group" role="group">
                                         @can('mpfn.rrhh.personal.create')
                                             <div class="dropdown">
                                                 <button class="btn btn-outline-dark btn-xs dropdown-toggle" 
                                                         type="button" 
                                                         data-bs-toggle="dropdown" 
                                                         aria-expanded="false">
-                                                    <i class="fa-solid fa-list"></i></i><br>Trámite
+                                                    <i class="fa-solid fa-list"></i></i> <i class="fa-solid fa-newspaper"></i><br>Trámite
                                                 </button>
 
                                                 <ul class="dropdown-menu">
@@ -137,7 +124,7 @@
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#nuevoEditarModal"
                                                                     wire:click="nuevo_adenda({{ $item->id }})">
-                                                                <i class="fa-solid fa-circle-check"></i> Adenda
+                                                                <i class="fa-solid fa-file"></i> Adenda
                                                             </button>
                                                         </li>
 
@@ -146,7 +133,7 @@
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#nuevoEditarModal"
                                                                     wire:click="nuevo_licencia({{ $item->id }})">
-                                                                <i class="fa-solid fa-circle-check"></i> Licencia
+                                                                <i class="fa-solid fa-file"></i> Licencia
                                                             </button>
                                                         </li>
 
@@ -155,7 +142,7 @@
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#nuevoEditarModal"
                                                                     wire:click="nuevo_renuncia({{ $item->id }})">
-                                                                <i class="fa-solid fa-circle-check"></i> Renuncia
+                                                                <i class="fa-solid fa-file"></i> Renuncia
                                                             </button>
                                                         </li>                                                       
 
@@ -166,7 +153,7 @@
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#nuevoEditarModal"
                                                                     wire:click="nuevo_incorporacion({{ $item->id }})">
-                                                                <i class="fa-solid fa-circle-check"></i> Incorporación
+                                                                <i class="fa-solid fa-file"></i> Incorporación
                                                             </button>
                                                         </li>
 
@@ -175,7 +162,7 @@
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#nuevoEditarModal"
                                                                     wire:click="nuevo_renuncia({{ $item->id }})">
-                                                                <i class="fa-solid fa-circle-check"></i> Renuncia
+                                                                <i class="fa-solid fa-file"></i> Renuncia
                                                             </button>
                                                         </li>
 
@@ -186,7 +173,7 @@
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#nuevoEditarModal"
                                                                     wire:click="nuevo_adenda({{ $item->id }})">
-                                                                <i class="fa-solid fa-circle-check"></i> Adenda
+                                                                <i class="fa-solid fa-file"></i> Adenda
                                                             </button>
                                                         </li>
 
@@ -195,7 +182,7 @@
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#nuevoEditarModal"
                                                                     wire:click="nuevo_licencia({{ $item->id }})">
-                                                                <i class="fa-solid fa-circle-check"></i> Licencia
+                                                                <i class="fa-solid fa-file"></i> Licencia
                                                             </button>
                                                         </li>
 
@@ -204,7 +191,7 @@
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#nuevoEditarModal"
                                                                     wire:click="nuevo_renuncia({{ $item->id }})">
-                                                                <i class="fa-solid fa-circle-check"></i> Renuncia
+                                                                <i class="fa-solid fa-file"></i> Renuncia
                                                             </button>
                                                         </li> 
 
@@ -215,7 +202,7 @@
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#nuevoEditarModal"
                                                                     wire:click="nuevo_contrato({{ $item->id }})">
-                                                                <i class="fa-solid fa-circle-check"></i> Contrato
+                                                                <i class="fa-solid fa-file"></i> Contrato
                                                             </button>
                                                         </li>
 
@@ -227,6 +214,52 @@
                                         <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#historialModal" wire:click="historial_documentos('{{ $item->dni }}')">
                                             <i class="fa-solid fa-timeline"></i><br>Historial
                                         </button>
+                                        {{-- <button type="button" class="btn btn-outline-secondary btn-xs" data-bs-toggle="modal" data-bs-target="#verDetallesModal" wire:click="editar({{ $item->id }})">
+                                            <i class="fa-solid fa-eye"></i><br>Ver
+                                        </button> --}}
+                                    </div>
+                                <td class="text-end">
+                                    <div class="btn-group" role="group">
+                                        @can('mpfn.rrhh.personal.create')
+                                            <div class="dropdown">
+                                                <button class="btn btn-outline-primary btn-xs dropdown-toggle" 
+                                                        type="button" 
+                                                        data-bs-toggle="dropdown" 
+                                                        aria-expanded="false">
+                                                    <i class="fa-solid fa-list"></i></i> <i class="fa-solid fa-people-arrows"></i><br>Traslado
+                                                </button>
+
+                                                <ul class="dropdown-menu">
+
+                                                        <li>
+                                                            <button class="dropdown-item text-dark"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#transferencia-personal-component"
+                                                                    wire:click="nuevo_transferir_personal({{ $item->id }})">
+                                                                <i class="fa-solid fa-file"></i> Nuevo
+                                                            </button>
+                                                        </li>
+
+                                                        <li>
+                                                            <button class="dropdown-item text-dark"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#transferencia-personal-component"
+                                                                    wire:click="nuevo_transferir_personal({{ $item->id }})">
+                                                                <i class="fa-solid fa-file"></i> Editar
+                                                            </button>
+                                                        </li>
+                                                </ul>
+                                            </div>
+
+                                            {{-- <button type="button" class="btn btn-outline-primary btn-xs" data-bs-toggle="modal" data-bs-target="#transferencia-personal-component" wire:click="nuevo_transferir_personal({{ $item->id }})">
+                                                <i class="fa-solid fa-people-arrows"></i><br>Ubicación
+                                            </button> --}}
+                                        @endcan
+                                        @can('mpfn.rrhh.personal.destroy')
+                                            <button type="button" class="btn btn-outline-danger btn-xs" wire:click="desactivar({{ $item->id }})">
+                                                <i class="fa-solid fa-trash-can"></i><br>Eliminar
+                                            </button>
+                                        @endcan
                                     </div>
                                 </td>
                                 </td>
@@ -324,7 +357,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" wire:click="cerrar"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="table-responsive small">
+                    <div class="table-responsive-xl">
                         <div class="input-group mb-3">
                             <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="searchi" placeholder="Buscar">
                         </div>
@@ -399,7 +432,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="table-responsive small">
+                    <div class="table-responsive-xl">
                         <div class="input-group mb-3">
                             <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="searchhistorial" placeholder="Buscar por número de convocatoria">
                             <a type="button" href="{{ route('pdf.rrhh.personal.reportePDF') }}" target="_blank" class="btn btn-outline-naranja btn-sm">
@@ -629,6 +662,44 @@
                     </div>
                     <div class="modal-body">
                         <fieldset class="border p-3 rounded mb-3" {{ $seccionPersona }}>
+                            <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS DE UBICACIÓN FÍSICA / TRANSFERENCIA</legend>
+                            <div class="row">
+                                <div class="col-xl-12 col-sm-12">
+                                    @include('livewire.rrhh.personal.partials.sede-dependencia-despacho-component')
+                                </div>
+                                <div class="col-xl-12 col-sm-12 mb-3">
+                                    @include('livewire.rrhh.personal.partials.datos-personales-transferencia-ubicacion-component')
+                                </div>                              
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary btn-sm" data-bs-dismiss="modal">
+                            <i class="fa-solid fa-floppy-disk"></i> Guardar
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" wire:click = "cerrar_transferir_personal">
+                            <i class="fa-solid fa-door-closed"></i> Cerrar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Historial - Traslado - Ubicación Física -->
+
+    <div wire:ignore.self class="modal fade" id="transferencia-personal-historial-component" tabindex="-1" aria-labelledby="transferir-Personal-Historial-componentLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <form wire:submit.prevent="{{ $funcionGuardarActualizar }}">
+                    <div class="modal-header bg-{{ $colorHeaderModal }}">
+                        <h1 class="modal-title fs-5" id="transferir-Personal-Historial-componentLabel">
+                            <i class="fa-brands fa-searchengin"></i> {{ $textoHeaderModal }}
+                        </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" wire:click = "cerrar_transferir_personal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <fieldset class="border p-3 rounded mb-3" {{ $seccionPersona }}>
                             <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS DE UBICACIÓN FÍSICA</legend>
                             @include('livewire.rrhh.personal.partials.sede-dependencia-despacho-component')
                         </fieldset>
@@ -645,6 +716,7 @@
             </div>
         </div>
     </div>
+
 
     @include('livewire.rrhh.personal.partials.buscar-personal-component')
     @include('livewire.rrhh.personal.partials.buscar-sedes-component')

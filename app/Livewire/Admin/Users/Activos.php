@@ -31,6 +31,9 @@ class Activos extends Component
     public $colorGuardarActualizar, $textoGuardarActualizar;
     public $colorAgregar;
 
+    //Variables PARA OCULTAR Y MOSTRAR TXT_OTROS
+    public $mostrarcargafoto = "";
+
     //Variables bloquear de secciones
     public $seccionFoto, $seccionPersona, $seccionPersonal;
 
