@@ -1,4 +1,5 @@
 <?php
+use App\Exports\UsuariosExport;
 
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\PermissionController;
@@ -12,8 +13,12 @@ use App\Http\Controllers\Informatica\SpijwebController;
 use App\Http\Controllers\Intranet\AtencionesController;
 use App\Http\Controllers\Intranet\ConfiguracionController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\Rrhh\PersonaController;
 use App\Http\Controllers\Rrhh\PersonalController;
 use App\Http\Controllers\Voluntariado\VoluntariadoController;
+
+use Maatwebsite\Excel\Facades\Excel;
+
 use App\Models\InformaticasSoporte;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -51,6 +56,9 @@ Route::get('/permissions', [PermissionController::class, 'index'])->name('proces
 Route::middleware(['auth','can:procesos.admin.users.index'])->group(function () {
 
     Route::get('/users', [UserController::class, 'index'])->name('procesos.admin.users.index');
+    Route::get('usuarios/exportar', [UserController::class, 'exportarExcel']);
+    // Route::get('/export-usuarios', function () { return Excel::download(new UsuariosExport, 'usuarios.xlsx');});
+    
     Route::get('/users/{user}/roles', [UserController::class, 'editRoles'])->name('procesos.admin.users.roles.edit');
     Route::post('/users/{user}/roles', [UserController::class, 'updateRoles'])->name('procesos.admin.users.roles.update');
 
@@ -128,6 +136,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('personal', PersonalController::class)->names('mpfn.rrhh.personal');
     Route::get('pdf/rrhh/personal/reportePDF/', [PersonalController::class, 'reportePDF'])->name('pdf.rrhh.personal.reportePDF');
     Route::get('pdf/rrhh/personal/reportePDFacta/{id}', [PersonalController::class, 'reportePDFacta'])->name('pdf.rrhh.personal.reportePDFacta');
+
+    Route::get('personas/exportar', [PersonaController::class, 'exportarExcel']);
 });
 
 

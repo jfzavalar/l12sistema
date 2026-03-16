@@ -6,10 +6,18 @@
 @section('content')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
-            <i class="fa-solid fa-users-gear"></i> Usuarios
+            <i class="fa-solid fa-users-between-lines"></i> Usuarios
         </h1>
         <div class="btn-group">
-            {{-- @include('layouts.bootstrap5.btnlogin') --}}
+            <a type="button" href="{{ route('pdf.rrhh.personal.reportePDF') }}" target="_blank" class="btn btn-outline-naranja btn-sm">
+                <i class="fa-regular fa-file-pdf"></i> PDF
+            </a>
+            <a id="btnreporteexcel" class="btn btn-outline-success btn-sm" href="{{ url('usuarios/exportar') }}">
+                <i class="fa-regular fa-file-excel"></i> Excel
+            </a>
+            {{-- <button type="button" id="btnreporteexcel" class="btn btn-outline-success btn-sm">
+                <i class="fa-regular fa-file-excel"></i> Excel
+            </button> --}}
         </div>
     </div>
 

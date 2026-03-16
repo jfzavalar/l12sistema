@@ -12,9 +12,9 @@
             <a type="button" href="{{ route('pdf.rrhh.personal.reportePDF') }}" target="_blank" class="btn btn-outline-naranja btn-sm">
                 <i class="fa-regular fa-file-pdf"></i> PDF
             </a>
-            <button type="button" id="btnreporteexcel" class="btn btn-outline-success btn-sm">
+            <a id="btnreporteexcel" class="btn btn-outline-success btn-sm" href="{{ url('personas/exportar') }}">
                 <i class="fa-regular fa-file-excel"></i> Excel
-            </button>
+            </a>
         </div>
     </div>
 
