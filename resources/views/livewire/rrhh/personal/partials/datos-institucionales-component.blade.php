@@ -64,7 +64,7 @@
             <small class="text-danger">{{ $message }}</small>
         @enderror
     </div>
-    <div class="col-xl-3 col-lg-6 col-sm-12">
+    <div class="col-xl-2 col-lg-6 col-sm-12">
         <label for="tiporegimen" class="fw-bold fs-6">Tipo</label>
         <select name="tiporegimen" id="tiporegimen" class="form-select form-select-xs" wire:model.live="tipo_regimen">
             <option value="">Seleccionar...</option>
@@ -73,7 +73,7 @@
             <option value="SUPLENCIA">SUPLENCIA</option>
         </select>
     </div>
-    <div class="col-xl-6 col-lg-6 col-sm-12">
+    <div class="col-xl-4 col-lg-6 col-sm-12">
         <label for="txt_cargo" class="fw-bold fs-6">Cargo</label>
         <div class="input-group">
             <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-cargos-component">
@@ -84,5 +84,13 @@
         @error('cargo')
             <small class="text-danger">{{ $message }}</small>
         @enderror
+    </div>
+    <div class="col-xl-3 col-lg-6 col-sm-12">
+        <label for="tiporegimen" class="fw-bold fs-6">Condición</label>
+        <select name="tiporegimen" id="tiporegimen" class="form-select form-select-xs" wire:model.live="cargo_condicion">
+            <option value="">Seleccionar...</option>
+            <option value="TITULAR">TITULAR</option>
+            <option value="PROVINCIAL">PROVINCIAL</option>
+        </select>
     </div>
 </div>

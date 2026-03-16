@@ -367,31 +367,6 @@
                                 </li>
                             @endcan
 
-
-                            {{-- ATENCIONES --}}
-                            @can('mpfn.rrhh')
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="nav-icon fa-solid fa-folder"></i>
-                                        <p>
-                                            ATENCIONES
-                                            <i class="nav-arrow fa-solid fa-angle-left right"></i>
-                                        </p>
-                                    </a>
-
-                                    <ul class="nav nav-treeview">
-                                        @can('mpfn.rrhh.personal.index')
-                                            <li class="nav-item">
-                                                <a class="nav-link ms-3 {{ request()->routeIs('mpfn.intranet.atenciones.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.intranet.atenciones.index') }}">
-                                                    <i class="nav-icon fa-regular fa-circle"></i>
-                                                    <p>Tickets</p>
-                                                </a>
-                                            </li>
-                                        @endcan
-                                    </ul>
-                                </li>
-                            @endcan
-
                             {{-- INFORMATICA --}}
                             @can('mpfn.informatica')
                                 <li class="nav-item">
@@ -495,6 +470,42 @@
                                                 <a class="nav-link ms-3 {{ request()->routeIs('mpfn.rrhh.personal.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.rrhh.personal.index') }}">
                                                     <i class="nav-icon fa-regular fa-circle"></i>
                                                     <p>Personal</p>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                    </ul>
+                                </li>
+                            @endcan
+
+                            <hr class="border-white border-2">
+
+                            {{-- INTRANET --}}
+                            @can('mpfn.rrhh')
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fa-solid fa-folder"></i>
+                                        <p>
+                                            INTRANET
+                                            <i class="nav-arrow fa-solid fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+
+                                    <ul class="nav nav-treeview">
+                                        @can('mpfn.rrhh.personal.index')
+                                            <li class="nav-item">
+                                                <a class="nav-link ms-3 {{ request()->routeIs('mpfn.intranet.atenciones.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.intranet.atenciones.index') }}">
+                                                    <i class="nav-icon fa-regular fa-circle"></i>
+                                                    <p>Exp. Importantes</p>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                    </ul>
+                                    <ul class="nav nav-treeview">
+                                        @can('mpfn.rrhh.personal.index')
+                                            <li class="nav-item">
+                                                <a class="nav-link ms-3 {{ request()->routeIs('mpfn.intranet.atenciones.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.intranet.atenciones.index') }}">
+                                                    <i class="nav-icon fa-regular fa-circle"></i>
+                                                    <p>Tickets</p>
                                                 </a>
                                             </li>
                                         @endcan

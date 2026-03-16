@@ -69,6 +69,8 @@ class PersonalComponent extends Component
     public function updatingSearchcargos(){
         $this->resetPage('cargosPage');
     }
+
+    Public $filtrosede, $filtrodependencia;
     public $filtrotipodocumento;
     public $filtroregimen;
 
@@ -96,6 +98,7 @@ class PersonalComponent extends Component
             $regimen,
             $tipo_regimen,
             $cargo,
+            $cargo_condicion,
 
             $codsedeorigen,
             $sedeorigen,
@@ -179,6 +182,12 @@ class PersonalComponent extends Component
                     ->orWhere('personas.datos', 'like', '%' . $this->search . '%');
                 });
             })
+            ->when($this->filtrodependencia, function ($query) {
+                $query->where(function ($q) {
+                    $q->where('personales.codsedeorigen', 'like', '%' . $this->filtrodependencia . '%');
+                    // ->orWhere('', 'like', '%' . $this->search . '%');
+                });
+            })
             ->when($this->filtrotipodocumento, function ($query) {
                 $query->where(function ($q) {
                     $q->where('personales.tipo_documento', 'like', '%' . $this->filtrotipodocumento . '%');
@@ -259,15 +268,17 @@ class PersonalComponent extends Component
         $lista_sedes = Personales_sede::select('id','nombre','nombred')
             ->where('activo','1')
             ->where('nombre','like','%' . $this->searchsedes . '%')
-            ->distinct()
+            // ->distinct()
             ->orderBy('nombre')
-            ->paginate(15,['*'], 'sedesPage');
+            ->paginate(30,['*'], 'sedesPage');
             
         $lista_dependencias = Personales_dependencia::select('id','nombre')
             ->where('activo','1')
-            ->where('sede_id',$this->codsedeorigen)
+            ->where(function ($query) {
+                $query->where('sede_id', $this->codsedeorigen)
+                    ->orWhere('sede_id', $this->filtrosede);
+            })
             ->where('nombre','like','%' . $this->searchdependencias . '%')
-            ->distinct()
             ->orderBy('nombre')
             ->paginate(10,['*'], 'dependenciasPage');
 
@@ -420,6 +431,7 @@ class PersonalComponent extends Component
                     'regimen' => $this->regimen,
                     'tipo_regimen' => $this->tipo_regimen,
                     'cargo' => $this->cargo,
+                    'cargo_condicion' => $this->cargo_condicion,
 
                     'codsedeorigen' => $this->codsedeorigen,
                     'sedeorigen' => $this->sedeorigen,
@@ -516,6 +528,7 @@ class PersonalComponent extends Component
         $this->regimen = $ipersonal->regimen;
         $this->tipo_regimen = $ipersonal->tipo_regimen;
         $this->cargo = $ipersonal->cargo;
+        $this->cargo_condicion = $ipersonal->cargo_condicion;
         $this->codsedeorigen = $ipersonal->codsedeorigen;
         $this->sedeorigen = $ipersonal->sedeorigen;
         $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
@@ -613,6 +626,7 @@ class PersonalComponent extends Component
                     'regimen' => $this->regimen,
                     'tipo_regimen' => $this->tipo_regimen,
                     'cargo' => $this->cargo,
+                    'cargo_condicion' => $this->cargo_condicion,
 
                     'codsedeorigen' => $this->codsedeorigen,
                     'sedeorigen' => $this->sedeorigen,
@@ -1358,6 +1372,7 @@ class PersonalComponent extends Component
         $this->regimen = $ipersonal->regimen;
         $this->tipo_regimen = $ipersonal->tipo_regimen;
         $this->cargo = $ipersonal->cargo;
+        $this->cargo_condicion = $ipersonal->cargo_condicion;
         $this->codsedeorigen = $ipersonal->codsedeorigen;
         $this->sedeorigen = $ipersonal->sedeorigen;
         $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
@@ -1389,6 +1404,7 @@ class PersonalComponent extends Component
             'regimen' => $this->regimen,
             'tipo_regimen' => $this->tipo_regimen,
             'cargo' => $this->cargo,
+            'cargo_condicion' => $this->cargo_condicion,
             'codsedeorigen' => $this->codsedeorigen,
             'sedeorigen' => $this->sedeorigen,
             'coddependenciaorigen' => $this->coddependenciaorigen,

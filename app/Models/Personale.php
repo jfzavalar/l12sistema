@@ -12,6 +12,7 @@ class Personale extends Model
         'tipo_regimen',
         'regimen',
         'cargo',
+        'cargo_condicion',
         'codsedeorigen',
         'sedeorigen',
         'coddependenciaorigen',

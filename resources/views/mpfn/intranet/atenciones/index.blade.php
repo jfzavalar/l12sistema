@@ -8,17 +8,17 @@
         <h1 class="h2">
             <i class="fa-solid fa-users-between-lines"></i> TICKETS ATENCIONES
         </h1>
-        <div class="btn-group">
+        {{-- <div class="btn-group">
             <a type="button" href="{{ route('pdf.rrhh.personal.reportePDF') }}" target="_blank" class="btn btn-outline-naranja btn-sm">
                 <i class="fa-regular fa-file-pdf"></i> PDF
             </a>
             <button type="button" id="btnreporteexcel" class="btn btn-outline-success btn-sm">
                 <i class="fa-regular fa-file-excel"></i> Excel
             </button>
-        </div>
+        </div> --}}
     </div>
 
-    {{-- <livewire:rrhh.personal.personal-component /> --}}
+    <livewire:intranet.atenciones.activos />
 @endsection
 
 @section('css')

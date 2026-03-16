@@ -135,7 +135,7 @@
                 {{-- <div class="input-group mb-3"> --}}
                     <div class="row g-3">
                         <div class="col-lg-2 col-sm-12">
-                            <label for="txtsearchpersonalatenciones" class="btn btn-outline-primary btn-sm me-2">Total: {{ $lista_atenciones->total() }}</label>
+                            <label for="txtsearchpersonalatenciones" class="btn btn-outline-primary btn-sm me-2">Total: {{ $lista_activos->total() }}</label>
                         </div>
                         
                         <div class="col-lg-2 col-sm-12">
@@ -195,7 +195,7 @@
                         </tr>
                     </thead>
                     <tbody class="align-middle">
-                        @forelse ($lista_atenciones as $item)
+                        @forelse ($lista_activos as $item)
                             <tr>
                                 <th class="text-center">
                                     <i class="fa-solid fa-ticket"></i> {{ $loop->iteration }}
@@ -266,202 +266,65 @@
 
     {{-- Flotante - paginación --}}
     <div class="dropdown position-fixed bottom-0 start-50 translate-middle-x mb-3 bg-primary-subtle shadow-sm rounded px-3 py-2">
-        {{ $lista_atenciones->links() }}
+        {{ $lista_activos->links() }}
     </div>
 
 
-    <!-- Modal Nuevo-Editar-->
-    <div class="modal fade @if($modal_abierto_atenciones) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
-        <div class="modal-dialog modal-xl" style="max-width:90%;">
+    {{-- Modal Nuevo-Editar --}}
+    <div wire:ignore.self class="modal fade" id="nuevoEditarModal" tabindex="-1" aria-labelledby="nuevoEditarModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width:90%;">
             <div class="modal-content">
-                <form wire:submit.prevent="{{ $btn_guardar_actualizar }}">
-                    <div class="modal-header bg-{{ $modal_header_color }}">
-                        <h1 class="modal-title fs-5" id="NuevoEditarModalLabel">
-                            @if ($modal_header_titulo === "nuevo")
-                                <i class="fa-solid fa-ticket"></i> NUEVO - ATENCIONES
-                            @else
-                                <i class="fa-solid fa-ticket"></i> EDITAR - ATENCIONES
-                            @endif
-                        </h1>
-                        <button type="button" class="btn-close" wire:click="cerrar"></button>
-                    </div>
+                <div class="modal-header bg-{{ $colorHeaderModal }}">
+                    <h1 class="modal-title fs-5" id="nuevoEditarModalLabel">
+                        <i class="fa-solid fa-file"></i> {{ $textoHeaderModal }}
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" wire:click="cerrar"></button>
+                </div>
+                <form wire:submit.prevent="{{ $funcionGuardarActualizar }}">
                     <div class="modal-body">
                         <div class="row">
-                            <div class="row">
-                                <div class="col-xl-3 col-sm-12">
-                                    <fieldset class="border p-3 rounded text-center mb-3" disabled>
-                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">FOTO DE PERFIL</legend>
-                                        @include('livewire.partials.personal-datos-foto')
-                                    </fieldset>
-                                </div>
-                                <div class="col-xl-9 col-sm-12">
-                                    {{-- <fieldset class="border p-3 rounded mb-3" disabled>
-                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center text-decoration-underline">DATOS INSTITUCIONALES</legend>
-                                        @include('livewire.partials.personal-datos-institucionales-mir')
-                                    </fieldset> --}}
+                            <div class="col-xl-2 col-sm-12">
+                                <fieldset class="border p-3 rounded text-center mb-3" {{ $seccionFoto }}>
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">FOTO DE PERFIL</legend>
+                                    @include('livewire.rrhh.personal.partials.datos-foto-component')
+                                </fieldset>
+                            </div>
 
-                                    @include('livewire.partials.personal-datos-institucionales-mir')
-                                    
-                                    <div class="row">
-                                        <div class="col-xl-3">
-                                            <fieldset class="border p-3 rounded mb-3">
-                                                {{-- <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center text-decoration-underline">DATOS PERSONALES</legend> --}}
-                                                @include('livewire.partials.personal-datos-personales')
-                                            </fieldset> 
-                                        </div>
-                                        <div class="col-xl-9">
-                                            <fieldset class="border p-3 rounded mb-3" disabled>
-                                                {{-- <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center text-decoration-underline">DATOS INSTITUCIONALES</legend> --}}
-                                                @include('livewire.partials.personal-datos-institucionales')
-                                            </fieldset>
-                                        </div>
+                            <div class="col-xl-10 col-sm-12">
+                                <div class="row">
+                                    <div class="col-xl-4">
+                                        <fieldset class="border p-3 rounded mb-3" {{ $seccionPersona }}>
+                                            <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS PERSONALES</legend>
+                                            @include('livewire.rrhh.personal.partials.datos-personales-component')
+                                        </fieldset>
+                                        {{-- <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-sm" data-bs-toggle="modal" data-bs-target="#buscar-personal-component">
+                                            <i class="fa-solid fa-magnifying-glass"></i> Buscar
+                                        </button> --}}
+                                    </div>
+                                    <div class="col-xl-8">
+                                        <fieldset class="border p-3 rounded mb-3" {{ $seccionPersonal }}>
+                                            <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS INSTITUCIONALES</legend>
+                                            @include('livewire.rrhh.personal.partials.datos-institucionales-component')
+                                        </fieldset>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-xl-8">
-                                    <fieldset class="border p-3 rounded mb-3">
-                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DETALLE DE LA ATENCIÓN</legend>
-                                        <div class="row">
-                                            <div class="col-xl-2">
-                                                <label for="cmb_reportado" class="fw-bold fs-6">REPORTADO POR</label>
-                                                <select id="cmb_reportado" class="form-select form-select-xs" wire:model="reportado_por">
-                                                    <option value="">Seleccionar...</option>
-                                                    <option value="CEA">CEA</option>
-                                                    <option value="CORREO">CORREO</option>
-                                                    <option value="DOCUMENTO">DOCUMENTO</option>
-                                                    <option value="LLAMADA">LLAMADA</option>
-                                                    <option value="PERSONALMENTE">PERSONALMENTE</option>
-                                                    <option value="SISTEMA">SISTEMA</option>
-                                                    <option value="WHATSAPP">WHATSAPP</option>
-                                                </select>
-                                                @error('reportado_por')
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror
-                                            </div>
-                                            <div class="col-xl-2">
-                                                <label for="tipoi" class="fw-bold fs-6">TIPO</label>
-                                                <div class="d-flex gap-2">
-                                                    <input type="radio" id="tipoi" name="tipo" class="btn-check" value="1" autocomplete="off" wire:model.live="tipo">
-                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="tipoi">INCIDENCIA</label>
-
-                                                    <input type="radio" id="tipos" name="tipo" class="btn-check" value="2" autocomplete="off" wire:model.live="tipo">
-                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="tipos">SOLICITUD</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-4">
-                                                <label for="txt_ind_sol" class="fw-bold fs-6">SERVICIO</label>
-                                                <div class="input-group">
-                                                    <button type="button" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-xs" wire:click="buscar_indicencia_solicitud">
-                                                        <i class="fa-solid fa-magnifying-glass"></i>
-                                                    </button>
-                                                    <input type="text" id="txt_ind_sol" class="form-control form-control-xs" wire:model="descripcion">
-                                                </div>
-                                                @error('descripcion')
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror
-                                            </div>
-                                            <div class="col-xl-4">
-                                                <label for="txt_especificacion" class="fw-bold fs-6">INCIDENCIA / SOLICITUD</label>
-                                                <div class="input-group">
-                                                    <button type="button" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-xs" wire:click="buscar_indicencia_solicitud_desc">
-                                                        <i class="fa-solid fa-magnifying-glass"></i>
-                                                    </button>
-                                                    <input type="text" id="txt_especificacion" class="form-control form-control-xs" wire:model="detalle">
-                                                </div>
-                                                @error('detalle')
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-xl-3">
-                                                <label for="txt_cea" class="fw-bold fs-6">CEA</label>
-                                                <input type="text" id="txt_cea" class="form-control form-control-xs" wire:model="cea">
-                                            </div>
-                                            <div class="col-xl-4">
-                                                <label for="txt_cf" class="fw-bold fs-6">Carpeta Fiscal</label>
-                                                <input type="text" id="txt_cf" class="form-control form-control-xs" wire:model="cf">
-                                            </div>
-                                            <div class="col-xl-2">
-                                                <label for="enviadoSi" class="fw-bold fs-6">Enviado a Lima</label>
-                                                <div class="d-flex gap-2">
-                                                    <input type="radio" id="enviadoSi" name="enviadoLima" class="btn-check" value="SI" autocomplete="off" wire:model.live="enviado_lima">
-                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="enviadoSi">Si</label>
-
-                                                    <input type="radio" id="enviadoNo" name="enviadoLima" class="btn-check" value="NO" autocomplete="off" wire:model.live="enviado_lima">
-                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="enviadoNo">No</label>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-xl-3">
-                                                <label for="txt_glpi" class="fw-bold fs-6">GLPI</label>
-                                                <input type="text" id="txt_glpi" class="form-control form-control-xs" wire:model=glpi>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-xl-10">
-                                                <label for="text_descripcion" class="fw-bold fs-6">OBSERVACIÓN (Opcional)</label>
-                                                <input type="text" id="text_descripcion" class="form-control form-control-xs" wire:model="observacion_is">
-                                            </div>
-                                            <div class="col-xl-2">
-                                                <label for="txtdespacho" class="fw-bold fs-6">ADJUNTAR</label>
-                                                <div class="d-flex gap-2">
-                                                    <button type="button" class="btn btn-outline-dark btn-xs flex-fill" wire:click="cargarPDF1"> Seleccionar...</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </fieldset>
-                                </div>
-                                <div class="col-xl-4">
-                                    <fieldset class="border p-3 rounded mb-3">
-                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">ATENCIÓN</legend>
-                                        <div class="row">
-                                            <div class="col-xl-12">
-                                                <label for="atendidoSi" class="fw-bold fs-6">ATENDIDO</label>
-                                                <div class="d-flex gap-2">
-                                                    <input type="radio" id="atendidoSi" name="atendido" class="btn-check" value="SI" autocomplete="off" wire:model.live="atendido">
-                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="atendidoSi">Sí</label>
-
-                                                    <input type="radio" id="atendidoNo" name="atendido" class="btn-check" value="NO" autocomplete="off" wire:model.live="atendido">
-                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="atendidoNo">No</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-12">
-                                                <label for="txtdespacho" class="fw-bold fs-6">TIEMPO DE ATENCIÓN</label>
-                                                <div class="d-flex gap-2">
-                                                    <input type="radio" id="normal" name="tiempo" class="btn-check" value="NORMAL" autocomplete="off" wire:model.live="tiempo_atencion">
-                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="normal">NORMAL (1 día)</label>
-
-                                                    <input type="radio" id="regular" name="tiempo" class="btn-check" value="REGULAR" autocomplete="off" wire:model.live="tiempo_atencion">
-                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="regular">REGULAR (2 a 5 días)</label>
-
-                                                    <input type="radio" id="complejo" name="tiempo" class="btn-check" value="COMPLEJO" autocomplete="off" wire:model.live="tiempo_atencion">
-                                                    <label class="btn btn-outline-{{ $btn_guardar_actualizar_color }} btn-xs flex-fill" for="complejo">COMPLEJO (mayor a 6 días)</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-xl-12">
-                                                <label for="txt_sol_res" class="fw-bold fs-6">SOLUCIÓN / RESPUESTA</label>
-                                                <input type="text" id="txt_sol_res" class="form-control form-control-xs" wire:model="respuesta">
-                                            </div>
-                                        </div>
-                                    </fieldset>
-                                </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <fieldset class="border p-3 rounded mb-3">
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS CONTRATO / ADENDA / RENUNCIA</legend>
+                                    @include('livewire.rrhh.contratos.partials.datos-contrato-component')
+                                </fieldset>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-sm">
-                            @if ($btn_guardar_actualizar === "guardar")
-                                <i class="fa-solid fa-floppy-disk"></i> Guardar y Responder <i class="fa-solid fa-envelope"></i>
-                            @else
-                                <i class="fa-solid fa-floppy-disk"></i> Actualizar
-                            @endif    
+                        <button type="submit" class="btn btn-{{ $colorGuardarActualizar }} btn-sm">
+                            <i class="fa-solid fa-floppy-disk"></i> {{ $textoGuardarActualizar }}
                         </button>
-                        <button type="button" class="btn btn-secondary btn-sm" wire:click="cerrar">
-                            <i class="fa-solid fa-square-xmark"></i> Cerrar
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" wire:click="cerrar">
+                            <i class="fa-solid fa-rectangle-xmark"></i> Cerrar
                         </button>
                     </div>
                 </form>
@@ -470,7 +333,7 @@
     </div>
 
     {{-- Modal Incidencias y Solicitudes --}}
-    <div class="modal fade @if($modal_abierto_incidencia_solicitud) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
+    {{-- <div class="modal fade @if($modal_abierto_incidencia_solicitud) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-warning-subtle">
@@ -528,10 +391,10 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     {{-- Modal Incidencias y Solicitudes Detalle --}}
-    <div class="modal fade @if($modal_abierto_incidencia_solicitud_detalle) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
+    {{-- <div class="modal fade @if($modal_abierto_incidencia_solicitud_detalle) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-secondary-subtle">
@@ -589,13 +452,13 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
 
     {{-- Cargar varios documentos y e imágenes --}}
 
     <!-- Modal Cargar PDF -->
-    <div class="modal fade @if($modal_abierto_pdf_cargar) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
+    {{-- <div class="modal fade @if($modal_abierto_pdf_cargar) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <form wire:submit.prevent="cargarPDF2">
@@ -619,7 +482,7 @@
                             @error('pdfs.*') 
                                 <span class="text-danger small">{{ $message }}</span> 
                             @enderror
-                            {{-- Vista previa opcional --}}
+                            Vista previa opcional
                         </div>
                         @if ($pdfs)
                             <ul class="list-group mt-2">
@@ -658,10 +521,10 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> --}}
     
 
 
-    @include('livewire.partials.personal-modal-buscar')
+    {{-- @include('livewire.partials.personal-modal-buscar') --}}
 
 </div>
