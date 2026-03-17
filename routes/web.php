@@ -12,6 +12,7 @@ use App\Http\Controllers\Informatica\soporteController;
 use App\Http\Controllers\Informatica\SpijwebController;
 use App\Http\Controllers\Intranet\AtencionesController;
 use App\Http\Controllers\Intranet\ConfiguracionController;
+use App\Http\Controllers\Intranet\ExpimportantesController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Rrhh\PersonaController;
 use App\Http\Controllers\Rrhh\PersonalController;
@@ -117,6 +118,10 @@ Route::middleware('auth','can:procesos.informatica.spijweb.index')->group(functi
 //INTRANET
 Route::middleware('auth','can:procesos.intranet.index')->group(function () {
     Route::resource('atenciones', AtencionesController::class)->names('mpfn.intranet.atenciones');
+});
+
+Route::middleware('auth','can:procesos.intranet.index')->group(function () {
+    Route::resource('expedientes', ExpimportantesController::class)->names('mpfn.intranet.expimportantes');
 });
 
 Route::middleware('auth','can:procesos.intranet.index')->group(function () {

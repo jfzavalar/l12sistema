@@ -18,7 +18,7 @@
         </div> --}}
     </div>
 
-    {{-- <livewire:rrhh.personal.personal-component /> --}}
+    <livewire:intranet.expimportantes.activos />
 @endsection
 
 @section('css')

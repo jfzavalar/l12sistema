@@ -184,7 +184,7 @@ class PersonalComponent extends Component
             })
             ->when($this->filtrodependencia, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('personales.codsedeorigen', 'like', '%' . $this->filtrodependencia . '%');
+                    $q->where('personales.coddependenciaorigen', $this->filtrodependencia );
                     // ->orWhere('', 'like', '%' . $this->search . '%');
                 });
             })

@@ -66,7 +66,7 @@
     </div>
     <div class="col-xl-2 col-lg-6 col-sm-12">
         <label for="tiporegimen" class="fw-bold fs-6">Tipo</label>
-        <select name="tiporegimen" id="tiporegimen" class="form-select form-select-xs" wire:model.live="tipo_regimen">
+        <select id="tiporegimen" class="form-select form-select-xs" wire:model.live="tipo_regimen">
             <option value="">Seleccionar...</option>
             <option value="INDETERMINADO">INDETERMINADO</option>
             <option value="TRANSITORIO">TRANSITORIO</option>
@@ -86,11 +86,11 @@
         @enderror
     </div>
     <div class="col-xl-3 col-lg-6 col-sm-12">
-        <label for="tiporegimen" class="fw-bold fs-6">Condición</label>
-        <select name="tiporegimen" id="tiporegimen" class="form-select form-select-xs" wire:model.live="cargo_condicion">
+        <label for="cargo_condicion" class="fw-bold fs-6">Condición</label>
+        <select id="cargo_condicion" class="form-select form-select-xs" wire:model.live="cargo_condicion">
             <option value="">Seleccionar...</option>
             <option value="TITULAR">TITULAR</option>
-            <option value="PROVINCIAL">PROVINCIAL</option>
+            <option value="PROVINCIAL">PROVISIONAL</option>
         </select>
     </div>
 </div>

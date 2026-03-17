@@ -3,10 +3,13 @@
 namespace App\Livewire\Intranet\Atenciones;
 
 use App\Models\Persona;
+use App\Models\Personale;
 use App\Models\Personales_cargo;
 use App\Models\Personales_dependencia;
 use App\Models\Personales_despacho;
 use App\Models\Personales_sede;
+use App\Models\PersonalesAtencionesIncidenciasSolicitudes;
+use App\Models\PersonalesAtencionesServicio;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 use Illuminate\Support\Facades\Storage;
@@ -31,7 +34,7 @@ class Activos extends Component
     public $colorAgregar;
 
     //Variables PARA OCULTAR Y MOSTRAR TXT_OTROS
-    public $mostrarcargafoto = "";
+    public $mostrarcargafoto = "d-none";
 
     //Variables bloquear de secciones
     public $seccionFoto, $seccionPersona, $seccionPersonal;
@@ -40,7 +43,8 @@ class Activos extends Component
     public $funcionGuardarActualizar;
 
     // Variables de búsqueda
-    public $search, $searchi,$searchhistorial, $searchpersonas, $searchsedes,$searchdependencias,$searchdespachos,$searchcargos;
+    public $search, $searchi,$searchhistorial, $searchpersonas, $searchsedes,$searchdependencias,$searchdespachos,$searchcargos,
+            $searchservicios,$searchincidenciasolicitud;
     public function updatingSearch(){
         $this->resetPage('personalesPage');
     }
@@ -65,6 +69,13 @@ class Activos extends Component
     public function updatingSearchcargos(){
         $this->resetPage('cargosPage');
     }
+    public function updatingSearchpersonalatenciones(){
+        $this->resetPage('personalatencionesPage');
+    }
+    public function updatingSearchservicios(){
+        $this->resetPage('serviciosPage');
+    }
+
     public $filtrotipodocumento;
     public $filtroregimen;
 
@@ -116,10 +127,17 @@ class Activos extends Component
             $fecha_fin,
             $ruta_documento;
 
-    public $num_expediente,
-            $fecha_iniciou,
-            $fecha_finu,
-            $motivo_ubicacion;
+    public $servicio,
+            $incidenciasolicitud,
+            $cea,
+            $sgf,
+            $enviado_lima,
+            $glpi,
+            $observacion,
+            $atendido,
+            $tiempo_atencion,
+            $respuesta,
+            $cargo_condicion,$reportado_por,$tipo;
 
     public $pdf_acta;
 
@@ -134,6 +152,7 @@ class Activos extends Component
     public function render()
     {
         $lista_activos = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
+            ->join('personales_atenciones','personas.id','=','personales_atenciones.persona_id')
             ->select('personas.*',
                 'personales.persona_id',
                 'personales.regimen',
@@ -260,8 +279,16 @@ class Activos extends Component
             ->orderBy('nombre')
             ->paginate(10,['*'], 'cargosPage');
 
+        $lista_incidencias_solicitudes = PersonalesAtencionesServicio::select('servicio')
+            ->where('activo','1')
+            ->where('servicio','like','%' . $this->searchservicios . '%')
+            ->distinct()
+            ->orderBy('servicio')
+            ->paginate(10,['*'],'serviciosPage');
+
         return view('livewire.intranet.atenciones.activos',
-                compact('lista_activos','lista_inactivos','lista_historial','lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos'));
+                compact('lista_activos','lista_inactivos','lista_historial','lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos',
+                            'lista_incidencias_solicitudes'));
     }
 
     protected function rules(){
@@ -302,122 +329,52 @@ class Activos extends Component
         $this->colorAgregar = "outline-primary";
 
         $this->tipo_documento = "CONTRATO";
-        $this->bandera_documento = "CONTRATO";
     }
 
-    public function guardar(){
-        $validated = $this->validate(); 
-
-        $this->modal_abierto_atenciones = false;
-        // Emitimos un evento para mostrar el SweetAlert
-        $this->dispatch(
-            'alerta-actualizado',
-            titulo: 'Datos Almacenados',
-            mensaje: 'Los datos se han guardado correctamente.',
-            tipo: 'success' // success | error | warning | info
-        );
-    }
-
-    public function editar(Tbl_personales_atencione $iatencion){
-        $this->modal_header_titulo = 'actualizar';
-        $this->modal_header_color = 'success-subtle';
-        $this->btn_guardar_actualizar = 'actualizar';
-        $this->btn_guardar_actualizar_color = 'success';
-
-        $this->modal_abierto_atenciones = true;
-    }
-
-    public function actualizar(){
-        $validated = $this->validate(); 
-    }
-
-    public function cerrar(){
-        $this->modal_abierto_atenciones = false;
-    }
-
-    // PERSONAL
-    // ---------------------------------------------------------
-    public function buscar_personal(){
-        $this->modal_abierto_personal_buscar = true;
-    }
-
-    public function agregar_personal(Tbl_personale $ipersonal){
-        $this->id_personal = $ipersonal->id;
-        $this->dni = $ipersonal->dni;
-        $this->datos = $ipersonal->datos;
-
-        $this->codsede_origen = $ipersonal->codsede_origen;
-        $this->sede_origen = $ipersonal->sede_origen;
-        $this->coddependencia_origen = $ipersonal->coddependencia_origen;
-        $this->dependencia_origen = $ipersonal->dependencia_origen;
-
-        $this->codsede_destino = $ipersonal->codsede_destino;
-        $this->sede_destino = $ipersonal->sede_destino;
-        $this->coddependencia_destino = $ipersonal->coddependencia_destino;
-        $this->dependencia_destino = $ipersonal->dependencia_destino;
-
-        $this->regimen = $ipersonal->regimen;
-        $this->cargo = $ipersonal->cargo;
-        $this->correo_personal = $ipersonal->correo_personal;
-        $this->correo_institucional = $ipersonal->correo_institucional;
-        $this->cel_personal = $ipersonal->cel_personal;
-        $this->cel_institucional = $ipersonal->cel_institucional;
-
-        $this->reset('searchbuscarpersonal');
-
-        $this->modal_abierto_personal_buscar = false;
-
-    }
-
-    public function cerrar_personal(){
-        $this->modal_abierto_personal_buscar = false;
-    }
-
-    // INCIDENCIAS Y SOLICITUDES
-    public function buscar_indicencia_solicitud(){
-        $this->modal_abierto_incidencia_solicitud = true;
-    }
-
-    public function agregar_indicencia_solicitud($vdescripcion){
-        $this->descripcion = $vdescripcion;
-        $this->modal_abierto_incidencia_solicitud = false;
-    }
-
-    public function cerrar_indicencia_solicitud(){
-        $this->modal_abierto_incidencia_solicitud = false;
-    }
-
-    //  DETALLES INCIDENCIAS Y SOLICITUDES
-    public function buscar_indicencia_solicitud_desc(){
-        $this->modal_abierto_incidencia_solicitud_detalle = true;
-    }
-
-    public function agregar_indicencia_solicitud_desc($vdescripcion_desc){
-        $this->detalle = $vdescripcion_desc;
-        $this->respuesta = 'SE REALIZA: ' . $vdescripcion_desc . ' DE ' . $this->descripcion;
-        $this->modal_abierto_incidencia_solicitud_detalle = false;
-    }
-
-    public function cerrar_indicencia_solicitud_desc(){
-        $this->modal_abierto_incidencia_solicitud_detalle = false;
-    }
-
-    // PDF
-    // ---------------------------------------------------------
-    public function cargarPDF1(){
-        $this->modal_abierto_pdf_cargar = true;
-    }
-
-    public function cargarPDF2(){
-    }
-    public function eliminarPDF($index)
+    public function cerrar()
     {
-        if (isset($this->pdfs[$index])) {
-            unset($this->pdfs[$index]);
-            $this->pdfs = array_values($this->pdfs); // reindexar el array
-        }
+        $this->reset();
+
+        $this->dispatch(
+                'alerta-cancelar',
+                titulo: 'Cancelar',
+                mensaje: 'Se canceló la operación.',
+                tipo: 'error'
+            );
     }
-    public function cerrar_PDF(){
-        $this->modal_abierto_pdf_cargar = false;
+
+
+    // FUNCIONES AGREGAR
+    public function agregar_persona(Persona $ipersona){
+        $this->persona_id = $ipersona->id;
+        $this->dni = $ipersona->dni;
+        $this->appaterno = $ipersona->appaterno;
+        $this->apmaterno = $ipersona->apmaterno;
+        $this->nombres = $ipersona->nombres;
+
+        $this->datos = $ipersona->datos;
+
+        $this->celpersonal = $ipersona->celpersonal;
+        $this->correopersonal = $ipersona->correopersonal;
+
+        $this->fotoactual = $ipersona->foto;
+
+        $ipersonal = Personale::where([['activo',1],['persona_dni',$this->dni],])->firstOrFail();
+
+        $this->sedeorigen = $ipersonal->sedeorigen;
+        $this->dependenciaorigen = $ipersonal->dependenciaorigen;
+        $this->despachoorigen = $ipersonal->despachoorigen;
+        $this->celinstitucional = $ipersonal->celinstitucional;
+        $this->correoinstitucional = $ipersonal->correoinstitucional;
+        $this->regimen = $ipersonal->regimen;
+        $this->tipo_regimen = $ipersonal->tipo_regimen;
+        $this->cargo = $ipersonal->cargo;
+
+        // $this->reset('searchpersonas');
+    }
+
+    public function agregar_incidencia_solicitud()
+    {
+
     }
 }

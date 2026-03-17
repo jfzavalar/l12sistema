@@ -309,7 +309,7 @@
     </div>
 
     {{-- Modal Nuevo-Editar --}}
-    <div wire:ignore.self class="modal fade" id="nuevoEditarModal" tabindex="-1" aria-labelledby="nuevoEditarModalLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal fade" id="nuevoEditarModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="nuevoEditarModalLabel" aria-hidden="true">
         <div class="modal-dialog" style="max-width:90%;">
             <div class="modal-content">
                 <div class="modal-header bg-{{ $colorHeaderModal }}">
@@ -371,7 +371,7 @@
     </div>
 
     {{-- Modal Inactivos --}}
-    <div wire:ignore.self class="modal fade" id="inactivosModal" tabindex="-1" aria-labelledby="inactivosModalLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal fade" id="inactivosModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="inactivosModalLabel" aria-hidden="true">
         <div class="modal-dialog" style="max-width:90%;">
             <div class="modal-content">
                 <div class="modal-header bg-dark-subtle">
@@ -446,7 +446,7 @@
     </div>
 
     {{-- Modal Historial --}}
-    <div wire:ignore.self class="modal fade" id="historialModal" tabindex="-1" aria-labelledby="historialModalLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal fade" id="historialModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="historialModalLabel" aria-hidden="true">
         <div class="modal-dialog" style="max-width:90%;">
             <div class="modal-content">
                 <div class="modal-header bg-warning-subtle">
@@ -548,7 +548,7 @@
     </div>
 
     <!-- Modal Detalles de persona personal -->
-    <div wire:ignore.self class="modal fade" id="verDetallesModal" tabindex="-1" aria-labelledby="verDetallesModalLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal fade" id="verDetallesModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="verDetallesModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
@@ -674,7 +674,7 @@
     </div>
 
     {{-- ModalTransferencia de Personal - Ubicación Física --}}
-    <div wire:ignore.self class="modal fade" id="transferencia-personal-component" tabindex="-1" aria-labelledby="transferir-Personal-componentLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal fade" id="transferencia-personal-component" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="transferir-Personal-componentLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <form wire:submit.prevent="{{ $funcionGuardarActualizar }}">
@@ -712,7 +712,7 @@
 
     <!-- Modal Historial - Traslado - Ubicación Física -->
 
-    <div wire:ignore.self class="modal fade" id="transferencia-personal-historial-component" tabindex="-1" aria-labelledby="transferir-Personal-Historial-componentLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal fade" id="transferencia-personal-historial-component" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="transferir-Personal-Historial-componentLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <form wire:submit.prevent="{{ $funcionGuardarActualizar }}">
