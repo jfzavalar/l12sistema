@@ -272,7 +272,7 @@
 
     {{-- Modal Nuevo-Editar --}}
     <div wire:ignore.self class="modal fade" id="nuevoEditarModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="nuevoEditarModalLabel" aria-hidden="true">
-        <div class="modal-dialog" style="max-width:90%;">
+        <div class="modal-dialog" style="max-width:95%;">
             <div class="modal-content">
                 <div class="modal-header bg-{{ $colorHeaderModal }}">
                     <h1 class="modal-title fs-5" id="nuevoEditarModalLabel">
@@ -306,13 +306,22 @@
                                             <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS INSTITUCIONALES</legend>
                                             @include('livewire.rrhh.personal.partials.datos-institucionales-component')
                                         </fieldset>
+                                        <div class="row">
+                                            <div class="col">
+                                                @if ($dni)
+                                                    <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#transferencia-personal-component" wire:click="nuevo_transferir_personal({{ $persona_id }})">
+                                                        <i class="fa-solid fa-people-arrows"></i> Cambiar Ubicación
+                                                    </button>
+                                                @endif
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-xl-8">
+                            <div class="col-xl-9">
                                 <fieldset class="border p-3 rounded mb-3">
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DETALLE DE ATENCIONES</legend>
                                     <div class="row">
@@ -332,10 +341,10 @@
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
                                         </div>
-                                        <div class="col-xl-4">
+                                        <div class="col-xl-3">
                                             <label for="txtservicio" class="fw-bold fs-6">SERVICIO</label>
                                             <div class="input-group">
-                                                <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-inicidencia-solicitud-component">
+                                                <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-servicio-component">
                                                     <i class="fa-solid fa-magnifying-glass"></i>
                                                 </button>
                                                 <input type="text" id="txtservicio" class="form-control form-control-xs" wire:model="servicio">
@@ -347,7 +356,7 @@
                                         <div class="col-xl-4">
                                             <label for="txtincidenciasolicitud" class="fw-bold fs-6">INCIDENCIA / SOLICITUD</label>
                                             <div class="input-group">
-                                                <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" wire:click="buscar_indicencia_solicitud_desc">
+                                                <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-inicidencia-solicitud-component">
                                                     <i class="fa-solid fa-magnifying-glass"></i>
                                                 </button>
                                                 <input type="text" id="txtincidenciasolicitud" class="form-control form-control-xs" wire:model="incidenciasolicitud">
@@ -356,7 +365,7 @@
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
                                         </div>
-                                        <div class="col-xl-2">
+                                        <div class="col-xl-3">
                                             <label for="tipoi" class="fw-bold fs-6">TIPO</label>
                                             <div class="d-flex gap-2">
                                                 <input type="radio" id="tipoi" name="tipo" class="btn-check" value="1" autocomplete="off" wire:model.live="tipo">
@@ -392,21 +401,37 @@
                                             <input type="text" id="txtglpi" class="form-control form-control-xs" wire:model=glpi>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-xl-10">
-                                            <label for="txtobservacion" class="fw-bold fs-6">OBSERVACIÓN (Opcional)</label>
-                                            <input type="text" id="txtobservacion" class="form-control form-control-xs" wire:model="observacion">
+                                    <div class="row mt-3">
+                                        <div class="col-xl-8 col-sm-12">
+                                            <label for="txtobservacion" class="fw-bold fs-6">DETALLE DEL PROBLEMA</label>
+                                            <div class="input-group">
+                                                <input type="text" id="txtobservacion" class="form-control form-control-xs" wire:model="observacion">
+                                                <button class="btn btn-outline-dark btn-xs" type="button" id="btndetalleatencion">
+                                                    <i class="fa-solid fa-print"></i> Agregar Items
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div class="col-xl-2">
-                                            <label class="fw-bold fs-6">ADJUNTAR</label>
-                                            <div class="d-flex gap-2">
-                                                <button type="button" class="btn btn-outline-dark btn-xs flex-fill" wire:click="cargarPDF1"> Seleccionar...</button>
+                                        <div class="col-xl-4 col-sm-12">
+                                            <label for="txtobservacion" class="fw-bold fs-6">CARGAR EVIDENCIA</label>
+                                            <div class="input-group">
+                                                {{-- <button class="btn btn-outline-dark btn-xs" type="button" id="btnimprimircontrato">
+                                                    <i class="fa-solid fa-print"></i> Imprimir
+                                                </button> --}}
+                                                <input type="file" class="form-control form-control-xs" id="filecontrato" aria-describedby="inputGroupFileAddon04" aria-label="Upload" accept="application/pdf" wire:model="pdf_acta">
+                                                {{-- <button class="btn btn-outline-warning btn-xs" type="button" id="btncargarcontrato">
+                                                    <i class="fa-solid fa-arrow-up-from-bracket"></i> Cargar
+                                                </button> --}}
+                                                @if ($ruta_documento)
+                                                    <a class="btn btn-{{ $colorAgregar }} btn-xs" type="button" id="btnverevidencia" href="{{ asset('storage/'.$ruta_documento) }}" target="_blank">
+                                                        <i class="fa-solid fa-file-pdf"></i> Ver firmado
+                                                    </a>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
                                 </fieldset>
                             </div>
-                            <div class="col-xl-4">
+                            <div class="col-xl-3">
                                 <fieldset class="border p-3 rounded mb-3">
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">ATENCIÓN</legend>
                                     <div class="row">
@@ -424,13 +449,13 @@
                                             <label for="normal" class="fw-bold fs-6">TIEMPO DE ATENCIÓN</label>
                                             <div class="d-flex gap-2">
                                                 <input type="radio" id="normal" name="tiempo" class="btn-check" value="NORMAL" autocomplete="off" wire:model.live="tiempo_atencion">
-                                                <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="normal">NORMAL (1 día)</label>
+                                                <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="normal">NORMAL<br> (1 día)</label>
 
                                                 <input type="radio" id="regular" name="tiempo" class="btn-check" value="REGULAR" autocomplete="off" wire:model.live="tiempo_atencion">
-                                                <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="regular">REGULAR (2 a 5 días)</label>
+                                                <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="regular">REGULAR<br> (2 a 5 días)</label>
 
                                                 <input type="radio" id="complejo" name="tiempo" class="btn-check" value="COMPLEJO" autocomplete="off" wire:model.live="tiempo_atencion">
-                                                <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="complejo">COMPLEJO (mayor a 6 días)</label>
+                                                <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="complejo">COMPLEJO<br> (mayor a 6 días)</label>
                                             </div>
                                         </div>
                                     </div>
@@ -443,6 +468,24 @@
                                 </fieldset>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-xl-4">
+                                <fieldset class="border p-3 rounded mb-3">
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">BIEN PATRIMONIAL</legend>
+                                    @include('livewire.patrimonio.bienes.partials.datos-bienes-component')
+                                </fieldset>
+                                <button type="button" class="btn btn-success btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-bienes-component">
+                                    <i class="fa-solid fa-magnifying-glass"></i> Buscar bien patrimonial
+                                </button>
+                            </div>
+                            <div class="col-xl-8">
+                                <fieldset class="border p-3 rounded mb-3">
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">SOPORTE</legend>
+                                    @include('livewire.informatica.partials.datos-soporte-component')
+                                </fieldset>
+                            </div>
+                        </div>
+                        @include('livewire.informatica.partials.datos-soporte-observacion-component')
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-{{ $colorGuardarActualizar }} btn-sm">
@@ -457,18 +500,18 @@
         </div>
     </div>
 
-    {{-- Modal Incidencias y Solicitudes --}}
-    <div wire:ignore.self class="modal fade" id="buscar-inicidencia-solicitud-component" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="buscar-inicidencia-solicitud-componentLabel" aria-hidden="true">
+    {{-- Modal servicios --}}
+    <div wire:ignore.self class="modal fade" id="buscar-servicio-component" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="buscar-servicio-componentLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-warning-subtle">
-                    <h1 class="modal-title fs-5" id="buscar-inicidencia-solicitud-componentLabel">
+                    <h1 class="modal-title fs-5" id="buscar-servicio-componentLabel">
                         BUSCAR SERVICIO
                     </h1>
-                    <button type="button" class="btn-close" wire:click="cerrar_indicencia_solicitud"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" wire:click="cerrar_servicio" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" id="txtservicio" class="form-control form-control-sm mb-2" placeholder="Buscar por incidencia o solicitud" wire:model.live="searchservicios">
+                    <input type="text" id="txtservicio" class="form-control form-control-sm mb-2" placeholder="Buscar por incidencia o solicitud" wire:model.live="searchservicios" >
                     <div class="table-responsive small">
                         <table class="table table-striped table-hover table-sm table-xsmall">
                             <thead class="table-dark text-center align-middle">
@@ -479,15 +522,76 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($lista_incidencias_solicitudes as $item)
+                                @forelse ($lista_servicios as $item)
                                     <tr>
                                         <th>{{ $loop->iteration }}</th>
                                         <td>{{ $item->servicio }}</td>
                                         <td>
                                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                 <div class="btn-group" role="group">
-                                                    <button type="button" class="btn btn-outline-success btn-sm" wire:click="agregar_indicencia_solicitud('{{ $item->descripcion }}')">
-                                                        <i class="fa-solid fa-share-from-square"></i>
+                                                    <button type="button" class="btn btn-outline-success btn-xs" wire:click="agregar_servicio({{ $item->id }})" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
+                                                        <i class="fa-solid fa-share-from-square"></i> Agregar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="12" class="text-center">
+                                            <div class="alert alert-danger" role="alert">
+                                                No se encontraron resultados!
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                        {{ $lista_servicios->links() }}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" wire:click="cerrar_servicio" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
+                        <i class="fa-solid fa-square-xmark"></i> Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Modal Incidencias y Solicitudes Detalle --}}
+    <div wire:ignore.self class="modal fade" id="buscar-inicidencia-solicitud-component" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="buscar-inicidencia-solicitud-componentLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-secondary-subtle">
+                    <h1 class="modal-title fs-5" id="NuevoEditarModalLabel">
+                        BUSCAR INCIDENCIAS / SOLICITUDES
+                    </h1>
+                    <button type="button" class="btn-close" wire:click="cerrar_incidencia_solicitud" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control form-control-sm mb-2" placeholder="Buscar por detalle incidencia o solicitud" wire:model.live="searchincidenciasolicitud">
+                    <div class="table-responsive small">
+                        <table class="table table-striped table-hover table-sm table-xsmall">
+                            <thead class="table-dark text-center align-middle">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Servicio</th>
+                                    <th>Incidencia / Solicitud</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($lista_incidencias_solicitudes as $item2)
+                                    <tr>
+                                        <th>{{ $loop->iteration }}</th>
+                                        <td>{{ $item2->servicio }}</td>
+                                        <td>{{ $item2->incidencia_solicitud }}</td>
+                                        <td>
+                                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                <div class="btn-group" role="group">
+                                                    <button type="button" class="btn btn-outline-success btn-xs" wire:click="agregar_incidencia_solicitud({{ $item2->id }})" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
+                                                        <i class="fa-solid fa-share-from-square"></i> Agregar
                                                     </button>
                                                 </div>
                                             </div>
@@ -508,74 +612,13 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-sm" wire:click="cerrar_indicencia_solicitud">
+                    <button type="button" class="btn btn-secondary btn-sm" wire:click="cerrar_incidencia_solicitud" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
                         <i class="fa-solid fa-square-xmark"></i> Cerrar
                     </button>
                 </div>
             </div>
         </div>
     </div>
-
-    {{-- Modal Incidencias y Solicitudes Detalle --}}
-    {{-- <div class="modal fade @if($modal_abierto_incidencia_solicitud_detalle) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-secondary-subtle">
-                    <h1 class="modal-title fs-5" id="NuevoEditarModalLabel">
-                        BUSCAR DETALLE DE INCIDENCIAS O SOLICITUDES
-                    </h1>
-                    <button type="button" class="btn-close" wire:click="cerrar_indicencia_solicitud_desc"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="text" class="form-control form-control-sm mb-2" placeholder="Buscar por detalle incidencia o solicitud" wire:model.live="searchincidenciasolicituddesc">
-                    <div class="table-responsive small">
-                        <table class="table table-striped table-hover table-sm table-xsmall">
-                            <thead class="table-dark text-center align-middle">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Tipo</th>
-                                    <th>Incidencia / Solicitud</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($lista_indicencias_solicitudes_desc as $item2)
-                                    <tr>
-                                        <th>{{ $loop->iteration }}</th>
-                                        <td></td>
-                                        <td>{{ $item2->detalle }}</td>
-                                        <td>
-                                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                <div class="btn-group" role="group">
-                                                    <button type="button" class="btn btn-outline-success btn-sm" wire:click="agregar_indicencia_solicitud_desc('{{ $item2->detalle }}')">
-                                                        <i class="fa-solid fa-share-from-square"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="12" class="text-center">
-                                            <div class="alert alert-danger" role="alert">
-                                                No se encontraron resultados!
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                        {{ $lista_indicencias_solicitudes_desc->links() }}
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-sm" wire:click="cerrar_indicencia_solicitud_desc">
-                        <i class="fa-solid fa-square-xmark"></i> Cerrar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div> --}}
 
 
     {{-- Cargar varios documentos y e imágenes --}}

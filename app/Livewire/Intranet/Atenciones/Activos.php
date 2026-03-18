@@ -34,7 +34,7 @@ class Activos extends Component
     public $colorAgregar;
 
     //Variables PARA OCULTAR Y MOSTRAR TXT_OTROS
-    public $mostrarcargafoto = "d-none";
+    public $mostrarotrosp = "d-none", $mostrarotrosc = "d-none",$mostrarcargafoto = "d-none";
 
     //Variables bloquear de secciones
     public $seccionFoto, $seccionPersona, $seccionPersonal;
@@ -74,6 +74,9 @@ class Activos extends Component
     }
     public function updatingSearchservicios(){
         $this->resetPage('serviciosPage');
+    }
+    public function updatingSearchincidenciasolicitud(){
+        $this->resetPage('incidenciasolicitudPage');
     }
 
     public $filtrotipodocumento;
@@ -127,7 +130,9 @@ class Activos extends Component
             $fecha_fin,
             $ruta_documento;
 
-    public $servicio,
+    public $servicio_id,
+            $servicio,
+            $incidenciasolicitud_id,
             $incidenciasolicitud,
             $cea,
             $sgf,
@@ -139,9 +144,68 @@ class Activos extends Component
             $respuesta,
             $cargo_condicion,$reportado_por,$tipo;
 
-    public $pdf_acta;
+    public $soporte_id,
+            $preventivo,
+            $sede_ubicacion,
+            $dependencia_ubicacion,
+            $despacho_ubicacion,
+            $p01,
+            $p02,
+            $p03,
+            $p04,
+            $p05,
+            $p06,
+            $p07,
+            $potros,
+            $correctivo,
+            $c01,
+            $c02,
+            $c03,
+            $c04,
+            $c05,
+            $c06,
+            $c07,
+            $cotros,
+            $operativo,
+            $observacion_usuario,
+            $recomendacion_usuario,
+            $ruta_evidencia;
 
-    public $filtro_anio,$filtro_mes ;
+    Public $bien_id,
+            $cod,
+            $cod_patrimonial,
+            $bien,
+            $marca,
+            $modelo,
+            $serie,
+            $medida,
+            $medidas,
+            $color,
+            $estado,
+            $clase,
+            $familia,
+            $bien_ip;
+
+    public $pdf_acta;
+    public $bandera_documento="EVIDENCIA";
+
+    public $filtro_anio,$filtro_mes;
+
+    public function updatedp07($value)
+    {
+        $this->mostrarotrosp = $value ? '' : 'd-none';
+        if (!$value) {
+            $this->cotros = '';
+        }
+    }
+
+    public function updatedC07($value)
+    {
+        $this->mostrarotrosc = $value ? '' : 'd-none';
+        if (!$value) {
+            $this->cotros = '';
+        }
+    }
 
     public function mount()
     {
@@ -279,16 +343,22 @@ class Activos extends Component
             ->orderBy('nombre')
             ->paginate(10,['*'], 'cargosPage');
 
-        $lista_incidencias_solicitudes = PersonalesAtencionesServicio::select('servicio')
+        $lista_servicios = PersonalesAtencionesServicio::select('id','servicio')
             ->where('activo','1')
             ->where('servicio','like','%' . $this->searchservicios . '%')
-            ->distinct()
             ->orderBy('servicio')
             ->paginate(10,['*'],'serviciosPage');
 
+        $lista_incidencias_solicitudes = PersonalesAtencionesIncidenciasSolicitudes::select('id','servicio','incidencia_solicitud')
+            ->where('activo','1')
+            ->where('servicio_id',$this->servicio_id)
+            ->where('incidencia_solicitud','like','%' . $this->searchincidenciasolicitud . '%')
+            ->orderBy('incidencia_solicitud')
+            ->paginate(10,['*'],'incidenciasolicitudPage');
+
         return view('livewire.intranet.atenciones.activos',
                 compact('lista_activos','lista_inactivos','lista_historial','lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos',
-                            'lista_incidencias_solicitudes'));
+                            'lista_servicios','lista_incidencias_solicitudes'));
     }
 
     protected function rules(){
@@ -373,8 +443,29 @@ class Activos extends Component
         // $this->reset('searchpersonas');
     }
 
-    public function agregar_incidencia_solicitud()
+    public function agregar_servicio(PersonalesAtencionesServicio $iservicio)
     {
+        $this->servicio_id = $iservicio->id;
+        $this->servicio = $iservicio->servicio;
 
+        $this->incidenciasolicitud = "";
+
+    }
+
+    public function cerrar_servicio()
+    {
+        $this->reset('searchservicios');
+    }
+
+    public function agregar_incidencia_solicitud(PersonalesAtencionesIncidenciasSolicitudes $iincidenciasolicitud)
+    {
+        $this->incidenciasolicitud_id = $iincidenciasolicitud->id;
+        $this->incidenciasolicitud = $iincidenciasolicitud->incidencia_solicitud;
+
+    }
+
+    public function cerrar_incidencia_solicitud()
+    {
+        $this->reset('searchincidenciasolicitud');
     }
 }
