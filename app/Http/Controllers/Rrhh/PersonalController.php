@@ -68,7 +68,8 @@ class PersonalController extends Controller
     public function reportePDF()
     {
         $ipersonal = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
-            ->select('personas.*',
+            ->select(
+                'personas.*',
                 'personales.persona_id',
                 'personales.regimen',
                 'personales.tipo_regimen',
@@ -78,14 +79,42 @@ class PersonalController extends Controller
                 'personales.despachoorigen',
                 'personales.sededestino',
                 'personales.dependenciadestino',
-                'personales.despachodestino')
+                'personales.despachodestino'
+            )
             ->where([['personas.activo',1],['personales.activo', 1]])
+            ->orderBy('personales.dependenciaorigen') // 👈 importante
             ->orderBy('personas.datos')
             ->get();
 
-        $pdf = Pdf::loadView('pdf.rrhh.personal.reportePDF', compact('ipersonal'));
+        // ✅ AGRUPAR POR DEPENDENCIA
+        $personalAgrupado = $ipersonal->groupBy('dependenciaorigen');
 
-        //Mostrar PDF
-        return $pdf->stream('reportePDF'.'.pdf');
+        $pdf = Pdf::loadView('pdf.rrhh.personal.reportePDF', compact('personalAgrupado'));
+
+        return $pdf->stream('reportePDF.pdf');
     }
+
+    // public function reportePDF()
+    // {
+    //     $ipersonal = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
+    //         ->select('personas.*',
+    //             'personales.persona_id',
+    //             'personales.regimen',
+    //             'personales.tipo_regimen',
+    //             'personales.cargo',
+    //             'personales.sedeorigen',
+    //             'personales.dependenciaorigen',
+    //             'personales.despachoorigen',
+    //             'personales.sededestino',
+    //             'personales.dependenciadestino',
+    //             'personales.despachodestino')
+    //         ->where([['personas.activo',1],['personales.activo', 1]])
+    //         ->orderBy('personas.datos')
+    //         ->get();
+
+    //     $pdf = Pdf::loadView('pdf.rrhh.personal.reportePDF', compact('ipersonal'));
+
+    //     //Mostrar PDF
+    //     return $pdf->stream('reportePDF'.'.pdf');
+    // }
 }

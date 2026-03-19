@@ -201,7 +201,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xl-4">
+                            <div class="col-xl-3">
                                 <fieldset class="border p-3 rounded mb-3" {{ $seccionBienpatrimonial }}>
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">BIEN PATRIMONIAL</legend>
                                     @include('livewire.patrimonio.bienes.partials.datos-bienes-component')
@@ -210,14 +210,13 @@
                                     <i class="fa-solid fa-magnifying-glass"></i> Buscar bien patrimonial
                                 </button>
                             </div>
-                            <div class="col-xl-8">
-                                <fieldset class="border p-3 rounded mb-3">
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">SOPORTE</legend>
+                            <div class="col-xl-9">
+                                {{-- <fieldset class="border p-3 rounded mb-3">
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">SOPORTE</legend> --}}
                                     @include('livewire.informatica.partials.datos-soporte-component')
-                                </fieldset>
+                                {{-- </fieldset> --}}
                             </div>
                         </div>
-                        @include('livewire.informatica.partials.datos-soporte-observacion-component')
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-{{ $colorGuardarActualizar }} btn-sm">

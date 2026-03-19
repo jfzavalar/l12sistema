@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col">
         <fieldset class="border p-3 rounded mb-3">
-        <legend>Mantenimiento preventivo</legend>
+        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">PREVENTIVO</legend>
             <div class="form-check form-check-sm">
                 <input id="p1" class="form-check-input" type="checkbox" wire:model="p01">
                 <label for="p1" class="form-check-label small">Abrir CASE para realizar limpieza</label>
@@ -39,7 +39,7 @@
     </div>
     <div class="col">
         <fieldset class="border p-3 rounded mb-3">
-            <legend>Mantenimiento correctivo</legend>
+            <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">CORRECTIVO</legend>
             <div class="form-check form-check-sm">
                 <input id="c1" class="form-check-input" type="checkbox" wire:model="c01">
                 <label for="c1" class="form-check-label small">Actualización de aplicaciones</label>
@@ -76,7 +76,7 @@
         </fieldset>
     </div>
 </div>
-<div class="row">
+<div class="row mb-3">
     <div class="col-xl-4 mb-2">
         <div class="input-group">
             <span class="input-group-text form-control form-control-xs" id="basic-addon1">Equipor en estado operativo:</span>
@@ -98,3 +98,4 @@
         </div>
     </div>
 </div>
+@include('livewire.informatica.partials.datos-soporte-observacion-component')

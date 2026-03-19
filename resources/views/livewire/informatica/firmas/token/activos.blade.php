@@ -1,49 +1,8 @@
 <div>
     <div class="card">
         <div class="card-body">
-            <div class="row mt-3">
-                <div class="col-xl-4">
-                    <table class="table">
-                        <thead class="table-dark">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col" colspan="3" class="text-center">Instalación de Tokens</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($totales_asignados as $tactivos)
-                                <tr class="align-middle" style="font-size: 12px;">
-                                    <th scope="row">{{ $loop->iteration }}</th>
-                                    <th style="white-space: nowrap;">{{ $tactivos->created_user }}</th>
-                                    <td>
-                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                            <div class="input-group input-group-xs">
-                                                <button class="input-group-text bg-success text-white" wire:click="setFiltrosAsignados('{{ $tactivos->created_user }}')">
-                                                    <i class="fa-solid fa-check me-2"></i>Asignado
-                                                </button>
-                                                <input type="text" class="form-control text-end" value="{{ $tactivos->total_asignados }}" readonly>
-                                            </div>
-                                            <div class="input-group input-group-xs">
-                                                <button class="input-group-text bg-danger text-white" wire:click="setFiltrosDevueltos('{{ $tactivos->created_user }}')">
-                                                    <i class="fa-solid fa-triangle-exclamation me-2"></i>Devuelto
-                                                </button>
-                                                <input type="text" class="form-control text-end" value="{{ $tactivos->total_devueltos }}" readonly>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    {{-- <td>
-                                        <div class="input-group input-group-xs">
-                                            <input type="text" class="form-control fw-bold text-end" value="{{ $tactivos->total_asignados + $tactivos->total_devueltos }}" readonly>
-                                        </div>
-                                    </td> --}}
-                                </tr>
-                            @empty
-                                <tr class="align-middle"><td colspan="3">Sin registros.</td></tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-                <div class="col-xl-8">
+            <div class="row">
+                <div class="col-xl-12">
                     <div class="row">
                         <div class="col-xl-4 col-lg-4 col-sm-4">
                             <div class="alert alert-primary" role="alert">
@@ -51,34 +10,60 @@
                                     Total Tokens
                                 </h5><br>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h1><i class="fa-solid fa-chart-simple text-primary"></i> {{ $conteo_rutas->con_ruta + $conteo_rutas->sin_ruta }}</h1>
-                                    <button class="btn btn-outline-primary btn-sm" wire:click="$set('filtro_rutas','')">
+                                    <h3><i class="fa-solid fa-chart-simple text-primary"></i> {{ $estadisticas->total }}</h3>
+                                    <button class="btn btn-outline-primary btn-sm" wire:click="$set('filtro_firma',''); $set('filtro_asignacion','');">
                                         <i class="fa-solid fa-bars"></i> Listar
                                     </button>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-4 col-lg-4 col-sm-4">
-                            <div class="alert alert-success" role="alert">
+                        <div class="col-xl-2 col-lg-4 col-sm-4">
+                            <div class="alert alert-secondary" role="alert">
                                 <h5 class="card-title">
                                     Actas Firmadas
                                 </h5><br>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h1><i class="fa-solid fa-file-signature text-success"></i> {{ $conteo_rutas->con_ruta }}</h1>
-                                    <button class="btn btn-outline-success btn-sm" wire:click="$set('filtro_rutas','con')">
+                                    <h3><i class="fa-solid fa-file-signature text-secondary"></i> {{ $estadisticas->con_firma }}</h3>
+                                    <button class="btn btn-outline-secondary btn-sm" wire:click="$set('filtro_firma','con'); $set('filtro_asignacion','');">
                                         <i class="fa-solid fa-bars"></i> Listar
                                     </button>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-4 col-lg-4 col-sm-4">
-                            <div class="alert alert-danger" role="alert">
+                        <div class="col-xl-2 col-lg-4 col-sm-4">
+                            <div class="alert alert-success" role="alert">
                                 <h5 class="card-title">
                                     Actas sin Firmar
                                 </h5><br>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h1><i class="fa-solid fa-signature text-danger"></i> {{ $conteo_rutas->sin_ruta }}</h1>
-                                    <button class="btn btn-outline-danger btn-sm" wire:click="$set('filtro_rutas','sin')">
+                                    <h3><i class="fa-solid fa-signature text-success"></i> {{ $estadisticas->sin_firma }}</h3>
+                                    <button class="btn btn-outline-success btn-sm" wire:click="$set('filtro_firma','sin'); $set('filtro_asignacion','');">
+                                        <i class="fa-solid fa-bars"></i> Listar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-4 col-sm-4">
+                            <div class="alert alert-danger" role="alert">
+                                <h5 class="card-title">
+                                    Asignados
+                                </h5><br>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h3><i class="fa-solid fa-signature text-danger"></i> {{ $estadisticas->asignados }}</h3>
+                                    <button class="btn btn-outline-danger btn-sm" wire:click="$set('filtro_firma',''); $set('filtro_asignacion','ASIGNACION');">
+                                        <i class="fa-solid fa-bars"></i> Listar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-4 col-sm-4">
+                            <div class="alert alert-warning" role="alert">
+                                <h5 class="card-title">
+                                    Devueltos
+                                </h5><br>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h3><i class="fa-solid fa-signature text-warning"></i> {{ $estadisticas->devueltos }}</h3>
+                                    <button class="btn btn-outline-warning btn-sm" wire:click="$set('filtro_firma',''); $set('filtro_asignacion','DEVOLUCION');">
                                         <i class="fa-solid fa-bars"></i> Listar
                                     </button>
                                 </div>
@@ -90,33 +75,40 @@
 
             <div class="table-responsive small">               
                 <div class="row">
-                    <div class="col-lg-2 col-sm-12">
-                        <label for="txtsearchpersonalatenciones" class="btn btn-outline-primary btn-sm me-2">Total: {{ $lista_activos->total() }}</label>
-                    </div>
-                    <div class="col-lg-10 col-sm-12">
-                        <div class="input-group mb-3">
-                            <select name="cmbfiltroAsignacion" id="cmbfiltroAsignacion" class="form-select form-select-xs" wire:model.live="filtroasignacion">
-                                <option value="">TOTAL</option>
-                                <option value="ASIGNACION">ASIGNACION</option>
-                                <option value="DEVOLUCION">DEVOLUCION</option>
-                            </select>
-                            <input type="text" id="txtsearcha" class="form-control form-control-sm" wire:model.live="searchtokens" placeholder="Buscar por DNI o Datos del Personal">
-                            <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" wire:click="nuevo">
+                    {{-- <div class="col-lg-1 col-sm-12">
+                        <label class="btn btn-outline-primary btn-sm me-2">Total: {{ $lista_activos->total() }}</label>
+                    </div> --}}
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
+                            <input type="text" id="txtsearcha" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar por DNI o Datos del Personal">
+                            <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" wire:click="nuevo" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
                                 <i class="fa-solid fa-file"></i> Nuevo
                             </button>
                         </div>
                     </div>
-                </div>                   
+                </div>
+                {{-- <div class="row">
+                    <div class="col-xl-2">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text fw-bold" id="basic-addon1">Filtrar por:</span>
+                            <select name="cmbfiltroAsignacion" id="cmbfiltroAsignacion" class="form-select form-select-sm" wire:model.live="filtroasignacion">
+                                <option value="">TOTAL</option>
+                                <option value="ASIGNACION">ASIGNACION</option>
+                                <option value="DEVOLUCION">DEVOLUCION</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>                    --}}
                 <table class="table table-striped table-hover table-sm table-xsmall">
                     <thead class="table-primary text-center align-middle">
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col"><i class="fa-solid fa-user"></i> DNI</th>
-                            <th scope="col">DATOS</th>
+                            <th scope="col"><i class="fa-solid fa-user"></i> DNI - DATOS</th>
                             <th scope="col">SEDE <br> DEPENDENCIA</th>
-                            <th scope="col">SEDE <br> DEPENDENCIA</th>
+                            {{-- <th scope="col">SEDE <br> DEPENDENCIA</th> --}}
                             <th scope="col">CARGO</th>
-                            <th scope="col">TOKEN</th>
+                            <th scope="col">CODTOKEN</th>
                             <th scope="col">EXPIRACION</th>
                             <th scope="col">ASIGNACIÓN</th>
                             <th scope="col"><i class="fa-solid fa-gears"></i></th>
@@ -125,32 +117,42 @@
                         </tr>
                     </thead>
                     <tbody class="align-middle">
-                        @forelse ($lista_activos as $activo)
+                        @forelse ($lista_activos as $item)
                             <tr>
                                 <th scope="row">{{ $loop->iteration }}</th>
-                                <th class="text-primary">{{ $activo->dni }}</th>
-                                <td>{{ $activo->datos }}</td>
-                                <td><b>{{ $activo->sede_origen }}</b> <br> {{ $activo->dependencia_origen }}</td>
-                                <td><b>{{ $activo->sede_destino }}</b> <br> {{ $activo->dependencia_destino }}</td>
-                                <td>{{ $activo->cargo }}</td>
-                                <td>{{ $activo->codtoken }}</td>
-                                <td>{{ $activo->fecha_expiracion }}</td>
+                                <th>
+                                    {{ $item->dni }}
+                                    <br>
+                                    {{ $item->datos }}
+                                </th>
                                 <td>
-                                    @if ($activo->asignacion == "ASIGNACION" || $activo->asignacion == "REASIGNACION")
-                                        <span class="badge rounded-pill text-bg-success">{{ $activo->asignacion }}</span>
+                                    <b>SEDE: {{ $item->sedeorigen }}</b>
+                                    <br>
+                                    {{ $item->dependenciaorigen }}
+                                </td>
+                                {{-- <td><b>SEDE: {{ $item->sededestino }}</b>
+                                    <br>
+                                    {{ $item->dependenciadestino }}
+                                </td> --}}
+                                <td>{{ $item->cargo }}</td>
+                                <td>{{ $item->token_codigo }}</td>
+                                <td>{{ $item->fecha_expiracion }}</td>
+                                <td>
+                                    @if ($item->asignacion == "ASIGNACION" || $item->asignacion == "REASIGNACION")
+                                        <span class="badge rounded-pill text-bg-success">{{ $item->asignacion }}</span>
                                     @else
-                                        <span class="badge rounded-pill text-bg-danger">{{ $activo->asignacion }}</span>
+                                        <span class="badge rounded-pill text-bg-danger">{{ $item->asignacion }}</span>
                                     @endif
                                 </td>
                                 <td>
                                     @can('procesos.informatica.tokens.edit')
-                                        @if ($activo->asignacion == "ASIGNACION" || $activo->asignacion == "REASIGNACION")
-                                            <button type="button" class="btn btn-outline-secondary btn-xs" wire:click="devolver2({{ $activo->id }})">
+                                        @if ($item->asignacion == "ASIGNACION" || $item->asignacion == "REASIGNACION")
+                                            <button type="button" class="btn btn-outline-secondary btn-xs" wire:click="nuevo_devolucion({{ $item->id }})" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
                                                 <i class="fas fa-exchange-alt"></i><br>Devolver
                                             </button>
                                         @endif
-                                        @if ($activo->asignacion == "DEVOLUCION")
-                                            <button type="button" class="btn btn-outline-danger btn-xs" wire:click="reasignar1({{ $activo->id }})">
+                                        @if ($item->asignacion == "DEVOLUCION")
+                                            <button type="button" class="btn btn-outline-danger btn-xs" wire:click="nuevo_reasignacion({{ $item->id }})" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
                                                 <i class="fas fa-exchange-alt"></i><br>Reasignar
                                             </button>
                                         @endif
@@ -160,7 +162,7 @@
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                         <div class="btn-group" role="group">
                                             @can('procesos.informatica.tokens.edit')
-                                                <button type="button" class="btn btn-outline-primary btn-xs" wire:click="editar({{ $activo->id }})" data-bs-toggle="modal" data-bs-target="#new-edit-Modal">
+                                                <button type="button" class="btn btn-outline-primary btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->id }})">
                                                     <i class="fa-solid fa-pen-to-square"></i><br>Editar
                                                 </button>
                                             @endcan
@@ -179,7 +181,7 @@
                                             {{-- <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#pdf-cargar-Modal">
                                                 <i class="fa-solid fa-file-pdf"></i> Firmado
                                             </button> --}}
-                                            <button type="button" class="btn btn-outline-info btn-xs" wire:click="historial_tokens('{{ $activo->codtoken }}')" >
+                                            <button type="button" class="btn btn-outline-info btn-xs" data-bs-toggle="modal" data-bs-target="#historial-componentModal" wire:click="historial_tokens('{{ $item->token_id }}')">
                                                 <i class="fa-solid fa-timeline"></i><br>Historial
                                             </button>     
                                             {{-- @can('procesos.informatica.tokens.destroy')
@@ -211,15 +213,12 @@
                                 </td>
                             </tr>
                         @endforelse
-                        <tr>
-                            <td>
-                                <p></p>
-                            </td>
-                        </tr>
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="13"><br></td>
+                            <td colspan="9">
+                                {{ $lista_activos->links() }}
+                            </td>
                         </tr>
                     </tfoot>
                 </table>
@@ -238,56 +237,108 @@
             </div>
         </div>
     </div> --}}
-    <div class="dropdown position-fixed bottom-0 start-50 translate-middle-x mb-3 bg-primary-subtle shadow-sm rounded px-3 py-2">
+    {{-- <div class="dropdown position-fixed bottom-0 start-50 translate-middle-x mb-3 bg-primary-subtle shadow-sm rounded px-3 py-2">
         {{ $lista_activos->links() }}
-    </div>
+    </div> --}}
 
-    <!-- Modal Nuevo-Editar-->
-    <div class="modal fade @if($modal_abierto_token) show d-block @endif" tabindex="-1">
-        {{-- <div class="modal-dialog modal-xl" style="max-width:90%;"> --}}
+    {{-- Modal Nuevo-Editar --}}
+    <div wire:ignore.self class="modal fade" id="nuevoEditarModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="nuevoEditarModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" style="max-width:90%;">>
             <div class="modal-content">
-                <form wire:submit.prevent="{{ $btn_guardar_actualizar }}">
-                    <div class="modal-header bg-{{ $modal_header_color }}">
+                <form wire:submit.prevent="{{ $funcionGuardarActualizar }}">
+                    <div class="modal-header bg-{{ $colorHeaderModal }}">
                         <h1 class="modal-title fs-5" id="NuevoEditarModalLabel">
-                            @if ($modal_header_titulo === "nuevo")
-                                <i class="fa-solid fa-file"></i> NUEVO - TOKEN
-                            @else
-                                <i class="fa-solid fa-pen-to-square"></i> EDITAR - TOKEN
-                            @endif
+                            <i class="fa-solid fa-file"></i> {{ $textoHeaderModal }}
                         </h1>
-                        <button type="button" class="btn-close" wire:click="cerrar"></button>
+                        <button type="button" class="btn-close" wire:click="cerrar" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-xl-3 col-sm-12">
-                                <fieldset class="border p-3 rounded text-center" disabled>
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">Foto de perfil</legend>
-                                    @include('livewire.partials.personal-datos-foto')
+                            <div class="col-xl-2 col-sm-12">
+                                <fieldset class="border p-3 rounded text-center mb-3" {{ $seccionFoto }} disabled>
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">FOTO DE PERFIL</legend>
+                                    @include('livewire.rrhh.personal.partials.datos-foto-component')
                                 </fieldset>
-                                <fieldset class="border p-3 rounded">
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">Datos Personales</legend>
-                                    @include('livewire.partials.personal-datos-personales')
-                                </fieldset>  
                             </div>
-                            <div class="col-xl-9 col-sm-12">
 
-                                @include('livewire.partials.personal-datos-institucionales-mir')
-
-                                <fieldset class="border p-3 rounded">
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">Datos Institucionales</legend>
-                                    @include('livewire.partials.personal-datos-institucionales')
-                                </fieldset>
-                                <fieldset class="border p-3 rounded">
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">Detalles de firma token</legend>
-                                    <div class="row">
-                                        <div class="col-lg-6 col-sm-12">
-                                            <label for="txt_fecha_expiracion_token" class="form-label fw-bold fs-6">Fecha Expiración</label>
-                                            <input type="date" id="txt_fecha_expiracion_token" class="form-control" wire:model="fecha_expiracion">
+                            <div class="col-xl-10 col-sm-12">
+                                <div class="row">
+                                    <div class="col-xl-4">
+                                        <fieldset class="border p-3 rounded mb-3" {{ $seccionPersona }} disabled>
+                                            <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS PERSONALES</legend>
+                                            @include('livewire.rrhh.personal.partials.datos-personales-component')
+                                        </fieldset>
+                                        <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-personal-component">
+                                            <i class="fa-solid fa-magnifying-glass"></i> Buscar personal
+                                        </button>
+                                    </div>
+                                    <div class="col-xl-8">
+                                        <fieldset class="border p-3 rounded mb-3" {{ $seccionPersonal }} disabled>
+                                            <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS INSTITUCIONALES</legend>
+                                            @include('livewire.rrhh.personal.partials.datos-institucionales-component')
+                                        </fieldset>
+                                        <div class="row">
+                                            <div class="col">
+                                                @if ($dni)
+                                                    <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#transferencia-personal-component" wire:click="nuevo_transferir_personal({{ $persona_id }})">
+                                                        <i class="fa-solid fa-people-arrows"></i> Cambiar Ubicación
+                                                    </button>
+                                                @endif
+                                            </div>
+                                            {{-- <div class="col">
+                                                <input type="text" class="form-control form-control-xs" wire:model="sededestino" disabled>                                      
+                                            </div>
+                                            <div class="col">
+                                                <input type="text" class="form-control form-control-xs" wire:model="dependenciadestino" disabled>
+                                            </div>
+                                            <div class="col">
+                                                <input type="text" class="form-control form-control-xs" wire:model="despachodestino" disabled>
+                                            </div> --}}
                                         </div>
-                                        <div class="col-lg-6 col-sm-12">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-12 col-sm-12">
+                                <fieldset class="border p-3 rounded">
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">ASIGNACIÓN / DEVOLUCIÓN DE TOKEN</legend>
+                                    <div class="row">
+                                        <div class="col-xl-3 col-lg-6 col-sm-12">
+                                            <label for="txt_token_codigo" class="fw-bold fs-6">Token</label>
+                                            <div class="input-group">
+                                                <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-token-component">
+                                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                                </button>
+                                                <input type="text" id="txt_token_codigo" class="form-control form-control-xs bg-light" wire:model="token_codigo" readonly required>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-3 col-lg-6 col-sm-12">
+                                            <label for="txt_equipo" class="fw-bold fs-6">Equipo</label>
+                                            <div class="input-group">
+                                                <input type="text" id="txt_equipo" class="form-control form-control-xs bg-light" wire:model="equipo" readonly required>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-3 col-lg-6 col-sm-12">
+                                            <label for="txt_modelo" class="fw-bold fs-6">Modelo</label>
+                                            <div class="input-group">
+                                                <input type="text" id="txt_modelo" class="form-control form-control-xs bg-light" wire:model="modelo" readonly required>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-3 col-lg-6 col-sm-12">
+                                            <label for="txt_operativo" class="fw-bold fs-6">Operativo</label>
+                                            <div class="input-group">
+                                                <input type="text" id="txt_operativo" class="form-control form-control-xs bg-light" wire:model="operativo" readonly required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-sm-12">
+                                            <label for="txt_fecha_expiracion_token" class="form-label fw-bold fs-6">Fecha Expiración</label>
+                                            <input type="date" id="txt_fecha_expiracion_token" class="form-control form-control-sm" wire:model="fecha_expiracion">
+                                        </div>
+                                        <div class="col-lg-9 col-sm-12">
                                             <label for="txt_observacion_token" class="form-label fw-bold fs-6">Observación</label>
-                                            <input type="text" id="txt_observacion_token" class="form-control" wire:model="observacion">
+                                            <input type="text" id="txt_observacion_token" class="form-control form-control-sm" wire:model="observacion">
                                         </div>
                                     </div>
                                 </fieldset>
@@ -295,15 +346,11 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-sm">
-                            @if ($btn_guardar_actualizar === "guardar")
-                                <i class="fa-solid fa-floppy-disk"></i><br>Guardar
-                            @else
-                                <i class="fa-solid fa-floppy-disk"></i><br>Actualizar
-                            @endif    
+                        <button type="submit" class="btn btn-{{ $colorGuardarActualizar }} btn-sm">
+                            <i class="fa-solid fa-floppy-disk"></i> {{ $textoGuardarActualizar }}
                         </button>
-                        <button type="button" class="btn btn-secondary btn-sm" wire:click="cerrar">
-                            <i class="fa-solid fa-square-xmark"></i><br>Cerrar
+                        <button type="button" class="btn btn-secondary btn-sm" wire:click="cerrar" data-bs-dismiss="modal">
+                            <i class="fa-solid fa-square-xmark"></i> Cerrar
                         </button>
                     </div>
                 </form>
@@ -311,113 +358,191 @@
         </div>
     </div>
 
-    <!-- Modal historial -->
-    <div class="modal fade @if($modal_abierto_historial_token) show d-block @endif" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
+
+    <!-- Modal buscar personal -->
+    <div wire:ignore.self class="modal fade" id="buscar-token-component" tabindex="-1" aria-labelledby="buscar-token-componentLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content rounded-5">
                 <form action="">
-                    <div class="modal-header bg-info-subtle">
-                        <h1 class="modal-title fs-5" id="NuevoEditarModalLabel">
-                            <i class="fa-solid fa-timeline"></i> HISTORIAL TOKENS
+                    <div class="modal-header bg-{{ $colorHeaderModal }}">
+                        <h1 class="modal-title fs-5" id="buscar-token-componentLabel">
+                            <i class="fa-solid fa-magnifying-glass"></i> BUSCAR TOKEN
                         </h1>
-                        <button type="button" class="btn-close" wire:click="cerrar_historial_tokens"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="table-responsive mt-3">
+                        <div class="table-responsive-xl">
+                            <form>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="input-group mb-2">
+                                            <input type="text" id="searchsede" class="form-control form-control-sm" placeholder="Buscar token" wire:model.live="searchtokens">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                             <table class="table table-striped table-hover table-sm table-xsmall">
-                                <thead class="table-primary text-center align-middle">
+                                <thead class="table-dark text-center">
                                     <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">DNI</th>
-                                        <th scope="col">DATOS</th>
-                                        <th scope="col">SEDE</th>
-                                        {{-- <th scope="col">LOCAL</th> --}}
-                                        <th scope="col">DEPENDENCIA</th>
-                                        {{-- <th scope="col">DESPACHO</th> --}}
-                                        <th scope="col">CARGO</th>
-                                        <th scope="col">ASIGNACIÓN</th>
-                                        <th scope="col"></th>
+                                        <th scope="col">CODIGO</th>
+                                        <th scope="col">EQUIPO</th>
+                                        <th scope="col">MODELO</th>
+                                        <th scope="col">OPERATIVO</th>
+                                        <th scope="col"><i class="fa-solid fa-gears"></i></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($lista_historial as $historial)
+                                    @forelse ($lista_bienes_tokens as $token)
                                         <tr>
-                                            <th scope="row">{{ $loop->iteration }}</th>
-                                            <td>{{ $historial->dni }}</td>
-                                            <td>{{ $historial->datos }}</td>
-                                            <td>{{ $historial->sede }}</td>
-                                            {{-- <td></td> --}}
-                                            <td>{{ $historial->dependencia }}</td>
-                                            <td>{{ $historial->cargo }}</td>
-                                            <td>
-                                                @if ($historial->asignacion == "ASIGNACION" || $historial->asignacion == "REASIGNACION")
-                                                    <span class="badge rounded-pill text-bg-success">{{ $historial->asignacion }}</span>
-                                                @else
-                                                    <span class="badge rounded-pill text-bg-danger">{{ $historial->asignacion }}</span>
-                                                @endif
-                                            </td>
+                                            <th>{{ $loop->iteration }}</th>
+                                            <th>{{ $token->codigo }}</th>
+                                            <td>{{ $token->equipo }}</td>
+                                            <td>{{ $token->modelo }}</td>
+                                            <td>{{ $token->operativo }}</td>
                                             <td>
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                     <div class="btn-group" role="group">
-                                                        <a type="button" href="{{ route('pdf.informatica.token-acta', $historial->id) }}" target="_blank" class="btn btn-outline-dark btn-xs">
-                                                            <i class="fa-solid fa-print"></i><br>Acta
-                                                        </a>
-                                                        {{-- <button type="button" class="btn btn-outline-dark" wire:click="imprimirPDF({{ $historial->id }})">
-                                                            <i class="fa-solid fa-print"></i>
-                                                        </button> --}}
-                                                        @can('procesos.informatica.tokens.edit')
-                                                            <button type="button" class="btn btn-outline-success btn-xs" wire:click="cargarPDF1({{ $historial->id }})" data-bs-toggle="modal" data-bs-target="#pdf-cargar-Modal">
-                                                                <i class="fa-solid fa-file-pdf"></i><br>CargarPDF
-                                                            </button>
-                                                        @endcan
-                                                        @if ($historial->actaruta)
-                                                            <a href="{{ asset($historial->actaruta) }}" target="_blank" class="btn btn-outline-warning btn-xs">
-                                                                <i class="fa-solid fa-file-pdf"></i><br>Firmado
-                                                            </a>
-                                                        @endif
+                                                        <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_token({{ $token->id }})" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
+                                                            <i class="fa-solid fa-circle-plus"></i> Agregar
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </td>
                                         </tr>
                                     @empty
-                                        <div class="alert alert-danger" role="alert">
-                                            No existen registros
-                                        </div>
+                                        
                                     @endforelse
                                 </tbody>
-                            </table>
-                        </div>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="4">
+                                            {{ $lista_bienes_tokens->links() }}
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>                       
+                        </div>          
                     </div>
                     <div class="modal-footer">
-                        {{-- Links de paginación --}}
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <div>
-                                <strong>Total de registros:</strong> {{ $lista_historial->total() }}
-                            </div>
-                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                {{ $lista_historial->links() }}
-                            </div>
-                            <button type="button" class="btn btn-outline-secondary btn-sm" wire:click="cerrar_historial_tokens">
-                            <i class="fa-solid fa-door-closed"></i>
-                                <br>Cerrar
-                            </button>
-                        </div>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" wire:click="cerrar_token" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
+                            <i class="fa-solid fa-door-closed"></i> Cerrar
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    @include('livewire.partials.personal-modal-buscar')
-
-    @include('livewire.partials.pdf-modal-cargar')
-
-    <!-- Modal historial -->
-    <div class="modal fade @if($modal_abierto_pdf_imprimir) show d-block @endif" tabindex="-1">
-        <div class="modal-dialog modal-lg">
+    {{-- Modal Historial --}}
+    <div wire:ignore.self class="modal fade" id="historial-componentModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="historial-componentModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width:90%;">
             <div class="modal-content">
-                vdfvdfvfdvdf
+                <div class="modal-header bg-warning-subtle">
+                    <h1 class="modal-title fs-5" id="historial-componentModalLabel">
+                        <i class="fa-solid fa-timeline"></i> HISTORIAL ASIGNACIÓN / DEVOLUCIÓN DE TOKENS
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive-xl">
+                        <div class="input-group mb-3">
+                            <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="searchhistorial" placeholder="Buscar por dni o apellidos y nombres">
+                            <a type="button" href="{{ route('pdf.rrhh.personal.reportePDF') }}" target="_blank" class="btn btn-outline-naranja btn-sm">
+                                <i class="fa-regular fa-file-pdf"></i> PDF
+                            </a>
+                        </div>
+                        <table class="table table-striped table-hover table-sm table-xsmall">
+                            <thead class="table-primary text-center align-middle">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col"><i class="fa-solid fa-user"></i> DNI - DATOS</th>
+                                    <th scope="col">SEDE <br> DEPENDENCIA</th>
+                                    <th scope="col">CARGO</th>
+                                    <th scope="col">CODTOKEN</th>
+                                    <th scope="col">EXPIRACION</th>
+                                    <th scope="col">ASIGNACIÓN</th>
+                                    <th scope="col"><i class="fa-solid fa-gears"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody class="align-middle">
+                                @forelse ($lista_historial as $item)
+                                    <tr>
+                                        <th scope="row">{{ $loop->iteration }}</th>
+                                        <th>
+                                            {{ $item->dni }}
+                                            <br>
+                                            {{ $item->datos }}
+                                        </th>
+                                        <td>
+                                            <b>SEDE: {{ $item->sedeorigen }}</b>
+                                            <br>
+                                            {{ $item->dependenciaorigen }}
+                                        </td>
+                                        <td>{{ $item->cargo }}</td>
+                                        <td>{{ $item->token_codigo }}</td>
+                                        <td>{{ $item->fecha_expiracion }}</td>
+                                        <td>
+                                            @if ($item->asignacion == "ASIGNACION" || $item->asignacion == "REASIGNACION")
+                                                <span class="badge rounded-pill text-bg-success">{{ $item->asignacion }}</span>
+                                            @else
+                                                <span class="badge rounded-pill text-bg-danger">{{ $item->asignacion }}</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                <div class="btn-group" role="group">
+                                                    <a type="button" href="{{ route('pdf.informatica.token-acta', $item->id) }}" target="_blank" class="btn btn-outline-dark btn-xs">
+                                                        <i class="fa-solid fa-print"></i><br>Acta
+                                                    </a>
+                                                    {{-- <button type="button" class="btn btn-outline-dark" wire:click="imprimirPDF({{ $historial->id }})">
+                                                        <i class="fa-solid fa-print"></i>
+                                                    </button> --}}
+                                                    @can('procesos.informatica.tokens.edit')
+                                                        <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#pdf-cargar-component" wire:click="editar_pdf({{ $item->id }})">
+                                                            <i class="fa-solid fa-upload"></i><br>Cargar
+                                                        </button>
+                                                    @endcan
+                                                    @if ($item->ruta_documento)
+                                                        <a href="{{ asset('storage/'.$item->ruta_documento) }}" target="_blank" class="btn btn-outline-warning btn-xs">
+                                                            <i class="fa-solid fa-file-pdf"></i><br>Firmado
+                                                        </a>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="12" class="text-center">
+                                            <div class="alert alert-danger" role="alert">
+                                                No se encontraron resultados!
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="8">
+                                        {{ $lista_historial->links() }}
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-rectangle-xmark"></i> Cerrar
+                    </button>
+                </div>
             </div>
         </div>
     </div>
+
+
+    @include('livewire.rrhh.contratos.partials.pdf-cargar-component')
+    @include('livewire.rrhh.personal.partials.buscar-personal-component')
+
 </div>

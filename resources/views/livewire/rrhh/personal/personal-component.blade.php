@@ -3,58 +3,14 @@
         <div class="card-body">
             <div class="table-responsive-xl">
                 <div class="row">
-                    <div class="col-xl-2">
+                    {{-- <div class="col-xl-2">
                         <div class="input-group input-group-sm mb-2">
-                            <span class="input-group-text bg-primary text-white" id="basic-addon1">SEDE:</span>
-                            <select id="cmbfiltrotipodocumento" class="form-select form-select-sm" wire:model.live="filtrosede">
-                                <option value="">TOTAL </option>
-                                @foreach ($lista_sedes as $item)
-                                    <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                                @endforeach
-                            </select>
-                            <span class="input-group-text" id="basic-addon2">{{ $lista_activos->total() }}</span>
+                            <span class="input-group-text" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
                         </div>
-                    </div>
-                    <div class="col-xl-2">
+                    </div> --}}
+                    <div class="col-xl-12">
                         <div class="input-group input-group-sm mb-2">
-                            <span class="input-group-text bg-primary text-white" id="basic-addon1">DEPENDENCIA:</span>
-                            <select id="cmbfiltrotipodocumento" class="form-select form-select-sm" wire:model.live="filtrodependencia">
-                                <option value="">TOTAL </option>
-                                @foreach ($lista_dependencias as $item)
-                                    <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                                @endforeach
-                            </select>
-                            <span class="input-group-text" id="basic-addon2">{{ $lista_activos->total() }}</span>
-                        </div>
-                    </div>
-                    <div class="col-xl-2">
-                        <div class="input-group input-group-sm mb-2">
-                            <span class="input-group-text bg-secondary text-white" id="basic-addon1">CONDICIÓN:</span>
-                            <select id="cmbfiltrotipodocumento" class="form-select form-select-sm" wire:model.live="filtrotipodocumento">
-                                <option value="">TOTAL </option>
-                                <option value="ADENDA">ADENDA </option>
-                                <option value="CONTRATO">CONTRATO </option>
-                                <option value="INCORPORACION">INCORPORACION </option>
-                                <option value="LICENCIA">LICENCIA </option>
-                                <option value="RENUNCIA">RENUNCIA </option>
-                            </select>
-                            <span class="input-group-text" id="basic-addon2">{{ $lista_activos->total() }}</span>
-                        </div>
-                    </div>
-                    <div class="col-xl-2">
-                        <div class="input-group input-group-sm mb-2">
-                            <span class="input-group-text bg-success text-white" id="basic-addon1">RÉGIMEN:</span>
-                            <select id="cmbfiltrotipodocumento" class="form-select form-select-sm" wire:model.live="filtroregimen">
-                                <option value="">TOTAL </option>
-                                <option value="CAS">CAS </option>
-                                <option value="D.L.276">D.L.276</option>
-                                <option value="D.L.728">D.L.728 </option>
-                            </select>
-                            <span class="input-group-text" id="basic-addon2">{{ $lista_activos->total() }}</span>
-                        </div>
-                    </div>
-                    <div class="col-xl-4">
-                        <div class="input-group mb-2">
+                            <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
                             <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar por DNI o Apellidos y Nombres">
                             @can('mpfn.rrhh.personal.create')
                                 <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
@@ -66,6 +22,58 @@
                                     <i class="fa-solid fa-ban"></i> Inactivos
                                 </button>
                             @endcan
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-2">
+                        <div class="input-group input-group-sm mb-2">
+                            <span class="input-group-text fw-bold" id="basic-addon1">Filtrar por sede:</span>
+                            <select id="cmbfiltrotipodocumento" class="form-select form-select-sm" wire:model.live="filtrosede">
+                                <option value="">TOTAL </option>
+                                @foreach ($lista_sedes as $item)
+                                    <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                                @endforeach
+                            </select>
+                            {{-- <span class="input-group-text" id="basic-addon2">{{ $lista_activos->total() }}</span> --}}
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="input-group input-group-sm mb-2">
+                            <span class="input-group-text fw-bold" id="basic-addon1">Por Dependencia:</span>
+                            <select id="cmbfiltrotipodocumento" class="form-select form-select-sm" wire:model.live="filtrodependencia">
+                                <option value="">TOTAL </option>
+                                @foreach ($lista_dependencias as $item)
+                                    <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                                @endforeach
+                            </select>
+                            {{-- <span class="input-group-text" id="basic-addon2">{{ $lista_activos->total() }}</span> --}}
+                        </div>
+                    </div>
+                    <div class="col-xl-2">
+                        <div class="input-group input-group-sm mb-2">
+                            <span class="input-group-text fw-bold" id="basic-addon1">Por Condición:</span>
+                            <select id="cmbfiltrotipodocumento" class="form-select form-select-sm" wire:model.live="filtrotipodocumento">
+                                <option value="">TOTAL </option>
+                                <option value="ADENDA">ADENDA </option>
+                                <option value="CONTRATO">CONTRATO </option>
+                                <option value="INCORPORACION">INCORPORACION </option>
+                                <option value="LICENCIA">LICENCIA </option>
+                                <option value="RENUNCIA">RENUNCIA </option>
+                            </select>
+                            {{-- <span class="input-group-text" id="basic-addon2">{{ $lista_activos->total() }}</span> --}}
+                        </div>
+                    </div>
+                    <div class="col-xl-2">
+                        <div class="input-group input-group-sm mb-2">
+                            <span class="input-group-text fw-bold" id="basic-addon1">Por régimen:</span>
+                            <select id="cmbfiltrotipodocumento" class="form-select form-select-sm" wire:model.live="filtroregimen">
+                                <option value="">TOTAL </option>
+                                <option value="CAS">CAS </option>
+                                <option value="D.L.276">D.L.276</option>
+                                <option value="D.L.728">D.L.728 </option>
+                            </select>
+                            {{-- <span class="input-group-text" id="basic-addon2">{{ $lista_activos->total() }}</span> --}}
                         </div>
                     </div>
                 </div>

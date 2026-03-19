@@ -2,14 +2,24 @@
 
 namespace App\Livewire\Informatica\Firmas\Token;
 
-use App\Models\Tbl_personale;
-use App\Models\Tbl_sede;
-use App\Models\Tbl_tokens_asignado;
+use App\Models\InformaticasBienesToken;
+use App\Models\InformaticasFirmasToken;
+use App\Models\Persona;
+use App\Models\Personale;
+use App\Models\Personales_cargo;
+use App\Models\Personales_dependencia;
+use App\Models\Personales_despacho;
+use App\Models\Personales_sede;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use Symfony\Component\Translation\Formatter\IntlFormatter;
 
 class Activos extends Component
 {
@@ -19,25 +29,21 @@ class Activos extends Component
     use WithPagination;
     protected $paginationTheme = "bootstrap";
 
-    // Variable de entorno
-    public $modal_header_titulo = 'nuevo';
-    public $modal_header_color = 'primary-subtle';
-    public $btn_guardar_actualizar = 'guardar';
-    public $btn_guardar_actualizar_color = 'primary';
+    public $mostrarBtnBuscarDni = "d-none";
 
-    // Variables de Modal
-    public $modal_abierto_token = false;
-    public $modal_abierto_historial_token = false;
-    public $modal_abierto_imagen = false;
-    public $modal_abierto_personal_buscar = false;
-    public $modal_abierto_pdf_cargar = false;
-    public $modal_abierto_pdf_imprimir = false;
-    
+    public $colorHeaderModal, $textoHeaderModal;
+    public $colorNuevoEditar, $textoNuevoEditar;
+    public $colorGuardarActualizar, $textoGuardarActualizar;
+    public $colorAgregar;
 
-    public $id_token,$codtoken,$operativo,$asignacion,$actaruta,$fecha_expiracion,$observacion,$created_user,$updated_user,$activo;
-    public $idpersonal,$dni,$datos,
-        $codsede_origen,$sede_origen,$coddependencia_origen,$dependencia_origen,$codsede_destino,$sede_destino,$coddependencia_destino,$dependencia_destino,
-        $despacho,$regimen,$cargo,$correo_personal,$correo_institucional,$cel_personal,$cel_institucional;
+    //Variables PARA OCULTAR Y MOSTRAR TXT_OTROS
+    public $mostrarotrosp = "d-none", $mostrarotrosc = "d-none",$mostrarcargafoto = "d-none";
+
+    //Variables bloquear de secciones
+    public $seccionFoto, $seccionPersona, $seccionPersonal,$seccionToken;
+
+    // Variable de función Guardar o Actualizar
+    public $funcionGuardarActualizar;
     
     public $pdf;
     public $filtro_asignados, $filtro_usuarios, $filtro_rutas;
@@ -51,267 +57,531 @@ class Activos extends Component
     public function updatingSearchtokens(){
         $this->resetPage('tokensPage');
     }
-    public $searchbuscarpersonal;
-    public function updatingSearchbuscarpersonal(){
-        $this->resetPage('personalPage');
+    // Variables de búsqueda
+    public $search, $searchi,$searchhistorial, $searchpersonas, $searchsedes,$searchdependencias,$searchdespachos,$searchcargos,$searchtoken;
+
+    public function updatingSearch(){
+        $this->resetPage('firmastokensPage');
+    }
+    public function updatingSearchi(){
+        $this->resetPage('personalesiPage');
+    }
+    public function updatingSearchhistorial(){
+        $this->resetPage('historialPage');
+    }
+    public function updatingSearchpersonas(){
+        $this->resetPage('personasPage');
+    }
+    public function updatingSearchsedes(){
+        $this->resetPage('sedesPage');
+    }
+    public function updatingSearchdependencias(){
+        $this->resetPage('dependenciasPage');
+    }
+    public function updatingSearchdespachos(){
+        $this->resetPage('despachosPage');
+    }
+    public function updatingSearchcargos(){
+        $this->resetPage('cargosPage');
+    }
+    public function updatingSearchtoken(){
+        $this->resetPage('tokensPage');
     }
 
-    //FUNCIONES EN TIEMPO REAL
-    // public function updatedFiltroasignacion($value)
-    // {
-    //     if ($value === 'ASIGNACION') {
-    //         $this->asignacion = 'ASIGNACION';
-    //     } elseif ($value === 'DEVOLUCION') {
-    //         $this->asignacion = 'DEVOLUCION';
-    //     } else {
-    //         $this->asignacion = '';
-    //     }
-    // }
+    Public $filtro_firma,$filtro_asignacion;
+
+    public $persona_id,
+            $dni,
+            $datos,
+            $appaterno,
+            $apmaterno,
+            $nombres,
+            $genero,
+            $estadocivil,
+            $fechanacimiento,
+            $celpersonal,
+            $correopersonal,
+            $foto,$fotoactual,$inputFileKey,
+            $activo,
+            $created_user,
+            $updated_user,
+            $created_at,
+            $updated_at;
+
+    public $personal_id,
+            $persona_dni,
+            $regimen,
+            $tipo_regimen,
+            $cargo,
+            $cargo_condicion,
+
+            $codsedeorigen,
+            $sedeorigen,
+            $coddependenciaorigen,
+            $dependenciaorigen,
+            $coddespachoorigen,
+            $despachoorigen,
+
+            $codsededestino,
+            $sededestino,
+            $coddependenciadestino,
+            $dependenciadestino,
+            $coddespachodestino,
+            $despachodestino,           
+            $celinstitucional,            
+            $correoinstitucional,            
+            $numero_convocatoria,
+            $tipo_documento,
+            $fecha_inicio,
+            $fecha_fin,
+            $ruta_documento;
+
+    public $firma_token_id,
+            $token_codigo,          
+            $asignacion,
+            $fecha_expiracion,
+            $observacion;
+
+    public $token_id,
+            $codigo,
+            $equipo,
+            $modelo,
+            $operativo,
+            $asignado;
+
+    public $pdf_acta;
 
     public function render()
     {
-        $lista_activos = Tbl_tokens_asignado::where('activo', '1')
-            ->when($this->searchtokens !== '', function ($query) {
-                $query->where(function ($q) {
-                    $q->where('dni', 'like', '%' . $this->searchtokens . '%')
-                    ->orWhere('datos', 'like', '%' . $this->searchtokens . '%');
-                });
-            })
+        $lista_activos = $this->queryBase()
 
-            // Filtro por rutas
-            ->when($this->filtro_rutas === 'con', function ($query) {
-                $query->whereNotNull('actaruta')->where('actaruta', '<>', '');
-            })
-            ->when($this->filtro_rutas === 'sin', function ($query) {
-                $query->where(function ($subquery) {
-                    $subquery->whereNull('actaruta')
-                            ->orWhere('actaruta', '');
-                });
-            })
-
-            // Filtro por asignación
-            ->when($this->filtroasignacion !== '', function ($query) {
-                $query->where('asignacion', $this->filtroasignacion);
-            })
-
-            ->orderBy('id', 'desc')
-            ->paginate(10, ['*'], 'tokensPage');
-        
-        $totales_asignados = Tbl_tokens_asignado::select(
-                'created_user',
-                DB::raw("SUM(CASE WHEN asignacion = 'ASIGNACION' THEN 1 ELSE 0 END) AS total_asignados"),
-                DB::raw("SUM(CASE WHEN asignacion = 'DEVOLUCION' THEN 1 ELSE 0 END) AS total_devueltos")
+            ->when($this->filtro_firma === 'con', fn($q) =>
+                $q->whereNotNull('ruta_documento')
+                ->where('ruta_documento', '<>', '')
             )
-            ->where('activo', "1")
-            ->groupBy('created_user')
-            ->get();
 
-        $conteo_rutas = Tbl_tokens_asignado::selectRaw("
+            ->when($this->filtro_firma === 'sin', fn($q) =>
+                $q->where(fn($q2) =>
+                    $q2->whereNull('ruta_documento')
+                    ->orWhere('ruta_documento', '')
+                )
+            )
+
+            ->when($this->filtro_asignacion, fn($q) =>
+                $q->where('asignacion', $this->filtro_asignacion)
+            )
+
+            ->orderByDesc('id')
+            ->paginate(5, ['*'], 'firmastokensPage');
+
+        $estadisticas = $this->queryBase()
+            ->selectRaw("
                 COUNT(*) as total,
-                SUM(CASE WHEN actaruta IS NULL OR actaruta = '' THEN 1 ELSE 0 END) as sin_ruta,
-                SUM(CASE WHEN actaruta IS NOT NULL AND actaruta <> '' THEN 1 ELSE 0 END) as con_ruta
+
+                SUM(CASE 
+                    WHEN ruta_documento IS NOT NULL 
+                    AND ruta_documento <> '' 
+                    THEN 1 ELSE 0 
+                END) as con_firma,
+
+                SUM(CASE 
+                    WHEN ruta_documento IS NULL 
+                    OR ruta_documento = '' 
+                    THEN 1 ELSE 0 
+                END) as sin_firma,
+
+                SUM(CASE 
+                    WHEN asignacion = 'ASIGNACION' 
+                    THEN 1 ELSE 0 
+                END) as asignados,
+
+                SUM(CASE 
+                    WHEN asignacion = 'DEVOLUCION' 
+                    THEN 1 ELSE 0 
+                END) as devueltos
             ")
-            ->where('activo', '1')
             ->first();
 
-        $lista_historial = Tbl_tokens_asignado::where('codtoken',$this->codtoken)
-            ->orderBy('id','desc')
-            ->paginate();
-
-        $lista_sedes = Tbl_sede::select('codsedeofi','nomsedeofi')
-            ->where('activo','1')
-            ->distinct()
-            ->orderBy('nomsedeofi')
-            ->get();
-            
-        $lista_dependencias = Tbl_sede::select('coddepofi','nomdepofi')
-            ->where('activo','1')
-            ->where('codsedeofi',$this->codsede_destino)
-            ->distinct()
-            ->orderBy('nomdepofi')
-            ->get();
-
-        $lista_personal = Tbl_personale::where('activo','1')
-            ->when($this->searchbuscarpersonal !== '', function ($query) {
+        $lista_historial = InformaticasFirmasToken::where('token_id',$this->token_id)
+            ->when($this->searchpersonas !== '', function ($query) {
                 $query->where(function ($q) {
-                    $q->where('dni', 'like', '%' . $this->searchbuscarpersonal . '%')
-                    ->orWhere('datos', 'like', '%' . $this->searchbuscarpersonal . '%');
+                    $q->where('dni', 'like', '%' . $this->searchhistorial . '%')
+                    ->orWhere('datos', 'like', '%' . $this->searchhistorial . '%');
+                });
+            })
+            ->orderBy('id','desc')
+            ->paginate(10,['*'],'historialPaginate');
+
+        $lista_personas = Persona::where('activo','1')
+            ->when($this->searchpersonas !== '', function ($query) {
+                $query->where(function ($q) {
+                    $q->where('dni', 'like', '%' . $this->searchpersonas . '%')
+                    ->orWhere('datos', 'like', '%' . $this->searchpersonas . '%');
                 });
             })
             ->orderBy('datos')
-            ->paginate(10,['*'],'personalPage');
+            ->paginate(10,['*'],'personasPage');
+
+        $lista_sedes = Personales_sede::select('id','nombre','nombre')
+            ->where('activo','1')
+            ->where('nombre','like','%' . $this->searchsedes . '%')
+            // ->distinct()
+            ->orderBy('nombre')
+            ->paginate(30,['*'], 'sedesPage');
+            
+        $lista_dependencias = Personales_dependencia::select('id','nombre')
+            ->where('activo','1')
+            // ->where(function ($query) {
+            //     $query->where('sede_id', $this->codsedeorigen)
+            //         ->orWhere('sede_id', $this->filtrosede);
+            // })
+            ->where('nombre','like','%' . $this->searchdependencias . '%')
+            ->orderBy('nombre')
+            ->paginate(10,['*'], 'dependenciasPage');
+
+        $lista_despachos = Personales_despacho::select('id','nombre')
+            ->where('activo','1')
+            ->where('nombre','like','%' . $this->searchdespachos . '%')
+            ->distinct()
+            ->orderBy('nombre')
+            ->paginate(10,['*'], 'despachosPage');
+
+        $lista_cargos = Personales_cargo::select('id','nombre')
+            ->where('activo','1')
+            ->where('nombre','like','%' . $this->searchcargos . '%')
+            ->distinct()
+            ->orderBy('nombre')
+            ->paginate(10,['*'], 'cargosPage');
+
+        $lista_bienes_tokens = InformaticasBienesToken::where('activo','1')
+            ->where('asignado','0')
+            ->where('codigo','like','%' . $this->searchtokens . '%')
+            ->orderBy('codigo')
+            ->paginate(10,['*'],'tokensPage');
 
         return view('livewire.informatica.firmas.token.activos',
-            compact('lista_activos','totales_asignados','conteo_rutas','lista_historial','lista_personal',
-                    'lista_sedes','lista_dependencias'));
+            compact('lista_activos','estadisticas','lista_personas','lista_historial',
+                    'lista_sedes','lista_dependencias','lista_bienes_tokens'));
     }
 
-    // Reglas de validación de variables
+    private function queryBase()
+    {
+        return InformaticasFirmasToken::where('activo', '1')
+
+            ->when($this->search, fn($q) =>
+                $q->where(fn($q2) =>
+                    $q2->where('dni', 'like', "%{$this->search}%")
+                    ->orWhere('datos', 'like', "%{$this->search}%")
+                )
+            );
+    }
 
     protected function rules(){
         return [
-            'dni' => 'required|string:tbl_tokens_asignados,dni,' . $this->id_token,
+                    'dni' => [
+                    'required',
+                    'string',
+                    Rule::unique('personas', 'dni')
+                        ->ignore($this->persona_id, 'id')
+                ],
+            'nombres' => 'required',
+            'appaterno' => 'required',
+            'apmaterno' => 'required',
+
+            'sedeorigen' => 'required',
+            'dependenciaorigen' => 'required',
+            'despachoorigen' => 'required',
+            'regimen' => 'required',
+            'cargo' => 'required',
+
+            // 'fecha_inicio' => 'required|date|before_or_equal:fecha_fin',
+            // 'fecha_fin'    => 'required|date|after_or_equal:fecha_inicio',
+
+            // 'foto' => 'nullable|image|mimes:jpg,jpeg|max:2048', // 2MB máximo
+
+            // 'pdf_acta' => 'nullable|file|mimes:pdf|max:5120', // 5MB            
         ];
     }
 
     protected $messages = [
         'dni.required' => 'El dni es obligatorio.',
+        'dni.unique' => 'El dni ya fue registrado.',
+        'nombres.required' => 'Campo requerido',
+        'appaterno.required' => 'Campo requerido',
+        'apmaterno.required' => 'Campo requerido',
+
+        'sedeorigen.required' => 'Campo requerido',
+        'dependenciaorigen.required' => 'Campo requerido',
+        'despachoorigen.required' => 'Campo requerido',
+        'regimen.required' => 'Campo requerido',
+        'cargo.required' => 'Campo requerido',
+
+        // 'fecha_inicio.required' => 'Campo requerido',
+        // 'fecha_fin.required' => 'Campo requerido',
+
+        // 'fecha_inicio.before_or_equal' => 'La fecha de inicio no puede ser mayor a la fecha de fin.',
+        // 'fecha_fin.after_or_equal' => 'La fecha de fin no puede ser menor a la fecha de inicio.',
+
+        // 'pdf_acta.mimes' => 'Solo se permiten archivos PDF.',
+        // 'pdf_acta.max' => 'El archivo no debe superar 5MB.',
     ];
 
     public function nuevo(){
-        $this->resetExcept('searcha');
+        $this->resetValidation();   // ← limpia los errores
+        $this->resetErrorBag();     // ← opcional extra seguridad
 
-        $this->modal_abierto_token = true;
-
-        $this->modal_header_titulo = 'nuevo';
-        $this->modal_header_color = 'primary-subtle';
-        $this->btn_guardar_actualizar = 'guardar';
-        $this->btn_guardar_actualizar_color = 'primary';
-    }
-
-    public function guardar(){
-        $validated = $this->validate(); 
-
-        $totalActivos = Tbl_tokens_asignado::where('activo', '1')->count() + 1;
-
-        Tbl_tokens_asignado::create([
-            // 'id',
-            'dni' => $this->dni,
-            'datos' => $this->datos,
-
-            'codsede_origen' => $this->codsede_origen,
-            'sede_origen' => $this->sede_origen,
-            'coddependencia_origen' => $this->coddependencia_origen,
-            'dependencia_origen' => $this->dependencia_origen,
-
-            'codsede_destino' => $this->codsede_destino,
-            'sede_destino' => $this->sede_destino,
-            'coddependencia_destino' => $this->coddependencia_destino,
-            'dependencia_destino' => $this->dependencia_destino,
-
-            'regimen' => $this->regimen,
-            'cargo' => $this->cargo,
-            'correo_personal' => $this->correo_personal,
-            'correo_institucional' => $this->correo_institucional,
-            'cel_personal' => $this->cel_personal,
-            'cel_institucional' => $this->cel_institucional,
-            //
-            'idtoken' => $totalActivos,
-            'codtoken' => "token" . $totalActivos,
-            'operativo' => "OPERATIVO",
-            'asignacion' => "ASIGNACION",
-            'fecha_expiracion' => $this->fecha_expiracion,
-            'observacion' => $this->observacion,
-            'activo' => "1",
-            //
-            'created_user' => auth()->user()->datos,
-            'updated_user' => auth()->user()->datos,
-            
-        ]);
-
+        // Restablecer todas las variables
         $this->reset();
+        $this->foto = null;
+        $this->fotoactual = null;
+        $this->inputFileKey = rand();
 
-        $this->modal_abierto_token = false;
+        $this->funcionGuardarActualizar="guardar";
 
-        // Emitimos un evento para mostrar el SweetAlert
-        $this->dispatch(
-            'alerta-actualizado',
-            titulo: 'Datos actualizado',
-            mensaje: 'Los datos se han guardado correctamente.',
-            tipo: 'success' // success | error | warning | info
-        );
+        $this->mostrarBtnBuscarDni = "d-none";
+
+        $this->colorHeaderModal = "primary-subtle";
+        $this->textoHeaderModal = "Nuevo";
+        $this->colorGuardarActualizar = "primary";
+        $this->textoGuardarActualizar = "Guardar";
+        $this->colorAgregar = "outline-primary";
     }
 
-    public function editar(Tbl_tokens_asignado $instanciaTbl){
-        $this->modal_abierto_token = true;
+    public function guardar()
+    {
+        $this->validate();
 
-        $this->modal_header_titulo = 'editar';
-        $this->modal_header_color = 'success-subtle';
-        $this->btn_guardar_actualizar = 'actualizar';
-        $this->btn_guardar_actualizar_color = 'success';
-
-        // - Editar -
-        $this->id_token = $instanciaTbl->id;
-        $this->dni = $instanciaTbl->dni;
-        $this->datos = $instanciaTbl->datos;
-
-        $this->codsede_origen = $instanciaTbl->codsede_origen;
-        $this->sede_origen = $instanciaTbl->sede_origen;
-        $this->coddependencia_origen = $instanciaTbl->coddependencia_origen;
-        $this->dependencia_origen = $instanciaTbl->dependencia_origen;
-
-        $this->codsede_destino = $instanciaTbl->codsede_destino;
-        $this->sede_destino = $instanciaTbl->sede_destino;
-        $this->coddependencia_destino = $instanciaTbl->coddependencia_destino;
-        $this->dependencia_destino = $instanciaTbl->dependencia_destino;
-
-        $this->regimen = $instanciaTbl->regimen;
-        $this->cargo = $instanciaTbl->cargo;
-        $this->correo_personal = $instanciaTbl->correo_personal;
-        $this->correo_institucional = $instanciaTbl->correo_institucional;
-        $this->cel_personal = $instanciaTbl->cel_personal;
-        $this->cel_institucional = $instanciaTbl->cel_institucional;
-        $this->created_user = $instanciaTbl->created_user;
-        $this->updated_user = $instanciaTbl->updated_user;
-        //
-        // $this->idtoken = $instanciaTbl->idtoken;
-        $this->codtoken = $instanciaTbl->codtoken;
-        $this->operativo = $instanciaTbl->operativo;
-        $this->asignacion = $instanciaTbl->asignacion;
-        $this->fecha_expiracion = $instanciaTbl->fecha_expiracion;
-        $this->observacion = $instanciaTbl->observacion;
-    }
-
-    public function actualizar(){
-        $instanciaTbl = Tbl_tokens_asignado::findOrFail($this->id_token);
-
-        $instanciaTbl->update([
-            // 'id',
-            'dni' => $this->dni,
-            'datos' => $this->datos,
-
-            'codsede_origen' => $this->codsede_origen,
-            'sede_origen' => $this->sede_origen,
-            'coddependencia_origen' => $this->coddependencia_origen,
-            'dependencia_origen' => $this->dependencia_origen,
-
-            'codsede_destino' => $this->codsede_destino,
-            'sede_destino' => $this->sede_destino,
-            'coddependencia_destino' => $this->coddependencia_destino,
-            'dependencia_destino' => $this->dependencia_destino,
-            
-            'regimen' => $this->regimen,
-            'cargo' => $this->cargo,
-            'correo_personal' => $this->correo_personal,
-            'correo_institucional' => $this->correo_institucional,
-            'cel_personal' => $this->cel_personal,
-            'cel_institucional' => $this->cel_institucional,
-            'fecha_expiracion' => $this->fecha_expiracion,
-            'observacion' => $this->observacion,
-            // 'activo' => "1",
-            //
-            'created_user' => $this->created_user,
-            'updated_user' => auth()->user()->datos,
-        ]);
-
-        $this->resetExcept('searcha');
-
-        $this->modal_abierto_token = false;
-
-        // Emitimos un evento para mostrar el SweetAlert
-        $this->dispatch(
-            'alerta-actualizado',
-            titulo: 'Datos actualizado',
-            mensaje: 'Los datos se han guardado correctamente.',
-            tipo: 'success' // success | error | warning | info
-        );
-    }
-
-    public function desactivar(Tbl_tokens_asignado $ibien){
         try {
+
+            DB::transaction(function () {
+
+                $usuario = auth()->user()->datos; // Mejor que usar propiedad pública
+
+                InformaticasFirmasToken::create([
+                    'persona_id' => $this->persona_id,
+                    'dni' => $this->dni,
+                    'datos' => $this->datos,
+                    'personal_id' => $this->personal_id,
+                    'codsedeorigen' => $this->codsedeorigen,
+                    'sedeorigen' => $this->sedeorigen,
+                    'coddependenciaorigen' => $this->coddependenciaorigen,
+                    'dependenciaorigen' => $this->dependenciaorigen,
+                    'coddespachoorigen' => $this->coddespachoorigen,
+                    'despachoorigen' => $this->despachoorigen,
+                    'codsededestino' => $this->codsededestino,
+                    'sededestino' => $this->sededestino,
+                    'coddependenciadestino' => $this->coddependenciadestino,
+                    'dependenciadestino' => $this->dependenciadestino,
+                    'coddespachodestino' => $this->coddespachodestino,
+                    'despachodestino' => $this->despachodestino,
+                    'token_id' => $this->token_id,
+                    'token_codigo' => $this->token_codigo,
+                    'asignacion' => "ASIGNACION",
+                    'fecha_expiracion' => $this->fecha_expiracion,
+                    'observacion' => $this->observacion,
+                    'ruta_documento' => $this->ruta_documento,
+                    'activo' => '1',
+                    'created_user' => $usuario,
+                    'updated_user' => $usuario,
+                ]);
+
+                $itoken = InformaticasBienesToken::findOrFail($this->token_id);
+
+                $itoken->update([
+                    'asignado' => '1',
+                ]);
+
+            });
+
+            // $this->resetExcept('searchPersonal');
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Datos actualizados',
+                mensaje: 'Los datos se han actualizado correctamente.',
+                tipo: 'success'
+            );
+
+            // Evento para cerrar el modal
+            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
+
+        } catch (\Throwable $e) {
+
+            report($e);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'Ocurrió un error al guardar.',
+                tipo: 'error'
+            );
+        }
+    }
+
+    public function editar($firmatoken_id)
+    {
+        $this->resetValidation();   // ← limpia los errores
+        $this->resetErrorBag();     // ← opcional extra seguridad
+
+        // Restablecer todas las variables
+        $this->reset();
+        $this->foto = null;
+        $this->fotoactual = null;
+        $this->inputFileKey = rand();
+
+        $this->funcionGuardarActualizar="actualizar";
+
+        $this->colorHeaderModal = "success-subtle";
+        $this->textoHeaderModal = "EDITAR";
+        $this->colorGuardarActualizar = "success";
+        $this->textoGuardarActualizar = "Actualizar";
+        $this->colorAgregar = "outline-success";
+
+        // $this->tipo_documento = "CONTRATO";
+
+        // ===== BLOQUEO DE SECCIONES =====
+        $this->seccionFoto = "disabled";
+        $this->seccionPersona = "disabled";
+        $this->seccionPersonal = "disabled";
+
+        // ===== DATOS FIRMA TOKEN =====
+        $ifirmatoken = InformaticasFirmasToken::findOrFail($firmatoken_id);
+
+        $this->firma_token_id = $ifirmatoken->id;
+        $this->token_id = $ifirmatoken->token_id;
+        $this->persona_id = $ifirmatoken->persona_id;
+        $this->dni = $ifirmatoken->dni;
+        $this->datos = $ifirmatoken->persona_datos;
+        $this->personal_id = $ifirmatoken->personal_id;
+        $this->fecha_expiracion = $ifirmatoken->fecha_expiracion;
+        $this->observacion = $ifirmatoken->observacion;
+
+        // ===== DATOS FIRMA TOKEN =====
+        $itoken = InformaticasBienesToken::findOrFail($this->token_id);
+        
+        $this->token_codigo = $itoken->codigo;
+        $this->equipo = $itoken->equipo;
+        $this->modelo = $itoken->modelo;
+        $this->operativo = $itoken->operativo;
+        $this->asignado = $itoken->asignado;
+
+        // ===== DATOS PERSONA =====
+        if ($ifirmatoken->dni) {
+
+            $ipersona = Persona::where('dni', $ifirmatoken->dni)
+                ->where('activo','1')
+                ->first();
+
+            if (!$ipersona) {
+                session()->flash('error', 'Persona no encontrada');
+                return;
+            }
+
+            $this->persona_id = $ipersona->id;
+            $this->dni = $ipersona->dni;
+            $this->datos = $ipersona->datos;
+            $this->nombres = $ipersona->nombres;
+            $this->appaterno = $ipersona->appaterno;
+            $this->apmaterno = $ipersona->apmaterno;
+            $this->celpersonal = $ipersona->celpersonal;
+            $this->correopersonal = $ipersona->correopersonal;
+            $this->fotoactual = $ipersona->foto;
+
+            // SOLO después de validar
+            $ipersonal = Personale::where([['persona_dni', $this->dni],['activo','1']])
+                ->where('activo','1')
+                ->first();
+
+            if ($ipersonal) {
+                $this->personal_id = $ipersonal->id;
+                $this->regimen = $ipersonal->regimen;
+                $this->tipo_regimen = $ipersonal->tipo_regimen;
+                $this->cargo = $ipersonal->cargo;
+
+                $this->codsedeorigen = $ipersonal->codsedeorigen;
+                $this->sedeorigen = $ipersonal->sedeorigen;
+                $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
+                $this->dependenciaorigen = $ipersonal->dependenciaorigen;
+                $this->coddespachoorigen = $ipersonal->coddespachoorigen;
+                $this->despachoorigen = $ipersonal->despachoorigen;
+
+                $this->codsededestino = $ipersonal->codsededestino;
+                $this->sededestino = $ifirmatoken->sededestino;
+                $this->coddependenciadestino = $ipersonal->coddependenciadestino;
+                $this->dependenciadestino = $ifirmatoken->dependenciadestino;
+                $this->coddespachodestino = $ipersonal->coddespachodestino;
+                $this->despachodestino = $ifirmatoken->despachodestino;
+
+                $this->celinstitucional = $ipersonal->celinstitucional;
+                $this->correoinstitucional = $ipersonal->correoinstitucional;
+            }
+        }
+    }
+
+    public function actualizar()
+    {
+        $this->validate();
+
+        try {
+
+            $usuario = optional(auth()->user())->datos ?? 'SYSTEM';
+
+            $ifirmatoken = InformaticasFirmasToken::findOrFail($this->firma_token_id);
+
+            $ifirmatoken->update([
+                'persona_id' => $this->persona_id,
+                'dni' => $this->dni,
+                'datos' => $this->datos,
+                'personal_id' => $this->personal_id,
+                'codsedeorigen' => $this->codsedeorigen,
+                'sedeorigen' => $this->sedeorigen,
+                'coddependenciaorigen' => $this->coddependenciaorigen,
+                'dependenciaorigen' => $this->dependenciaorigen,
+                'coddespachoorigen' => $this->coddespachoorigen,
+                'despachoorigen' => $this->despachoorigen,
+                'codsededestino' => $this->codsededestino,
+                'sededestino' => $this->sededestino,
+                'coddependenciadestino' => $this->coddependenciadestino,
+                'dependenciadestino' => $this->dependenciadestino,
+                'coddespachodestino' => $this->coddespachodestino,
+                'despachodestino' => $this->despachodestino,
+                'token_id' => $this->token_id,
+                'token_codigo' => $this->token_codigo,
+                'asignacion' => "ASIGNACION",
+                'fecha_expiracion' => $this->fecha_expiracion,
+                'observacion' => $this->observacion,
+                'updated_user' => $usuario,
+            ]);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Datos actualizados',
+                mensaje: 'Los datos se han actualizado correctamente.',
+                tipo: 'success'
+            );
+
+            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
+
+        } catch (\Throwable $e) {
+
+            report($e);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: config('app.debug') ? $e->getMessage() : 'Ocurrió un error al actualizar.',
+                tipo: 'error'
+            );
+        }
+    }
+
+    public function desactivar(InformaticasFirmasToken $ibien){
+        try {
+            $usuario = auth()->user()->datos; // Mejor que usar propiedad pública
+
             $ibien->update([
                 'activo' => '0',
-                'updated_user' => auth()->user()->datos,
+                'updated_user' => $usuario,
             ]);
 
             // Comunica que se desactivado
@@ -323,242 +593,494 @@ class Activos extends Component
         }
     }
 
-    public function cerrar(){
-        $this->resetExcept('searcha');
-        
-        $this->modal_abierto_token = false;
-    }
+    public function cerrar()
+    {
+        $this->reset();
 
-    // PDF
-    // ---------------------------------------------------------
-
-    public function imprimirPDF(){
-        $this->modal_abierto_pdf_imprimir = true;
-    }
-
-    public function cargarPDF1(Tbl_tokens_asignado $instanciaTbl){
-        $this->modal_abierto_pdf_cargar = true;
-
-        $this->id_token = $instanciaTbl->id;
-
-        $this->dni = $instanciaTbl->dni;
-        $this->asignacion = $instanciaTbl->asignacion;
-        $this->codtoken = $instanciaTbl->codtoken;
-
-    }
-
-    public function cargarPDF2(){
-        $this->validate([
-            'pdf' => 'required|mimes:pdf|max:4096', // Máx. 4MB
-        ]);
-
-        // Generar un nombre personalizado con timestamp
-        $fileName = $this->dni . '_' . $this->asignacion . '_' . $this->codtoken . '.' . $this->pdf->getClientOriginalExtension();
-
-        $path = $this->pdf->storeAs('archivos/informatica/tokens', $fileName, 'public');
-
-        $instanciaTbl = Tbl_tokens_asignado::findOrFail($this->id_token);
-
-        $instanciaTbl->update([
-            'actaruta' => 'storage/archivos/informatica/tokens/' . $fileName,
-            'updated_user' => auth()->user()->datos,
-        ]);
-
-        // Limpia el archivo de la propiedad Livewire si lo deseas
-        $this->reset('pdf');
-
-        // Cerrar el modal en el navegador
-        $this->modal_abierto_pdf_cargar = false;
-
-        // Emitimos un evento para mostrar el SweetAlert
         $this->dispatch(
-            'alerta-actualizado',
-            titulo: 'PDF actualizado',
-            mensaje: 'Los datos se han guardado correctamente.',
-            tipo: 'success' // success | error | warning | info
-        );
+                'alerta-cancelar',
+                titulo: 'Cancelar',
+                mensaje: 'Se canceló la operación.',
+                tipo: 'error'
+            );
     }
 
-    public function cerrar_PDF(){
-        //Reiniciar variables
-        $this->reset('searchbuscarpersonal');
+    //TRÁMITES TOKEN DEVOLVER - REASIGNAR
+    public function nuevo_devolucion($firmatoken_id)
+    {
+        $this->resetValidation();   // ← limpia los errores
+        $this->resetErrorBag();     // ← opcional extra seguridad
 
-        $this->modal_abierto_pdf_cargar  = false;
+        // Restablecer todas las variables
+        $this->reset();
+        $this->foto = null;
+        $this->fotoactual = null;
+        $this->inputFileKey = rand();
+
+        $this->funcionGuardarActualizar="guardar_devolucion";
+
+        $this->mostrarBtnBuscarDni = "d-none";
+
+        $this->colorHeaderModal = "danger-subtle";
+        $this->textoHeaderModal = "NUEVA DEVOLUCION";
+        $this->colorGuardarActualizar = "danger";
+        $this->textoGuardarActualizar = "Guardar devolucion";
+        $this->colorAgregar = "outline-danger";
+
+        // ===== BLOQUEO DE SECCIONES =====
+        $this->seccionFoto = "disabled";
+        $this->seccionPersona = "disabled";
+        $this->seccionPersonal = "disabled";
+        $this->seccionToken = "disabled";
+
+        // ===== DATOS FIRMA TOKEN =====
+        $ifirmatoken = InformaticasFirmasToken::findOrFail($firmatoken_id);
+
+        $this->firma_token_id = $ifirmatoken->id;
+        $this->token_id = $ifirmatoken->token_id;
+        $this->persona_id = $ifirmatoken->persona_id;
+        $this->dni = $ifirmatoken->dni;
+        $this->datos = $ifirmatoken->persona_datos;
+        $this->personal_id = $ifirmatoken->personal_id;
+        $this->fecha_expiracion = $ifirmatoken->fecha_expiracion;
+        $this->observacion = $ifirmatoken->observacion;
+
+        // ===== DATOS FIRMA TOKEN =====
+        $itoken = InformaticasBienesToken::findOrFail($this->token_id);
+        
+        $this->token_codigo = $itoken->codigo;
+        $this->equipo = $itoken->equipo;
+        $this->modelo = $itoken->modelo;
+        $this->operativo = $itoken->operativo;
+        $this->asignado = $itoken->asignado;
+
+        // ===== DATOS PERSONA =====
+        if ($ifirmatoken->dni) {
+
+            $ipersona = Persona::where('dni', $ifirmatoken->dni)
+                ->where('activo','1')
+                ->first();
+
+            if (!$ipersona) {
+                session()->flash('error', 'Persona no encontrada');
+                return;
+            }
+
+            $this->persona_id = $ipersona->id;
+            $this->dni = $ipersona->dni;
+            $this->datos = $ipersona->datos;
+            $this->nombres = $ipersona->nombres;
+            $this->appaterno = $ipersona->appaterno;
+            $this->apmaterno = $ipersona->apmaterno;
+            $this->celpersonal = $ipersona->celpersonal;
+            $this->correopersonal = $ipersona->correopersonal;
+            $this->fotoactual = $ipersona->foto;
+
+            // SOLO después de validar
+            $ipersonal = Personale::where([['persona_dni', $this->dni],['activo','1']])
+                ->where('activo','1')
+                ->first();
+
+            if ($ipersonal) {
+                $this->personal_id = $ipersonal->id;
+                $this->regimen = $ipersonal->regimen;
+                $this->tipo_regimen = $ipersonal->tipo_regimen;
+                $this->cargo = $ipersonal->cargo;
+
+                $this->codsedeorigen = $ipersonal->codsedeorigen;
+                $this->sedeorigen = $ipersonal->sedeorigen;
+                $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
+                $this->dependenciaorigen = $ipersonal->dependenciaorigen;
+                $this->coddespachoorigen = $ipersonal->coddespachoorigen;
+                $this->despachoorigen = $ipersonal->despachoorigen;
+
+                $this->codsededestino = $ipersonal->codsededestino;
+                $this->sededestino = $ifirmatoken->sededestino;
+                $this->coddependenciadestino = $ipersonal->coddependenciadestino;
+                $this->dependenciadestino = $ifirmatoken->dependenciadestino;
+                $this->coddespachodestino = $ipersonal->coddespachodestino;
+                $this->despachodestino = $ifirmatoken->despachodestino;
+
+                $this->celinstitucional = $ipersonal->celinstitucional;
+                $this->correoinstitucional = $ipersonal->correoinstitucional;
+            }
+        }
     }
 
-    // HISTORIAL DE ASIGNACIONES Y DEVOLUCIONES
-    // ---------------------------------------------------------
+    public function guardar_devolucion()
+    {
+        $this->validate();
 
+        try {
 
-    public function historial_tokens($codtoken){
-        $this->modal_abierto_historial_token = true;
-        $this->codtoken = $codtoken;
+            DB::transaction(function () {
+
+                $usuario = auth()->user()->datos; // Mejor que usar propiedad pública
+
+                //Desahabilitamos el registro anterior
+                $ifirmatoken = InformaticasFirmasToken::findOrFail($this->firma_token_id);
+                $ifirmatoken->update([
+                    'activo' => '0',
+                ]);
+
+                $itoken = InformaticasBienesToken::findOrFail($this->token_id);
+                $itoken->update([
+                    'asignado' => '0',
+                ]);
+
+                InformaticasFirmasToken::create([
+                    'persona_id' => $this->persona_id,
+                    'dni' => $this->dni,
+                    'datos' => $this->datos,
+                    'personal_id' => $this->personal_id,
+                    'codsedeorigen' => $this->codsedeorigen,
+                    'sedeorigen' => $this->sedeorigen,
+                    'coddependenciaorigen' => $this->coddependenciaorigen,
+                    'dependenciaorigen' => $this->dependenciaorigen,
+                    'coddespachoorigen' => $this->coddespachoorigen,
+                    'despachoorigen' => $this->despachoorigen,
+                    'codsededestino' => $this->codsededestino,
+                    'sededestino' => $this->sededestino,
+                    'coddependenciadestino' => $this->coddependenciadestino,
+                    'dependenciadestino' => $this->dependenciadestino,
+                    'coddespachodestino' => $this->coddespachodestino,
+                    'despachodestino' => $this->despachodestino,
+                    'token_id' => $this->token_id,
+                    'token_codigo' => $this->token_codigo,
+                    'asignacion' => "DEVOLUCION",
+                    'fecha_expiracion' => $this->fecha_expiracion,
+                    'observacion' => $this->observacion,
+                    'ruta_documento' => $this->ruta_documento,
+                    'activo' => '1',
+                    'created_user' => $usuario,
+                    'updated_user' => $usuario,
+                ]);
+
+            });
+
+            // $this->resetExcept('searchPersonal');
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Datos actualizados',
+                mensaje: 'Los datos se han actualizado correctamente.',
+                tipo: 'success'
+            );
+
+            // Evento para cerrar el modal
+            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
+
+        } catch (\Throwable $e) {
+
+            report($e);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'Ocurrió un error al guardar.',
+                tipo: 'error'
+            );
+        }
     }
 
-    public function cerrar_historial_tokens(){
-        $this->modal_abierto_historial_token = false;
+    public function nuevo_reasignacion($firmatoken_id){
+         $this->resetValidation();   // ← limpia los errores
+        $this->resetErrorBag();     // ← opcional extra seguridad
+
+        // Restablecer todas las variables
+        $this->reset();
+        $this->foto = null;
+        $this->fotoactual = null;
+        $this->inputFileKey = rand();
+
+        $this->funcionGuardarActualizar="guardar_reasignacion";
+
+        $this->mostrarBtnBuscarDni = "d-none";
+
+        $this->colorHeaderModal = "primary-subtle";
+        $this->textoHeaderModal = "NUEVA REASIGNACION";
+        $this->colorGuardarActualizar = "primary";
+        $this->textoGuardarActualizar = "Guardar reasignación";
+        $this->colorAgregar = "outline-primary";
+
+        // ===== BLOQUEO DE SECCIONES =====
+        $this->seccionFoto = "disabled";
+        $this->seccionPersona = "disabled";
+        $this->seccionPersonal = "disabled";
+        $this->seccionToken = "disabled";
+
+        // ===== DATOS FIRMA TOKEN =====
+        $ifirmatoken = InformaticasFirmasToken::findOrFail($firmatoken_id);
+
+        $this->firma_token_id = $ifirmatoken->id;
+        $this->token_id = $ifirmatoken->token_id;
+        $this->persona_id = $ifirmatoken->persona_id;
+        // $this->dni = $ifirmatoken->dni;
+        $this->datos = $ifirmatoken->persona_datos;
+        $this->personal_id = $ifirmatoken->personal_id;
+        $this->fecha_expiracion = $ifirmatoken->fecha_expiracion;
+        $this->observacion = $ifirmatoken->observacion;
+
+        // ===== DATOS FIRMA TOKEN =====
+        $itoken = InformaticasBienesToken::findOrFail($this->token_id);
+        
+        $this->token_codigo = $itoken->codigo;
+        $this->equipo = $itoken->equipo;
+        $this->modelo = $itoken->modelo;
+        $this->operativo = $itoken->operativo;
+        $this->asignado = $itoken->asignado;
+    }
+
+    public function guardar_reasignacion()
+    {
+        $this->validate();
+
+        try {
+
+            DB::transaction(function () {
+
+                $usuario = auth()->user()->datos; // Mejor que usar propiedad pública
+
+                //Desahabilitamos el registro anterior
+                $ifirmatoken = InformaticasFirmasToken::findOrFail($this->firma_token_id);
+                $ifirmatoken->update([
+                    'activo' => '0',
+                ]);
+
+                $itoken = InformaticasBienesToken::findOrFail($this->token_id);
+                $itoken->update([
+                    'asignado' => '1',
+                ]);
+
+                InformaticasFirmasToken::create([
+                    'persona_id' => $this->persona_id,
+                    'dni' => $this->dni,
+                    'datos' => $this->datos,
+                    'personal_id' => $this->personal_id,
+                    'codsedeorigen' => $this->codsedeorigen,
+                    'sedeorigen' => $this->sedeorigen,
+                    'coddependenciaorigen' => $this->coddependenciaorigen,
+                    'dependenciaorigen' => $this->dependenciaorigen,
+                    'coddespachoorigen' => $this->coddespachoorigen,
+                    'despachoorigen' => $this->despachoorigen,
+                    'codsededestino' => $this->codsededestino,
+                    'sededestino' => $this->sededestino,
+                    'coddependenciadestino' => $this->coddependenciadestino,
+                    'dependenciadestino' => $this->dependenciadestino,
+                    'coddespachodestino' => $this->coddespachodestino,
+                    'despachodestino' => $this->despachodestino,
+                    'token_id' => $this->token_id,
+                    'token_codigo' => $this->token_codigo,
+                    'asignacion' => "ASIGNACION",
+                    'fecha_expiracion' => $this->fecha_expiracion,
+                    'observacion' => $this->observacion,
+                    'ruta_documento' => $this->ruta_documento,
+                    'activo' => '1',
+                    'created_user' => $usuario,
+                    'updated_user' => $usuario,
+                ]);
+
+            });
+
+            // $this->resetExcept('searchPersonal');
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Datos actualizados',
+                mensaje: 'Los datos se han actualizado correctamente.',
+                tipo: 'success'
+            );
+
+            // Evento para cerrar el modal
+            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
+
+        } catch (\Throwable $e) {
+
+            report($e);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'Ocurrió un error al guardar.',
+                tipo: 'error'
+            );
+        }
+    }
+
+    public function historial_tokens($token_id)
+    {
+        $this->token_id = $token_id;
     }
 
     // PERSONAL
     // ---------------------------------------------------------
     public function buscar_personal(){
-        $this->modal_abierto_personal_buscar = true;
+
     }
 
-    public function agregar_personal(Tbl_personale $ipersonal){
-        $this->idpersonal = $ipersonal->id;
-        $this->dni = $ipersonal->dni;
-        $this->datos = $ipersonal->datos;
+    // FUNCIONES AGREGAR
+    public function agregar_persona(Persona $ipersona){
+        $this->persona_id = $ipersona->id;
+        $this->dni = $ipersona->dni;
+        $this->appaterno = $ipersona->appaterno;
+        $this->apmaterno = $ipersona->apmaterno;
+        $this->nombres = $ipersona->nombres;
 
-        $this->codsede_origen = $ipersonal->codsede_origen;
-        $this->sede_origen = $ipersonal->sede_origen;
-        $this->coddependencia_origen = $ipersonal->coddependencia_origen;
-        $this->dependencia_origen = $ipersonal->dependencia_origen;
-        
-        $this->codsede_destino = $ipersonal->codsede_destino;
-        $this->sede_destino = $ipersonal->sede;
-        $this->coddependencia_destino = $ipersonal->coddependencia_destino;
-        $this->dependencia_destino = $ipersonal->dependencia_destino;
+        $this->datos = $ipersona->datos;
 
+        $this->celpersonal = $ipersona->celpersonal;
+        $this->correopersonal = $ipersona->correopersonal;
+
+        $this->fotoactual = $ipersona->foto;
+
+        $ipersonal = Personale::where([['activo',1],['persona_dni',$this->dni],])->firstOrFail();
+
+        $this->personal_id = $ipersonal->id;
+
+        $this->codsedeorigen = $ipersonal->codsedeorigen;
+        $this->sedeorigen = $ipersonal->sedeorigen;
+        $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
+        $this->dependenciaorigen = $ipersonal->dependenciaorigen;
+        $this->coddespachoorigen = $ipersonal->coddespachoorigen;
+        $this->despachoorigen = $ipersonal->despachoorigen;
+
+        $this->codsededestino = $ipersonal->codsededestino;
+        $this->sededestino = $ipersonal->sededestino;
+        $this->coddependenciadestino = $ipersonal->coddependenciadestino;
+        $this->dependenciadestino = $ipersonal->dependenciadestino;
+        $this->coddespachodestino = $ipersonal->coddespachodestino;
+        $this->despachodestino = $ipersonal->despachodestino;
+
+        $this->celinstitucional = $ipersonal->celinstitucional;
+        $this->correoinstitucional = $ipersonal->correoinstitucional;
         $this->regimen = $ipersonal->regimen;
+        $this->tipo_regimen = $ipersonal->tipo_regimen;
         $this->cargo = $ipersonal->cargo;
-        $this->correo_personal = $ipersonal->correo_personal;
-        $this->correo_institucional = $ipersonal->correo_institucional;
-        $this->cel_personal = $ipersonal->cel_personal;
-        $this->cel_institucional = $ipersonal->cel_institucional;
-
-        $this->reset('searchbuscarpersonal');
-
-        $this->modal_abierto_personal_buscar = false;
     }
 
-    public function cerrar_personal(){
-        $this->modal_abierto_personal_buscar = false;
+    public function agregar_token(InformaticasBienesToken $itoken)
+    {
+        $this->token_id = $itoken->id;
+        $this->token_codigo = $itoken->codigo;
+        $this->equipo = $itoken->equipo;
+        $this->modelo = $itoken->modelo;
+        $this->operativo = $itoken->operativo;
+        $this->asignado = $itoken->asignado;
     }
 
-    // REASIGNAR Y DEVOLVER
-    // ---------------------------------------------------------
-    public function reasignar1(Tbl_tokens_asignado $instanciaTbl){
-        $this->resetExcept('searcha');
-
-        $this->modal_abierto_token = true;
-
-        $this->modal_header_titulo = 'nuevo';
-        $this->modal_header_color = 'secondary-subtle';
-        $this->btn_guardar_actualizar = 'reasignar2';
-        $this->btn_guardar_actualizar_color = 'secondary';
-
-        $this->id_token = $instanciaTbl->id;
-
-        $this->created_user = $instanciaTbl->created_user;
-        $this->updated_user = $instanciaTbl->updated_user;
+    public function cerrar_token()
+    {
+        $this->reset('searchtokens');
     }
 
-    public function reasignar2(){
-        $validated = $this->validate(); 
 
-        $instanciaTbl = Tbl_tokens_asignado::findOrFail($this->id_token);
+    // FUNCIONES PARA CARGAR PDF
 
-        $instanciaTbl->update([
-            'activo' => "0",
+
+    public function editar_pdf($firma_token_id)
+    {
+        $this->firma_token_id = $firma_token_id;
+    }
+
+    public function actualizar_pdf()
+    {
+        // ===== DATOS PERSONAL =====
+        $ifirmatoken = InformaticasFirmasToken::where('id', $this->firma_token_id)->firstOrFail();
+
+        $this->token_codigo = $ifirmatoken->token_codigo;
+        $this->asignacion = $ifirmatoken->asignacion;
+        
+        // Validar solo el PDF
+        $this->validate([
+            'pdf_acta' => 'required|file|mimes:pdf|max:5120'
         ]);
 
-        Tbl_tokens_asignado::create([
-            // 'id',
-            'dni' => $this->dni,
-            'datos' => $this->datos,
-            'sede_origen' => $this->sede_origen,
-            'dependencia_origen' => $this->dependencia_origen,
-            'regimen' => $this->regimen,
-            'cargo' => $this->cargo,
-            'correo_personal' => $this->correo_personal,
-            'correo_institucional' => $this->correo_institucional,
-            'cel_personal' => $this->cel_personal,
-            'cel_institucional' => $this->cel_institucional,
-            //
-            'idtoken' => $instanciaTbl->idtoken,
-            'codtoken' => $instanciaTbl->codtoken,
-            'operativo' => "OPERATIVO",
-            'asignacion' => "ASIGNACION",
-            'fecha_expiracion' => $this->fecha_expiracion,
-            'observacion' => $this->observacion,
-            //
-            'activo' => "1",
-            //
-            'created_user' => $this->created_user,
-            'updated_user' => auth()->user()->datos,
-            
-        ]);
+        try {
 
-        //Reiniciar variables
-        $this->resetExcept('searcha');
-    
-        //Emitir evento al frontend
-        $this->modal_abierto_token = false;
+            DB::transaction(function () use ($ifirmatoken) {
 
-        // Emitimos un evento para mostrar el SweetAlert
-        $this->dispatch(
-            'alerta-actualizado',
-            titulo: 'Datos actualizado',
-            mensaje: 'Los datos se han guardado correctamente.',
-            tipo: 'success' // success | error | warning | info
+                $usuario = auth()->user()->datos;
+
+                // Ruta actual
+                $rutaDocumento = $this->actualizar_acta();
+
+                $ifirmatoken->update([
+                    'ruta_documento' => $rutaDocumento,
+                    'updated_user' => $usuario,
+                ]);
+
+            });
+
+            $this->reset('pdf_acta');
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Documento cargado',
+                mensaje: 'El PDF se cargó correctamente.',
+                tipo: 'success'
+            );
+
+        } catch (\Throwable $e) {
+
+            report($e);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'Ocurrió un error al cargar el PDF.',
+                tipo: 'error'
+            );
+        }
+    }
+
+
+
+    private function guardar_acta()
+    {
+        if (!$this->pdf_acta) {
+            return null;
+        }
+
+        $fileName = now()->format('Ymd_His') . '_'
+            . ($this->dni ?? 'sin-dni') . '_'
+            . Str::slug($this->asignacion ?? 'sin-asignacion') . '_'
+            . Str::slug($this->token_codigo ?? 'sin-token')
+            . '.pdf';
+
+        return $this->pdf_acta->storeAs(
+            'archivos/informatica/tokens',
+            $fileName,
+            'public'
         );
+        
     }
 
-    public function devolver1(Tbl_tokens_asignado $instanciaTbl){
-        $this->id_token = $instanciaTbl->id;
+    private function actualizar_acta()
+    {
+        $ifirmatoken = InformaticasFirmasToken::findOrFail($this->firma_token_id);
 
-        $this->created_user = $instanciaTbl->created_user;
-        $this->updated_user = $instanciaTbl->updated_user;
-    }
+        $rutaDocumento = $ifirmatoken->ruta_documento;
 
-    public function devolver2($id){
-        $instanciaTbl = Tbl_tokens_asignado::findOrFail($id);
+        if (!$this->pdf_acta) {
+            return $rutaDocumento;
+        }
 
-        $this->created_user = $instanciaTbl->created_user;
+        // Si no existe archivo previo
+        if (!$rutaDocumento) {
+            return $this->guardar_acta();
+        }
 
-        $instanciaTbl->update([
-            'activo' => "0",
-        ]);
+        $fileName = basename($rutaDocumento);
+        $directory = dirname($rutaDocumento);
 
-        Tbl_tokens_asignado::create([
-            // 'id',
-            'dni' => $instanciaTbl->dni,
-            'datos' => $instanciaTbl->datos,
-            'sede' => $instanciaTbl->sede,
-            'dependencia' => $instanciaTbl->dependencia,
-            'regimen' => $instanciaTbl->regimen,
-            'cargo' => $instanciaTbl->cargo,
-            'correo_personal' => $instanciaTbl->correo_personal,
-            'correo_institucional' => $instanciaTbl->correo_institucional,
-            'cel_personal' => $instanciaTbl->cel_personal,
-            'cel_institucional' => $instanciaTbl->cel_institucional,
-            //
-            'idtoken' => $instanciaTbl->idtoken,
-            'codtoken' => $instanciaTbl->codtoken,
-            'operativo' => "OPERATIVO",
-            'asignacion' => "DEVOLUCION",
-            'fecha_expiracion' => $instanciaTbl->fecha_expiracion,
-            'observacion' => $instanciaTbl->observacion,
-            //
-            'activo' => "1",
-            //
-            'created_user' => $this->created_user,
-            'updated_user' => auth()->user()->datos,
-        ]);
+        if (Storage::disk('public')->exists($rutaDocumento)) {
+            Storage::disk('public')->delete($rutaDocumento);
+        }
 
-        //Reiniciar variables
-        $this->resetExcept('searcha');
-
-        //Emitir evento al frontend
-        $this->modal_abierto_token = false;
-
-        // Emitimos un evento para mostrar el SweetAlert
-        $this->dispatch(
-            'alerta-actualizado',
-            titulo: 'Token devuelto',
-            mensaje: 'Los datos se han guardado correctamente.',
-            tipo: 'success' // success | error | warning | info
+        return $this->pdf_acta->storeAs(
+            $directory,
+            $fileName,
+            'public'
         );
     }
 }

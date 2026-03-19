@@ -23,38 +23,53 @@
 {{-- <hr> --}}
 
 <div class="content">
-    <h3>DFJUNIN - DISTRIBUCIÓN DE PERSONAL</h3>
+    <h4 style="text-align:center;">DFJUNIN - DISTRIBUCIÓN DE PERSONAL POR DEPENDENCIA<br>TOTAL: {{ $personalAgrupado->flatten()->count() }}</h4>
     
-    <table class="tabla">
-        <thead>
-            <tr>
-                <th>N°</th>
-                <th>DNI</th>
-                <th>DATOS</th>
-                <th>DEPENDENCIA</th>
-                <th>REGIMEN</th>
-                <th>CARGO</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($ipersonal as $item)
+    @foreach ($personalAgrupado as $dependencia => $personas)
+
+        {{-- <h4 style="text-align:center; margin-top:20px; font-weight:bold;">
+            DEPENDENCIA: {{ $dependencia }}
+        </h4> --}}
+        <br>
+
+        <table class="tabla">
+            <thead>
                 <tr>
-                    <td></td>
-                    <td>{{ $item->dni }}</td>
-                    <td>{{ $item->datos }}</td>
-                    <td>
-                        {{ $item->sedeorigen }}
-                        <br>
-                        {{ $item->dependenciaorigen }}
-                        <br>
-                        {{ $item->despachoorigen }}
-                    </td>
-                    <td>{{ $item->regimen }}</td>
-                    <td>{{ $item->cargo }}</td>
-                </tr>               
-            @endforeach
-        </tbody>
-    </table>
+                    <th colspan="5" style="font-size:12px; text-align:center; padding:10px; font-weight:bold; background:#f2f2f2;">
+                        {{ $dependencia }}
+                    </th>
+                    <th style="font-size:12px; text-align:center; padding:10px; font-weight:bold; background:#f2f2f2;">
+                        Total: {{ count($personas) }}
+                    </th>
+                </tr>
+                <tr>
+                    <th>N°</th>
+                    <th>DNI</th>
+                    <th>DATOS</th>
+                    <th>DEPENDENCIA</th>
+                    <th>REGIMEN</th>
+                    <th>CARGO</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($personas as $item)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $item->dni }}</td>
+                        <td>{{ $item->datos }}</td>
+                        <td>
+                            {{ $item->sedeorigen }}<br>
+                            {{ $item->dependenciaorigen }}<br>
+                            {{ $item->despachoorigen }}
+                        </td>
+                        <td>{{ $item->regimen }}</td>
+                        <td>{{ $item->cargo }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+    @endforeach
     {{-- <h5>
         Se precisa, que se debe dar estricto cumplimiento de la Resolución de la Gerencia General N° 1537-2014-MP-FN-GG, “Reglamento Interno para el Acceso y Uso de las Herramientas y Servicios Informáticos en el Ministerio Publico”, para el cuidado y uso de los bienes de la entidad.
     </h5> --}}
@@ -67,21 +82,13 @@
 <div class="footer">
     <table class="tabla-firma">
         <tbody>
-            {{-- <tr>
-                @if ( $ipersonal->asignacion === "ASIGNACION")
-                    <td class="borde-superior">Entregué Conforme<br>CARHUAMACA VILCHEZ DENIS<br>DNI : 10708588</td>
-                @else
-                    <td class="borde-superior">Entregué Conforme<br>{{ $ipersonal->datos }}<br>{{ $ipersonal->dni }}</td>
-                @endif
+            <tr>
+                <td class="borde-superior">ADMINISTRACIÓN<br>Responsable<br>DNI: </td>
                 <td></td>
                 <td></td>
                 <td></td>
-                @if ( $ipersonal->asignacion === "DEVOLUCION")
-                    <td class="borde-superior">Recibí Conforme<br>CARHUAMACA VILCHEZ DENIS<br>DNI : 10708588</td>    
-                @else
-                    <td class="borde-superior">RecibíConforme<br>{{ $ipersonal->datos }}<br>{{ $ipersonal->dni }}</td>
-                @endif
-            </tr> --}}
+                <td class="borde-superior">POTENCIAL HUMANO<br>Responsable<br>DNI: </td>    
+            </tr>
         </tbody>
     </table>
 
