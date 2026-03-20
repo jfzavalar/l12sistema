@@ -120,7 +120,7 @@ Route::middleware('auth','can:procesos.intranet.index')->group(function () {
     Route::resource('atenciones', AtencionesController::class)->names('mpfn.intranet.atenciones');
 });
 
-Route::middleware('auth','can:procesos.intranet.index')->group(function () {
+Route::middleware('auth','can:mpfn.intranet.expimportantes.index')->group(function () {
     Route::resource('expedientes', ExpimportantesController::class)->names('mpfn.intranet.expimportantes');
 });
 

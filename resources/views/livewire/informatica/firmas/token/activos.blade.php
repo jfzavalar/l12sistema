@@ -18,13 +18,13 @@
                             </div>
                         </div>
                         <div class="col-xl-2 col-lg-4 col-sm-4">
-                            <div class="alert alert-secondary" role="alert">
+                            <div class="alert alert-success" role="alert">
                                 <h5 class="card-title">
                                     Actas Firmadas
                                 </h5><br>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h3><i class="fa-solid fa-file-signature text-secondary"></i> {{ $estadisticas->con_firma }}</h3>
-                                    <button class="btn btn-outline-secondary btn-sm" wire:click="$set('filtro_firma','con'); $set('filtro_asignacion','');">
+                                    <h3><i class="fa-solid fa-signature text-success"></i> {{ $estadisticas->con_firma }}</h3>
+                                    <button class="btn btn-outline-success btn-sm" wire:click="$set('filtro_firma','con'); $set('filtro_asignacion','');">
                                         <i class="fa-solid fa-bars"></i> Listar
                                     </button>
                                 </div>
@@ -49,7 +49,7 @@
                                     Asignados
                                 </h5><br>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h3><i class="fa-solid fa-signature text-danger"></i> {{ $estadisticas->asignados }}</h3>
+                                    <h3><i class="fa-solid fa-file-signature text-danger"></i> {{ $estadisticas->asignados }}</h3>
                                     <button class="btn btn-outline-danger btn-sm" wire:click="$set('filtro_firma',''); $set('filtro_asignacion','ASIGNACION');">
                                         <i class="fa-solid fa-bars"></i> Listar
                                     </button>
@@ -57,13 +57,13 @@
                             </div>
                         </div>
                         <div class="col-xl-2 col-lg-4 col-sm-4">
-                            <div class="alert alert-warning" role="alert">
+                            <div class="alert alert-danger" role="alert">
                                 <h5 class="card-title">
                                     Devueltos
                                 </h5><br>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h3><i class="fa-solid fa-signature text-warning"></i> {{ $estadisticas->devueltos }}</h3>
-                                    <button class="btn btn-outline-warning btn-sm" wire:click="$set('filtro_firma',''); $set('filtro_asignacion','DEVOLUCION');">
+                                    <h3><i class="fa-solid fa-file-signature text-danger"></i>  {{ $estadisticas->devueltos }}</h3>
+                                    <button class="btn btn-outline-danger btn-sm" wire:click="$set('filtro_firma',''); $set('filtro_asignacion','DEVOLUCION');">
                                         <i class="fa-solid fa-bars"></i> Listar
                                     </button>
                                 </div>

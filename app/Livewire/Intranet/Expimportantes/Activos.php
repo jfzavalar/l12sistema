@@ -2,6 +2,9 @@
 
 namespace App\Livewire\Intranet\Expimportantes;
 
+use App\Models\AdministracionesExpimportante;
+use App\Models\Persona;
+use App\Models\Personale;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -18,15 +21,12 @@ class Activos extends Component
     use WithPagination;
     protected $paginationTheme = "bootstrap";
 
-    public $mostrarBtnBuscarDni = "d-none";
+    public $mostrarBtnBuscarDni = "d-none", $mostrarcargafoto = "d-none";
 
     public $colorHeaderModal, $textoHeaderModal;
     public $colorNuevoEditar, $textoNuevoEditar;
     public $colorGuardarActualizar, $textoGuardarActualizar;
     public $colorAgregar;
-
-    //Variables PARA OCULTAR Y MOSTRAR TXT_OTROS
-    public $mostrarcargafoto = "";
 
     //Variables bloquear de secciones
     public $seccionFoto, $seccionPersona, $seccionPersonal;
@@ -115,6 +115,13 @@ class Activos extends Component
             $fecha_fin,
             $ruta_documento;
 
+    public $expimportante_id,
+            $numexpediente,
+            $estado,
+            $oficina_ubicacion,
+            $fecha;
+
+
     public $pdf_acta;
 
     public $bandera_documento="CONTRATO";
@@ -126,8 +133,90 @@ class Activos extends Component
 
     public function render()
     {
-        return view('livewire.intranet.expimportantes.activos');
+        $usuario = auth()->user();
+
+        $query = AdministracionesExpimportante::where('activo','1');
+
+        // 🔐 CONTROL DE ACCESO
+        if (!$usuario->hasAnyRole(['ExpImportantes-Admin', 'Admin-Super'])) {
+            $query->where('dni', $usuario->dni); // 👈 clave
+        }
+
+        // 🔍 BÚSQUEDA
+        if ($this->search) {
+            $query->where(function ($q) {
+                $q->where('dni', 'like', "%{$this->search}%")
+                ->orWhere('datos', 'like', "%{$this->search}%");
+            });
+        }
+
+        $lista_activos = $query
+            ->orderBy('datos')
+            ->paginate(10, ['*'], 'activosPage');
+
+        $lista_personas = Persona::where('activo','1')
+            ->when($this->searchpersonas !== '', function ($query) {
+                $query->where(function ($q) {
+                    $q->where('dni', 'like', '%' . $this->searchpersonas . '%')
+                    ->orWhere('datos', 'like', '%' . $this->searchpersonas . '%');
+                });
+            })
+            ->orderBy('datos')
+            ->paginate(10,['*'],'personasPage');
+
+        return view('livewire.intranet.expimportantes.activos',
+                compact('lista_activos','lista_personas'));
     }
+
+    protected function rules(){
+        return [
+                    'dni' => [
+                    'required',
+                    'string',
+                    Rule::unique('personas', 'dni')
+                        ->ignore($this->persona_id, 'id')
+                ],
+            'nombres' => 'required',
+            'appaterno' => 'required',
+            'apmaterno' => 'required',
+
+            'sedeorigen' => 'required',
+            'dependenciaorigen' => 'required',
+            'despachoorigen' => 'required',
+            'regimen' => 'required',
+            'cargo' => 'required',
+
+            // 'fecha_inicio' => 'required|date|before_or_equal:fecha_fin',
+            // 'fecha_fin'    => 'required|date|after_or_equal:fecha_inicio',
+
+            'foto' => 'nullable|image|mimes:jpg,jpeg|max:2048', // 2MB máximo
+
+            'pdf_acta' => 'nullable|file|mimes:pdf|max:5120', // 5MB            
+        ];
+    }
+
+    protected $messages = [
+        'dni.required' => 'El dni es obligatorio.',
+        'dni.unique' => 'El dni ya fue registrado.',
+        'nombres.required' => 'Campo requerido',
+        'appaterno.required' => 'Campo requerido',
+        'apmaterno.required' => 'Campo requerido',
+
+        'sedeorigen.required' => 'Campo requerido',
+        'dependenciaorigen.required' => 'Campo requerido',
+        'despachoorigen.required' => 'Campo requerido',
+        'regimen.required' => 'Campo requerido',
+        'cargo.required' => 'Campo requerido',
+
+        // 'fecha_inicio.required' => 'Campo requerido',
+        // 'fecha_fin.required' => 'Campo requerido',
+
+        // 'fecha_inicio.before_or_equal' => 'La fecha de inicio no puede ser mayor a la fecha de fin.',
+        // 'fecha_fin.after_or_equal' => 'La fecha de fin no puede ser menor a la fecha de inicio.',
+
+        // 'pdf_acta.mimes' => 'Solo se permiten archivos PDF.',
+        // 'pdf_acta.max' => 'El archivo no debe superar 5MB.',
+    ];
 
     public function nuevo()
     {
@@ -149,5 +238,253 @@ class Activos extends Component
         $this->colorGuardarActualizar = "primary";
         $this->textoGuardarActualizar = "Guardar";
         $this->colorAgregar = "outline-primary";
+
+        $usuario = auth()->user()->dni;
+
+        $ipersona = Persona::where([['activo',1],['dni',$usuario],])->firstOrFail();
+        $this->persona_id = $ipersona->id;
+        $this->dni = $ipersona->dni;
+        $this->appaterno = $ipersona->appaterno;
+        $this->apmaterno = $ipersona->apmaterno;
+        $this->nombres = $ipersona->nombres;
+
+        $this->datos = $ipersona->datos;
+
+        $this->celpersonal = $ipersona->celpersonal;
+        $this->correopersonal = $ipersona->correopersonal;
+
+        $ipersonal = Personale::where([['activo',1],['persona_dni',$usuario],])->firstOrFail();
+        $this->personal_id = $ipersonal->id;
+        $this->codsedeorigen = $ipersonal->codsedeorigen;
+        $this->sedeorigen = $ipersonal->sedeorigen;
+        $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
+        $this->dependenciaorigen = $ipersonal->dependenciaorigen;
+        $this->coddespachoorigen = $ipersonal->coddespachoorigen;
+        $this->despachoorigen = $ipersonal->despachoorigen;
+        $this->celinstitucional = $ipersonal->celinstitucional;
+        $this->correoinstitucional = $ipersonal->correoinstitucional;
+        $this->regimen = $ipersonal->regimen;
+        $this->tipo_regimen = $ipersonal->tipo_regimen;
+        $this->cargo = $ipersonal->cargo;
     }
+
+    public function guardar()
+    {
+        $this->validate();
+
+        try {
+
+            DB::transaction(function () {
+
+                $usuario = auth()->user()->datos;
+
+                AdministracionesExpimportante::create([
+                    'persona_id' => $this->persona_id,
+                    'dni' => $this->dni,
+                    'datos' => strtoupper($this->appaterno . ' ' . $this->apmaterno . ' ' . $this->nombres),
+                    'personal_id' => $this->personal_id,
+                    'codsedeorigen' => $this->codsedeorigen,
+                    'sedeorigen' => $this->sedeorigen,
+                    'coddependenciaorigen' => $this->coddependenciaorigen,
+                    'dependenciaorigen' => $this->dependenciaorigen,
+                    'coddespachoorigen' => $this->coddespachoorigen,
+                    'despachoorigen' => $this->despachoorigen,
+                    'numexpediente' => Str::slug($this->numexpediente),
+                    'estado' => $this->estado,
+                    'oficina_ubicacion' => strtoupper($this->oficina_ubicacion),
+                    'fecha' => $this->fecha,
+                    'activo' => "1",
+                    'created_user' => $usuario,
+                    'updated_user' => $usuario,
+                ]);
+
+            });
+
+            $this->reset(); // 🔥 limpia formulario
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Guardado',
+                mensaje: 'Registro creado correctamente.',
+                tipo: 'success'
+            );
+
+            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
+
+        } catch (\Throwable $e) {
+
+            report($e);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: config('app.debug') ? $e->getMessage() : 'Ocurrió un error al guardar.',
+                tipo: 'error'
+            );
+        }
+    }
+
+    public function editar(AdministracionesExpimportante $iexpedientesimportantes)
+    {
+        $this->resetValidation();
+        $this->resetErrorBag();
+
+        $this->funcionGuardarActualizar = "actualizar";
+
+        $this->mostrarBtnBuscarDni = "d-none";
+
+        $this->colorHeaderModal = "success-subtle";
+        $this->textoHeaderModal = "Editar";
+        $this->colorGuardarActualizar = "success";
+        $this->textoGuardarActualizar = "Actualizar";
+        $this->colorAgregar = "outline-success";
+
+        // ===== BLOQUEO DE SECCIONES =====
+        $this->seccionFoto = "";
+        $this->seccionPersona = "";
+        $this->seccionPersonal = "";
+
+        $this->expimportante_id = $iexpedientesimportantes->id;
+        $this->persona_id = $iexpedientesimportantes->persona_id;
+        $this->numexpediente = $iexpedientesimportantes->numexpediente;
+        $this->estado = $iexpedientesimportantes->estado;
+        $this->oficina_ubicacion = $iexpedientesimportantes->oficina_ubicacion;
+        $this->fecha = $iexpedientesimportantes->fecha;
+
+        $ipersona = Persona::where([['activo',1],['id',$this->persona_id],])->firstOrFail();
+
+        // ===== DATOS PERSONA =====
+        // $this->persona_id = $ipersona->id;
+        $this->dni = $ipersona->dni;
+        $this->nombres = $ipersona->nombres;
+        $this->appaterno = $ipersona->appaterno;
+        $this->apmaterno = $ipersona->apmaterno;
+        $this->celpersonal = $ipersona->celpersonal;
+        $this->correopersonal = $ipersona->correopersonal;
+
+        $this->fotoactual = $ipersona->foto;
+
+        // ===== DATOS PERSONAL =====
+        $ipersonal = Personale::where('persona_dni', $this->dni)->where('activo','1')->firstOrFail();
+
+        $this->personal_id = $ipersonal->id;
+        $this->regimen = $ipersonal->regimen;
+        $this->tipo_regimen = $ipersonal->tipo_regimen;
+        $this->cargo = $ipersonal->cargo;
+        $this->cargo_condicion = $ipersonal->cargo_condicion;
+        $this->codsedeorigen = $ipersonal->codsedeorigen;
+        $this->sedeorigen = $ipersonal->sedeorigen;
+        $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
+        $this->dependenciaorigen = $ipersonal->dependenciaorigen;
+        $this->coddespachoorigen = $ipersonal->coddespachoorigen;
+        $this->despachoorigen = $ipersonal->despachoorigen;
+
+        $this->celinstitucional = $ipersonal->celinstitucional;
+        $this->correoinstitucional = $ipersonal->correoinstitucional;      
+    }
+
+    public function actualizar()
+    {
+        $this->validate();
+
+        try {
+
+            DB::transaction(function () {
+
+                $usuario = auth()->user()->datos;
+
+                // ========================
+                // ACTUALIZAR EXPEDIENTE IMPORTANTE
+                // ========================
+                $iexpedientesimportantes = AdministracionesExpimportante::findOrFail($this->expimportante_id);
+
+                $iexpedientesimportantes->update([
+                    'persona_id' => $this->persona_id,
+                    'dni' => $this->dni,
+                    'datos' => strtoupper($this->appaterno . ' ' . $this->apmaterno . ' ' . $this->nombres),
+                    'personal_id' => $this->personal_id,
+                    'codsedeorigen' => $this->codsedeorigen,
+                    'sedeorigen' => $this->sedeorigen,
+                    'coddependenciaorigen' => $this->coddependenciaorigen,
+                    'dependenciaorigen' => $this->dependenciaorigen,
+                    'coddespachoorigen' => $this->coddespachoorigen,
+                    'despachoorigen' => $this->despachoorigen,
+                    'numexpediente' => Str::slug($this->numexpediente),
+                    'estado' => $this->estado,
+                    'oficina_ubicacion' => strtoupper($this->oficina_ubicacion),
+                    'fecha' => $this->fecha,
+                    'activo' => "1",
+                    'updated_user' => $usuario,
+                ]);
+            });
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Datos actualizados',
+                mensaje: 'Los datos se han actualizado correctamente.',
+                tipo: 'success'
+            );
+
+            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
+
+        } catch (\Throwable $e) {
+
+            report($e);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'Ocurrió un error al actualizar.',
+                tipo: 'error'
+            );
+        }
+    }
+
+    public function cerrar()
+    {
+        $this->reset();
+
+        $this->dispatch(
+                'alerta-cancelar',
+                titulo: 'Cancelar',
+                mensaje: 'Se canceló la operación.',
+                tipo: 'error'
+            );
+    }
+
+    // FUNCIONES AGREGAR
+
+    // FUNCIONES AGREGAR
+    public function agregar_persona(Persona $ipersona){
+        $this->persona_id = $ipersona->id;
+        $this->dni = $ipersona->dni;
+        $this->appaterno = $ipersona->appaterno;
+        $this->apmaterno = $ipersona->apmaterno;
+        $this->nombres = $ipersona->nombres;
+
+        $this->datos = $ipersona->datos;
+
+        $this->celpersonal = $ipersona->celpersonal;
+        $this->correopersonal = $ipersona->correopersonal;
+
+        $this->fotoactual = $ipersona->foto;
+
+        $ipersonal = Personale::where([['activo',1],['persona_dni',$this->dni],])->firstOrFail();
+
+        $this->personal_id = $ipersonal->id;
+        $this->codsedeorigen = $ipersonal->codsedeorigen;
+        $this->sedeorigen = $ipersonal->sedeorigen;
+        $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
+        $this->dependenciaorigen = $ipersonal->dependenciaorigen;
+        $this->coddespachoorigen = $ipersonal->coddespachoorigen;
+        $this->despachoorigen = $ipersonal->despachoorigen;
+        $this->celinstitucional = $ipersonal->celinstitucional;
+        $this->correoinstitucional = $ipersonal->correoinstitucional;
+        $this->regimen = $ipersonal->regimen;
+        $this->tipo_regimen = $ipersonal->tipo_regimen;
+        $this->cargo = $ipersonal->cargo;
+
+        $this->reset('searchpersonas');
+    }
+
 }
