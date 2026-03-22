@@ -1326,21 +1326,26 @@ class PersonalComponent extends Component
 
         $this->persona_id = $ipersona->id;
 
-        $usuario = auth()->user()->datos;
+        // $usuario = auth()->user()->datos;
 
         // ===== DATOS PERSONAL =====
         $ipersonalrotacion = PersonalesRotacione::where('persona_id', $this->persona_id)
             ->where('activo', '1')
-            ->firstOrFail();
+            ->first();
 
-        $this->persona_dni = $ipersonalrotacion->persona_dni;
+        if (!$ipersonalrotacion) {
+            session()->flash('error', 'No se encontró la rotación activa');
+            return;
+        }
+
+        $this->dni = $ipersonalrotacion->persona_dni;
         $this->personal_id = $ipersonalrotacion->personal_id;
-        $this->sede_id = $ipersonalrotacion->sede_id;
-        $this->sede = $ipersonalrotacion->sede;
-        $this->dependencia_id = $ipersonalrotacion->dependencia_id;
-        $this->dependencia = $ipersonalrotacion->dependencia;
-        $this->despacho_id = $ipersonalrotacion->despacho_id;
-        $this->despacho = $ipersonalrotacion->despacho;
+        $this->codsededestino = $ipersonalrotacion->sede_id;
+        $this->sededestino = $ipersonalrotacion->sede;
+        $this->coddependenciadestino = $ipersonalrotacion->dependencia_id;
+        $this->dependenciadestino = $ipersonalrotacion->dependencia;
+        $this->coddespachodestino = $ipersonalrotacion->despacho_id;
+        $this->despachodestino = $ipersonalrotacion->despacho;
         $this->num_expediente = $ipersonalrotacion->num_expediente;
         $this->fecha_iniciou = $ipersonalrotacion->fecha_iniciou;
         $this->fecha_finu = $ipersonalrotacion->fecha_finu;
@@ -1348,6 +1353,7 @@ class PersonalComponent extends Component
         $this->ruta_documento = $ipersonalrotacion->ruta_documento;
 
     }
+
     public function cerrar_transferir_personal()
     {
         // Restablecer todas las variables
