@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-xl-3 col-lg-6 col-sm-12">
-        <label for="cmbcodsede" class="fw-bold fs-6">Sede</label>
+        <label for="txt_sede2" class="fw-bold fs-6">Sede</label>
         <div class="input-group">
             <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#2buscar-sedes-component">
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -12,7 +12,7 @@
         @enderror
     </div>
     <div class="col-xl-6 col-lg-6 col-sm-12">
-        <label for="cmbcoddependencia" class="fw-bold fs-6">Dependencia</label>
+        <label for="txt_dependencia2" class="fw-bold fs-6">Dependencia</label>
         <div class="input-group position-relative">
             <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#2buscar-dependencias-component">
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -24,7 +24,7 @@
         @enderror
     </div>
     <div class="col-xl-3 col-lg-6 col-sm-12">
-        <label for="cmbcoddependencia" class="fw-bold fs-6">Despacho</label>
+        <label for="txt_despacho2" class="fw-bold fs-6">Despacho</label>
         <div class="input-group position-relative">
             <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#2buscar-despachos-component">
                 <i class="fa-solid fa-magnifying-glass"></i>

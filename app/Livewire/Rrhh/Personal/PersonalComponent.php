@@ -8,7 +8,7 @@ use App\Models\Personales_cargo;
 use App\Models\Personales_dependencia;
 use App\Models\Personales_despacho;
 use App\Models\Personales_sede;
-use App\Models\PersonalesHistorialesUbicaciones;
+use App\Models\PersonalesRotacione;
 use App\Models\Tbl_cargo;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
@@ -255,6 +255,28 @@ class PersonalComponent extends Component
             ->orderBy('personales.id','desc')
             ->paginate(10, ['personas.*'], 'historialPage');
 
+        $lista_historial_rotaciones = Persona::join('personales_rotaciones', 'personas.id', '=', 'personales_rotaciones.persona_id')
+            ->select('personas.*',
+                'personales_rotaciones.id as personal_id',
+                'personales_rotaciones.persona_id',
+                'personales_rotaciones.sede',
+                'personales_rotaciones.dependencia',
+                'personales_rotaciones.despacho',
+                'personales_rotaciones.num_expediente',
+                'personales_rotaciones.motivo_ubicacion',
+                'personales_rotaciones.fecha_iniciou',
+                'personales_rotaciones.fecha_finu',
+                'personales_rotaciones.ruta_documento')
+            ->where('personales_rotaciones.persona_dni', $this->dni)
+            // ->when($this->searchhistorial, function ($query) {
+            //     $query->where(function ($q) {
+            //         $q->where('personales.numero_convocatoria', 'like', '%' . $this->searchhistorial . '%')
+            //         ->orWhere('personales.tipo_documento', 'like', '%' . $this->searchhistorial . '%');
+            //     });
+            // })
+            ->orderByDesc('id')
+            ->paginate(10, ['*'], 'historialrotacionesPage');
+
         $lista_personas = Persona::where('activo','1')
             ->when($this->searchpersonas !== '', function ($query) {
                 $query->where(function ($q) {
@@ -297,7 +319,8 @@ class PersonalComponent extends Component
             ->paginate(10,['*'], 'cargosPage');
 
         return view('livewire.rrhh.personal.personal-component',
-                        compact('lista_activos','lista_inactivos','lista_historial','lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos'));
+                        compact('lista_activos','lista_inactivos','lista_historial','lista_historial_rotaciones',
+                                    'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos'));
     }
 
     protected function rules(){
@@ -1176,6 +1199,11 @@ class PersonalComponent extends Component
         $this->dni = $persona_dni;
     }
 
+    public function historial_rotaciones($persona_dni)
+    {
+        $this->dni = $persona_dni;
+    }
+
     // FUNCIONES DE TRANSFERIR PERSONAL
 
     public function nuevo_transferir_personal(Persona $ipersona)
@@ -1236,7 +1264,7 @@ class PersonalComponent extends Component
                 $rutaDocumento = $this->guardar_acta();
 
                 //Insertar datos en la tabla historial ubicaciones
-                PersonalesHistorialesUbicaciones::create([
+                PersonalesRotacione::create([
                     'persona_id' => $personal->persona_id,
                     'persona_dni' => $personal->persona_dni,
                     'personal_id' => $personal->id,
@@ -1279,7 +1307,47 @@ class PersonalComponent extends Component
             );
         }
     }
+    
 
+    public function editar_transferir_personal(Persona $ipersona)
+    {
+        $this->resetValidation();
+        $this->resetErrorBag();
+
+        $this->funcionGuardarActualizar = "actualizar_transferir_personal";
+
+        $this->mostrarBtnBuscarDni = "d-none";
+
+        $this->colorHeaderModal = "success-subtle";
+        $this->textoHeaderModal = "Editar rotación";
+        $this->colorGuardarActualizar = "success";
+        $this->textoGuardarActualizar = "Actualizar rotacion";
+        $this->colorAgregar = "outline-success";
+
+        $this->persona_id = $ipersona->id;
+
+        $usuario = auth()->user()->datos;
+
+        // ===== DATOS PERSONAL =====
+        $ipersonalrotacion = PersonalesRotacione::where('persona_id', $this->persona_id)
+            ->where('activo', '1')
+            ->firstOrFail();
+
+        $this->persona_dni = $ipersonalrotacion->persona_dni;
+        $this->personal_id = $ipersonalrotacion->personal_id;
+        $this->sede_id = $ipersonalrotacion->sede_id;
+        $this->sede = $ipersonalrotacion->sede;
+        $this->dependencia_id = $ipersonalrotacion->dependencia_id;
+        $this->dependencia = $ipersonalrotacion->dependencia;
+        $this->despacho_id = $ipersonalrotacion->despacho_id;
+        $this->despacho = $ipersonalrotacion->despacho;
+        $this->num_expediente = $ipersonalrotacion->num_expediente;
+        $this->fecha_iniciou = $ipersonalrotacion->fecha_iniciou;
+        $this->fecha_finu = $ipersonalrotacion->fecha_finu;
+        $this->motivo_ubicacion = $ipersonalrotacion->motivo_ubicacion;
+        $this->ruta_documento = $ipersonalrotacion->ruta_documento;
+
+    }
     public function cerrar_transferir_personal()
     {
         // Restablecer todas las variables

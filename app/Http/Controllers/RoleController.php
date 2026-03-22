@@ -57,7 +57,7 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        $permissions = Permission::all()->chunk(4);
+        $permissions = Permission::orderBy('name')->get()->chunk(4);
         $rolePermissions = $role->permissions->pluck('name')->toArray();
 
         return view('procesos.admin.roles.edit', compact('role', 'permissions', 'rolePermissions'));

@@ -1,10 +1,10 @@
 <div class="row">
     <div class="col-xl-2 col-sm-12">
-        <label for="txtobservacion" class="fw-bold fs-6">N° de convocatoria</label>
+        <label for="txtconvocatoria" class="fw-bold fs-6">N° de convocatoria</label>
         <input type="text" id="txtconvocatoria" class="form-control form-control-xs text-uppercase" wire:model="numero_convocatoria">
     </div>
     <div class="col-xl-2 col-sm-12">
-        <label for="txtobservacion" class="fw-bold fs-6">Tipo de documento</label>
+        <label for="txttipodocumento" class="fw-bold fs-6">Tipo de documento</label>
         <input type="text" id="txttipodocumento" class="form-control form-control-xs" wire:model="tipo_documento" disabled>
         {{-- <select id="cmdobsconvocatoria" class="form-select form-select-xs" wire:model="tipo_documento">
             <option value="">Selecionar...</option>
@@ -14,14 +14,14 @@
         </select> --}}
     </div>
     <div class="col-xl-2 col-sm-12">
-        <label for="txtobservacion" class="fw-bold fs-6">Fecha de inicio</label>
+        <label for="txtfechainiciocontrato" class="fw-bold fs-6">Fecha de inicio</label>
         <input type="date" id="txtfechainiciocontrato" class="form-control form-control-xs" wire:model="fecha_inicio">
         @error('fecha_inicio')
             <small class="text-danger">{{ $message }}</small>
         @enderror
     </div>
     <div class="col-xl-2 col-sm-12">
-        <label for="txtobservacion" class="fw-bold fs-6">Fecha de fin</label>
+        <label for="txtfechafincontrato" class="fw-bold fs-6">Fecha de fin</label>
         <input type="date" id="txtfechafincontrato" class="form-control form-control-xs" wire:model="fecha_fin">
         @error('fecha_fin')
             <small class="text-danger">{{ $message }}</small>
@@ -29,7 +29,7 @@
     </div>
     
     <div class="col-xl-4 col-sm-12">
-        <label for="txtobservacion" class="fw-bold fs-6">Contrato</label>
+        <label class="fw-bold fs-6">Contrato</label>
         <div class="input-group">
             <button class="btn btn-outline-dark btn-xs" type="button" id="btnimprimircontrato">
                 <i class="fa-solid fa-print"></i> Imprimir

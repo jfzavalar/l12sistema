@@ -82,9 +82,12 @@
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
                             <input type="text" id="txtsearcha" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar por DNI o Datos del Personal">
-                            <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" wire:click="nuevo" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
-                                <i class="fa-solid fa-file"></i> Nuevo
-                            </button>
+                            @can('procesos.informatica.firmasdigitales.index')
+                                <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" wire:click="nuevo" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
+                                    <i class="fa-solid fa-file"></i> Nuevo
+                                </button>
+                            @endcan
+                            
                         </div>
                     </div>
                 </div>

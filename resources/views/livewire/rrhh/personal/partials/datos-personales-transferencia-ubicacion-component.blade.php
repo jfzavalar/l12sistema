@@ -35,8 +35,8 @@
         @enderror
     </div>
     <div class="col-xl-8 col-sm-12 mt-2">
-        <label for="txtresolucionu" class="fw-bold fs-6">Observación o motivo</label>
-        <input type="text" id="txtresolucionu" class="form-control form-control-xs" wire:model="motivo_ubicacion">
+        <label for="txtobservacionu" class="fw-bold fs-6">Observación o motivo</label>
+        <input type="text" id="txtobservacionu" class="form-control form-control-xs" wire:model="motivo_ubicacion">
         @error('motivou')
             <small class="text-danger">{{ $message }}</small>
         @enderror

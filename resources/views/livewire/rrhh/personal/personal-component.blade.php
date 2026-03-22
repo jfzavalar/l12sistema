@@ -41,7 +41,7 @@
                     <div class="col-xl-6">
                         <div class="input-group input-group-sm mb-2">
                             <span class="input-group-text fw-bold" id="basic-addon1">Por Dependencia:</span>
-                            <select id="cmbfiltrotipodocumento" class="form-select form-select-sm" wire:model.live="filtrodependencia">
+                            <select id="cmbfiltrotipodocumento2" class="form-select form-select-sm" wire:model.live="filtrodependencia">
                                 <option value="">TOTAL </option>
                                 @foreach ($lista_dependencias as $item)
                                     <option value="{{ $item->id }}">{{ $item->nombre }}</option>
@@ -53,7 +53,7 @@
                     <div class="col-xl-2">
                         <div class="input-group input-group-sm mb-2">
                             <span class="input-group-text fw-bold" id="basic-addon1">Por Condición:</span>
-                            <select id="cmbfiltrotipodocumento" class="form-select form-select-sm" wire:model.live="filtrotipodocumento">
+                            <select id="cmbfiltrotipodocumento3" class="form-select form-select-sm" wire:model.live="filtrotipodocumento">
                                 <option value="">TOTAL </option>
                                 <option value="ADENDA">ADENDA </option>
                                 <option value="CONTRATO">CONTRATO </option>
@@ -67,7 +67,7 @@
                     <div class="col-xl-2">
                         <div class="input-group input-group-sm mb-2">
                             <span class="input-group-text fw-bold" id="basic-addon1">Por régimen:</span>
-                            <select id="cmbfiltrotipodocumento" class="form-select form-select-sm" wire:model.live="filtroregimen">
+                            <select id="cmbfiltrotipodocumento4" class="form-select form-select-sm" wire:model.live="filtroregimen">
                                 <option value="">TOTAL </option>
                                 <option value="CAS">CAS </option>
                                 <option value="D.L.276">D.L.276</option>
@@ -184,6 +184,15 @@
                                                             <button class="dropdown-item text-dark"
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#nuevoEditarModal"
+                                                                    wire:click="nuevo_contrato({{ $item->id }})">
+                                                                <i class="fa-solid fa-file"></i> Contrato
+                                                            </button>
+                                                        </li>
+
+                                                        <li>
+                                                            <button class="dropdown-item text-dark"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#nuevoEditarModal"
                                                                     wire:click="nuevo_incorporacion({{ $item->id }})">
                                                                 <i class="fa-solid fa-file"></i> Incorporación
                                                             </button>
@@ -276,7 +285,7 @@
                                                             <button class="dropdown-item text-dark"
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#transferencia-personal-component"
-                                                                    wire:click="nuevo_transferir_personal({{ $item->id }})">
+                                                                    wire:click="editar_transferir_personal({{ $item->id }})">
                                                                 <i class="fa-solid fa-file"></i> Editar
                                                             </button>
                                                         </li>
@@ -287,6 +296,9 @@
                                                 <i class="fa-solid fa-people-arrows"></i><br>Ubicación
                                             </button> --}}
                                         @endcan
+                                        <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#historialrotacionesModal" wire:click="historial_rotaciones('{{ $item->dni }}')">
+                                            <i class="fa-solid fa-timeline"></i><br>Historial
+                                        </button>
                                         @can('mpfn.rrhh.personal.destroy')
                                             <button type="button" class="btn btn-outline-danger btn-xs" wire:click="desactivar({{ $item->id }})">
                                                 <i class="fa-solid fa-trash-can"></i><br>Eliminar
@@ -391,7 +403,7 @@
                 <div class="modal-body">
                     <div class="table-responsive-xl">
                         <div class="input-group mb-3">
-                            <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="searchi" placeholder="Buscar">
+                            <input type="text" id="txtsearchi" class="form-control form-control-sm" wire:model.live="searchi" placeholder="Buscar">
                         </div>
                         <table class="table table-striped table-hover table-sm table-xsmall">
                             <thead class="table-dark text-center align-middle">
@@ -466,7 +478,7 @@
                 <div class="modal-body">
                     <div class="table-responsive-xl">
                         <div class="input-group mb-3">
-                            <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="searchhistorial" placeholder="Buscar por número de convocatoria">
+                            <input type="text" id="txtsearchhistorial" class="form-control form-control-sm" wire:model.live="searchhistorial" placeholder="Buscar por número de convocatoria">
                             <a type="button" href="{{ route('pdf.rrhh.personal.reportePDF') }}" target="_blank" class="btn btn-outline-naranja btn-sm">
                                 <i class="fa-regular fa-file-pdf"></i> PDF
                             </a>
@@ -522,11 +534,120 @@
                                         </td>
                                         <td class="text-end">
                                             <div class="btn-group" role="group">
-                                                <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#pdf-cargar-component" wire:click="editar_pdf({{ $item3->personal_id }})">
-                                                    <i class="fa-solid fa-upload"></i><br>Cargar
-                                                </button>
+                                                @can('mpfn.rrhh.personal.edit')
+                                                    <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#pdf-cargar-component" wire:click="editar_pdf({{ $item3->personal_id }})">
+                                                        <i class="fa-solid fa-upload"></i><br>Cargar
+                                                    </button>
+                                                @endcan
+                                                
                                                 @if($item3->ruta_documento)
                                                     <a type="button" class="btn btn-outline-info btn-xs" href="{{ asset('storage/'.$item3->ruta_documento) }}" target="_blank">
+                                                        <i class="fa-solid fa-file-signature"></i><br> Firmado
+                                                    </a>
+                                                @endif
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="10" class="text-center">
+                                            <div class="alert alert-danger" role="alert">
+                                                ¡No se encontraron resultados!
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-rectangle-xmark"></i> Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Modal Historial Rotaciones --}}
+    <div wire:ignore.self class="modal fade" id="historialrotacionesModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="historialrotacionesModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width:90%;">
+            <div class="modal-content">
+                <div class="modal-header bg-warning-subtle">
+                    <h1 class="modal-title fs-5" id="historialrotacionesModalLabel">
+                        <i class="fa-solid fa-timeline"></i> HISTORIAL ROTACIONES
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive-xl">
+                        <div class="input-group mb-3">
+                            <input type="text" id="txtsearchhistorialr" class="form-control form-control-sm" wire:model.live="searchhistorial" placeholder="Buscar por número de convocatoria">
+                            <a type="button" href="{{ route('pdf.rrhh.personal.reportePDF') }}" target="_blank" class="btn btn-outline-naranja btn-sm">
+                                <i class="fa-regular fa-file-pdf"></i> PDF
+                            </a>
+                        </div>
+                        <table class="table table-striped table-hover table-sm table-xsmall">
+                            <thead class="table-dark text-center align-middle">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">
+                                        <i class="fa-solid fa-user"></i> PERSONAL
+                                    </th>
+                                    {{-- <th scope="col">DEPENDENCIA ORIGEN</th> --}}
+                                    <th scope="col">ROTACIÓN</th>
+                                    <th scope="col">N° EXPEDIENTE</th>
+                                    <th scope="col">MOTIVO</th>
+                                    <th scope="col">DESDE</th>
+                                    <th scope="col">HASTA</th>
+                                    <th scope="col"><i class="fa-solid fa-gears"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody class="align-middle">
+                                @forelse ($lista_historial_rotaciones as $item4)
+                                    <tr>
+                                        <th class="text-center">{{ $loop->iteration }}</th>
+                                        <th>
+                                            {{ $item4->dni }}
+                                            <br>{{ $item4->datos }}
+                                        </th>
+                                        {{-- <td>
+                                            <b>SEDE:</b> {{ $item4->sedeorigen }}
+                                            <br>
+                                            <b>DEPENDENCIA:</b> {{ $item4->dependenciaorigen }}
+                                            <br>
+                                            <b>DESPACHO:</b> {{ $item4->despachoorigen }}
+                                        </td> --}}
+                                        <td>
+                                            <b>SEDE:</b> {{ $item4->sede }}
+                                            <br>
+                                            <b>DEPENDENCIA:</b> {{ $item4->dependencia }}
+                                            <br>
+                                            <b>DESPACHO:</b> {{ $item4->despacho }}
+                                        </td>
+                                        <td>
+                                            {{ $item4->num_expediente }}
+                                        </td>
+                                        <td>
+                                            {{ $item4->motivo_ubicacion }}
+                                        </td>
+                                        <td>
+                                            {{ $item4->fecha_iniciou }}
+                                        </td>
+                                        <td>
+                                            {{ $item4->fecha_finu }}
+                                        </td>
+                                        <td class="text-end">
+                                            <div class="btn-group" role="group">
+                                                @can('mpfn.rrhh.personal.edit')
+                                                    <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#pdf-cargar-component" wire:click="editar_pdf({{ $item4->personal_id }})">
+                                                        <i class="fa-solid fa-upload"></i><br>Cargar
+                                                    </button>
+                                                @endcan
+                                                
+                                                @if($item4->ruta_documento)
+                                                    <a type="button" class="btn btn-outline-info btn-xs" href="{{ asset('storage/'.$item4->ruta_documento) }}" target="_blank">
                                                         <i class="fa-solid fa-file-signature"></i><br> Firmado
                                                     </a>
                                                 @endif
@@ -681,7 +802,7 @@
         </div>
     </div>
 
-    {{-- ModalTransferencia de Personal - Ubicación Física --}}
+    {{-- Modal Transferencia de Personal - Ubicación Física --}}
     <div wire:ignore.self class="modal fade" id="transferencia-personal-component" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="transferir-Personal-componentLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
