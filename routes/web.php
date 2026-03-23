@@ -16,6 +16,7 @@ use App\Http\Controllers\Intranet\ExpimportantesController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Rrhh\PersonaController;
 use App\Http\Controllers\Rrhh\PersonalController;
+use App\Http\Controllers\Rrhh\PersonalrotacionController;
 use App\Http\Controllers\Voluntariado\VoluntariadoController;
 
 use Maatwebsite\Excel\Facades\Excel;
@@ -143,6 +144,8 @@ Route::middleware('auth')->group(function () {
     Route::get('pdf/rrhh/personal/reportePDFacta/{id}', [PersonalController::class, 'reportePDFacta'])->name('pdf.rrhh.personal.reportePDFacta');
 
     Route::get('personas/exportar', [PersonaController::class, 'exportarExcel']);
+
+    Route::resource('personalrotacion', PersonalrotacionController::class)->names('mpfn.rrhh.personalrotacion');
 });
 
 

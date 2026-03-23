@@ -20,7 +20,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
-class PersonalComponent extends Component
+class PersonalrotacionComponent extends Component
 {
     use WithFileUploads;
     use WithPagination;
@@ -164,6 +164,7 @@ class PersonalComponent extends Component
     public function render()
     {
         $lista_activos = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
+            ->join('personales_rotaciones','personas.id','=','personales_rotaciones.persona_id')
             ->select('personas.*',
                 'personales.persona_id',
                 'personales.regimen',
@@ -176,7 +177,7 @@ class PersonalComponent extends Component
                 'personales.dependenciadestino',
                 'personales.despachodestino',
                 'personales.tipo_documento')
-            ->where('personales.activo', 1)
+            ->where('personales_rotaciones.activo', 1)
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('personas.dni', 'like', '%' . $this->search . '%')
@@ -202,7 +203,6 @@ class PersonalComponent extends Component
                 });
             })
             ->orderBy('personales.id','desc')
-            // ->distinct()
             ->paginate(10, ['personas.*'], 'personalesPage');
 
         $lista_inactivos = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
@@ -319,7 +319,7 @@ class PersonalComponent extends Component
             ->orderBy('nombre')
             ->paginate(10,['*'], 'cargosPage');
 
-        return view('livewire.rrhh.personal.personal-component',
+        return view('livewire.rrhh.personal.personalrotacion-component',
                         compact('lista_activos','lista_inactivos','lista_historial','lista_historial_rotaciones',
                                     'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos'));
     }
@@ -1235,6 +1235,13 @@ class PersonalComponent extends Component
         $this->despachodestino = "";
 
         $this->bandera_documento = "RESOLUCION";
+
+        $ipersonal = Personale::where([['activo',"1"],['persona_dni', $this->dni],])->firstOrFail();
+        // Actualizar Personal
+                $ipersonal->update([
+                    'activo' => "0",
+                ]);
+
     }
 
     public function guardar_transferir_personal()
@@ -1247,7 +1254,6 @@ class PersonalComponent extends Component
 
                 // Buscar Personal
                 // ===== DATOS PERSONAL =====
-
                 $personal = Personale::where([['activo',"1"],['persona_dni', $this->dni],])->firstOrFail();
 
                 // Actualizar Personal
@@ -1259,12 +1265,6 @@ class PersonalComponent extends Component
                     'coddespachodestino' => $this->coddespachoorigen,
                     'despachodestino' => $this->despachoorigen,
                     'updated_user' => $usuario,
-                ]);
-
-                $ipersonalrotacion = PersonalesRotacione::where([['activo',"1"],['persona_dni', $this->dni],])->firstOrFail();
-
-                $ipersonalrotacion->update([
-                    'activo' => "0",
                 ]);
 
                 // FUNCIÓN PARA CARGAR DOCUMENTO
