@@ -116,9 +116,11 @@ class Activos extends Component
             $ruta_documento;
 
     public $expimportante_id,
+            $expdetalle,
             $numexpediente,
             $estado,
             $oficina_ubicacion,
+            $asignado_a,
             $fecha;
 
 
@@ -290,8 +292,10 @@ class Activos extends Component
                     'coddespachoorigen' => $this->coddespachoorigen,
                     'despachoorigen' => $this->despachoorigen,
                     'numexpediente' => Str::slug($this->numexpediente),
+                    'expdetalle' => strtoupper($this->expdetalle),
                     'estado' => $this->estado,
                     'oficina_ubicacion' => strtoupper($this->oficina_ubicacion),
+                    'asignado_a' => strtoupper($this->asignado_a),
                     'fecha' => $this->fecha,
                     'activo' => "1",
                     'created_user' => $usuario,
@@ -347,8 +351,10 @@ class Activos extends Component
         $this->expimportante_id = $iexpedientesimportantes->id;
         $this->persona_id = $iexpedientesimportantes->persona_id;
         $this->numexpediente = $iexpedientesimportantes->numexpediente;
+        $this->expdetalle = $iexpedientesimportantes->expdetalle;
         $this->estado = $iexpedientesimportantes->estado;
         $this->oficina_ubicacion = $iexpedientesimportantes->oficina_ubicacion;
+        $this->asignado_a = $iexpedientesimportantes->asignado_a;
         $this->fecha = $iexpedientesimportantes->fecha;
 
         $ipersona = Persona::where([['activo',1],['id',$this->persona_id],])->firstOrFail();
@@ -410,8 +416,10 @@ class Activos extends Component
                     'coddespachoorigen' => $this->coddespachoorigen,
                     'despachoorigen' => $this->despachoorigen,
                     'numexpediente' => Str::slug($this->numexpediente),
+                    'expdetalle' => strtoupper($this->expdetalle),
                     'estado' => $this->estado,
                     'oficina_ubicacion' => strtoupper($this->oficina_ubicacion),
+                    'asignado_a' => strtoupper($this->asignado_a),
                     'fecha' => $this->fecha,
                     'activo' => "1",
                     'updated_user' => $usuario,

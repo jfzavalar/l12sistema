@@ -125,13 +125,17 @@
                         <div class="row">
                             <div class="col">
                                 <fieldset class="border p-3 rounded mb-3">
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS DEL EXPDIENTE</legend>
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS DEL EXPEDIENTE</legend>
                                     <div class="row">
-                                        <div class="col">
+                                        <div class="col-xl-2">
                                             <label for="txtexp" class="fw-bold fs-6">N° de Expediente</label>
                                             <input type="text" id="txtexp" class="form-control form-control-xs" wire:model="numexpediente" required>
                                         </div>
-                                        <div class="col">
+                                        <div class="col-xl-2">
+                                            <label for="txtexpdetalle" class="fw-bold fs-6">Motivo o detalle</label>
+                                            <input type="text" id="txtexpdetalle" class="form-control form-control-xs" wire:model="expdetalle" required>
+                                        </div>
+                                        <div class="col-xl-2">
                                             <label for="cmbestadoexp" class="fw-bold fs-6">Estado</label>
                                             <select id="cmbestadoexp" class="form-select form-select-xs" wire:model="estado" required>
                                                 <option value="">Seleccionar...</option>
@@ -139,12 +143,16 @@
                                                 <option value="FINALIZADO">FINALIZADO</option>
                                             </select>
                                         </div>
-                                        <div class="col">
+                                        <div class="col-xl-2">
                                             <label for="txtubicacion" class="fw-bold fs-6">Ubicación</label>
                                             <input type="text" id="txtubicacion" class="form-control form-control-xs" wire:model="oficina_ubicacion" required>
                                         </div>
-                                        <div class="col">
-                                            <label for="txtfecha" class="fw-bold fs-6">Fecha</label>
+                                        <div class="col-xl-2">
+                                            <label for="txtasignadoa" class="fw-bold fs-6">Asignado a: </label>
+                                            <input type="text" id="txtasignadoa" class="form-control form-control-xs" wire:model="asignado_a" required>
+                                        </div>
+                                        <div class="col-xl-2">
+                                            <label for="txtfecha" class="fw-bold fs-6">Desde: </label>
                                             <input type="date" id="txtfecha" class="form-control form-control-xs" wire:model="fecha" required>
                                         </div>
                                     </div>
