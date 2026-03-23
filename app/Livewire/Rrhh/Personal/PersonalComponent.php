@@ -123,7 +123,8 @@ class PersonalComponent extends Component
             $fecha_fin,
             $ruta_documento;
 
-    public $num_expediente,
+    public $rotacion_id,
+            $num_expediente,
             $fecha_iniciou,
             $fecha_finu,
             $motivo_ubicacion;
@@ -1338,6 +1339,7 @@ class PersonalComponent extends Component
             return;
         }
 
+        $this->rotacion_id = $ipersonalrotacion->id;
         $this->dni = $ipersonalrotacion->persona_dni;
         $this->personal_id = $ipersonalrotacion->personal_id;
         $this->codsededestino = $ipersonalrotacion->sede_id;
@@ -1352,6 +1354,49 @@ class PersonalComponent extends Component
         $this->motivo_ubicacion = $ipersonalrotacion->motivo_ubicacion;
         $this->ruta_documento = $ipersonalrotacion->ruta_documento;
 
+    }
+
+    public function actualizar_transferir_personal()
+    {
+        // $this->validate();
+
+        try {
+
+            DB::transaction(function () {
+
+                $usuario = auth()->user()->datos;
+
+                // ========================
+                // ACTUALIZAR PERSONAL ROTACION
+                // ========================
+                $personal = Personale::where([['activo', "1"], ['persona_dni', $this->dni],])->firstOrFail();
+
+                $this->personal_id = $personal->id;
+
+                // Llamamos a la función privada para cargar documento
+                $rutaDocumento = $this->actualizar_acta();
+            });
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Datos actualizados',
+                mensaje: 'Los datos se han actualizado correctamente.',
+                tipo: 'success'
+            );
+
+            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
+
+        } catch (\Throwable $e) {
+
+            report($e);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'Ocurrió un error al actualizar.',
+                tipo: 'error'
+            );
+        }
     }
 
     public function cerrar_transferir_personal()

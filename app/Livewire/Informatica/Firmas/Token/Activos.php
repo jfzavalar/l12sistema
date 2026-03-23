@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Informatica\Firmas\Token;
 
+use App\Http\Controllers\Informatica\FirmasdigitalesController;
 use App\Models\InformaticasBienesToken;
 use App\Models\InformaticasFirmasToken;
 use App\Models\Persona;
@@ -46,19 +47,13 @@ class Activos extends Component
     public $funcionGuardarActualizar;
     
     public $pdf;
-    public $filtro_asignados, $filtro_usuarios, $filtro_rutas;
 
     public $avatar;
 
-    public $filtroasignacion="";
+    // Variables para filtrar
 
-    //Buscar
-    public $searchtokens;
-    public function updatingSearchtokens(){
-        $this->resetPage('tokensPage');
-    }
     // Variables de búsqueda
-    public $search, $searchi,$searchhistorial, $searchpersonas, $searchsedes,$searchdependencias,$searchdespachos,$searchcargos,$searchtoken;
+    public $search, $searchi,$searchhistorial, $searchpersonas, $searchsedes,$searchdependencias,$searchdespachos,$searchcargos,$searchtokens;
 
     public function updatingSearch(){
         $this->resetPage('firmastokensPage');
@@ -84,7 +79,7 @@ class Activos extends Component
     public function updatingSearchcargos(){
         $this->resetPage('cargosPage');
     }
-    public function updatingSearchtoken(){
+    public function updatingSearchtokens(){
         $this->resetPage('tokensPage');
     }
 
@@ -151,30 +146,51 @@ class Activos extends Component
 
     public $pdf_acta;
 
+    public function filtrarTotal()
+    {
+        $this->resetFiltros();
+    }
+
+    public function filtrarFirmadas()
+    {
+        $this->resetFiltros();
+        $this->filtro_firma = 'con';
+    }
+
+    public function filtrarSinFirmar()
+    {
+        $this->resetFiltros();
+        $this->filtro_firma = 'sin';
+    }
+
+    public function filtrarAsignados()
+    {
+        $this->resetFiltros();
+        $this->filtro_asignacion = 'ASIGNACION';
+    }
+
+    public function filtrarDevueltos()
+    {
+        $this->resetFiltros();
+        $this->filtro_asignacion = 'DEVOLUCION';
+    }
+
+    private function resetFiltros()
+    {
+        $this->search = '';
+        $this->filtro_firma = '';
+        $this->filtro_asignacion = '';
+
+        $this->resetPage('firmastokensPage');
+    }
+
     public function render()
     {
-        $lista_activos = $this->queryBase()
-
-            ->when($this->filtro_firma === 'con', fn($q) =>
-                $q->whereNotNull('ruta_documento')
-                ->where('ruta_documento', '<>', '')
-            )
-
-            ->when($this->filtro_firma === 'sin', fn($q) =>
-                $q->where(fn($q2) =>
-                    $q2->whereNull('ruta_documento')
-                    ->orWhere('ruta_documento', '')
-                )
-            )
-
-            ->when($this->filtro_asignacion, fn($q) =>
-                $q->where('asignacion', $this->filtro_asignacion)
-            )
-
+        $lista_activos = $this->queryConFiltros()
             ->orderByDesc('id')
-            ->paginate(5, ['*'], 'firmastokensPage');
+            ->paginate(30, ['*'], 'firmastokensPage');
 
-        $estadisticas = $this->queryBase()
+        $estadisticas = InformaticasFirmasToken::where('activo', '1')
             ->selectRaw("
                 COUNT(*) as total,
 
@@ -182,23 +198,25 @@ class Activos extends Component
                     WHEN ruta_documento IS NOT NULL 
                     AND ruta_documento <> '' 
                     THEN 1 ELSE 0 
-                END) as con_firma,
+                END) as firmadas,
 
                 SUM(CASE 
                     WHEN ruta_documento IS NULL 
                     OR ruta_documento = '' 
                     THEN 1 ELSE 0 
-                END) as sin_firma,
+                END) as sin_firmar,
 
                 SUM(CASE 
-                    WHEN asignacion = 'ASIGNACION' 
+                    WHEN asignacion IS NULL 
+                    OR asignacion = 'ASIGNACION' 
                     THEN 1 ELSE 0 
-                END) as asignados,
+                END) as asignacion,
 
                 SUM(CASE 
-                    WHEN asignacion = 'DEVOLUCION' 
+                    WHEN asignacion IS NULL 
+                    OR asignacion = 'DEVOLUCION' 
                     THEN 1 ELSE 0 
-                END) as devueltos
+                END) as devolucion
             ")
             ->first();
 
@@ -260,11 +278,11 @@ class Activos extends Component
             ->paginate(10,['*'],'tokensPage');
 
         return view('livewire.informatica.firmas.token.activos',
-            compact('lista_activos','estadisticas','lista_personas','lista_historial',
-                    'lista_sedes','lista_dependencias','lista_bienes_tokens'));
+            compact('lista_activos','lista_personas','lista_historial',
+                    'lista_sedes','lista_dependencias','lista_bienes_tokens','estadisticas'));
     }
 
-    private function queryBase()
+    private function queryConFiltros()
     {
         return InformaticasFirmasToken::where('activo', '1')
 
@@ -273,6 +291,22 @@ class Activos extends Component
                     $q2->where('dni', 'like', "%{$this->search}%")
                     ->orWhere('datos', 'like', "%{$this->search}%")
                 )
+            )
+
+            ->when($this->filtro_firma === 'con', fn($q) =>
+                $q->whereNotNull('ruta_documento')
+                ->where('ruta_documento', '<>', '')
+            )
+
+            ->when($this->filtro_firma === 'sin', fn($q) =>
+                $q->where(fn($q2) =>
+                    $q2->whereNull('ruta_documento')
+                    ->orWhere('ruta_documento', '')
+                )
+            )
+
+            ->when($this->filtro_asignacion, fn($q) =>
+                $q->where('asignacion', $this->filtro_asignacion)
             );
     }
 
@@ -715,48 +749,53 @@ class Activos extends Component
 
             DB::transaction(function () {
 
-                $usuario = auth()->user()->datos; // Mejor que usar propiedad pública
+            $usuario = auth()->user()->datos;
 
-                //Desahabilitamos el registro anterior
-                $ifirmatoken = InformaticasFirmasToken::findOrFail($this->firma_token_id);
-                $ifirmatoken->update([
-                    'activo' => '0',
-                ]);
+            // Desactivar anterior
+            $ifirmatoken = InformaticasFirmasToken::findOrFail($this->firma_token_id);
+            $ifirmatoken->update([
+                'activo' => '0',
+            ]);
 
-                $itoken = InformaticasBienesToken::findOrFail($this->token_id);
-                $itoken->update([
-                    'asignado' => '0',
-                ]);
+            // Liberar token
+            $itoken = InformaticasBienesToken::findOrFail($this->token_id);
+            $itoken->update([
+                'asignado' => '0',
+            ]);
 
-                InformaticasFirmasToken::create([
-                    'persona_id' => $this->persona_id,
-                    'dni' => $this->dni,
-                    'datos' => $this->datos,
-                    'personal_id' => $this->personal_id,
-                    'codsedeorigen' => $this->codsedeorigen,
-                    'sedeorigen' => $this->sedeorigen,
-                    'coddependenciaorigen' => $this->coddependenciaorigen,
-                    'dependenciaorigen' => $this->dependenciaorigen,
-                    'coddespachoorigen' => $this->coddespachoorigen,
-                    'despachoorigen' => $this->despachoorigen,
-                    'codsededestino' => $this->codsededestino,
-                    'sededestino' => $this->sededestino,
-                    'coddependenciadestino' => $this->coddependenciadestino,
-                    'dependenciadestino' => $this->dependenciadestino,
-                    'coddespachodestino' => $this->coddespachodestino,
-                    'despachodestino' => $this->despachodestino,
-                    'token_id' => $this->token_id,
-                    'token_codigo' => $this->token_codigo,
-                    'asignacion' => "DEVOLUCION",
-                    'fecha_expiracion' => $this->fecha_expiracion,
-                    'observacion' => $this->observacion,
-                    'ruta_documento' => $this->ruta_documento,
-                    'activo' => '1',
-                    'created_user' => $usuario,
-                    'updated_user' => $usuario,
-                ]);
+            // Guardar PDF correctamente
+            $rutaDocumento = $this->guardar_acta();
 
-            });
+            // Crear devolución
+            InformaticasFirmasToken::create([
+                'persona_id' => $this->persona_id,
+                'dni' => $this->dni,
+                'datos' => $this->datos,
+                'personal_id' => $this->personal_id,
+                'codsedeorigen' => $this->codsedeorigen,
+                'sedeorigen' => $this->sedeorigen,
+                'coddependenciaorigen' => $this->coddependenciaorigen,
+                'dependenciaorigen' => $this->dependenciaorigen,
+                'coddespachoorigen' => $this->coddespachoorigen,
+                'despachoorigen' => $this->despachoorigen,
+                'codsededestino' => $this->codsededestino,
+                'sededestino' => $this->sededestino,
+                'coddependenciadestino' => $this->coddependenciadestino,
+                'dependenciadestino' => $this->dependenciadestino,
+                'coddespachodestino' => $this->coddespachodestino,
+                'despachodestino' => $this->despachodestino,
+                'token_id' => $this->token_id,
+                'token_codigo' => $this->token_codigo,
+                'asignacion' => "DEVOLUCION",
+                'fecha_expiracion' => $this->fecha_expiracion,
+                'observacion' => $this->observacion,
+                'ruta_documento' => $rutaDocumento, // 🔥 FIX
+                'activo' => '1',
+                'created_user' => $usuario,
+                'updated_user' => $usuario,
+            ]);
+
+        });
 
             // $this->resetExcept('searchPersonal');
 
@@ -777,6 +816,7 @@ class Activos extends Component
             $this->dispatch(
                 'alerta-actualizado',
                 titulo: 'Error',
+                // mensaje: $e->getMessage(),
                 mensaje: 'Ocurrió un error al guardar.',
                 tipo: 'error'
             );
@@ -1081,6 +1121,26 @@ class Activos extends Component
             $directory,
             $fileName,
             'public'
+        );
+    }
+
+    // PDF exportar
+    public function exportarPDF()
+    {
+        $datos = $this->queryConFiltros()
+            ->orderBy('datos')
+            ->get();
+
+        $pdf = Pdf::loadView('pdf.informatica.token-reporte-filtro', [
+            'datos' => $datos,
+            'filtro_firma' => $this->filtro_firma,
+            'filtro_asignacion' => $this->filtro_asignacion,
+            'search' => $this->search
+        ]);
+
+        return response()->streamDownload(
+            fn () => print($pdf->output()),
+            'reporte-activos.pdf'
         );
     }
 }

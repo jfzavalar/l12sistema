@@ -134,6 +134,10 @@
             background-color: #ff8800;
             color: white;
             }
+            .btn-naranja:hover {
+                background-color: #e67600; /* naranja más oscuro */
+                color: white;
+            }
 
             .btn-azul-oscuro {
                 background-color: #003366;
@@ -150,7 +154,6 @@
                 border: 1px solid #ff8800;
                 background-color: transparent;
             }
-
             .btn-outline-naranja:hover {
                 background-color: #ff8800;
                 color: white;

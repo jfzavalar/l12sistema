@@ -11,7 +11,7 @@
                                 </h5><br>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h3><i class="fa-solid fa-chart-simple text-primary"></i> {{ $estadisticas->total }}</h3>
-                                    <button class="btn btn-outline-primary btn-sm" wire:click="$set('filtro_firma',''); $set('filtro_asignacion','');">
+                                    <button class="btn btn-outline-primary btn-sm" wire:click="filtrarTotal">
                                         <i class="fa-solid fa-bars"></i> Listar
                                     </button>
                                 </div>
@@ -23,8 +23,8 @@
                                     Actas Firmadas
                                 </h5><br>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h3><i class="fa-solid fa-signature text-success"></i> {{ $estadisticas->con_firma }}</h3>
-                                    <button class="btn btn-outline-success btn-sm" wire:click="$set('filtro_firma','con'); $set('filtro_asignacion','');">
+                                    <h3><i class="fa-solid fa-signature text-success"></i> {{ $estadisticas->firmadas }}</h3>
+                                    <button class="btn btn-outline-success btn-sm" wire:click="filtrarFirmadas">
                                         <i class="fa-solid fa-bars"></i> Listar
                                     </button>
                                 </div>
@@ -36,8 +36,8 @@
                                     Actas sin Firmar
                                 </h5><br>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h3><i class="fa-solid fa-signature text-success"></i> {{ $estadisticas->sin_firma }}</h3>
-                                    <button class="btn btn-outline-success btn-sm" wire:click="$set('filtro_firma','sin'); $set('filtro_asignacion','');">
+                                    <h3><i class="fa-solid fa-signature text-success"></i> {{ $estadisticas->sin_firmar }}</h3>
+                                    <button class="btn btn-outline-success btn-sm" wire:click="filtrarSinFirmar">
                                         <i class="fa-solid fa-bars"></i> Listar
                                     </button>
                                 </div>
@@ -49,8 +49,8 @@
                                     Asignados
                                 </h5><br>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h3><i class="fa-solid fa-file-signature text-danger"></i> {{ $estadisticas->asignados }}</h3>
-                                    <button class="btn btn-outline-danger btn-sm" wire:click="$set('filtro_firma',''); $set('filtro_asignacion','ASIGNACION');">
+                                    <h3><i class="fa-solid fa-file-signature text-danger"></i> {{ $estadisticas->asignacion }}</h3>
+                                    <button class="btn btn-outline-danger btn-sm" wire:click="filtrarAsignados">
                                         <i class="fa-solid fa-bars"></i> Listar
                                     </button>
                                 </div>
@@ -62,8 +62,8 @@
                                     Devueltos
                                 </h5><br>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h3><i class="fa-solid fa-file-signature text-danger"></i>  {{ $estadisticas->devueltos }}</h3>
-                                    <button class="btn btn-outline-danger btn-sm" wire:click="$set('filtro_firma',''); $set('filtro_asignacion','DEVOLUCION');">
+                                    <h3><i class="fa-solid fa-file-signature text-danger"></i>  {{ $estadisticas->devolucion }}</h3>
+                                    <button class="btn btn-outline-danger btn-sm" wire:click="filtrarDevueltos">
                                         <i class="fa-solid fa-bars"></i> Listar
                                     </button>
                                 </div>
@@ -87,7 +87,9 @@
                                     <i class="fa-solid fa-file"></i> Nuevo
                                 </button>
                             @endcan
-                            
+                            <button class="btn btn-naranja" wire:click="exportarPDF">
+                                <i class="fa fa-file-pdf"></i> Exportar PDF
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -507,7 +509,7 @@
                                                         </button>
                                                     @endcan
                                                     @if ($item->ruta_documento)
-                                                        <a href="{{ asset('storage/'.$item->ruta_documento) }}" target="_blank" class="btn btn-outline-warning btn-xs">
+                                                        <a href="{{ asset('storage/'.$item->ruta_documento) }}" target="_blank" class="btn btn-outline-info btn-xs">
                                                             <i class="fa-solid fa-file-pdf"></i><br>Firmado
                                                         </a>
                                                     @endif
