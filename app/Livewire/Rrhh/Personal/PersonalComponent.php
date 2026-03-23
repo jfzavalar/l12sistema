@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Rrhh\Personal;
 
+use App\Exports\PersonalesfiltrosExport;
 use App\Models\Persona;
 use App\Models\Personale;
 use App\Models\Personales_cargo;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PersonalComponent extends Component
 {
@@ -26,6 +28,7 @@ class PersonalComponent extends Component
     use WithPagination;
     protected $paginationTheme = "bootstrap";
 
+    public $habilitarInputs = "";
     public $mostrarBtnBuscarDni = "d-none";
 
     public $colorHeaderModal, $textoHeaderModal;
@@ -163,47 +166,9 @@ class PersonalComponent extends Component
 
     public function render()
     {
-        $lista_activos = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
-            ->select('personas.*',
-                'personales.persona_id',
-                'personales.regimen',
-                'personales.tipo_regimen',
-                'personales.cargo',
-                'personales.sedeorigen',
-                'personales.dependenciaorigen',
-                'personales.despachoorigen',
-                'personales.sededestino',
-                'personales.dependenciadestino',
-                'personales.despachodestino',
-                'personales.tipo_documento')
-            ->where('personales.activo', 1)
-            ->when($this->search, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('personas.dni', 'like', '%' . $this->search . '%')
-                    ->orWhere('personas.datos', 'like', '%' . $this->search . '%');
-                });
-            })
-            ->when($this->filtrodependencia, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('personales.coddependenciaorigen', $this->filtrodependencia );
-                    // ->orWhere('', 'like', '%' . $this->search . '%');
-                });
-            })
-            ->when($this->filtrotipodocumento, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('personales.tipo_documento', 'like', '%' . $this->filtrotipodocumento . '%');
-                    // ->orWhere('', 'like', '%' . $this->search . '%');
-                });
-            })
-            ->when($this->filtroregimen, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('personales.regimen', 'like', '%' . $this->filtroregimen . '%');
-                    // ->orWhere('', 'like', '%' . $this->search . '%');
-                });
-            })
-            ->orderBy('personales.id','desc')
-            // ->distinct()
-            ->paginate(10, ['personas.*'], 'personalesPage');
+        $lista_activos = $this->queryConFiltros()
+            ->orderBy('personales.id', 'desc')
+            ->paginate(30, ['personas.*'], 'personalesPage');
 
         $lista_inactivos = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
             ->select('personas.*',
@@ -322,6 +287,50 @@ class PersonalComponent extends Component
         return view('livewire.rrhh.personal.personal-component',
                         compact('lista_activos','lista_inactivos','lista_historial','lista_historial_rotaciones',
                                     'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos'));
+    }
+
+    private function queryConFiltros()
+    {
+        return Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
+            ->select(
+                'personas.*',
+                'personales.persona_id',
+                'personales.regimen',
+                'personales.tipo_regimen',
+                'personales.cargo',
+                'personales.sedeorigen',
+                'personales.dependenciaorigen',
+                'personales.despachoorigen',
+                'personales.sededestino',
+                'personales.dependenciadestino',
+                'personales.despachodestino',
+                'personales.tipo_documento'
+            )
+            ->where('personales.activo', 1)
+
+            ->when($this->search, function ($query) {
+                $query->where(function ($q) {
+                    $q->where('personas.dni', 'like', '%' . $this->search . '%')
+                    ->orWhere('personas.datos', 'like', '%' . $this->search . '%');
+                });
+            })
+
+            // ✅ CORREGIDO
+            ->when($this->filtrosede, function ($query) {
+                $query->where('personales.codsedeorigen', $this->filtrosede);
+            })
+
+            ->when($this->filtrodependencia, function ($query) {
+                $query->where('personales.coddependenciaorigen', $this->filtrodependencia);
+            })
+
+            ->when($this->filtrotipodocumento, function ($query) {
+                $query->where('personales.tipo_documento', 'like', '%' . $this->filtrotipodocumento . '%');
+            })
+
+            ->when($this->filtroregimen, function ($query) {
+                $query->where('personales.regimen', 'like', '%' . $this->filtroregimen . '%');
+            });
     }
 
     protected function rules(){
@@ -1628,6 +1637,21 @@ class PersonalComponent extends Component
             $directory,
             $fileName,
             'public'
+        );
+    }
+
+    // Exportar a Excel
+    public function exportarExcel()
+    {
+        return Excel::download(
+            new PersonalesfiltrosExport(
+                $this->search,
+                $this->filtrosede,
+                $this->filtrodependencia,
+                $this->filtrotipodocumento,
+                $this->filtroregimen
+            ),
+            'reporte.xlsx'
         );
     }
 }

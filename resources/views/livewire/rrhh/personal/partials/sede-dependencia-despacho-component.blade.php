@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-xl-3 col-lg-6 col-sm-12">
+    <div class="col-xl-12">
         <label for="txt_sede2" class="fw-bold fs-6">Sede</label>
         <div class="input-group">
             <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#2buscar-sedes-component">
@@ -11,7 +11,7 @@
             <small class="text-danger">{{ $message }}</small>
         @enderror
     </div>
-    <div class="col-xl-6 col-lg-6 col-sm-12">
+    <div class="col-xl-12">
         <label for="txt_dependencia2" class="fw-bold fs-6">Dependencia</label>
         <div class="input-group position-relative">
             <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#2buscar-dependencias-component">
@@ -23,7 +23,7 @@
             <small class="text-danger">{{ $message }}</small>
         @enderror
     </div>
-    <div class="col-xl-3 col-lg-6 col-sm-12">
+    <div class="col-xl-12">
         <label for="txt_despacho2" class="fw-bold fs-6">Despacho</label>
         <div class="input-group position-relative">
             <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#2buscar-despachos-component">

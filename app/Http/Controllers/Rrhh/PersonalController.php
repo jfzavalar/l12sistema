@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Rrhh;
 
+use App\Exports\PersonalesfiltrosExport;
 use App\Http\Controllers\Controller;
 use App\Models\Persona;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PersonalController extends Controller
 {
@@ -92,6 +94,12 @@ class PersonalController extends Controller
         $pdf = Pdf::loadView('pdf.rrhh.personal.reportePDF', compact('personalAgrupado'));
 
         return $pdf->stream('reportePDF.pdf');
+    }
+
+    //Exportar a Excel
+    public function exportarExcel()
+    {
+        return Excel::download(new PersonalesfiltrosExport, 'personas.xlsx');
     }
 
     // public function reportePDF()

@@ -203,7 +203,7 @@ class PersonalrotacionComponent extends Component
                 });
             })
             ->orderBy('personales.id','desc')
-            ->paginate(10, ['personas.*'], 'personalesPage');
+            ->paginate(30, ['personas.*'], 'personalesPage');
 
         $lista_inactivos = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
             ->select('personas.*',

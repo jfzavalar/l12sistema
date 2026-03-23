@@ -15,7 +15,17 @@ class PersonasExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
 {
     public function collection()
     {
-        return Persona::select('id','dni','datos','celpersonal','correopersonal')->get();
+        return Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
+            ->select('personas.id','personas.dni','personas.datos','personas.celpersonal','personas.correopersonal',
+                'personales.celinstitucional',
+                'personales.correoinstitucional',
+                'personales.regimen',
+                'personales.tipo_regimen',
+                'personales.cargo',
+                'personales.sedeorigen',
+                'personales.dependenciaorigen',
+                'personales.despachoorigen')
+            ->get();
     }
 
     public function headings(): array
@@ -25,7 +35,16 @@ class PersonasExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
             'DNI',
             'DATOS',
             'CEL_PERSONAL',
-            'CORREO_PERSONAL'
+            'CORREO_PERSONAL',
+
+            'CEL_INSTITUCIONAL',
+            'CORREO_INSTITUCIONAL',
+            'REGIMEN',
+            'TIPO_REGIMEN',
+            'CARGO',
+            'SEDE',
+            'DEPENDENCIA',
+            'DESPACHO',
         ];
     }
 

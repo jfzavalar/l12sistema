@@ -138,7 +138,7 @@
                                                 <i class="fa-solid fa-pen-to-square"></i><br>Editar
                                             </button>
                                         @endcan
-                                        @can('mpfn.rrhh.personal.create')
+                                        {{-- @can('mpfn.rrhh.personal.create')
                                             <div class="dropdown">
                                                 <button class="btn btn-outline-dark btn-xs dropdown-toggle" 
                                                         type="button" 
@@ -251,10 +251,10 @@
 
                                                 </ul>
                                             </div>
-                                        @endcan
-                                        <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#historialModal" wire:click="historial_documentos('{{ $item->dni }}')">
+                                        @endcan --}}
+                                        {{-- <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#historialModal" wire:click="historial_documentos('{{ $item->dni }}')">
                                             <i class="fa-solid fa-timeline"></i><br>Historial
-                                        </button>
+                                        </button> --}}
                                         {{-- <button type="button" class="btn btn-outline-secondary btn-xs" data-bs-toggle="modal" data-bs-target="#verDetallesModal" wire:click="editar({{ $item->id }})">
                                             <i class="fa-solid fa-eye"></i><br>Ver
                                         </button> --}}
@@ -355,9 +355,9 @@
                                             <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS PERSONALES</legend>
                                             @include('livewire.rrhh.personal.partials.datos-personales-component')
                                         </fieldset>
-                                        {{-- <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-sm" data-bs-toggle="modal" data-bs-target="#buscar-personal-component">
-                                            <i class="fa-solid fa-magnifying-glass"></i> Buscar
-                                        </button> --}}
+                                        <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-personal-component">
+                                            <i class="fa-solid fa-magnifying-glass"></i> Buscar personal
+                                        </button>
                                     </div>
                                     <div class="col-xl-8">
                                         <fieldset class="border p-3 rounded mb-3" {{ $seccionPersonal }}>
@@ -369,10 +369,24 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col">
-                                <fieldset class="border p-3 rounded mb-3">
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS CONTRATO / ADENDA / RENUNCIA</legend>
-                                    @include('livewire.rrhh.contratos.partials.datos-contrato-component')
+                            <div class="col-xl-4">
+                                <fieldset class="border p-3 rounded mb-3" {{ $seccionPersona }}>
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">NUEVA UBICACIÓN</legend>
+                                    <div class="row">
+                                        <div class="col-xl-12 col-sm-12">
+                                            @include('livewire.rrhh.personal.partials.sede-dependencia-despacho-component')
+                                        </div>                            
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="col-xl-8">
+                                <fieldset class="border p-3 rounded mb-3" {{ $seccionPersona }}>
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS SUSTENTATORIOS</legend>
+                                    <div class="row">
+                                        <div class="col-xl-12 col-sm-12 mb-3">
+                                            @include('livewire.rrhh.personal.partials.datos-personales-transferencia-ubicacion-component')
+                                        </div>                              
+                                    </div>
                                 </fieldset>
                             </div>
                         </div>

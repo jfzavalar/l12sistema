@@ -25,10 +25,12 @@
                             <th scope="col">
                                 <i class="fa-solid fa-user"></i> DNI - PERSONAL
                             </th>
-                            <th scope="col">DEPENDENCIA ORIGEN</th>
+                            {{-- <th scope="col">DEPENDENCIA ORIGEN</th> --}}
                             <th scope="col" class="table-secondary">EXPEDIENTE</th>
+                            <th scope="col" class="table-secondary">MOTIVO - DETALLE</th>
                             <th scope="col" class="table-secondary">UBICACIÓN</th>
-                            <th scope="col" class="table-secondary">FECHA</th>
+                            <th scope="col" class="table-secondary">ASIGNADO A</th>
+                            <th scope="col" class="table-secondary">DESDE</th>
                             <th scope="col" class="table-secondary">ESTADO</th>
                             @can('mpfn.intranet.expimportantes.edit')
                                 <th scope="col" class="table-dark"><i class="fa-solid fa-gears"></i></th>  
@@ -44,13 +46,19 @@
                                     <br>
                                     {{ $item->datos }}
                                 </th>
-                                <td>
+                                {{-- <td>
                                     <b>SEDE: {{ $item->sedeorigen }}</b>
                                     <br>
                                     {{ $item->dependenciaorigen }}
-                                </td>
+                                </td> --}}
                                 <td>
                                     {{ $item->numexpediente }}
+                                </td>
+                                <td>
+                                    {{ $item->expdetalle }}
+                                </td>
+                                <td>
+                                    {{ $item->asignado_a }}
                                 </td>
                                 <td>
                                     {{ $item->oficina_ubicacion }}

@@ -38,7 +38,7 @@
                             {{-- <span class="input-group-text" id="basic-addon2">{{ $lista_activos->total() }}</span> --}}
                         </div>
                     </div>
-                    <div class="col-xl-6">
+                    <div class="col-xl-4">
                         <div class="input-group input-group-sm mb-2">
                             <span class="input-group-text fw-bold" id="basic-addon1">Por Dependencia:</span>
                             <select id="cmbfiltrotipodocumento2" class="form-select form-select-sm" wire:model.live="filtrodependencia">
@@ -75,6 +75,11 @@
                             </select>
                             {{-- <span class="input-group-text" id="basic-addon2">{{ $lista_activos->total() }}</span> --}}
                         </div>
+                    </div>
+                    <div class="col-xl-2 text-end">
+                        <button class="btn btn-success btn-sm" wire:click="exportarExcel">
+                            <i class="fa fa-file-pdf"></i> Exportar a Excel
+                        </button>
                     </div>
                 </div>
                 <table class="table table-striped table-hover table-sm table-xsmall">
@@ -258,8 +263,13 @@
                                         {{-- <button type="button" class="btn btn-outline-secondary btn-xs" data-bs-toggle="modal" data-bs-target="#verDetallesModal" wire:click="editar({{ $item->id }})">
                                             <i class="fa-solid fa-eye"></i><br>Ver
                                         </button> --}}
+                                        @can('mpfn.rrhh.personal.destroy')
+                                            <button type="button" class="btn btn-outline-danger btn-xs" wire:click="desactivar({{ $item->id }})">
+                                                <i class="fa-solid fa-trash-can"></i><br>Eliminar
+                                            </button>
+                                        @endcan
                                     </div>
-                                <td class="text-end">
+                                {{-- <td class="text-end">
                                     <div class="btn-group" role="group">
                                         @can('mpfn.rrhh.personal.create')
                                             <div class="dropdown">
@@ -291,10 +301,6 @@
                                                         </li>
                                                 </ul>
                                             </div>
-
-                                            {{-- <button type="button" class="btn btn-outline-primary btn-xs" data-bs-toggle="modal" data-bs-target="#transferencia-personal-component" wire:click="nuevo_transferir_personal({{ $item->id }})">
-                                                <i class="fa-solid fa-people-arrows"></i><br>Ubicación
-                                            </button> --}}
                                         @endcan
                                         <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#historialrotacionesModal" wire:click="historial_rotaciones('{{ $item->dni }}')">
                                             <i class="fa-solid fa-timeline"></i><br>Historial
@@ -305,8 +311,7 @@
                                             </button>
                                         @endcan
                                     </div>
-                                </td>
-                                </td>
+                                </td> --}}
                             </tr>
                         @empty
                             <tr>

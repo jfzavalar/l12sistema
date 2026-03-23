@@ -5,7 +5,7 @@
             <form action="">
                 <div class="modal-header bg-{{ $colorHeaderModal }}">
                     <h1 class="modal-title fs-5" id="2buscar-dependencias-componentLabel">
-                        <i class="fa-brands fa-searchengin"></i> BUSCAR DEPENDENCIA
+                        <i class="fa-brands fa-searchengin"></i> BUSCAR NUEVA DEPENDENCIA
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-toggle="modal" data-bs-target="#transferencia-personal-component"></button>
                 </div>
@@ -36,7 +36,7 @@
                                         <td>
                                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                 <div class="btn-group" role="group">
-                                                    <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_dependencia({{ $dependencia->id }})" data-bs-toggle="modal" data-bs-target="#transferencia-personal-component">
+                                                    <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_dependencia({{ $dependencia->id }})" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
                                                         <i class="fa-solid fa-circle-plus"></i> Agregar
                                                     </button>
                                                 </div>
