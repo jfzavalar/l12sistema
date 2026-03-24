@@ -12,12 +12,12 @@
                         <div class="input-group input-group-sm mb-2">
                             <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
                             <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar por DNI o Apellidos y Nombres">
-                            @can('mpfn.rrhh.personal.create')
+                            @can('mpfn.rrhh.personalrotacion.index')
                                 <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
                                     <i class="fa-solid fa-file"></i> Nuevo
                                 </button>
                             @endcan
-                            @can('mpfn.rrhh.personal.destroy')
+                            @can('mpfn.rrhh.personalrotacion.destroy')
                                 <button type="button" id="btnnuevo" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#inactivosModal">
                                     <i class="fa-solid fa-ban"></i> Inactivos
                                 </button>
@@ -133,11 +133,11 @@
                                 </td>
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
-                                        @can('mpfn.rrhh.personal.edit')
+                                        {{-- @can('mpfn.rrhh.personal.edit')
                                             <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->id }})">
                                                 <i class="fa-solid fa-pen-to-square"></i><br>Editar
                                             </button>
-                                        @endcan
+                                        @endcan --}}
                                         {{-- @can('mpfn.rrhh.personal.create')
                                             <div class="dropdown">
                                                 <button class="btn btn-outline-dark btn-xs dropdown-toggle" 
@@ -261,45 +261,15 @@
                                     </div>
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
-                                        @can('mpfn.rrhh.personal.create')
-                                            <div class="dropdown">
-                                                <button class="btn btn-outline-primary btn-xs dropdown-toggle" 
-                                                        type="button" 
-                                                        data-bs-toggle="dropdown" 
-                                                        aria-expanded="false">
-                                                    <i class="fa-solid fa-list"></i></i> <i class="fa-solid fa-people-arrows"></i><br>Rotación
-                                                </button>
-
-                                                <ul class="dropdown-menu">
-
-                                                        <li>
-                                                            <button class="dropdown-item text-dark"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#transferencia-personal-component"
-                                                                    wire:click="nuevo_transferir_personal({{ $item->id }})">
-                                                                <i class="fa-solid fa-file"></i> Nuevo
-                                                            </button>
-                                                        </li>
-
-                                                        <li>
-                                                            <button class="dropdown-item text-dark"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#transferencia-personal-component"
-                                                                    wire:click="editar_transferir_personal({{ $item->id }})">
-                                                                <i class="fa-solid fa-file"></i> Editar
-                                                            </button>
-                                                        </li>
-                                                </ul>
-                                            </div>
-
-                                            {{-- <button type="button" class="btn btn-outline-primary btn-xs" data-bs-toggle="modal" data-bs-target="#transferencia-personal-component" wire:click="nuevo_transferir_personal({{ $item->id }})">
-                                                <i class="fa-solid fa-people-arrows"></i><br>Ubicación
-                                            </button> --}}
+                                        @can('mpfn.rrhh.personalrotacion.edit')
+                                            <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->id }})">
+                                                <i class="fa-solid fa-pen-to-square"></i><br>Editar
+                                            </button>
                                         @endcan
                                         <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#historialrotacionesModal" wire:click="historial_rotaciones('{{ $item->dni }}')">
                                             <i class="fa-solid fa-timeline"></i><br>Historial
                                         </button>
-                                        @can('mpfn.rrhh.personal.destroy')
+                                        @can('mpfn.rrhh.personalrotacion.destroy')
                                             <button type="button" class="btn btn-outline-danger btn-xs" wire:click="desactivar({{ $item->id }})">
                                                 <i class="fa-solid fa-trash-can"></i><br>Eliminar
                                             </button>
@@ -371,7 +341,7 @@
                         <div class="row">
                             <div class="col-xl-4">
                                 <fieldset class="border p-3 rounded mb-3" {{ $seccionPersona }}>
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">NUEVA UBICACIÓN</legend>
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">ROTACIÓN</legend>
                                     <div class="row">
                                         <div class="col-xl-12 col-sm-12">
                                             @include('livewire.rrhh.personal.partials.sede-dependencia-despacho-component')
@@ -480,7 +450,7 @@
     </div>
 
     {{-- Modal Historial --}}
-    <div wire:ignore.self class="modal fade" id="historialModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="historialModalLabel" aria-hidden="true">
+    {{-- <div wire:ignore.self class="modal fade" id="historialModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="historialModalLabel" aria-hidden="true">
         <div class="modal-dialog" style="max-width:90%;">
             <div class="modal-content">
                 <div class="modal-header bg-warning-subtle">
@@ -582,7 +552,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     {{-- Modal Historial Rotaciones --}}
     <div wire:ignore.self class="modal fade" id="historialrotacionesModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="historialrotacionesModalLabel" aria-hidden="true">
@@ -691,7 +661,7 @@
     </div>
 
     <!-- Modal Detalles de persona personal -->
-    <div wire:ignore.self class="modal fade" id="verDetallesModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="verDetallesModalLabel" aria-hidden="true">
+    {{-- <div wire:ignore.self class="modal fade" id="verDetallesModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="verDetallesModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
@@ -729,26 +699,26 @@
                                     <thead class="table-dark text-center align-middle">
                                         <tr>
                                             <th scope="col">#</th>
-                                            {{-- <th scope="col">
+                                            <th scope="col">
                                                 <i class="fa-solid fa-user"></i> PERSONAL
-                                            </th> --}}
+                                            </th>
                                             <th scope="col">DEPENDENCIA ORIGEN</th>
-                                            {{-- <th scope="col">UBICACIÓN FÍSICA</th> --}}
+                                            <th scope="col">UBICACIÓN FÍSICA</th>
                                             <th scope="col">REGIMEN</th>
                                             <th scope="col">CARGO</th>
                                             <th scope="col">N° DE CONVOCATORIA</th>
                                             <th scope="col">DATOS</th>
-                                            {{-- <th scope="col"><i class="fa-solid fa-gears"></i></th> --}}
+                                            <th scope="col"><i class="fa-solid fa-gears"></i></th>
                                         </tr>
                                     </thead>
                                     <tbody class="align-middle">
                                         @forelse ($lista_historial as $item3)
                                             <tr>
                                                 <th class="text-center">{{ $loop->iteration }}</th>
-                                                {{-- <th>
+                                                <th>
                                                     {{ $item3->dni }}
                                                     <br>{{ $item3->datos }}
-                                                </th> --}}
+                                                </th>
                                                 <td>
                                                     <b>SEDE:</b> {{ $item3->sedeorigen }}
                                                     <br>
@@ -756,13 +726,13 @@
                                                     <br>
                                                     <b>DESPACHO:</b> {{ $item3->despachoorigen }}
                                                 </td>
-                                                {{-- <td>
+                                                <td>
                                                     <b>SEDE:</b> {{ $item3->sededestino }}
                                                     <br>
                                                     <b>DEPENDENCIA:</b> {{ $item3->dependenciadestino }}
                                                     <br>
                                                     <b>DESPACHO:</b> {{ $item3->despachodestino }}
-                                                </td> --}}
+                                                </td>
                                                 <td>{{ $item3->regimen }}</td>
                                                 <td>{{ $item3->cargo }}</td>
                                                 <td>{{ $item3->numero_convocatoria }}</td>
@@ -775,7 +745,7 @@
                                                     <br>
                                                     {{ \Carbon\Carbon::parse($item3->fecha_inicio)->format('d/m/Y') . '-' . \Carbon\Carbon::parse($item3->fecha_fin)->format('d/m/Y') }}
                                                 </td>
-                                                {{-- <td class="text-end">
+                                                <td class="text-end">
                                                     <div class="btn-group" role="group">
                                                         <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#pdf-cargar-component" wire:click="editar_pdf({{ $item3->personal_id }})">
                                                             <i class="fa-solid fa-upload"></i><br>Cargar
@@ -786,7 +756,7 @@
                                                             </a>
                                                         @endif
                                                     </div>
-                                                </td> --}}
+                                                </td>
                                             </tr>
                                         @empty
                                             <tr>
@@ -814,7 +784,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     {{-- Modal Transferencia de Personal - Ubicación Física --}}
     <div wire:ignore.self class="modal fade" id="transferencia-personal-component" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="transferir-Personal-componentLabel" aria-hidden="true">

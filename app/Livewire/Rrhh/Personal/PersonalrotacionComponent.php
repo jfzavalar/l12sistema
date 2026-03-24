@@ -34,7 +34,7 @@ class PersonalrotacionComponent extends Component
     public $colorAgregar;
 
     //Variables PARA OCULTAR Y MOSTRAR TXT_OTROS
-    public $mostrarcargafoto = "";
+    public $mostrarcargafoto = "d-none";
 
     //Variables bloquear de secciones
     public $seccionFoto, $seccionPersona, $seccionPersonal;
@@ -177,7 +177,7 @@ class PersonalrotacionComponent extends Component
                 'personales.dependenciadestino',
                 'personales.despachodestino',
                 'personales.tipo_documento')
-            ->where('personales_rotaciones.activo', 1)
+            ->where('personales_rotaciones.activo', '1')
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('personas.dni', 'like', '%' . $this->search . '%')
@@ -227,34 +227,6 @@ class PersonalrotacionComponent extends Component
             ->orderBy('personas.datos')
             ->distinct()
             ->paginate(10, ['personas.*'], 'personalesiPage');
-
-        $lista_historial = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
-            ->select('personas.*',
-                'personales.id as personal_id',
-                'personales.persona_id',
-                'personales.regimen',
-                'personales.tipo_regimen',
-                'personales.cargo',
-                'personales.sedeorigen',
-                'personales.dependenciaorigen',
-                'personales.despachoorigen',
-                'personales.sededestino',
-                'personales.dependenciadestino',
-                'personales.despachodestino',
-                'personales.numero_convocatoria',
-                'personales.tipo_documento',
-                'personales.fecha_inicio',
-                'personales.fecha_fin',
-                'personales.ruta_documento')
-            ->where('personales.persona_dni', $this->dni)
-            ->when($this->searchhistorial, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('personales.numero_convocatoria', 'like', '%' . $this->searchhistorial . '%')
-                    ->orWhere('personales.tipo_documento', 'like', '%' . $this->searchhistorial . '%');
-                });
-            })
-            ->orderBy('personales.id','desc')
-            ->paginate(10, ['personas.*'], 'historialPage');
 
         $lista_historial_rotaciones = Persona::join('personales_rotaciones', 'personas.id', '=', 'personales_rotaciones.persona_id')
             ->select('personas.*',
@@ -312,6 +284,30 @@ class PersonalrotacionComponent extends Component
             ->orderBy('nombre')
             ->paginate(10,['*'], 'despachosPage');
 
+        $lista_sedes2 = Personales_sede::select('id','nombre','nombred')
+            ->where('activo','1')
+            ->where('nombre','like','%' . $this->searchsedes . '%')
+            // ->distinct()
+            ->orderBy('nombre')
+            ->paginate(30,['*'], 'sedesPage');
+            
+        $lista_dependencias2 = Personales_dependencia::select('id','nombre')
+            ->where('activo','1')
+            ->where(function ($query) {
+                $query->where('sede_id', $this->codsededestino)
+                    ->orWhere('sede_id', $this->filtrosede);
+            })
+            ->where('nombre','like','%' . $this->searchdependencias . '%')
+            ->orderBy('nombre')
+            ->paginate(10,['*'], 'dependenciasPage');
+
+        $lista_despachos2 = Personales_despacho::select('id','nombre')
+            ->where('activo','1')
+            ->where('nombre','like','%' . $this->searchdespachos . '%')
+            ->distinct()
+            ->orderBy('nombre')
+            ->paginate(10,['*'], 'despachosPage');
+
         $lista_cargos = Personales_cargo::select('id','nombre')
             ->where('activo','1')
             ->where('nombre','like','%' . $this->searchcargos . '%')
@@ -320,8 +316,9 @@ class PersonalrotacionComponent extends Component
             ->paginate(10,['*'], 'cargosPage');
 
         return view('livewire.rrhh.personal.personalrotacion-component',
-                        compact('lista_activos','lista_inactivos','lista_historial','lista_historial_rotaciones',
-                                    'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos'));
+                        compact('lista_activos','lista_inactivos','lista_historial_rotaciones',
+                                    'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos',
+                                    'lista_sedes2','lista_dependencias2','lista_despachos2'));
     }
 
     protected function rules(){
@@ -340,14 +337,11 @@ class PersonalrotacionComponent extends Component
             'dependenciaorigen' => 'required',
             'despachoorigen' => 'required',
             'regimen' => 'required',
-            'cargo' => 'required',
-
-            // 'fecha_inicio' => 'required|date|before_or_equal:fecha_fin',
-            // 'fecha_fin'    => 'required|date|after_or_equal:fecha_inicio',
-
-            'foto' => 'nullable|image|mimes:jpg,jpeg|max:2048', // 2MB máximo
-
-            'pdf_acta' => 'nullable|file|mimes:pdf|max:5120', // 5MB            
+            'cargo' => 'required', 
+            
+            'sededestino' => 'required',
+            'dependenciadestino' => 'required',
+            'despachodestino' => 'required',
         ];
     }
 
@@ -364,14 +358,9 @@ class PersonalrotacionComponent extends Component
         'regimen.required' => 'Campo requerido',
         'cargo.required' => 'Campo requerido',
 
-        // 'fecha_inicio.required' => 'Campo requerido',
-        // 'fecha_fin.required' => 'Campo requerido',
-
-        // 'fecha_inicio.before_or_equal' => 'La fecha de inicio no puede ser mayor a la fecha de fin.',
-        // 'fecha_fin.after_or_equal' => 'La fecha de fin no puede ser menor a la fecha de inicio.',
-
-        'pdf_acta.mimes' => 'Solo se permiten archivos PDF.',
-        'pdf_acta.max' => 'El archivo no debe superar 5MB.',
+        'sededestino.required' => 'Campo requierido',
+        'dependenciadestino.required' => 'Campo requierido',
+        'despachodestino.required' => 'Campo requierido',
     ];
 
     public function nuevo()
@@ -380,23 +369,26 @@ class PersonalrotacionComponent extends Component
         $this->resetErrorBag();     // ← opcional extra seguridad
 
         // Restablecer todas las variables
-        $this->reset();
-        $this->foto = null;
-        $this->fotoactual = null;
-        $this->inputFileKey = rand();
+        // $this->reset();
 
         $this->funcionGuardarActualizar="guardar";
 
         $this->mostrarBtnBuscarDni = "d-none";
 
         $this->colorHeaderModal = "primary-subtle";
-        $this->textoHeaderModal = "Nuevo";
+        $this->textoHeaderModal = "Nuevo ubicación de personal";
         $this->colorGuardarActualizar = "primary";
         $this->textoGuardarActualizar = "Guardar";
         $this->colorAgregar = "outline-primary";
 
-        $this->tipo_documento = "CONTRATO";
-        $this->bandera_documento = "CONTRATO";
+        $this->codsededestino = "";
+        $this->sededestino = "";
+        $this->coddependenciadestino = "";
+        $this->dependenciadestino = "";
+        $this->coddespachodestino = "";
+        $this->despachodestino = "";
+
+        $this->bandera_documento = "RESOLUCION";
     }
 
     public function guardar()
@@ -407,87 +399,54 @@ class PersonalrotacionComponent extends Component
 
             DB::transaction(function () {
 
-                $usuario = auth()->user()->datos; // Mejor que usar propiedad pública
+                $usuario = auth()->user()->datos;
 
-                // 📌 Subir FOTO si existe
-                $rutaFoto = null;
+                // Buscar Personal
+                // ===== DATOS PERSONAL =====
+                $personal = Personale::where([['activo',"1"],['persona_dni', $this->dni],])->firstOrFail();
 
-                if ($this->foto) {
-
-                    $nombreFoto =
-                        now()->timestamp.'_foto_'.
-                        Str::slug(pathinfo($this->foto->getClientOriginalName(), PATHINFO_FILENAME)).
-                        '.'.$this->foto->getClientOriginalExtension();
-
-                    $rutaFoto = $this->foto->storeAs(
-                        'imagenes/rrhh/personal/fotos',
-                        $nombreFoto,
-                        'public'
-                    );
-                }
-
-                // GUARDAR CAMPOS DE PERSONA
-
-                $persona = Persona::create([
-                    'dni' => $this->dni,
-                    'appaterno' => strtoupper($this->appaterno),
-                    'apmaterno' => strtoupper($this->apmaterno),
-                    'nombres' => strtoupper($this->nombres),
-                    'datos' => strtoupper($this->appaterno . ' ' . $this->apmaterno . ' ' . $this->nombres),
-                    'genero' => $this->genero,
-                    'estadocivil' => $this->estadocivil,
-                    'fechanacimiento' => $this->fechanacimiento,
-                    'celpersonal' => $this->celpersonal,
-                    'correopersonal' => $this->correopersonal,
-                    'foto' => $rutaFoto, // 🔥 GUARDAMOS FOTO
-                    'activo' => '1',
-                    'created_user' => $usuario,
+                // Actualizar Personal
+                $personal->update([
+                    'codsededestino' => $this->codsededestino,
+                    'sededestino' => $this->sededestino,
+                    'coddependenciadestino' => $this->coddependenciadestino,
+                    'dependenciadestino' => $this->dependenciadestino,
+                    'coddespachodestino' => $this->coddespachodestino,
+                    'despachodestino' => $this->despachodestino,
                     'updated_user' => $usuario,
+                ]);
+
+                $ipersonalrotacion = PersonalesRotacione::where([['activo',"1"],['persona_dni', $this->dni],])->firstOrFail();
+
+                $ipersonalrotacion->update([
+                    'activo' => "0",
                 ]);
 
                 // FUNCIÓN PARA CARGAR DOCUMENTO
                 $rutaDocumento = $this->guardar_acta();
 
-                // GUARDAR CAMPOS DE PERSONAL
-                Personale::create([
-                    'persona_id' => $persona->id,
-                    'persona_dni' => $persona->dni,
-                    'regimen' => $this->regimen,
-                    'tipo_regimen' => $this->tipo_regimen,
-                    'cargo' => $this->cargo,
-                    'cargo_condicion' => $this->cargo_condicion,
-
-                    'codsedeorigen' => $this->codsedeorigen,
-                    'sedeorigen' => $this->sedeorigen,
-                    'coddependenciaorigen' => $this->coddependenciaorigen,
-                    'dependenciaorigen' => $this->dependenciaorigen,
-                    'coddespachoorigen' => $this->coddespachoorigen,
-                    'despachoorigen' => $this->despachoorigen,
-                    'codsededestino' => $this->codsedeorigen,
-                    'sededestino' => $this->sedeorigen,
-                    'coddependenciadestino' => $this->coddependenciaorigen,
-                    'dependenciadestino' => $this->dependenciaorigen,
-                    'coddespachodestino' => $this->coddespachoorigen,
-                    'despachodestino' => $this->despachoorigen,
-
-                    'celinstitucional' => $this->celinstitucional,
-                    'correoinstitucional' => $this->correoinstitucional,
-
-                    'numero_convocatoria' => $this->numero_convocatoria,
-                    'tipo_documento' => $this->tipo_documento,
-                    'fecha_inicio' => $this->fecha_inicio,
-                    'fecha_fin' => $this->fecha_fin,
-
-                    // 🔥 Guardamos la ruta real del archivo
+                //Insertar datos en la tabla historial ubicaciones
+                PersonalesRotacione::create([
+                    'persona_id' => $personal->persona_id,
+                    'persona_dni' => $personal->persona_dni,
+                    'personal_id' => $personal->id,
+                    'sede_id' => $this->codsededestino,
+                    'sede' => $this->sededestino,
+                    'dependencia_id' => $this->coddependenciadestino,
+                    'dependencia' => $this->dependenciadestino,
+                    'despacho_id' => $this->coddespachodestino,
+                    'despacho' => $this->despachodestino,
+                    'num_expediente' => $this->num_expediente,
+                    'fecha_iniciou' => $this->fecha_iniciou,
+                    'fecha_finu' => $this->fecha_finu,
+                    'motivo_ubicacion' => $this->motivo_ubicacion,
                     'ruta_documento' => $rutaDocumento,
-
-                    'activo' => '1',
+                    'activo' => "1",
                     'created_user' => $usuario,
                     'updated_user' => $usuario,
                 ]);
-            });
 
-            // $this->resetExcept('searchPersonal');
+            });
 
             $this->dispatch(
                 'alerta-actualizado',
@@ -506,7 +465,7 @@ class PersonalrotacionComponent extends Component
             $this->dispatch(
                 'alerta-actualizado',
                 titulo: 'Error',
-                mensaje: 'Ocurrió un error al guardar.',
+                mensaje: 'Ocurrió un error al actualizar.',
                 tipo: 'error'
             );
         }
@@ -522,19 +481,11 @@ class PersonalrotacionComponent extends Component
         $this->mostrarBtnBuscarDni = "d-none";
 
         $this->colorHeaderModal = "success-subtle";
-        $this->textoHeaderModal = "Editar";
+        $this->textoHeaderModal = "Editar rotación";
         $this->colorGuardarActualizar = "success";
-        $this->textoGuardarActualizar = "Actualizar";
+        $this->textoGuardarActualizar = "Actualizar rotacion";
         $this->colorAgregar = "outline-success";
 
-        // ===== BLOQUEO DE SECCIONES =====
-        $this->seccionFoto = "";
-        $this->seccionPersona = "";
-        $this->seccionPersonal = "";
-
-        $this->bandera_documento = "CONTRATO";
-
-        // ===== DATOS PERSONA =====
         $this->persona_id = $ipersona->id;
         $this->dni = $ipersona->dni;
         $this->nombres = $ipersona->nombres;
@@ -542,7 +493,6 @@ class PersonalrotacionComponent extends Component
         $this->apmaterno = $ipersona->apmaterno;
         $this->celpersonal = $ipersona->celpersonal;
         $this->correopersonal = $ipersona->correopersonal;
-
         $this->fotoactual = $ipersona->foto;
 
         // ===== DATOS PERSONAL =====
@@ -560,22 +510,40 @@ class PersonalrotacionComponent extends Component
         $this->coddespachoorigen = $ipersonal->coddespachoorigen;
         $this->despachoorigen = $ipersonal->despachoorigen;
 
-        $this->codsededestino = $ipersonal->codsededestino;
-        $this->sededestino = $ipersonal->sededestino;
-        $this->coddependenciadestino = $ipersonal->coddependenciadestino;
-        $this->dependenciadestino = $ipersonal->dependenciadestino;
-        $this->coddespachodestino = $ipersonal->coddespachodestino;
-        $this->despachodestino = $ipersonal->despachodestino;
+        // $this->codsededestino = $ipersonal->codsededestino;
+        // $this->sededestino = $ipersonal->sededestino;
+        // $this->coddependenciadestino = $ipersonal->coddependenciadestino;
+        // $this->dependenciadestino = $ipersonal->dependenciadestino;
+        // $this->coddespachodestino = $ipersonal->coddespachodestino;
+        // $this->despachodestino = $ipersonal->despachodestino;
 
         $this->celinstitucional = $ipersonal->celinstitucional;
         $this->correoinstitucional = $ipersonal->correoinstitucional;
 
-        // ===== DATOS CONTRATO =====
-        $this->numero_convocatoria = $ipersonal->numero_convocatoria;
-        $this->tipo_documento = $ipersonal->tipo_documento;
-        $this->fecha_inicio = $ipersonal->fecha_inicio;
-        $this->fecha_fin = $ipersonal->fecha_fin;
-        $this->ruta_documento = $ipersonal->ruta_documento;
+        // ===== DATOS PERSONAL =====
+        $ipersonalrotacion = PersonalesRotacione::where('persona_id', $this->persona_id)
+            ->where('activo', '1')
+            ->first();
+
+        if (!$ipersonalrotacion) {
+            session()->flash('error', 'No se encontró la rotación activa');
+            return;
+        }
+
+        $this->rotacion_id = $ipersonalrotacion->id;
+        $this->dni = $ipersonalrotacion->persona_dni;
+        $this->personal_id = $ipersonalrotacion->personal_id;
+        $this->codsededestino = $ipersonalrotacion->sede_id;
+        $this->sededestino = $ipersonalrotacion->sede;
+        $this->coddependenciadestino = $ipersonalrotacion->dependencia_id;
+        $this->dependenciadestino = $ipersonalrotacion->dependencia;
+        $this->coddespachodestino = $ipersonalrotacion->despacho_id;
+        $this->despachodestino = $ipersonalrotacion->despacho;
+        $this->num_expediente = $ipersonalrotacion->num_expediente;
+        $this->fecha_iniciou = $ipersonalrotacion->fecha_iniciou;
+        $this->fecha_finu = $ipersonalrotacion->fecha_finu;
+        $this->motivo_ubicacion = $ipersonalrotacion->motivo_ubicacion;
+        $this->ruta_documento = $ipersonalrotacion->ruta_documento;
         
     }
 
@@ -589,91 +557,39 @@ class PersonalrotacionComponent extends Component
 
                 $usuario = auth()->user()->datos;
 
-                // ========================
-                // ACTUALIZAR PERSONA
-                // ========================
-                $persona = Persona::findOrFail($this->persona_id);
+                // Buscar Personal
+                // ===== DATOS PERSONAL =====
+                $personal = Personale::where([['activo',"1"],['persona_dni', $this->dni],])->firstOrFail();
 
-                // Mantener imagen actual
-                $rutaFoto = $persona->foto;
-
-                // 📌 Si se sube nueva imagen
-                if ($this->foto) {
-
-                    // Eliminar anterior si existe
-                    if ($persona->foto && 
-                        Storage::disk('public')->exists($persona->foto)) {
-
-                        Storage::disk('public')->delete($persona->foto);
-                    }
-
-                    // Nombre limpio
-                    $fileName = 'perfil_' . $this->dni . '.' . 
-                                $this->foto->getClientOriginalExtension();
-
-                    // Guardar imagen
-                    $rutaFoto = $this->foto->storeAs(
-                        'archivos/rrhh/personal/fotos',
-                        $fileName,
-                        'public'
-                    );
-                }
-
-                $persona->update([
-                    'datos' => strtoupper($this->appaterno . ' ' . $this->apmaterno . ' ' . $this->nombres),
-                    'appaterno' => strtoupper($this->appaterno),
-                    'apmaterno' => strtoupper($this->apmaterno),
-                    'nombres' => strtoupper($this->nombres),
-                    'genero' => $this->genero,
-                    'estadocivil' => $this->estadocivil,
-                    'fechanacimiento' => $this->fechanacimiento,
-                    'celpersonal' => $this->celpersonal,
-                    'correopersonal' => $this->correopersonal,
-                    'foto' => $rutaFoto, //AQUÏ
-                    'updated_user' => $usuario,
-                ]);
-
-                // ========================
-                // ACTUALIZAR PERSONAL
-                // ========================
-                $personal = Personale::where([
-                    ['activo', "1"],
-                    ['persona_dni', $this->dni],
-                ])->firstOrFail();
-
-                $this->personal_id = $personal->id;
-
-                // Llamamos a la función privada para cargar documento
-                $rutaDocumento = $this->actualizar_acta();
-
+                // Actualizar Personal
                 $personal->update([
-                    'regimen' => $this->regimen,
-                    'tipo_regimen' => $this->tipo_regimen,
-                    'cargo' => $this->cargo,
-                    'cargo_condicion' => $this->cargo_condicion,
-
-                    'codsedeorigen' => $this->codsedeorigen,
-                    'sedeorigen' => $this->sedeorigen,
-                    'coddependenciaorigen' => $this->coddependenciaorigen,
-                    'dependenciaorigen' => $this->dependenciaorigen,
-                    'coddespachoorigen' => $this->coddespachoorigen,
-                    'despachoorigen' => $this->despachoorigen,
-
                     'codsededestino' => $this->codsededestino,
                     'sededestino' => $this->sededestino,
                     'coddependenciadestino' => $this->coddependenciadestino,
                     'dependenciadestino' => $this->dependenciadestino,
                     'coddespachodestino' => $this->coddespachodestino,
+                    'despachodestino' => $this->despachodestino,
+                    'updated_user' => $usuario,
+                ]);
 
-                    'celinstitucional' => $this->celinstitucional,
-                    'correoinstitucional' => $this->correoinstitucional,
-                    'numero_convocatoria' => $this->numero_convocatoria,
+                // Llamamos a la función privada para cargar documento
+                $rutaDocumento = $this->actualizar_acta();
 
-                    // 🔥 Solo cambia si hay nuevo archivo
+                // ===== DATOS DE LA ROTACION =====
+                $ipersonalrotacion = PersonalesRotacione::findOrFail($this->rotacion_id);
+                $ipersonalrotacion->update([
+                    'sede_id' => $this->codsededestino,
+                    'sede' => $this->sededestino,
+                    'dependencia_id' => $this->coddependenciadestino,
+                    'dependencia' => $this->dependenciadestino,
+                    'despacho_id' => $this->coddespachodestino,
+                    'despacho' => $this->despachodestino,
+                    'num_expediente' => $this->num_expediente,
+                    'fecha_iniciou' => $this->fecha_iniciou,
+                    'fecha_finu' => $this->fecha_finu,
+                    'motivo_ubicacion' => $this->motivo_ubicacion,
                     'ruta_documento' => $rutaDocumento,
-
-                    'fecha_inicio' => $this->fecha_inicio,
-                    'fecha_fin' => $this->fecha_fin,
+                    'activo' => "1",
                     'updated_user' => $usuario,
                 ]);
             });
@@ -713,13 +629,32 @@ class PersonalrotacionComponent extends Component
     }
 
     // FUNCIONES AGREGAR
-
     public function agregar_persona(Persona $ipersona){
         $this->persona_id = $ipersona->id;
         $this->dni = $ipersona->dni;
+        $this->appaterno = $ipersona->appaterno;
+        $this->apmaterno = $ipersona->apmaterno;
+        $this->nombres = $ipersona->nombres;
+
         $this->datos = $ipersona->datos;
 
-        $this->reset('searchpersonas');
+        $this->celpersonal = $ipersona->celpersonal;
+        $this->correopersonal = $ipersona->correopersonal;
+
+        $this->fotoactual = $ipersona->foto;
+
+        $ipersonal = Personale::where([['activo',1],['persona_dni',$this->dni],])->firstOrFail();
+
+        $this->sedeorigen = $ipersonal->sedeorigen;
+        $this->dependenciaorigen = $ipersonal->dependenciaorigen;
+        $this->despachoorigen = $ipersonal->despachoorigen;
+        $this->celinstitucional = $ipersonal->celinstitucional;
+        $this->correoinstitucional = $ipersonal->correoinstitucional;
+        $this->regimen = $ipersonal->regimen;
+        $this->tipo_regimen = $ipersonal->tipo_regimen;
+        $this->cargo = $ipersonal->cargo;
+
+        // $this->reset('searchpersonas');
     }
 
     public function agregar_sede(Personales_sede $isede)
@@ -734,16 +669,40 @@ class PersonalrotacionComponent extends Component
 
         $this->reset(['searchdependencias','searchdespachos']);
     }
+    public function agregar_sede2(Personales_sede $isede)
+    {
+        // $this->codsedeorigen = $isede->id;
+        // $this->sedeorigen = $isede->nombre;
+
+        $this->codsededestino = $isede->id;
+        $this->sededestino = $isede->nombre;
+
+        // $this->reset(['dependenciaorigen','despachoorigen']);
+
+        $this->reset(['searchdependencias','searchdespachos']);
+    }
 
     public function agregar_dependencia(Personales_dependencia $idependencia)
     {
-        $this->coddependenciaorigen = $idependencia->id;
-        $this->dependenciaorigen = $idependencia->nombre;
+        // $this->coddependenciaorigen = $idependencia->id;
+        // $this->dependenciaorigen = $idependencia->nombre;
 
         $this->coddependenciadestino = $idependencia->id;
         $this->dependenciadestino = $idependencia->nombre;
 
-        $this->reset('despachoorigen');
+        // $this->reset('despachoorigen');
+
+        $this->reset('searchdespachos');
+    }
+    public function agregar_dependencia2(Personales_dependencia $idependencia)
+    {
+        // $this->coddependenciaorigen = $idependencia->id;
+        // $this->dependenciaorigen = $idependencia->nombre;
+
+        $this->coddependenciadestino = $idependencia->id;
+        $this->dependenciadestino = $idependencia->nombre;
+
+        // $this->reset('despachoorigen');
 
         $this->reset('searchdespachos');
     }
@@ -752,6 +711,14 @@ class PersonalrotacionComponent extends Component
     {
         $this->coddespachoorigen = $idespacho->id;
         $this->despachoorigen = $idespacho->nombre;
+
+        $this->coddespachodestino = $idespacho->id;
+        $this->despachodestino = $idespacho->nombre;
+    }
+    public function agregar_despacho2(Personales_despacho $idespacho)
+    {
+        // $this->coddespachoorigen = $idespacho->id;
+        // $this->despachoorigen = $idespacho->nombre;
 
         $this->coddespachodestino = $idespacho->id;
         $this->despachodestino = $idespacho->nombre;
@@ -1204,215 +1171,6 @@ class PersonalrotacionComponent extends Component
     {
         $this->dni = $persona_dni;
     }
-
-    // FUNCIONES DE TRANSFERIR PERSONAL
-
-    public function nuevo_transferir_personal(Persona $ipersona)
-    {
-        $this->resetValidation();   // ← limpia los errores
-        $this->resetErrorBag();     // ← opcional extra seguridad
-
-        // Restablecer todas las variables
-        // $this->reset();
-
-        $this->funcionGuardarActualizar="guardar_transferir_personal";
-
-        $this->mostrarBtnBuscarDni = "d-none";
-
-        $this->colorHeaderModal = "primary-subtle";
-        $this->textoHeaderModal = "Nuevo ubicación de personal";
-        $this->colorGuardarActualizar = "primary";
-        $this->textoGuardarActualizar = "Guardar";
-        $this->colorAgregar = "outline-primary";
-        
-        $this->dni = $ipersona->dni;
-
-        $this->codsededestino = "";
-        $this->sededestino = "";
-        $this->coddependenciadestino = "";
-        $this->dependenciadestino = "";
-        $this->coddespachodestino = "";
-        $this->despachodestino = "";
-
-        $this->bandera_documento = "RESOLUCION";
-
-        $ipersonal = Personale::where([['activo',"1"],['persona_dni', $this->dni],])->firstOrFail();
-        // Actualizar Personal
-                $ipersonal->update([
-                    'activo' => "0",
-                ]);
-
-    }
-
-    public function guardar_transferir_personal()
-    {
-        try {
-
-            DB::transaction(function () {
-
-                $usuario = auth()->user()->datos;
-
-                // Buscar Personal
-                // ===== DATOS PERSONAL =====
-                $personal = Personale::where([['activo',"1"],['persona_dni', $this->dni],])->firstOrFail();
-
-                // Actualizar Personal
-                $personal->update([
-                    'codsededestino' => $this->codsedeorigen,
-                    'sededestino' => $this->sedeorigen,
-                    'coddependenciadestino' => $this->coddependenciaorigen,
-                    'dependenciadestino' => $this->dependenciaorigen,
-                    'coddespachodestino' => $this->coddespachoorigen,
-                    'despachodestino' => $this->despachoorigen,
-                    'updated_user' => $usuario,
-                ]);
-
-                // FUNCIÓN PARA CARGAR DOCUMENTO
-                $rutaDocumento = $this->guardar_acta();
-
-                //Insertar datos en la tabla historial ubicaciones
-                PersonalesRotacione::create([
-                    'persona_id' => $personal->persona_id,
-                    'persona_dni' => $personal->persona_dni,
-                    'personal_id' => $personal->id,
-                    'sede_id' => $this->codsedeorigen,
-                    'sede' => $this->sedeorigen,
-                    'dependencia_id' => $this->coddependenciaorigen,
-                    'dependencia' => $this->dependenciaorigen,
-                    'despacho_id' => $this->coddespachoorigen,
-                    'despacho' => $this->despachoorigen,
-                    'num_expediente' => $this->num_expediente,
-                    'fecha_iniciou' => $this->fecha_iniciou,
-                    'fecha_finu' => $this->fecha_finu,
-                    'motivo_ubicacion' => $this->motivo_ubicacion,
-                    'ruta_documento' => $rutaDocumento,
-                    'activo' => "1",
-                    'created_user' => $usuario,
-                    'updated_user' => $usuario,
-                ]);
-
-            });
-
-            $this->dispatch(
-                'alerta-actualizado',
-                titulo: 'Datos actualizados',
-                mensaje: 'Los datos se han actualizado correctamente.',
-                tipo: 'success'
-            );
-
-            // Evento para cerrar el modal
-            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
-
-        } catch (\Throwable $e) {
-
-            report($e);
-
-            $this->dispatch(
-                'alerta-actualizado',
-                titulo: 'Error',
-                mensaje: 'Ocurrió un error al actualizar.',
-                tipo: 'error'
-            );
-        }
-    }
-    
-
-    public function editar_transferir_personal(Persona $ipersona)
-    {
-        $this->resetValidation();
-        $this->resetErrorBag();
-
-        $this->funcionGuardarActualizar = "actualizar_transferir_personal";
-
-        $this->mostrarBtnBuscarDni = "d-none";
-
-        $this->colorHeaderModal = "success-subtle";
-        $this->textoHeaderModal = "Editar rotación";
-        $this->colorGuardarActualizar = "success";
-        $this->textoGuardarActualizar = "Actualizar rotacion";
-        $this->colorAgregar = "outline-success";
-
-        $this->persona_id = $ipersona->id;
-
-        // $usuario = auth()->user()->datos;
-
-        // ===== DATOS PERSONAL =====
-        $ipersonalrotacion = PersonalesRotacione::where('persona_id', $this->persona_id)
-            ->where('activo', '1')
-            ->first();
-
-        if (!$ipersonalrotacion) {
-            session()->flash('error', 'No se encontró la rotación activa');
-            return;
-        }
-
-        $this->rotacion_id = $ipersonalrotacion->id;
-        $this->dni = $ipersonalrotacion->persona_dni;
-        $this->personal_id = $ipersonalrotacion->personal_id;
-        $this->codsededestino = $ipersonalrotacion->sede_id;
-        $this->sededestino = $ipersonalrotacion->sede;
-        $this->coddependenciadestino = $ipersonalrotacion->dependencia_id;
-        $this->dependenciadestino = $ipersonalrotacion->dependencia;
-        $this->coddespachodestino = $ipersonalrotacion->despacho_id;
-        $this->despachodestino = $ipersonalrotacion->despacho;
-        $this->num_expediente = $ipersonalrotacion->num_expediente;
-        $this->fecha_iniciou = $ipersonalrotacion->fecha_iniciou;
-        $this->fecha_finu = $ipersonalrotacion->fecha_finu;
-        $this->motivo_ubicacion = $ipersonalrotacion->motivo_ubicacion;
-        $this->ruta_documento = $ipersonalrotacion->ruta_documento;
-
-    }
-
-    public function actualizar_transferir_personal()
-    {
-        // $this->validate();
-
-        try {
-
-            DB::transaction(function () {
-
-                $usuario = auth()->user()->datos;
-
-                // ========================
-                // ACTUALIZAR PERSONAL ROTACION
-                // ========================
-                $personal = Personale::where([['activo', "1"], ['persona_dni', $this->dni],])->firstOrFail();
-
-                $this->personal_id = $personal->id;
-
-                // Llamamos a la función privada para cargar documento
-                $rutaDocumento = $this->actualizar_acta();
-            });
-
-            $this->dispatch(
-                'alerta-actualizado',
-                titulo: 'Datos actualizados',
-                mensaje: 'Los datos se han actualizado correctamente.',
-                tipo: 'success'
-            );
-
-            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
-
-        } catch (\Throwable $e) {
-
-            report($e);
-
-            $this->dispatch(
-                'alerta-actualizado',
-                titulo: 'Error',
-                mensaje: 'Ocurrió un error al actualizar.',
-                tipo: 'error'
-            );
-        }
-    }
-
-    public function cerrar_transferir_personal()
-    {
-        // Restablecer todas las variables
-        $this->reset();
-    }
-
-
 
 
     // FUNCIONES PARA CARGAR PDF

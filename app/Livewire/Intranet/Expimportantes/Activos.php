@@ -128,6 +128,8 @@ class Activos extends Component
 
     public $bandera_documento="CONTRATO";
 
+    public $bloquear_inputs = "";
+
     public function mount()
     {
         $this->inputFileKey = rand();
@@ -153,7 +155,11 @@ class Activos extends Component
         }
 
         $lista_activos = $query
-            ->orderBy('datos')
+            ->orderByDesc('id')
+            ->paginate(10, ['*'], 'activosPage');
+
+        $lista_historial = AdministracionesExpimportante::where('numexpediente',$this->numexpediente)
+            ->orderByDesc('id')
             ->paginate(10, ['*'], 'activosPage');
 
         $lista_personas = Persona::where('activo','1')
@@ -167,16 +173,22 @@ class Activos extends Component
             ->paginate(10,['*'],'personasPage');
 
         return view('livewire.intranet.expimportantes.activos',
-                compact('lista_activos','lista_personas'));
+                compact('lista_activos','lista_historial','lista_personas'));
     }
 
     protected function rules(){
         return [
-                    'dni' => [
+                'dni' => [
                     'required',
                     'string',
                     Rule::unique('personas', 'dni')
                         ->ignore($this->persona_id, 'id')
+                ],
+                'numexpediente' => [
+                    'required',
+                    Rule::unique('tu_tabla', 'numexpediente')
+                        ->ignore($this->id) // 👈 IGNORA el mismo registro
+                        ->where(fn ($query) => $query->where('activo', 1))
                 ],
             'nombres' => 'required',
             'appaterno' => 'required',
@@ -186,14 +198,7 @@ class Activos extends Component
             'dependenciaorigen' => 'required',
             'despachoorigen' => 'required',
             'regimen' => 'required',
-            'cargo' => 'required',
-
-            // 'fecha_inicio' => 'required|date|before_or_equal:fecha_fin',
-            // 'fecha_fin'    => 'required|date|after_or_equal:fecha_inicio',
-
-            'foto' => 'nullable|image|mimes:jpg,jpeg|max:2048', // 2MB máximo
-
-            'pdf_acta' => 'nullable|file|mimes:pdf|max:5120', // 5MB            
+            'cargo' => 'required',  
         ];
     }
 
@@ -210,14 +215,8 @@ class Activos extends Component
         'regimen.required' => 'Campo requerido',
         'cargo.required' => 'Campo requerido',
 
-        // 'fecha_inicio.required' => 'Campo requerido',
-        // 'fecha_fin.required' => 'Campo requerido',
+        'numexpediente.unique' => 'El expediente ya existe',
 
-        // 'fecha_inicio.before_or_equal' => 'La fecha de inicio no puede ser mayor a la fecha de fin.',
-        // 'fecha_fin.after_or_equal' => 'La fecha de fin no puede ser menor a la fecha de inicio.',
-
-        // 'pdf_acta.mimes' => 'Solo se permiten archivos PDF.',
-        // 'pdf_acta.max' => 'El archivo no debe superar 5MB.',
     ];
 
     public function nuevo()
@@ -240,6 +239,8 @@ class Activos extends Component
         $this->colorGuardarActualizar = "primary";
         $this->textoGuardarActualizar = "Guardar";
         $this->colorAgregar = "outline-primary";
+
+        $this->bloquear_inputs = "";
 
         $usuario = auth()->user()->dni;
 
@@ -291,7 +292,7 @@ class Activos extends Component
                     'dependenciaorigen' => $this->dependenciaorigen,
                     'coddespachoorigen' => $this->coddespachoorigen,
                     'despachoorigen' => $this->despachoorigen,
-                    'numexpediente' => Str::slug($this->numexpediente),
+                    'numexpediente' => Str::upper($this->numexpediente),
                     'expdetalle' => strtoupper($this->expdetalle),
                     'estado' => $this->estado,
                     'oficina_ubicacion' => strtoupper($this->oficina_ubicacion),
@@ -348,6 +349,8 @@ class Activos extends Component
         $this->seccionPersona = "";
         $this->seccionPersonal = "";
 
+        $this->bloquear_inputs = "disabled";
+
         $this->expimportante_id = $iexpedientesimportantes->id;
         $this->persona_id = $iexpedientesimportantes->persona_id;
         $this->numexpediente = $iexpedientesimportantes->numexpediente;
@@ -391,8 +394,6 @@ class Activos extends Component
 
     public function actualizar()
     {
-        $this->validate();
-
         try {
 
             DB::transaction(function () {
@@ -405,6 +406,12 @@ class Activos extends Component
                 $iexpedientesimportantes = AdministracionesExpimportante::findOrFail($this->expimportante_id);
 
                 $iexpedientesimportantes->update([
+                    'activo' => "0",
+                ]);
+
+                // $this->validate();
+
+                AdministracionesExpimportante::create([
                     'persona_id' => $this->persona_id,
                     'dni' => $this->dni,
                     'datos' => strtoupper($this->appaterno . ' ' . $this->apmaterno . ' ' . $this->nombres),
@@ -415,15 +422,17 @@ class Activos extends Component
                     'dependenciaorigen' => $this->dependenciaorigen,
                     'coddespachoorigen' => $this->coddespachoorigen,
                     'despachoorigen' => $this->despachoorigen,
-                    'numexpediente' => Str::slug($this->numexpediente),
+                    'numexpediente' => Str::upper($this->numexpediente),
                     'expdetalle' => strtoupper($this->expdetalle),
                     'estado' => $this->estado,
                     'oficina_ubicacion' => strtoupper($this->oficina_ubicacion),
                     'asignado_a' => strtoupper($this->asignado_a),
                     'fecha' => $this->fecha,
                     'activo' => "1",
+                    'created_user' => $usuario,
                     'updated_user' => $usuario,
                 ]);
+
             });
 
             $this->dispatch(
@@ -460,7 +469,11 @@ class Activos extends Component
             );
     }
 
-    // FUNCIONES AGREGAR
+    // FUNCIONES DE HISTORIAL
+    public function historial_documentos($numexpediente)
+    {
+        $this->numexpediente = $numexpediente;
+    }
 
     // FUNCIONES AGREGAR
     public function agregar_persona(Persona $ipersona){

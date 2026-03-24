@@ -478,7 +478,7 @@
                                             <li class="nav-item">
                                                 <a class="nav-link ms-3 {{ request()->routeIs('mpfn.rrhh.personalrotacion.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.rrhh.personalrotacion.index') }}">
                                                     <i class="nav-icon fa-regular fa-circle"></i>
-                                                    <p>Rotación</p>
+                                                    <p>Rotaciones</p>
                                                 </a>
                                             </li>
                                         @endcan

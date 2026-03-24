@@ -9,12 +9,12 @@
             <i class="fa-solid fa-users-between-lines"></i> Personal rotaciones
         </h1>
         <div class="btn-group">
-            <a type="button" href="{{ route('pdf.rrhh.personal.reportePDF') }}" target="_blank" class="btn btn-outline-naranja btn-sm">
+            {{-- <a type="button" href="{{ route('pdf.rrhh.personal.reportePDF') }}" target="_blank" class="btn btn-outline-naranja btn-sm">
                 <i class="fa-regular fa-file-pdf"></i> PDF
             </a>
             <a id="btnreporteexcel" class="btn btn-outline-success btn-sm" href="{{ url('personas/exportar') }}">
                 <i class="fa-regular fa-file-excel"></i> Excel
-            </a>
+            </a> --}}
         </div>
     </div>
 

@@ -576,7 +576,7 @@
     </div>
 
     {{-- Modal Historial Rotaciones --}}
-    <div wire:ignore.self class="modal fade" id="historialrotacionesModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="historialrotacionesModalLabel" aria-hidden="true">
+    {{-- <div wire:ignore.self class="modal fade" id="historialrotacionesModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="historialrotacionesModalLabel" aria-hidden="true">
         <div class="modal-dialog" style="max-width:90%;">
             <div class="modal-content">
                 <div class="modal-header bg-warning-subtle">
@@ -600,7 +600,7 @@
                                     <th scope="col">
                                         <i class="fa-solid fa-user"></i> PERSONAL
                                     </th>
-                                    {{-- <th scope="col">DEPENDENCIA ORIGEN</th> --}}
+                                    <th scope="col">DEPENDENCIA ORIGEN</th>
                                     <th scope="col">ROTACIÓN</th>
                                     <th scope="col">N° EXPEDIENTE</th>
                                     <th scope="col">MOTIVO</th>
@@ -617,13 +617,13 @@
                                             {{ $item4->dni }}
                                             <br>{{ $item4->datos }}
                                         </th>
-                                        {{-- <td>
+                                        <td>
                                             <b>SEDE:</b> {{ $item4->sedeorigen }}
                                             <br>
                                             <b>DEPENDENCIA:</b> {{ $item4->dependenciaorigen }}
                                             <br>
                                             <b>DESPACHO:</b> {{ $item4->despachoorigen }}
-                                        </td> --}}
+                                        </td>
                                         <td>
                                             <b>SEDE:</b> {{ $item4->sede }}
                                             <br>
@@ -679,7 +679,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Modal Detalles de persona personal -->
     <div wire:ignore.self class="modal fade" id="verDetallesModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="verDetallesModalLabel" aria-hidden="true">
@@ -808,7 +808,7 @@
     </div>
 
     {{-- Modal Transferencia de Personal - Ubicación Física --}}
-    <div wire:ignore.self class="modal fade" id="transferencia-personal-component" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="transferir-Personal-componentLabel" aria-hidden="true">
+    {{-- <div wire:ignore.self class="modal fade" id="transferencia-personal-component" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="transferir-Personal-componentLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <form wire:submit.prevent="{{ $funcionGuardarActualizar }}">
@@ -842,11 +842,11 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Modal Historial - Traslado - Ubicación Física -->
 
-    <div wire:ignore.self class="modal fade" id="transferencia-personal-historial-component" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="transferir-Personal-Historial-componentLabel" aria-hidden="true">
+    {{-- <div wire:ignore.self class="modal fade" id="transferencia-personal-historial-component" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="transferir-Personal-Historial-componentLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <form wire:submit.prevent="{{ $funcionGuardarActualizar }}">
@@ -873,7 +873,7 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> --}}
 
 
     @include('livewire.rrhh.personal.partials.buscar-personal-component')
@@ -882,9 +882,9 @@
     @include('livewire.rrhh.personal.partials.buscar-despachos-component')
     @include('livewire.rrhh.personal.partials.buscar-cargos-component')
 
-    @include('livewire.rrhh.personal.partials.2buscar-sedes-component')
+    {{-- @include('livewire.rrhh.personal.partials.2buscar-sedes-component')
     @include('livewire.rrhh.personal.partials.2buscar-dependencias-component')
-    @include('livewire.rrhh.personal.partials.2buscar-despachos-component')
+    @include('livewire.rrhh.personal.partials.2buscar-despachos-component') --}}
 
     @include('livewire.rrhh.contratos.partials.pdf-cargar-component')
 

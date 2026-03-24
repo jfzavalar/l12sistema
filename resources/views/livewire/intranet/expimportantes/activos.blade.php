@@ -64,7 +64,7 @@
                                     {{ $item->oficina_ubicacion }}
                                 </td>
                                 <td>
-                                    {{ $item->fecha }}
+                                    {{ \Carbon\Carbon::parse($item->fecha)->translatedFormat('d F Y') }}
                                 </td>
                                 <td>
                                     <span class="badge 
@@ -73,12 +73,15 @@
                                         {{ $item->estado }}
                                     </span>
                                 </td>
-                                <td>
+                                <td class="text-end">
                                     @can('mpfn.intranet.expimportantes.edit')
                                         <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->id }})">
                                             <i class="fa-solid fa-pen-to-square"></i><br>Editar
                                         </button>   
-                                    @endcan                                  
+                                    @endcan
+                                    <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#historialModal" wire:click="historial_documentos('{{ $item->numexpediente }}')">
+                                        <i class="fa-solid fa-timeline"></i><br>Historial
+                                    </button>                                  
                                 </td>
                             </tr>                            
                         @empty
@@ -137,11 +140,14 @@
                                     <div class="row">
                                         <div class="col-xl-2">
                                             <label for="txtexp" class="fw-bold fs-6">N° de Expediente</label>
-                                            <input type="text" id="txtexp" class="form-control form-control-xs" wire:model="numexpediente" required>
+                                            <input type="text" id="txtexp" class="form-control form-control-xs text-uppercase" wire:model="numexpediente" {{ $bloquear_inputs }} required>
+                                            @error('numexpediente')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
                                         </div>
                                         <div class="col-xl-2">
                                             <label for="txtexpdetalle" class="fw-bold fs-6">Motivo o detalle</label>
-                                            <input type="text" id="txtexpdetalle" class="form-control form-control-xs" wire:model="expdetalle" required>
+                                            <input type="text" id="txtexpdetalle" class="form-control form-control-xs text-uppercase" wire:model="expdetalle" {{ $bloquear_inputs }} required>
                                         </div>
                                         <div class="col-xl-2">
                                             <label for="cmbestadoexp" class="fw-bold fs-6">Estado</label>
@@ -153,11 +159,11 @@
                                         </div>
                                         <div class="col-xl-2">
                                             <label for="txtubicacion" class="fw-bold fs-6">Ubicación</label>
-                                            <input type="text" id="txtubicacion" class="form-control form-control-xs" wire:model="oficina_ubicacion" required>
+                                            <input type="text" id="txtubicacion" class="form-control form-control-xs text-uppercase" wire:model="oficina_ubicacion" required>
                                         </div>
                                         <div class="col-xl-2">
                                             <label for="txtasignadoa" class="fw-bold fs-6">Asignado a: </label>
-                                            <input type="text" id="txtasignadoa" class="form-control form-control-xs" wire:model="asignado_a" required>
+                                            <input type="text" id="txtasignadoa" class="form-control form-control-xs text-uppercase" wire:model="asignado_a" required>
                                         </div>
                                         <div class="col-xl-2">
                                             <label for="txtfecha" class="fw-bold fs-6">Desde: </label>
@@ -177,6 +183,105 @@
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- Modal Historial --}}
+    <div wire:ignore.self class="modal fade" id="historialModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="historialModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width:90%;">
+            <div class="modal-content">
+                <div class="modal-header bg-warning-subtle">
+                    <h1 class="modal-title fs-5" id="historialModalLabel">
+                        <i class="fa-solid fa-timeline"></i> HISTORIAL CONTRATOS / ADENDAS / RENUNCIAS
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive-xl">
+                        <div class="input-group mb-3">
+                            <input type="text" id="txtsearchhistorial" class="form-control form-control-sm" wire:model.live="searchhistorial" placeholder="Buscar por número de convocatoria">
+                            {{-- <a type="button" href="{{ route('pdf.rrhh.personal.reportePDF') }}" target="_blank" class="btn btn-outline-naranja btn-sm">
+                                <i class="fa-regular fa-file-pdf"></i> PDF
+                            </a> --}}
+                        </div>
+                        <table class="table table-striped table-hover table-sm table-xsmall">
+                            <thead class="table-primary text-center align-middle">
+                                    <th scope="col">#</th>
+                                    <th scope="col">
+                                        <i class="fa-solid fa-user"></i> DNI - PERSONAL
+                                    </th>
+                                    {{-- <th scope="col">DEPENDENCIA ORIGEN</th> --}}
+                                    <th scope="col" class="table-secondary">EXPEDIENTE</th>
+                                    <th scope="col" class="table-secondary">MOTIVO - DETALLE</th>
+                                    <th scope="col" class="table-secondary">UBICACIÓN</th>
+                                    <th scope="col" class="table-secondary">ASIGNADO A</th>
+                                    <th scope="col" class="table-secondary">DESDE</th>
+                                    <th scope="col" class="table-secondary">ESTADO</th>
+                                    {{-- @can('mpfn.intranet.expimportantes.edit')
+                                        <th scope="col" class="table-dark"><i class="fa-solid fa-gears"></i></th>  
+                                    @endcan                          --}}
+                                </tr>
+                            </thead>
+                            <tbody class="align-middle">
+                                @forelse ($lista_historial as $item)
+                                    <tr>
+                                        <th></th>
+                                        <th>
+                                            {{ $item->dni }}
+                                            <br>
+                                            {{ $item->datos }}
+                                        </th>
+                                        {{-- <td>
+                                            <b>SEDE: {{ $item->sedeorigen }}</b>
+                                            <br>
+                                            {{ $item->dependenciaorigen }}
+                                        </td> --}}
+                                        <td>
+                                            {{ $item->numexpediente }}
+                                        </td>
+                                        <td>
+                                            {{ $item->expdetalle }}
+                                        </td>
+                                        <td>
+                                            {{ $item->asignado_a }}
+                                        </td>
+                                        <td>
+                                            {{ $item->oficina_ubicacion }}
+                                        </td>
+                                        <td>
+                                            {{ $item->fecha }}
+                                        </td>
+                                        <td>
+                                            <span class="badge 
+                                                {{ $item->estado == 'PENDIENTE' ? 'bg-danger' : '' }}
+                                                {{ $item->estado == 'FINALIZADO' ? 'bg-success' : '' }}">
+                                                {{ $item->estado }}
+                                            </span>
+                                        </td>
+                                        {{-- <td>
+                                            @can('mpfn.intranet.expimportantes.edit')
+                                                <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->id }})">
+                                                    <i class="fa-solid fa-pen-to-square"></i><br>Editar
+                                                </button>   
+                                            @endcan
+                                            <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#historialModal" wire:click="historial_documentos('{{ $item->dni }}')">
+                                                <i class="fa-solid fa-timeline"></i><br>Historial
+                                            </button>                                  
+                                        </td> --}}
+                                    </tr>                            
+                                @empty
+                                    
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-rectangle-xmark"></i> Cerrar
+                    </button>
+                </div>
             </div>
         </div>
     </div>

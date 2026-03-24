@@ -7,7 +7,7 @@
                     <h1 class="modal-title fs-5" id="2buscar-sedes-componentLabel">
                         <i class="fa-brands fa-searchengin"></i> BUSCAR NUEVA SEDE
                     </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-toggle="modal" data-bs-target="#transferencia-personal-component"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal"></button>
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive-xl">
@@ -30,7 +30,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($lista_sedes as $sede)
+                                @forelse ($lista_sedes2 as $sede)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $sede->nombre }}</td>
@@ -38,7 +38,7 @@
                                         <td>
                                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                 <div class="btn-group" role="group">
-                                                    <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_sede({{ $sede->id }})" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
+                                                    <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_sede2({{ $sede->id }})" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
                                                         <i class="fa-solid fa-circle-plus"></i> Agregar
                                                     </button>
                                                 </div>
@@ -51,14 +51,14 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="4">{{ $lista_sedes->links() }}</td>
+                                    <td colspan="4">{{ $lista_sedes2->links() }}</td>
                                 </tr>
                             </tfoot>
                         </table>                      
                     </div>          
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#transferencia-personal-component">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
                         <i class="fa-solid fa-door-closed"></i> Cerrar
                     </button>
                 </div>
