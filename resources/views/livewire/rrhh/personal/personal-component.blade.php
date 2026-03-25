@@ -403,12 +403,12 @@
                     <h1 class="modal-title fs-5" id="inactivosModalLabel">
                         <i class="fa-solid fa-trash"></i> RENUNCIAS
                     </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" wire:click="cerrar"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive-xl">
                         <div class="input-group mb-3">
-                            <input type="text" id="txtsearchi" class="form-control form-control-sm" wire:model.live="searchi" placeholder="Buscar">
+                            <input type="text" id="txtsearchi" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar">
                         </div>
                         <table class="table table-striped table-hover table-sm table-xsmall">
                             <thead class="table-primary text-center align-middle">
@@ -618,7 +618,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" wire:click="cerrar">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
                         <i class="fa-solid fa-rectangle-xmark"></i> Cerrar
                     </button>
                 </div>
@@ -634,12 +634,12 @@
                     <h1 class="modal-title fs-5" id="licenciasModalLabel">
                         <i class="fa-solid fa-trash"></i> LICENCIAS
                     </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" wire:click="cerrar"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive-xl">
                         <div class="input-group mb-3">
-                            <input type="text" id="txtsearchi" class="form-control form-control-sm" wire:model.live="searchi" placeholder="Buscar">
+                            <input type="text" id="txtsearchi" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar">
                         </div>
                         <table class="table table-striped table-hover table-sm table-xsmall">
                             <thead class="table-primary text-center align-middle">
@@ -657,7 +657,7 @@
                                 </tr>
                             </thead>
                             <tbody class="align-middle">
-                                @forelse ($lista_inactivos as $item)
+                                @forelse ($lista_licencias as $item)
                                     <tr>
                                         <th @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>{{ $loop->iteration }}</th>
                                         <th @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
@@ -849,7 +849,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" wire:click="cerrar">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
                         <i class="fa-solid fa-rectangle-xmark"></i> Cerrar
                     </button>
                 </div>

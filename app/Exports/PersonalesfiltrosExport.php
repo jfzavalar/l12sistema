@@ -43,6 +43,9 @@ class PersonalesfiltrosExport implements FromCollection, WithHeadings, ShouldAut
                 'personales.sedeorigen as sede',
                 'personales.dependenciaorigen as dependencia',
                 'personales.despachoorigen as despacho',
+                'personales.sededestino as sedeu',
+                'personales.dependenciadestino as dependenciau',
+                'personales.despachodestino as despachou',
                 'personales.tipo_documento as condicion',
             )
             ->where('personales.activo', 1)
@@ -90,6 +93,9 @@ class PersonalesfiltrosExport implements FromCollection, WithHeadings, ShouldAut
             'SEDE',
             'DEPENDENCIA',
             'DESPACHO',
+            'SEDE_ROTACION',
+            'DEPENDENCIA_ROTACION',
+            'DESPACHO_ROTACION',
             'CONDICION',
         ];
     }

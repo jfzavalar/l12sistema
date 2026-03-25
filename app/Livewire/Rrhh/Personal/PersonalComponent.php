@@ -142,6 +142,11 @@ class PersonalComponent extends Component
     }
 
     //FUNCIONES EN TIEMPO REAL
+    public function updatedFiltrosede($value)
+    {
+        $this->reset('filtrodependencia');
+    }
+
     public function updatedRegimen($value)
     {
         if ($value === 'D.L.728') {
@@ -174,7 +179,7 @@ class PersonalComponent extends Component
             ->orderBy('personales.id', 'desc')
             ->paginate(10, ['personas.*'], 'personalesiPage');
 
-        $lista_licencias = $this->queryConFiltros('LICENCIAS')
+        $lista_licencias = $this->queryConFiltros('LICENCIA')
             ->orderBy('personales.id', 'desc')
             ->paginate(10, ['personas.*'], 'personaleslPage');
 
