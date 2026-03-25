@@ -1,5 +1,5 @@
 <!-- Modal buscar dependencias -->
-<div wire:ignore.self class="modal fade" id="buscar-dependencias-component" tabindex="-1" aria-labelledby="buscar-dependencias-componentLabel" aria-hidden="true">
+<div wire:ignore.self class="modal fade" id="buscar-dependencias-component" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="buscar-dependencias-componentLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <form action="">

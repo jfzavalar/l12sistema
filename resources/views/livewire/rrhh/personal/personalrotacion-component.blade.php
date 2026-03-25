@@ -340,7 +340,7 @@
                         </div>
                         <div class="row">
                             <div class="col-xl-4">
-                                <fieldset class="border p-3 rounded mb-3" {{ $seccionPersona }}>
+                                <fieldset class="border p-3 rounded mb-3">
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">ROTACIÓN</legend>
                                     <div class="row">
                                         <div class="col-xl-12 col-sm-12">
@@ -350,7 +350,7 @@
                                 </fieldset>
                             </div>
                             <div class="col-xl-8">
-                                <fieldset class="border p-3 rounded mb-3" {{ $seccionPersona }}>
+                                <fieldset class="border p-3 rounded mb-3">
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS SUSTENTATORIOS</legend>
                                     <div class="row">
                                         <div class="col-xl-12 col-sm-12 mb-3">

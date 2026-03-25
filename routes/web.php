@@ -1,8 +1,9 @@
 <?php
 use App\Exports\UsuariosExport;
-
+use App\Http\Controllers\Admin\DependenciasController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\SedesController;
 use App\Http\Controllers\Administracion\ArchivoController;
 use App\Http\Controllers\Administracion\PatrimonioController;
 use App\Http\Controllers\Administracion\RrhhController;
@@ -75,6 +76,11 @@ Route::middleware(['auth','can:procesos.admin.roles.index'])->group(function () 
     Route::put('/roles/{role}', [RoleController::class, 'update'])->name('procesos.admin.roles.update');
 });
 
+//ADMIN
+Route::middleware('auth')->group(function () {
+    Route::resource('dependencias', DependenciasController::class)->names('mpfn.admin.dependencias');
+    Route::resource('sedes', SedesController::class)->names('mpfn.admin.sedes');
+});
 //ADMINISTRACION
 Route::middleware('auth','can:procesos.administracion.archivo.index')->group(function () {
     Route::resource('archivo', ArchivoController::class)->names('procesos.administracion.archivo');

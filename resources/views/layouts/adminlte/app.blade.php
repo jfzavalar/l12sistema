@@ -346,14 +346,14 @@
                                         <hr class="ms-5 border-light">
 
                                         <li class="nav-item">
-                                            <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.users.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.users.index') }}">
+                                            <a class="nav-link ms-3 {{ request()->routeIs('mpfn.admin.sedes.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.admin.sedes.index') }}">
                                                 <i class="nav-icon fa-regular fa-circle"></i>
                                                 <p>Sedes</p>
                                             </a>
                                         </li>
 
                                         <li class="nav-item">
-                                            <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.roles.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.roles.index') }}">
+                                            <a class="nav-link ms-3 {{ request()->routeIs('mpfn.admin.dependencias.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.admin.dependencias.index') }}">
                                                 <i class="nav-icon fa-regular fa-circle"></i>
                                                 <p>Dependencias</p>
                                             </a>

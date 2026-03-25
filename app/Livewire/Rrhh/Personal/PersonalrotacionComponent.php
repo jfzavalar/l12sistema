@@ -37,7 +37,7 @@ class PersonalrotacionComponent extends Component
     public $mostrarcargafoto = "d-none";
 
     //Variables bloquear de secciones
-    public $seccionFoto, $seccionPersona, $seccionPersonal;
+    public $seccionFoto = "disabled", $seccionPersona = "disabled", $seccionPersonal = "disabled";
 
     // Variable de función Guardar o Actualizar
     public $funcionGuardarActualizar;
@@ -679,7 +679,7 @@ class PersonalrotacionComponent extends Component
         $this->codsededestino = $isede->id;
         $this->sededestino = $isede->nombre;
 
-        // $this->reset(['dependenciaorigen','despachoorigen']);
+        $this->reset(['dependenciadestino','despachodestino']);
 
         $this->reset(['searchdependencias','searchdespachos']);
     }
@@ -692,7 +692,7 @@ class PersonalrotacionComponent extends Component
         $this->coddependenciadestino = $idependencia->id;
         $this->dependenciadestino = $idependencia->nombre;
 
-        // $this->reset('despachoorigen');
+        $this->reset('despachodestino');
 
         $this->reset('searchdespachos');
     }

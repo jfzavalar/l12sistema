@@ -1,5 +1,5 @@
 <!-- Modal buscar personal -->
-<div wire:ignore.self class="modal fade" id="buscar-personal-component" tabindex="-1" aria-labelledby="buscar-personal-componentLabel" aria-hidden="true">
+<div wire:ignore.self class="modal fade" id="buscar-personal-component" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="buscar-personal-componentLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content rounded-5">
             <form action="">

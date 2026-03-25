@@ -1,5 +1,5 @@
 <!-- Modal buscar sede -->
-<div wire:ignore.self class="modal fade" id="buscar-sedes-component" tabindex="-1" aria-labelledby="buscar-sedes-componentLabel" aria-hidden="true">
+<div wire:ignore.self class="modal fade" id="buscar-sedes-component" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="buscar-sedes-componentLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form action="">

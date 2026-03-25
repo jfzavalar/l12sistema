@@ -551,12 +551,12 @@ class PersonalComponent extends Component
         $this->coddespachoorigen = $ipersonal->coddespachoorigen;
         $this->despachoorigen = $ipersonal->despachoorigen;
 
-        $this->codsededestino = $ipersonal->codsededestino;
-        $this->sededestino = $ipersonal->sededestino;
-        $this->coddependenciadestino = $ipersonal->coddependenciadestino;
-        $this->dependenciadestino = $ipersonal->dependenciadestino;
-        $this->coddespachodestino = $ipersonal->coddespachodestino;
-        $this->despachodestino = $ipersonal->despachodestino;
+        // $this->codsededestino = $ipersonal->codsededestino;
+        // $this->sededestino = $ipersonal->sededestino;
+        // $this->coddependenciadestino = $ipersonal->coddependenciadestino;
+        // $this->dependenciadestino = $ipersonal->dependenciadestino;
+        // $this->coddespachodestino = $ipersonal->coddespachodestino;
+        // $this->despachodestino = $ipersonal->despachodestino;
 
         $this->celinstitucional = $ipersonal->celinstitucional;
         $this->correoinstitucional = $ipersonal->correoinstitucional;
@@ -650,11 +650,11 @@ class PersonalComponent extends Component
                     'coddespachoorigen' => $this->coddespachoorigen,
                     'despachoorigen' => $this->despachoorigen,
 
-                    'codsededestino' => $this->codsededestino,
-                    'sededestino' => $this->sededestino,
-                    'coddependenciadestino' => $this->coddependenciadestino,
-                    'dependenciadestino' => $this->dependenciadestino,
-                    'coddespachodestino' => $this->coddespachodestino,
+                    // 'codsededestino' => $this->codsededestino,
+                    // 'sededestino' => $this->sededestino,
+                    // 'coddependenciadestino' => $this->coddependenciadestino,
+                    // 'dependenciadestino' => $this->dependenciadestino,
+                    // 'coddespachodestino' => $this->coddespachodestino,
 
                     'celinstitucional' => $this->celinstitucional,
                     'correoinstitucional' => $this->correoinstitucional,
