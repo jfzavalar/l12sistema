@@ -166,32 +166,17 @@ class PersonalComponent extends Component
 
     public function render()
     {
-        $lista_activos = $this->queryConFiltros()
+        $lista_activos = $this->queryConFiltros('CONTRATO')
             ->orderBy('personales.id', 'desc')
             ->paginate(30, ['personas.*'], 'personalesPage');
 
-        $lista_inactivos = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
-            ->select('personas.*',
-                'personales.persona_id',
-                'personales.regimen',
-                'personales.tipo_regimen',
-                'personales.cargo',
-                'personales.sedeorigen',
-                'personales.dependenciaorigen',
-                'personales.despachoorigen',
-                'personales.sededestino',
-                'personales.dependenciadestino',
-                'personales.despachodestino')
-            ->where([['personas.activo',0],['personales.activo', 0]])
-            ->when($this->searchi, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('personas.dni', 'like', '%' . $this->searchi . '%')
-                    ->orWhere('personas.datos', 'like', '%' . $this->searchi . '%');
-                });
-            })
-            ->orderBy('personas.datos')
-            ->distinct()
+        $lista_inactivos = $this->queryConFiltros('RENUNCIA')
+            ->orderBy('personales.id', 'desc')
             ->paginate(10, ['personas.*'], 'personalesiPage');
+
+        $lista_licencias = $this->queryConFiltros('LICENCIAS')
+            ->orderBy('personales.id', 'desc')
+            ->paginate(10, ['personas.*'], 'personaleslPage');
 
         $lista_historial = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
             ->select('personas.*',
@@ -285,11 +270,11 @@ class PersonalComponent extends Component
             ->paginate(10,['*'], 'cargosPage');
 
         return view('livewire.rrhh.personal.personal-component',
-                        compact('lista_activos','lista_inactivos','lista_historial','lista_historial_rotaciones',
+                        compact('lista_activos','lista_inactivos','lista_licencias','lista_historial','lista_historial_rotaciones',
                                     'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos'));
     }
 
-    private function queryConFiltros()
+    private function queryConFiltros($tipoDocumento = null)
     {
         return Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
             ->select(
@@ -308,6 +293,10 @@ class PersonalComponent extends Component
             )
             ->where('personales.activo', 1)
 
+            ->when($tipoDocumento, function ($query) use ($tipoDocumento) {
+                $query->where('personales.tipo_documento', $tipoDocumento);
+            })
+
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('personas.dni', 'like', '%' . $this->search . '%')
@@ -315,22 +304,10 @@ class PersonalComponent extends Component
                 });
             })
 
-            // ✅ CORREGIDO
-            ->when($this->filtrosede, function ($query) {
-                $query->where('personales.codsedeorigen', $this->filtrosede);
-            })
-
-            ->when($this->filtrodependencia, function ($query) {
-                $query->where('personales.coddependenciaorigen', $this->filtrodependencia);
-            })
-
-            ->when($this->filtrotipodocumento, function ($query) {
-                $query->where('personales.tipo_documento', 'like', '%' . $this->filtrotipodocumento . '%');
-            })
-
-            ->when($this->filtroregimen, function ($query) {
-                $query->where('personales.regimen', 'like', '%' . $this->filtroregimen . '%');
-            });
+            ->when($this->filtrosede, fn($q) => $q->where('personales.codsedeorigen', $this->filtrosede))
+            ->when($this->filtrodependencia, fn($q) => $q->where('personales.coddependenciaorigen', $this->filtrodependencia))
+            ->when($this->filtrotipodocumento, fn($q) => $q->where('personales.tipo_documento', 'like', '%' . $this->filtrotipodocumento . '%'))
+            ->when($this->filtroregimen, fn($q) => $q->where('personales.regimen', 'like', '%' . $this->filtroregimen . '%'));
     }
 
     protected function rules(){
@@ -808,7 +785,7 @@ class PersonalComponent extends Component
 
         $this->ver_personal($ipersonal);
         
-        $this->tipo_documento = "ADENDA";
+        $this->tipo_documento = "CONTRATO";
         $this->fecha_inicio = $ipersonal->fecha_fin
             ? Carbon::parse($ipersonal->fecha_fin)->addDay()->format('Y-m-d')
             : null;
@@ -1152,7 +1129,7 @@ class PersonalComponent extends Component
 
         $this->ver_personal($ipersonal);
 
-        $this->tipo_documento = "INCORPORACION";
+        $this->tipo_documento = "CONTRATO";
 
         $this->personal_id = $ipersonal->id;
     }

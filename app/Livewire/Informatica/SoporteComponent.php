@@ -73,6 +73,7 @@ class SoporteComponent extends Component
         $this->resetPage('bienesPage');
     }
 
+    Public $filtrosede, $filtrodependencia;
     public $filtrotipodocumento;
     public $filtroregimen;
 
@@ -261,6 +262,30 @@ class SoporteComponent extends Component
             ->distinct()
             ->orderBy('nombre')
             ->paginate(10,['*'], 'despachosPage');
+        
+        $lista_sedes2 = Personales_sede::select('id','nombre','nombred')
+            ->where('activo','1')
+            ->where('nombre','like','%' . $this->searchsedes . '%')
+            // ->distinct()
+            ->orderBy('nombre')
+            ->paginate(30,['*'], 'sedesPage');
+            
+        $lista_dependencias2 = Personales_dependencia::select('id','nombre')
+            ->where('activo','1')
+            ->where(function ($query) {
+                $query->where('sede_id', $this->codsededestino)
+                    ->orWhere('sede_id', $this->filtrosede);
+            })
+            ->where('nombre','like','%' . $this->searchdependencias . '%')
+            ->orderBy('nombre')
+            ->paginate(10,['*'], 'dependenciasPage');
+
+        $lista_despachos2 = Personales_despacho::select('id','nombre')
+            ->where('activo','1')
+            ->where('nombre','like','%' . $this->searchdespachos . '%')
+            ->distinct()
+            ->orderBy('nombre')
+            ->paginate(10,['*'], 'despachosPage');
 
         $lista_cargos = Personales_cargo::select('id','nombre')
             ->where('activo','1')
@@ -277,7 +302,8 @@ class SoporteComponent extends Component
 
         return view('livewire.informatica.soporte-component',
                         compact('lista_activos','lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos',
-                                    'lista_bienes'));
+                                    'lista_bienes',
+                                    'lista_sedes2','lista_dependencias2','lista_despachos2'));
     }
 
     protected function rules(){
@@ -339,8 +365,7 @@ class SoporteComponent extends Component
         // ===== BLOQUEO DE SECCIONES =====
         $this->seccionFoto = "disabled";
         $this->seccionPersona = "disabled";
-        $this->seccionPersonal = "disabled";
-        $this->seccionPersonal = "disabled";
+        $this->seccionPersonal = "";
     }
 
     public function guardar()
@@ -450,8 +475,7 @@ class SoporteComponent extends Component
         // ===== BLOQUEO DE SECCIONES =====
         $this->seccionFoto = "disabled";
         $this->seccionPersona = "disabled";
-        $this->seccionPersonal = "disabled";
-        $this->seccionPersonal = "disabled";
+        $this->seccionPersonal = "";
 
         // ===== DATOS SOPORTE =====
         $isoporte = InformaticasSoporte::findOrFail($soporte_id);
@@ -463,9 +487,9 @@ class SoporteComponent extends Component
         $this->datos = $isoporte->persona_datos;
         $this->personal_id = $isoporte->personal_id;
         
-        $this->sede_ubicacion = $isoporte->sede_ubicacion;
-        $this->dependencia_ubicacion = $isoporte->dependencia_ubicacion;
-        $this->despacho_ubicacion = $isoporte->despacho_ubicacion;
+        $this->sedeorigen = $isoporte->sede_ubicacion;
+        $this->dependenciaorigen = $isoporte->dependencia_ubicacion;
+        $this->despachoorigen = $isoporte->despacho_ubicacion;
 
         $this->p01 = (bool) $isoporte->p01;
         $this->p02 = (bool) $isoporte->p02;
@@ -515,19 +539,19 @@ class SoporteComponent extends Component
         $this->tipo_regimen = $ipersonal->tipo_regimen;
         $this->cargo = $ipersonal->cargo;
 
-        $this->codsedeorigen = $ipersonal->codsedeorigen;
-        $this->sedeorigen = $ipersonal->sedeorigen;
-        $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
-        $this->dependenciaorigen = $ipersonal->dependenciaorigen;
-        $this->coddespachoorigen = $ipersonal->coddespachoorigen;
-        $this->despachoorigen = $ipersonal->despachoorigen;
+        // $this->codsedeorigen = $ipersonal->codsedeorigen;
+        // $this->sedeorigen = $ipersonal->sedeorigen;
+        // $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
+        // $this->dependenciaorigen = $ipersonal->dependenciaorigen;
+        // $this->coddespachoorigen = $ipersonal->coddespachoorigen;
+        // $this->despachoorigen = $ipersonal->despachoorigen;
 
-        $this->codsededestino = $ipersonal->codsededestino;
-        $this->sededestino = $isoporte->sede_ubicacion;
-        $this->coddependenciadestino = $ipersonal->coddependenciadestino;
-        $this->dependenciadestino = $isoporte->dependencia_ubicacion;
-        $this->coddespachodestino = $ipersonal->coddespachodestino;
-        $this->despachodestino = $isoporte->despacho_ubicacion;
+        // $this->codsededestino = $ipersonal->codsededestino;
+        // $this->sededestino = $isoporte->sede_ubicacion;
+        // $this->coddependenciadestino = $ipersonal->coddependenciadestino;
+        // $this->dependenciadestino = $isoporte->dependencia_ubicacion;
+        // $this->coddespachodestino = $ipersonal->coddespachodestino;
+        // $this->despachodestino = $isoporte->despacho_ubicacion;
 
         $this->celinstitucional = $ipersonal->celinstitucional;
         $this->correoinstitucional = $ipersonal->correoinstitucional;
@@ -591,6 +615,11 @@ class SoporteComponent extends Component
                     'c06' => $this->c06,
                     'c07' => $this->c07,
                     'cotros' => mb_strtoupper($this->cotros),
+
+                    'sede_ubicacion' => $this->sedeorigen,
+                    'dependencia_ubicacion' => $this->dependenciaorigen,
+                    'despacho_ubicacion' => $this->despachoorigen,
+
 
                     'operativo' => $this->operativo,
 
@@ -691,6 +720,18 @@ class SoporteComponent extends Component
 
         $this->reset(['searchdependencias','searchdespachos']);
     }
+    public function agregar_sede2(Personales_sede $isede)
+    {
+        // $this->codsedeorigen = $isede->id;
+        // $this->sedeorigen = $isede->nombre;
+
+        $this->codsededestino = $isede->id;
+        $this->sededestino = $isede->nombre;
+
+        // $this->reset(['dependenciaorigen','despachoorigen']);
+
+        $this->reset(['searchdependencias','searchdespachos']);
+    }
 
     public function agregar_dependencia(Personales_dependencia $idependencia)
     {
@@ -704,11 +745,31 @@ class SoporteComponent extends Component
 
         $this->reset('searchdespachos');
     }
+    public function agregar_dependencia2(Personales_dependencia $idependencia)
+    {
+        // $this->coddependenciaorigen = $idependencia->id;
+        // $this->dependenciaorigen = $idependencia->nombre;
+
+        $this->coddependenciadestino = $idependencia->id;
+        $this->dependenciadestino = $idependencia->nombre;
+
+        // $this->reset('despachoorigen');
+
+        $this->reset('searchdespachos');
+    }
 
     public function agregar_despacho(Personales_despacho $idespacho)
     {
         $this->coddespachoorigen = $idespacho->id;
         $this->despachoorigen = $idespacho->nombre;
+
+        $this->coddespachodestino = $idespacho->id;
+        $this->despachodestino = $idespacho->nombre;
+    }
+    public function agregar_despacho2(Personales_despacho $idespacho)
+    {
+        // $this->coddespachoorigen = $idespacho->id;
+        // $this->despachoorigen = $idespacho->nombre;
 
         $this->coddespachodestino = $idespacho->id;
         $this->despachodestino = $idespacho->nombre;

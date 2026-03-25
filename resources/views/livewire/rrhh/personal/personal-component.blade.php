@@ -17,16 +17,19 @@
                                     <i class="fa-solid fa-file"></i> Nuevo
                                 </button>
                             @endcan
-                            @can('mpfn.rrhh.personal.destroy')
+                            @can('mpfn.rrhh.personal.edit')
+                                <button type="button" id="btnnuevo" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#licenciasModal">
+                                    <i class="fa-solid fa-ban"></i> Licencias
+                                </button>
                                 <button type="button" id="btnnuevo" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#inactivosModal">
-                                    <i class="fa-solid fa-ban"></i> Inactivos
+                                    <i class="fa-solid fa-ban"></i> Renuncias
                                 </button>
                             @endcan
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xl-2">
+                    <div class="col-xl-4">
                         <div class="input-group input-group-sm mb-2">
                             <span class="input-group-text fw-bold" id="basic-addon1">Filtrar por sede:</span>
                             <select id="cmbfiltrotipodocumento" class="form-select form-select-sm" wire:model.live="filtrosede">
@@ -50,20 +53,17 @@
                             {{-- <span class="input-group-text" id="basic-addon2">{{ $lista_activos->total() }}</span> --}}
                         </div>
                     </div>
-                    <div class="col-xl-2">
+                    {{-- <div class="col-xl-2">
                         <div class="input-group input-group-sm mb-2">
                             <span class="input-group-text fw-bold" id="basic-addon1">Por Condición:</span>
                             <select id="cmbfiltrotipodocumento3" class="form-select form-select-sm" wire:model.live="filtrotipodocumento">
                                 <option value="">TOTAL </option>
-                                <option value="ADENDA">ADENDA </option>
                                 <option value="CONTRATO">CONTRATO </option>
-                                <option value="INCORPORACION">INCORPORACION </option>
                                 <option value="LICENCIA">LICENCIA </option>
                                 <option value="RENUNCIA">RENUNCIA </option>
                             </select>
-                            {{-- <span class="input-group-text" id="basic-addon2">{{ $lista_activos->total() }}</span> --}}
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col-xl-2">
                         <div class="input-group input-group-sm mb-2">
                             <span class="input-group-text fw-bold" id="basic-addon1">Por régimen:</span>
@@ -310,8 +310,8 @@
                                                 <i class="fa-solid fa-trash-can"></i><br>Eliminar
                                             </button>
                                         @endcan
-                                    </div>
-                                </td> --}}
+                                    </div>--}}
+                                </td> 
                             </tr>
                         @empty
                             <tr>
@@ -401,7 +401,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-dark-subtle">
                     <h1 class="modal-title fs-5" id="inactivosModalLabel">
-                        <i class="fa-solid fa-trash"></i> INACTIVOS
+                        <i class="fa-solid fa-trash"></i> RENUNCIAS
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" wire:click="cerrar"></button>
                 </div>
@@ -411,40 +411,191 @@
                             <input type="text" id="txtsearchi" class="form-control form-control-sm" wire:model.live="searchi" placeholder="Buscar">
                         </div>
                         <table class="table table-striped table-hover table-sm table-xsmall">
-                            <thead class="table-dark text-center align-middle">
+                            <thead class="table-primary text-center align-middle">
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">
-                                        <i class="fa-solid fa-user"></i> PERSONAL
+                                        <i class="fa-solid fa-user"></i> DNI - PERSONAL
                                     </th>
-                                    <th scope="col" class="table-secondary">DEPENDENCIA ORIGEN</th>
-                                    <th scope="col" class="table-secondary">DEPENDENCIA DESTINO</th>
-                                    <th scope="col" class="table-secondary">REGIMEN</th>
-                                    <th scope="col" class="table-secondary">CARGO</th>
-                                    <th scope="col"><i class="fa-solid fa-gears"></i></th>
+                                    <th scope="col">DEPENDENCIA ORIGEN</th>
+                                    <th scope="col">REGIMEN - CARGO</th>
+                                    <th scope="col" class="table-danger">ROTACIÓN: UBICACIÓN FÍSICA</th>
+                                    <th scope="col">CONDICIÓN</th>
+                                    <th scope="col" colspan="2"><i class="fa-solid fa-gears"></i></th>
+                                    {{-- <th scope="col"><i class="fa-solid fa-gears"></i></th> --}}
                                 </tr>
                             </thead>
                             <tbody class="align-middle">
-                                @forelse ($lista_inactivos as $item2)
+                                @forelse ($lista_inactivos as $item)
                                     <tr>
-                                        <th class="text-center">{{ $loop->iteration }}</th>
-                                        <td>
-                                            {{ $item2->dni }}
-                                            <br>{{ $item2->datos }}
-                                        </td>
-                                        <td>
-                                            SEDE: {{ $item2->sedeorigen }}
+                                        <th @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>{{ $loop->iteration }}</th>
+                                        <th @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
+                                            DNI: {{ $item->dni }}
                                             <br>
-                                            DEPENDENCIA: {{ $item2->dependenciaorigen }}
+                                            {{ $item->datos }}
+                                        </th>
+                                        <td @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
+                                            <b>SEDE:</b> {{ $item->sedeorigen }}
+                                            <br>
+                                            <b>DEPENDENCIA:</b> {{ $item->dependenciaorigen }}
+                                            <br>
+                                            <b>DESPACHO:</b> {{ $item->despachoorigen }}
                                         </td>
-                                        <td></td>
-                                        <td>{{ $item2->regimen }}</td>
-                                        <td>{{ $item2->cargo }}</td>
+                                        <td @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
+                                            <b>REGIMEN:</b> {{ $item->regimen }}
+                                            <br>
+                                            <b>CARGO:</b> {{ $item->cargo }}
+                                        </td>
+                                        <td @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
+                                            <b>SEDE:</b> {{ $item->sededestino }}
+                                            <br>
+                                            <b>DEPENDENCIA:</b> {{ $item->dependenciadestino }}
+                                            <br>
+                                            <b>DESPACHO:</b> {{ $item->despachodestino }}
+                                            <br>
+                                            <b>De:</b>
+                                            <b>Hasta:</b>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge @if(in_array($item->tipo_documento, ['ADENDA','CONTRATO','INCORPORACION'])) text-bg-primary
+                                                @elseif(in_array($item->tipo_documento, ['LICENCIA','RENUNCIA']))
+                                                    text-bg-danger
+                                                @endif">
+                                                {{ $item->tipo_documento }}
+                                            </span>
+                                        </td>
                                         <td class="text-end">
                                             <div class="btn-group" role="group">
-                                                <button type="button" class="btn btn-outline-danger btn-xs" wire:click="desactivar({{ $item2->id }})">
-                                                    <i class="fa-solid fa-check-double"></i><br>Reactivar
+                                                @can('mpfn.rrhh.personal.edit')
+                                                    <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->id }})">
+                                                        <i class="fa-solid fa-pen-to-square"></i><br>Editar
+                                                    </button>
+                                                @endcan
+                                                @can('mpfn.rrhh.personal.create')
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-outline-dark btn-xs dropdown-toggle" 
+                                                                type="button" 
+                                                                data-bs-toggle="dropdown" 
+                                                                aria-expanded="false">
+                                                            <i class="fa-solid fa-list"></i></i> <i class="fa-solid fa-newspaper"></i><br>Trámite
+                                                        </button>
+
+                                                        <ul class="dropdown-menu">
+
+                                                            @if ($item->tipo_documento === "CONTRATO")
+
+                                                                <li>
+                                                                    <button class="dropdown-item text-dark"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#nuevoEditarModal"
+                                                                            wire:click="nuevo_adenda({{ $item->id }})">
+                                                                        <i class="fa-solid fa-file"></i> Adenda
+                                                                    </button>
+                                                                </li>
+
+                                                                <li>
+                                                                    <button class="dropdown-item text-dark"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#nuevoEditarModal"
+                                                                            wire:click="nuevo_licencia({{ $item->id }})">
+                                                                        <i class="fa-solid fa-file"></i> Licencia
+                                                                    </button>
+                                                                </li>
+
+                                                                <li>
+                                                                    <button class="dropdown-item text-dark"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#nuevoEditarModal"
+                                                                            wire:click="nuevo_renuncia({{ $item->id }})">
+                                                                        <i class="fa-solid fa-file"></i> Renuncia
+                                                                    </button>
+                                                                </li>                                                       
+
+                                                            @elseif($item->tipo_documento === "LICENCIA")
+
+                                                                <li>
+                                                                    <button class="dropdown-item text-dark"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#nuevoEditarModal"
+                                                                            wire:click="nuevo_contrato({{ $item->id }})">
+                                                                        <i class="fa-solid fa-file"></i> Contrato
+                                                                    </button>
+                                                                </li>
+
+                                                                <li>
+                                                                    <button class="dropdown-item text-dark"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#nuevoEditarModal"
+                                                                            wire:click="nuevo_incorporacion({{ $item->id }})">
+                                                                        <i class="fa-solid fa-file"></i> Incorporación
+                                                                    </button>
+                                                                </li>
+
+                                                                <li>
+                                                                    <button class="dropdown-item text-dark"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#nuevoEditarModal"
+                                                                            wire:click="nuevo_renuncia({{ $item->id }})">
+                                                                        <i class="fa-solid fa-file"></i> Renuncia
+                                                                    </button>
+                                                                </li>
+
+                                                            @elseif($item->tipo_documento === "ADENDA")
+
+                                                                <li>
+                                                                    <button class="dropdown-item text-dark"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#nuevoEditarModal"
+                                                                            wire:click="nuevo_adenda({{ $item->id }})">
+                                                                        <i class="fa-solid fa-file"></i> Adenda
+                                                                    </button>
+                                                                </li>
+
+                                                                <li>
+                                                                    <button class="dropdown-item text-dark"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#nuevoEditarModal"
+                                                                            wire:click="nuevo_licencia({{ $item->id }})">
+                                                                        <i class="fa-solid fa-file"></i> Licencia
+                                                                    </button>
+                                                                </li>
+
+                                                                <li>
+                                                                    <button class="dropdown-item text-dark"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#nuevoEditarModal"
+                                                                            wire:click="nuevo_renuncia({{ $item->id }})">
+                                                                        <i class="fa-solid fa-file"></i> Renuncia
+                                                                    </button>
+                                                                </li> 
+
+                                                            @else
+
+                                                                <li>
+                                                                    <button class="dropdown-item text-dark"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#nuevoEditarModal"
+                                                                            wire:click="nuevo_contrato({{ $item->id }})">
+                                                                        <i class="fa-solid fa-file"></i> Contrato
+                                                                    </button>
+                                                                </li>
+
+                                                            @endif
+
+                                                        </ul>
+                                                    </div>
+                                                @endcan
+                                                <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#historialModal" wire:click="historial_documentos('{{ $item->dni }}')">
+                                                    <i class="fa-solid fa-timeline"></i><br>Historial
                                                 </button>
+                                                {{-- <button type="button" class="btn btn-outline-secondary btn-xs" data-bs-toggle="modal" data-bs-target="#verDetallesModal" wire:click="editar({{ $item->id }})">
+                                                    <i class="fa-solid fa-eye"></i><br>Ver
+                                                </button> --}}
+                                                @can('mpfn.rrhh.personal.destroy')
+                                                    <button type="button" class="btn btn-outline-danger btn-xs" wire:click="desactivar({{ $item->id }})">
+                                                        <i class="fa-solid fa-trash-can"></i><br>Eliminar
+                                                    </button>
+                                                @endcan
                                             </div>
                                         </td>
                                     </tr>
@@ -458,6 +609,242 @@
                                     </tr>
                                 @endforelse
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="8">{{ $lista_inactivos->links() }}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" wire:click="cerrar">
+                        <i class="fa-solid fa-rectangle-xmark"></i> Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Modal Licencias --}}
+    <div wire:ignore.self class="modal fade" id="licenciasModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="licenciasModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width:90%;">
+            <div class="modal-content">
+                <div class="modal-header bg-danger-subtle">
+                    <h1 class="modal-title fs-5" id="licenciasModalLabel">
+                        <i class="fa-solid fa-trash"></i> LICENCIAS
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" wire:click="cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive-xl">
+                        <div class="input-group mb-3">
+                            <input type="text" id="txtsearchi" class="form-control form-control-sm" wire:model.live="searchi" placeholder="Buscar">
+                        </div>
+                        <table class="table table-striped table-hover table-sm table-xsmall">
+                            <thead class="table-primary text-center align-middle">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">
+                                        <i class="fa-solid fa-user"></i> DNI - PERSONAL
+                                    </th>
+                                    <th scope="col">DEPENDENCIA ORIGEN</th>
+                                    <th scope="col">REGIMEN - CARGO</th>
+                                    <th scope="col" class="table-danger">ROTACIÓN: UBICACIÓN FÍSICA</th>
+                                    <th scope="col">CONDICIÓN</th>
+                                    <th scope="col" colspan="2"><i class="fa-solid fa-gears"></i></th>
+                                    {{-- <th scope="col"><i class="fa-solid fa-gears"></i></th> --}}
+                                </tr>
+                            </thead>
+                            <tbody class="align-middle">
+                                @forelse ($lista_inactivos as $item)
+                                    <tr>
+                                        <th @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>{{ $loop->iteration }}</th>
+                                        <th @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
+                                            DNI: {{ $item->dni }}
+                                            <br>
+                                            {{ $item->datos }}
+                                        </th>
+                                        <td @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
+                                            <b>SEDE:</b> {{ $item->sedeorigen }}
+                                            <br>
+                                            <b>DEPENDENCIA:</b> {{ $item->dependenciaorigen }}
+                                            <br>
+                                            <b>DESPACHO:</b> {{ $item->despachoorigen }}
+                                        </td>
+                                        <td @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
+                                            <b>REGIMEN:</b> {{ $item->regimen }}
+                                            <br>
+                                            <b>CARGO:</b> {{ $item->cargo }}
+                                        </td>
+                                        <td @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
+                                            <b>SEDE:</b> {{ $item->sededestino }}
+                                            <br>
+                                            <b>DEPENDENCIA:</b> {{ $item->dependenciadestino }}
+                                            <br>
+                                            <b>DESPACHO:</b> {{ $item->despachodestino }}
+                                            <br>
+                                            <b>De:</b>
+                                            <b>Hasta:</b>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge @if(in_array($item->tipo_documento, ['ADENDA','CONTRATO','INCORPORACION'])) text-bg-primary
+                                                @elseif(in_array($item->tipo_documento, ['LICENCIA','RENUNCIA']))
+                                                    text-bg-danger
+                                                @endif">
+                                                {{ $item->tipo_documento }}
+                                            </span>
+                                        </td>
+                                        <td class="text-end">
+                                            <div class="btn-group" role="group">
+                                                @can('mpfn.rrhh.personal.edit')
+                                                    <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->id }})">
+                                                        <i class="fa-solid fa-pen-to-square"></i><br>Editar
+                                                    </button>
+                                                @endcan
+                                                @can('mpfn.rrhh.personal.create')
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-outline-dark btn-xs dropdown-toggle" 
+                                                                type="button" 
+                                                                data-bs-toggle="dropdown" 
+                                                                aria-expanded="false">
+                                                            <i class="fa-solid fa-list"></i></i> <i class="fa-solid fa-newspaper"></i><br>Trámite
+                                                        </button>
+
+                                                        <ul class="dropdown-menu">
+
+                                                            @if ($item->tipo_documento === "CONTRATO")
+
+                                                                <li>
+                                                                    <button class="dropdown-item text-dark"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#nuevoEditarModal"
+                                                                            wire:click="nuevo_adenda({{ $item->id }})">
+                                                                        <i class="fa-solid fa-file"></i> Adenda
+                                                                    </button>
+                                                                </li>
+
+                                                                <li>
+                                                                    <button class="dropdown-item text-dark"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#nuevoEditarModal"
+                                                                            wire:click="nuevo_licencia({{ $item->id }})">
+                                                                        <i class="fa-solid fa-file"></i> Licencia
+                                                                    </button>
+                                                                </li>
+
+                                                                <li>
+                                                                    <button class="dropdown-item text-dark"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#nuevoEditarModal"
+                                                                            wire:click="nuevo_renuncia({{ $item->id }})">
+                                                                        <i class="fa-solid fa-file"></i> Renuncia
+                                                                    </button>
+                                                                </li>                                                       
+
+                                                            @elseif($item->tipo_documento === "LICENCIA")
+
+                                                                <li>
+                                                                    <button class="dropdown-item text-dark"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#nuevoEditarModal"
+                                                                            wire:click="nuevo_contrato({{ $item->id }})">
+                                                                        <i class="fa-solid fa-file"></i> Contrato
+                                                                    </button>
+                                                                </li>
+
+                                                                <li>
+                                                                    <button class="dropdown-item text-dark"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#nuevoEditarModal"
+                                                                            wire:click="nuevo_incorporacion({{ $item->id }})">
+                                                                        <i class="fa-solid fa-file"></i> Incorporación
+                                                                    </button>
+                                                                </li>
+
+                                                                <li>
+                                                                    <button class="dropdown-item text-dark"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#nuevoEditarModal"
+                                                                            wire:click="nuevo_renuncia({{ $item->id }})">
+                                                                        <i class="fa-solid fa-file"></i> Renuncia
+                                                                    </button>
+                                                                </li>
+
+                                                            @elseif($item->tipo_documento === "ADENDA")
+
+                                                                <li>
+                                                                    <button class="dropdown-item text-dark"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#nuevoEditarModal"
+                                                                            wire:click="nuevo_adenda({{ $item->id }})">
+                                                                        <i class="fa-solid fa-file"></i> Adenda
+                                                                    </button>
+                                                                </li>
+
+                                                                <li>
+                                                                    <button class="dropdown-item text-dark"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#nuevoEditarModal"
+                                                                            wire:click="nuevo_licencia({{ $item->id }})">
+                                                                        <i class="fa-solid fa-file"></i> Licencia
+                                                                    </button>
+                                                                </li>
+
+                                                                <li>
+                                                                    <button class="dropdown-item text-dark"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#nuevoEditarModal"
+                                                                            wire:click="nuevo_renuncia({{ $item->id }})">
+                                                                        <i class="fa-solid fa-file"></i> Renuncia
+                                                                    </button>
+                                                                </li> 
+
+                                                            @else
+
+                                                                <li>
+                                                                    <button class="dropdown-item text-dark"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#nuevoEditarModal"
+                                                                            wire:click="nuevo_contrato({{ $item->id }})">
+                                                                        <i class="fa-solid fa-file"></i> Contrato
+                                                                    </button>
+                                                                </li>
+
+                                                            @endif
+
+                                                        </ul>
+                                                    </div>
+                                                @endcan
+                                                <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#historialModal" wire:click="historial_documentos('{{ $item->dni }}')">
+                                                    <i class="fa-solid fa-timeline"></i><br>Historial
+                                                </button>
+                                                {{-- <button type="button" class="btn btn-outline-secondary btn-xs" data-bs-toggle="modal" data-bs-target="#verDetallesModal" wire:click="editar({{ $item->id }})">
+                                                    <i class="fa-solid fa-eye"></i><br>Ver
+                                                </button> --}}
+                                                @can('mpfn.rrhh.personal.destroy')
+                                                    <button type="button" class="btn btn-outline-danger btn-xs" wire:click="desactivar({{ $item->id }})">
+                                                        <i class="fa-solid fa-trash-can"></i><br>Eliminar
+                                                    </button>
+                                                @endcan
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="10" class="text-center">
+                                            <div class="alert alert-danger" role="alert">
+                                                ¡No se encontraron resultados!
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="8">{{ $lista_inactivos->links() }}</td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>

@@ -186,8 +186,8 @@ class Activos extends Component
                 ],
                 'numexpediente' => [
                     'required',
-                    Rule::unique('tu_tabla', 'numexpediente')
-                        ->ignore($this->id) // 👈 IGNORA el mismo registro
+                    Rule::unique('administraciones_expimportantes', 'numexpediente')
+                        ->ignore($this->expimportante_id) // 👈 IGNORA el mismo registro
                         ->where(fn ($query) => $query->where('activo', 1))
                 ],
             'nombres' => 'required',

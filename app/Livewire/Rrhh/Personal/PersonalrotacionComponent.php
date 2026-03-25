@@ -416,11 +416,13 @@ class PersonalrotacionComponent extends Component
                     'updated_user' => $usuario,
                 ]);
 
-                $ipersonalrotacion = PersonalesRotacione::where([['activo',"1"],['persona_dni', $this->dni],])->firstOrFail();
+                $ipersonalrotacion = PersonalesRotacione::where([['activo',"1"],['persona_dni', $this->dni],])->first();
 
-                $ipersonalrotacion->update([
-                    'activo' => "0",
-                ]);
+                if ($ipersonalrotacion) {
+                    $ipersonalrotacion->update([
+                        'activo' => "0",
+                    ]);
+                }
 
                 // FUNCIÓN PARA CARGAR DOCUMENTO
                 $rutaDocumento = $this->guardar_acta();

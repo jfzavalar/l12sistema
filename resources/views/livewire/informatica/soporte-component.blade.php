@@ -178,7 +178,7 @@
                                             <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS INSTITUCIONALES</legend>
                                             @include('livewire.rrhh.personal.partials.datos-institucionales-component')
                                         </fieldset>
-                                        <div class="row">
+                                        {{-- <div class="row">
                                             <div class="col">
                                                 @if ($dni)
                                                     <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#transferencia-personal-component" wire:click="nuevo_transferir_personal({{ $persona_id }})">
@@ -186,7 +186,7 @@
                                                     </button>
                                                 @endif
                                             </div>
-                                            {{-- <div class="col">
+                                            <div class="col">
                                                 <input type="text" class="form-control form-control-xs" wire:model="sededestino" disabled>                                      
                                             </div>
                                             <div class="col">
@@ -194,8 +194,8 @@
                                             </div>
                                             <div class="col">
                                                 <input type="text" class="form-control form-control-xs" wire:model="despachodestino" disabled>
-                                            </div> --}}
-                                        </div>
+                                            </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
@@ -265,8 +265,8 @@
 
     @include('livewire.rrhh.contratos.partials.pdf-cargar-component')
     @include('livewire.rrhh.personal.partials.buscar-personal-component')
-    @include('livewire.rrhh.personal.partials.2buscar-sedes-component')
-    @include('livewire.rrhh.personal.partials.2buscar-dependencias-component')
-    @include('livewire.rrhh.personal.partials.2buscar-despachos-component')
+    @include('livewire.rrhh.personal.partials.buscar-sedes-component')
+    @include('livewire.rrhh.personal.partials.buscar-dependencias-component')
+    @include('livewire.rrhh.personal.partials.buscar-despachos-component')
 
 </div>
