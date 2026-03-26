@@ -187,6 +187,8 @@ class PersonalComponent extends Component
             ->select('personas.*',
                 'personales.id as personal_id',
                 'personales.persona_id',
+                'personales.celinstitucional',
+                'personales.correoinstitucional',
                 'personales.regimen',
                 'personales.tipo_regimen',
                 'personales.cargo',
@@ -285,6 +287,8 @@ class PersonalComponent extends Component
             ->select(
                 'personas.*',
                 'personales.persona_id',
+                'personales.celinstitucional',
+                'personales.correoinstitucional',
                 'personales.regimen',
                 'personales.tipo_regimen',
                 'personales.cargo',

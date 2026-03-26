@@ -92,6 +92,7 @@
                             <th scope="col">DEPENDENCIA ORIGEN</th>
                             <th scope="col">REGIMEN - CARGO</th>
                             <th scope="col" class="table-danger">ROTACIÓN: UBICACIÓN FÍSICA</th>
+                            <th scope="col">MEDIOS DE COMUNICACIÓN</th>
                             <th scope="col">CONDICIÓN</th>
                             <th scope="col" colspan="2"><i class="fa-solid fa-gears"></i></th>
                             {{-- <th scope="col"><i class="fa-solid fa-gears"></i></th> --}}
@@ -127,6 +128,12 @@
                                     <br>
                                     <b>De:</b>
                                     <b>Hasta:</b>
+                                </td>
+                                <td class="text-nowrap">
+                                    <b>Email personal:</b> {{ $item->correopersonal }}:
+                                    <br><b>Cel. personal:</b> {{ $item->celpersonal }}
+                                    <br><b>Email institucional:</b> {{ $item->correoinstitucional }}
+                                    <br><b>Cel. institucional:</b> {{ $item->celinstitucional }}
                                 </td>
                                 <td class="text-center">
                                     <span class="badge @if(in_array($item->tipo_documento, ['ADENDA','CONTRATO','INCORPORACION'])) text-bg-primary
