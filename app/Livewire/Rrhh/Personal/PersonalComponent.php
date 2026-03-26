@@ -260,21 +260,21 @@ class PersonalComponent extends Component
             })
             ->where('nombre','like','%' . $this->searchdependencias . '%')
             ->orderBy('nombre')
-            ->paginate(10,['*'], 'dependenciasPage');
+            ->paginate(30,['*'], 'dependenciasPage');
 
         $lista_despachos = Personales_despacho::select('id','nombre')
             ->where('activo','1')
             ->where('nombre','like','%' . $this->searchdespachos . '%')
             ->distinct()
             ->orderBy('nombre')
-            ->paginate(10,['*'], 'despachosPage');
+            ->paginate(30,['*'], 'despachosPage');
 
         $lista_cargos = Personales_cargo::select('id','nombre')
             ->where('activo','1')
             ->where('nombre','like','%' . $this->searchcargos . '%')
             ->distinct()
             ->orderBy('nombre')
-            ->paginate(10,['*'], 'cargosPage');
+            ->paginate(30,['*'], 'cargosPage');
 
         return view('livewire.rrhh.personal.personal-component',
                         compact('lista_activos','lista_inactivos','lista_licencias','lista_historial','lista_historial_rotaciones',
