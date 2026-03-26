@@ -294,7 +294,7 @@
                             @can('procesos.admin.users.index')
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fa-solid fa-folder"></i>
+                                        <i class=" nav-icon fa-solid fa-user-tie"></i>
                                         <p>
                                             ADMIN
                                             <i class="nav-arrow fa-solid fa-angle-left right"></i>
@@ -374,7 +374,7 @@
                             @can('mpfn.informatica')
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fa-solid fa-folder"></i>
+                                        <i class="nav-icon fa-brands fa-ubuntu"></i>
                                         <p>
                                             INFORMÁTICA
                                             <i class="nav-arrow fa-solid fa-angle-left right"></i>
@@ -422,7 +422,7 @@
                             @can('mpfn.patrimonio')
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fa-solid fa-folder"></i>
+                                        <i class="nav-icon fa-solid fa-layer-group"></i>
                                         <p>
                                             PATRIMONIO
                                             <i class="nav-arrow fa-solid fa-angle-left right"></i>
@@ -444,7 +444,7 @@
                             @can('mpfn.rrhh')
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fa-solid fa-folder"></i>
+                                        <i class="nav-icon fa-solid fa-users-between-lines"></i>
                                         <p>
                                             RRHH
                                             <i class="nav-arrow fa-solid fa-angle-left right"></i>
@@ -509,7 +509,7 @@
                                             </li>
                                         @endcan
                                     </ul>
-                                    <ul class="nav nav-treeview">
+                                    {{-- <ul class="nav nav-treeview">
                                         @can('mpfn.rrhh.personal.index')
                                             <li class="nav-item">
                                                 <a class="nav-link ms-3 {{ request()->routeIs('mpfn.intranet.atenciones.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.intranet.atenciones.index') }}">
@@ -518,7 +518,7 @@
                                                 </a>
                                             </li>
                                         @endcan
-                                    </ul>
+                                    </ul> --}}
                                 </li>
                             @endcan
 
