@@ -204,6 +204,7 @@ class PersonalComponent extends Component
                 'personales.fecha_fin',
                 'personales.ruta_documento')
             ->where('personales.persona_dni', $this->dni)
+            ->whereIn('personales.activo',['1','0'])
             ->when($this->searchhistorial, function ($query) {
                 $query->where(function ($q) {
                     $q->where('personales.numero_convocatoria', 'like', '%' . $this->searchhistorial . '%')
