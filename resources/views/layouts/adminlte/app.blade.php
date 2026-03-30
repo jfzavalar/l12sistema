@@ -370,6 +370,30 @@
                                 </li>
                             @endcan
 
+                            {{-- CONTABILIDAD --}}
+                            @can('mpfn.contabilidad')
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fa-solid fa-calculator"></i>
+                                        <p>
+                                            CONTABILIDAD
+                                            <i class="nav-arrow fa-solid fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+
+                                    @can('mpfn.contabilidad.gastosoperativos.index')
+                                        <ul class="nav nav-treeview">
+                                            <li class="nav-item">
+                                                <a class="nav-link ms-3 {{ request()->routeIs('mpfn.contabilidad.gastosoperativos.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.contabilidad.gastosoperativos.index') }}">
+                                                    <i class="nav-icon fa-regular fa-circle"></i>
+                                                    <p>Gastos operativos</p>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    @endcan
+                                </li>
+                            @endcan
+
                             {{-- INFORMATICA --}}
                             @can('mpfn.informatica')
                                 <li class="nav-item">

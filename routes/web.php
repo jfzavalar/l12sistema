@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\SedesController;
 use App\Http\Controllers\Administracion\ArchivoController;
 use App\Http\Controllers\Administracion\PatrimonioController;
 use App\Http\Controllers\Administracion\RrhhController;
+use App\Http\Controllers\Contabilidad\GastosoperativosController;
 use App\Http\Controllers\Informatica\FirmasdigitalesController;
 use App\Http\Controllers\Informatica\IpsController;
 use App\Http\Controllers\Informatica\soporteController;
@@ -96,6 +97,10 @@ Route::middleware('auth','can:procesos.administracion.rrhh.index')->group(functi
     Route::resource('rrhh', RrhhController::class)->names('procesos.administracion.rrhh');
 });
 
+//CONTABILIDAD
+Route::middleware('auth')->group(function () {
+    Route::resource('gastos_operativos', GastosoperativosController::class)->names('mpfn.contabilidad.gastosoperativos');
+});
 
 
 //INFORMATICA

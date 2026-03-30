@@ -10,5 +10,49 @@
             {{-- @include('layouts.bootstrap5.btnlogin') --}}
         </div>
     </div>
+
+    <div class="container mt-4">
+        <div class="card shadow-sm border-0 rounded-4 p-3 border-start border-4 border-primary">
+            
+            <div class="d-flex justify-content-between align-items-start">
+
+                <!-- Izquierda -->
+                <div>
+                    <h6 class="fw-bold mb-1">Pedido # 9038660227</h6>
+                    <small class="text-muted">Entrega el 27 de marzo.</small>
+
+                    <div class="mt-2">
+                        <span class="badge bg-light text-primary border">
+                            Inkafarma
+                        </span>
+                    </div>
+
+                    <div class="mt-2 fw-bold text-primary">
+                        S/59
+                    </div>
+                </div>
+
+                <!-- Derecha -->
+                <div class="text-center">
+                    <div class="position-relative">
+                        <div class="bg-light rounded-3 p-2">
+                            📦
+                        </div>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                            5
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mt-3 text-end">
+                <button class="btn btn-outline-primary btn-sm rounded-pill">
+                    Listo para recoger
+                </button>
+            </div>
+
+        </div>
+    </div>
         
 @endsection

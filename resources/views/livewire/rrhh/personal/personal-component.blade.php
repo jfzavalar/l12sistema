@@ -464,7 +464,9 @@
                                             <b>Hasta:</b>
                                         </td>
                                         <td class="text-center">
-                                            <span class="badge @if(in_array($item->tipo_documento, ['ADENDA','CONTRATO','INCORPORACION'])) text-bg-primary
+                                            <span class="badge 
+                                                @if(in_array($item->tipo_documento, ['ADENDA','CONTRATO','INCORPORACION'])) 
+                                                    text-bg-primary
                                                 @elseif(in_array($item->tipo_documento, ['LICENCIA','RENUNCIA']))
                                                     text-bg-danger
                                                 @endif">
