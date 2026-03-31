@@ -24,7 +24,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $permissions = Permission::all()->chunk(4);
+        $permissions = Permission::orderBy('name', 'asc')->get()->chunk(4);
         return view('procesos.admin.roles.create', compact('permissions'));
     }
 

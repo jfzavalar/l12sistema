@@ -329,7 +329,7 @@
 
                                         <hr class="ms-5 border-light">
 
-                                        <li class="nav-item">
+                                        {{-- <li class="nav-item">
                                             <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.permissions.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.permissions.index') }}">
                                                 <i class="nav-icon fa-regular fa-circle"></i>
                                                 <p>Cargos</p>
@@ -341,9 +341,9 @@
                                                 <i class="nav-icon fa-regular fa-circle"></i>
                                                 <p>Régimen</p>
                                             </a>
-                                        </li>
+                                        </li> --}}
 
-                                        <hr class="ms-5 border-light">
+                                        {{-- <hr class="ms-5 border-light"> --}}
 
                                         <li class="nav-item">
                                             <a class="nav-link ms-3 {{ request()->routeIs('mpfn.admin.sedes.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.admin.sedes.index') }}">
@@ -406,6 +406,12 @@
                                     </a>
                                     
                                     <ul class="nav nav-treeview">
+                                            <li class="nav-item">
+                                                <a class="nav-link ms-3 {{ request()->routeIs('mpfn.informatica.anexos.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.informatica.anexos.index') }}">
+                                                    <i class="nav-icon fa-regular fa-circle"></i>
+                                                    <p>Anexos telefónicos</p>
+                                                </a>
+                                            </li>
                                         @can('procesos.informatica.firmasdigitales.index')
                                             <li class="nav-item">
                                                 <a class="nav-link ms-3 {{ request()->routeIs('procesos.informatica.firmasdigitales.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.firmasdigitales.index') }}">

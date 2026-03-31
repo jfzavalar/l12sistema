@@ -8,6 +8,7 @@ use App\Http\Controllers\Administracion\ArchivoController;
 use App\Http\Controllers\Administracion\PatrimonioController;
 use App\Http\Controllers\Administracion\RrhhController;
 use App\Http\Controllers\Contabilidad\GastosoperativosController;
+use App\Http\Controllers\Informatica\AnexosController;
 use App\Http\Controllers\Informatica\FirmasdigitalesController;
 use App\Http\Controllers\Informatica\IpsController;
 use App\Http\Controllers\Informatica\soporteController;
@@ -104,6 +105,11 @@ Route::middleware('auth')->group(function () {
 
 
 //INFORMATICA
+
+Route::middleware('auth')->group(function () {
+    Route::resource('anexos', AnexosController::class)->names('mpfn.informatica.anexos');
+    // Route::get('pdf/informatica/soporte-acta/{id}', [soporteController::class, 'exportarPDF'])->name('pdf.informatica.soporte-acta');
+});
 
 Route::middleware('auth','can:mpfn.informatica.soporte.index')->group(function () {
     Route::resource('soporte', soporteController::class)->names('mpfn.informatica.soporte');
