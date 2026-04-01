@@ -17,6 +17,7 @@ use Livewire\WithPagination;
 
 class Activos extends Component
 {
+    //Actualizar cambios
     use WithFileUploads;
     use WithPagination;
     protected $paginationTheme = "bootstrap";
