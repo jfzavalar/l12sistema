@@ -160,6 +160,7 @@ class Activos extends Component
             ->paginate(10, ['*'], 'activosPage');
 
         $lista_historial = AdministracionesExpimportante::where('numexpediente',$this->numexpediente)
+            ->whereIn('activo',['1','0'])
             ->orderByDesc('id')
             ->paginate(10, ['*'], 'activosPage');
 
