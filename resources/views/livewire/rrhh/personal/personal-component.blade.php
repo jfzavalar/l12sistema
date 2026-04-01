@@ -29,7 +29,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xl-4">
+                    <div class="col-xl-2">
                         <div class="input-group input-group-sm mb-2">
                             <span class="input-group-text fw-bold" id="basic-addon1">Filtrar por sede:</span>
                             <select id="cmbfiltrotipodocumento" class="form-select form-select-sm" wire:model.live="filtrosede">
@@ -43,7 +43,7 @@
                     </div>
                     <div class="col-xl-4">
                         <div class="input-group input-group-sm mb-2">
-                            <span class="input-group-text fw-bold" id="basic-addon1">Por Dependencia:</span>
+                            <span class="input-group-text fw-bold" id="basic-addon1">Por dependencia:</span>
                             <select id="cmbfiltrotipodocumento2" class="form-select form-select-sm" wire:model.live="filtrodependencia">
                                 <option value="">TOTAL </option>
                                 @foreach ($lista_dependencias as $item)
@@ -74,6 +74,18 @@
                                 <option value="D.L.728">D.L.728 </option>
                             </select>
                             {{-- <span class="input-group-text" id="basic-addon2">{{ $lista_activos->total() }}</span> --}}
+                        </div>
+                    </div>
+                    <div class="col-xl-2">
+                        <div class="input-group input-group-sm mb-2">
+                            <span class="input-group-text fw-bold" id="basic-addon1">Por cargo:</span>
+                            <select id="cmbfiltrotipodocumento3" class="form-select form-select-sm" wire:model.live="filtrocargo">
+                                <option value="">TOTAL </option>
+                                <option value="CONTRATO">CONTRATO </option>
+                                @foreach ($lista_cargos2 as $item)
+                                    <option value="{{ $item->nombre }}">{{ $item->nombre }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="col-xl-2 text-end">

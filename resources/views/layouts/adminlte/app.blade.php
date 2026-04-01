@@ -539,7 +539,7 @@
                                             </li>
                                         @endcan
                                     </ul>
-                                    {{-- <ul class="nav nav-treeview">
+                                    <ul class="nav nav-treeview">
                                         @can('mpfn.rrhh.personal.index')
                                             <li class="nav-item">
                                                 <a class="nav-link ms-3 {{ request()->routeIs('mpfn.intranet.atenciones.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.intranet.atenciones.index') }}">
@@ -548,7 +548,7 @@
                                                 </a>
                                             </li>
                                         @endcan
-                                    </ul> --}}
+                                    </ul>
                                 </li>
                             @endcan
 

@@ -16,7 +16,7 @@
     <div class="card">
         <div class="card-body">
             <div class="row mt-3">
-                <div class="col-xl-4 col-gl-6 col-sm-12">
+                <div class="col-xl-5 col-gl-6 col-sm-12">
                     <table class="table">
                         <thead class="table-dark">
                             <tr>
@@ -25,9 +25,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @forelse ($totales_asignados as $tactivos) --}}
+                            @forelse ($estadisticas as $item)
                                 <tr class="align-middle" style="font-size: 12px;">
-                                    <th scope="row">Usuario</th>
+                                    <th scope="row">{{ $item->created_user }}</th>
                                     <th style="white-space: nowrap;"></th>
                                     <td>
                                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -35,26 +35,26 @@
                                                 <button class="input-group-text bg-success text-white">
                                                     <i class="fa-solid fa-check me-2"></i>Atendidos
                                                 </button>
-                                                <label class="form-control form-control-xs"></label>
+                                                <label class="form-control form-control-xs text-end">{{ $item->atendidos }}</label>
                                             </div>
                                             <div class="input-group input-group-xs">
                                                 <button class="input-group-text bg-danger text-white">
                                                     <i class="fa-solid fa-triangle-exclamation me-2"></i>Pendientes
                                                 </button>
-                                                <label class="form-control form-control-xs"></label>
+                                                <label class="form-control form-control-xs text-end">{{ $item->no_atendidos }}</label>
                                             </div>
                                             <div class="input-group input-group-xs">
                                                 <button class="input-group-text bg-info text-white">
-                                                    <i class="fa-solid fa-envelope"></i>Lima
+                                                    <i class="fa-solid fa-envelope"></i> Lima
                                                 </button>
-                                                <label class="form-control form-control-xs"></label>
+                                                <label class="form-control form-control-xs text-end">{{ $item->no_atendidos }}</label>
                                             </div>
                                         </div>
                                     </td>
                                 </tr>
-                            {{-- @empty
+                            @empty
                                 <tr class="align-middle"><td colspan="3">Sin registros.</td></tr>
-                            @endforelse --}}
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -95,7 +95,7 @@
                     </table>
                 </div>
 
-                <div class="col-xl-4 col-gl-6 col-sm-12">
+                <div class="col-xl-3 col-gl-6 col-sm-12">
                     <div class="row">
                         <div class="col-xl-4 col-lg-4 col-sm-4">
                             <div class="alert alert-primary" role="alert">
@@ -131,7 +131,7 @@
                 </div>
             </div>
 
-            <div class="table-responsive small">
+            <div class="table-responsive-xl">
                 {{-- <div class="input-group mb-3"> --}}
                     <div class="row g-3">
                         <div class="col-lg-2 col-sm-12">
@@ -166,7 +166,7 @@
 
                         <div class="col-lg-6 col-sm-12">
                             <div class="input-group mb-3"> 
-                                <input type="text" id="txtsearchpersonalatenciones2" class="form-control form-control-sm" placeholder="Buscar por DNI o Datos del Personal">
+                                <input type="text" id="txtsearchpersonalatenciones2" class="form-control form-control-sm" placeholder="Buscar por DNI o Datos del Personal" wire:model.live="search">
                                 <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
                                     <i class="fa-solid fa-file"></i> Nuevo
                                 </button>
@@ -179,18 +179,21 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">
-                                <i class="fa-solid fa-user"></i> DNI - DATOS
+                                <i class="fa-solid fa-user"></i> DNI - PERSONAL
                             </th>
-                            <th scope="col">TIPO</th>
-                            <th scope="col">PEDIDO</th>
-                            <th scope="col">DESCRIPCION</th>
-                            <th scope="col">MEDIO</th>
-                            <th scope="col">ESTADO</th>
+                            <th scope="col">DEPENDENCIA ORIGEN</th>
+                            <th scope="col">REGIMEN - CARGO</th>
+                            <th scope="col" class="table-danger">ROTACIÓN: UBICACIÓN FÍSICA</th>
+                            <th scope="col" class="bg-success-subtle">TIPO</th>
+                            <th scope="col" class="bg-success-subtle">PEDIDO</th>
+                            <th scope="col" class="bg-success-subtle">DESCRIPCION</th>
+                            <th scope="col" class="bg-success-subtle">MEDIO</th>
+                            <th scope="col" class="bg-success-subtle">ESTADO</th>
                             <th scope="col" class="bg-success-subtle">ATENDIDO POR</th>
-                            <th scope="col" class="bg-success-subtle">SOLUCIÓN</th>
-                            <th scope="col">GLPI</th>
+                            {{-- <th scope="col" class="bg-success-subtle">SOLUCIÓN</th> --}}
+                            {{-- <th scope="col">GLPI</th>
                             <th scope="col">CEA</th>
-                            <th scope="col">CARPETA</th>
+                            <th scope="col">CARPETA</th> --}}
                             <th scope="col"><i class="fa-solid fa-gears"></i></th>
                         </tr>
                     </thead>
@@ -201,32 +204,52 @@
                                     <i class="fa-solid fa-ticket"></i> {{ $loop->iteration }}
                                 </th>
                                 <td><b>{{ $item->dni }}</b> <br> {{ $item->datos }}</td>
-                                <td></td>
                                 <td>
-                                    
+                                    {{ $item->sedeorigen }}
+                                    <br>
+                                    {{ $item->dependenciaorigen }}
+                                    <br>
+                                    {{ $item->despachoorigen }}
                                 </td>
-                                <td class="text-primary">
-                                    
+                                <td>
+                                    {{ $item->regimen }}
+                                    <br>
+                                    {{ $item->cargo }}
+                                </td>
+                                <td>
+                                    {{ $item->sededestino }}
+                                    <br>
+                                    {{ $item->dependenciadestino }}
+                                    <br>
+                                    {{ $item->despachodestino }}
+                                </td>
+                                <td>
+                                    {{ $item->solicitud_incidencia }}
+                                </td>
+                                <td>
+                                    {{ $item->servicio }}
+                                </td>
+                                <td>
+                                    {{ $item->detalle_servicio }}
                                 </td>
                                 <td>{{ $item->reportado_por }}</td>
                                 <td>
-                                    <span class="badge rounded-pill text-bg-success">
-                                        ATENDIDO
+                                    <span class="badge rounded-pill {{ $item->atendido === 'SI' ? 'text-bg-success' : 'text-bg-danger' }}">
+                                        {{ $item->atendido === 'SI' ? 'Atendido' : 'No atendido' }}
                                     </span>
                                 </td>
-                                <td>{{ $item->created_user }}</td>
-                                <td>
-
-                                </td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>{{ $item->atendido_por_datos}}</td>
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar({{ $item->id }})">
-                                            <i class="fa-solid fa-pen-to-square"></i><br>Editar
-                                        </button>                   
-                                        <button type="button" class="btn btn-outline-danger btn-xs" wire:click="desactivar({{ $item->id }})">
+                                        @if ($item->utencioncreado === auth()->user()->datos)
+                                            <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->personalatencion_id }})">
+                                                <i class="fa-solid fa-pen-to-square"></i><br>Editar
+                                            </button> 
+                                        @endif
+                                        <a type="button" href="#" target="_blank" class="btn btn-outline-dark btn-xs">
+                                            <i class="fa-solid fa-print"></i><br>Acta
+                                        </a>                
+                                        <button type="button" class="btn btn-outline-danger btn-xs">
                                             <i class="fa-solid fa-trash-can"></i><br>Eliminar
                                         </button>
                                     </div>
@@ -234,7 +257,7 @@
                             </tr>                           
                         @empty
                             <tr>
-                                <td colspan="13" class="text-center">
+                                <td colspan="12" class="text-center">
                                     <div class="alert alert-danger" role="alert">
                                         No se encontraron resultados!
                                     </div>
@@ -308,11 +331,11 @@
                                         </fieldset>
                                         <div class="row">
                                             <div class="col">
-                                                @if ($dni)
+                                                {{-- @if ($dni)
                                                     <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#transferencia-personal-component" wire:click="nuevo_transferir_personal({{ $persona_id }})">
                                                         <i class="fa-solid fa-people-arrows"></i> Cambiar Ubicación
                                                     </button>
-                                                @endif
+                                                @endif --}}
                                             </div>
                                         </div>
                                     </div>
@@ -356,12 +379,12 @@
                                             @enderror
                                         </div>
                                         <div class="col-xl-4">
-                                            <label for="txtincidenciasolicitud" class="fw-bold fs-6">INCIDENCIA / SOLICITUD</label>
+                                            <label for="txtdetalle_servicio" class="fw-bold fs-6">SOLICITUD / INCIDENCIA</label>
                                             <div class="input-group">
                                                 <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-inicidencia-solicitud-component">
                                                     <i class="fa-solid fa-magnifying-glass"></i>
                                                 </button>
-                                                <input type="text" id="txtincidenciasolicitud" class="form-control form-control-xs" wire:model="incidenciasolicitud">
+                                                <input type="text" id="txtdetalle_servicio" class="form-control form-control-xs" wire:model="detalle_servicio">
                                             </div>
                                             @error('incidenciasolicitud')
                                                 <small class="text-danger">{{ $message }}</small>
@@ -370,10 +393,10 @@
                                         <div class="col-xl-3">
                                             <label for="tipoi" class="fw-bold fs-6">TIPO</label>
                                             <div class="d-flex gap-2">
-                                                <input type="radio" id="tipoi" name="tipo" class="btn-check" value="1" autocomplete="off" wire:model.live="tipo">
+                                                <input type="radio" id="tipoi" name="solicitud_incidencia" class="btn-check" value="INCIDENCIA" autocomplete="off" wire:model.live="solicitud_incidencia">
                                                 <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="tipoi">INCIDENCIA</label>
 
-                                                <input type="radio" id="tipos" name="tipo" class="btn-check" value="2" autocomplete="off" wire:model.live="tipo">
+                                                <input type="radio" id="tipos" name="solicitud_incidencia" class="btn-check" value="SOLICITUD" autocomplete="off" wire:model.live="solicitud_incidencia">
                                                 <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="tipos">SOLICITUD</label>
                                             </div>
                                         </div>
@@ -384,8 +407,12 @@
                                             <input type="text" id="txtcea" class="form-control form-control-xs" wire:model="cea">
                                         </div>
                                         <div class="col-xl-4">
-                                            <label for="txtsgf" class="fw-bold fs-6">Carpeta Fiscal</label>
+                                            <label for="txtsgf" class="fw-bold fs-6">N° de Carpeta Fiscal</label>
                                             <input type="text" id="txtsgf" class="form-control form-control-xs" wire:model="sgf">
+                                        </div>
+                                        <div class="col-xl-3">
+                                            <label for="txtglpi" class="fw-bold fs-6">GLPI</label>
+                                            <input type="text" id="txtglpi" class="form-control form-control-xs" wire:model=glpi>
                                         </div>
                                         <div class="col-xl-2">
                                             <label class="fw-bold fs-6">Enviado a Lima</label>
@@ -397,17 +424,12 @@
                                                 <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="enviadoNo">No</label>
                                             </div>
                                         </div>
-
-                                        <div class="col-xl-3">
-                                            <label for="txtglpi" class="fw-bold fs-6">GLPI</label>
-                                            <input type="text" id="txtglpi" class="form-control form-control-xs" wire:model=glpi>
-                                        </div>
                                     </div>
                                     <div class="row mt-3">
-                                        <div class="col-xl-8 col-sm-12">
+                                        <div class="col-xl-6 col-sm-12">
                                             <label for="txtobservacion" class="fw-bold fs-6">DETALLE DEL PROBLEMA</label>
                                             <div class="input-group input-group">
-                                                <input type="text" id="txtobservacion" class="form-control form-control-xs" wire:model="observacion">
+                                                <input type="text" id="txtobservacion" class="form-control form-control-xs" wire:model="detalle_problema">
                                             </div>
                                         </div>
                                         <div class="col-xl-4 col-sm-12">
@@ -416,7 +438,7 @@
                                                 {{-- <button class="btn btn-outline-dark btn-xs" type="button" id="btnimprimircontrato">
                                                     <i class="fa-solid fa-print"></i> Imprimir
                                                 </button> --}}
-                                                <input type="file" class="form-control form-control-xs" id="filecontrato" aria-describedby="inputGroupFileAddon04" aria-label="Upload" accept="application/pdf" wire:model="pdf_acta">
+                                                <input type="file" class="form-control form-control-xs" id="filecontrato" aria-describedby="inputGroupFileAddon04" aria-label="Upload" accept="application/pdf">
                                                 {{-- <button class="btn btn-outline-warning btn-xs" type="button" id="btncargarcontrato">
                                                     <i class="fa-solid fa-arrow-up-from-bracket"></i> Cargar
                                                 </button> --}}
@@ -427,6 +449,14 @@
                                                 @endif --}}
                                             </div>
                                         </div>
+                                        @if ($servicio_id === 7 )
+                                            <div class="col-xl-2 col-sm-12">
+                                                <label for="txtncopias" class="fw-bold fs-6"># DE COPIAS</label>
+                                                <div class="input-group input-group">
+                                                    <input type="number" id="txtncopias" class="form-control form-control-xs is-valid" wire:model="ncopias" min="0">
+                                                </div>
+                                            </div>
+                                        @endif
                                     </div>
                                 </fieldset>
                             </div>

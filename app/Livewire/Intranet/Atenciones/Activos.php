@@ -8,15 +8,19 @@ use App\Models\Personales_cargo;
 use App\Models\Personales_dependencia;
 use App\Models\Personales_despacho;
 use App\Models\Personales_sede;
+use App\Models\PersonalesAtencione;
 use App\Models\PersonalesAtencionesIncidenciasSolicitudes;
 use App\Models\PersonalesAtencionesServicio;
 use Barryvdh\DomPDF\Facade\Pdf;
-
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Activos extends Component
 {
@@ -81,6 +85,7 @@ class Activos extends Component
 
     public $filtrotipodocumento;
     public $filtroregimen;
+    public $filtroatendido;
 
     public $user_login;
 
@@ -106,6 +111,7 @@ class Activos extends Component
             $regimen,
             $tipo_regimen,
             $cargo,
+            $cargo_condicion,
 
             $codsedeorigen,
             $sedeorigen,
@@ -130,46 +136,56 @@ class Activos extends Component
             $fecha_fin,
             $ruta_documento;
 
-    public $servicio_id,
+    public $atencion_id,
+            $reportado_por,
+            $solicitud_incidencia,
+            $servicio_id,
             $servicio,
-            $incidenciasolicitud_id,
-            $incidenciasolicitud,
+            $detalle_servicio_id,
+            $detalle_servicio,
             $cea,
             $sgf,
-            $enviado_lima,
             $glpi,
-            $observacion,
+            $enviado_lima,
+            $detalle_problema,
+            $captura_evidencia,
+            $ncopias,
             $atendido,
+            $atendido_por_id,
+            $atendido_por_dni,
+            $atendido_por_datos,
             $tiempo_atencion,
             $respuesta,
-            $cargo_condicion,$reportado_por,$tipo;
+            $conformidad;
 
-    public $soporte_id,
-            $preventivo,
-            $sede_ubicacion,
-            $dependencia_ubicacion,
-            $despacho_ubicacion,
-            $p01,
-            $p02,
-            $p03,
-            $p04,
-            $p05,
-            $p06,
-            $p07,
-            $potros,
-            $correctivo,
-            $c01,
-            $c02,
-            $c03,
-            $c04,
-            $c05,
-            $c06,
-            $c07,
-            $cotros,
-            $operativo,
-            $observacion_usuario,
-            $recomendacion_usuario,
-            $ruta_evidencia;
+            
+
+    // public $soporte_id,
+    //         $preventivo,
+    //         $sede_ubicacion,
+    //         $dependencia_ubicacion,
+    //         $despacho_ubicacion,
+    //         $p01,
+    //         $p02,
+    //         $p03,
+    //         $p04,
+    //         $p05,
+    //         $p06,
+    //         $p07,
+    //         $potros,
+    //         $correctivo,
+    //         $c01,
+    //         $c02,
+    //         $c03,
+    //         $c04,
+    //         $c05,
+    //         $c06,
+    //         $c07,
+    //         $cotros,
+    //         $operativo,
+    //         $observacion_usuario,
+    //         $recomendacion_usuario,
+    //         $ruta_evidencia;
 
     Public $bien_id,
             $cod,
@@ -189,23 +205,17 @@ class Activos extends Component
     public $pdf_acta;
     public $bandera_documento="EVIDENCIA";
 
+    public function updatedEnviadoLima($value)
+    {
+        if ($value === "SI") {
+            $this->atendido = "NO";
+        } else {
+            $this->atendido = "SI";
+        }
+        
+    }
+
     public $filtro_anio,$filtro_mes;
-
-    public function updatedp07($value)
-    {
-        $this->mostrarotrosp = $value ? '' : 'd-none';
-        if (!$value) {
-            $this->cotros = '';
-        }
-    }
-
-    public function updatedC07($value)
-    {
-        $this->mostrarotrosc = $value ? '' : 'd-none';
-        if (!$value) {
-            $this->cotros = '';
-        }
-    }
 
     public function mount()
     {
@@ -215,8 +225,7 @@ class Activos extends Component
 
     public function render()
     {
-        $lista_activos = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
-            ->join('personales_atenciones','personas.id','=','personales_atenciones.persona_id')
+        $lista_activos = $this->queryConFiltros()
             ->select('personas.*',
                 'personales.persona_id',
                 'personales.regimen',
@@ -228,57 +237,21 @@ class Activos extends Component
                 'personales.sededestino',
                 'personales.dependenciadestino',
                 'personales.despachodestino',
-                'personales.tipo_documento')
-            ->where('personales.activo', 1)
-            ->when($this->search, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('personas.dni', 'like', '%' . $this->search . '%')
-                    ->orWhere('personas.datos', 'like', '%' . $this->search . '%');
-                });
-            })
-            ->when($this->filtrotipodocumento, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('personales.tipo_documento', 'like', '%' . $this->filtrotipodocumento . '%');
-                    // ->orWhere('', 'like', '%' . $this->search . '%');
-                });
-            })
-            ->when($this->filtroregimen, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('personales.regimen', 'like', '%' . $this->filtroregimen . '%');
-                    // ->orWhere('', 'like', '%' . $this->search . '%');
-                });
-            })
+                'personales.tipo_documento',
+                'personales_atenciones.id as personalatencion_id',
+                'personales_atenciones.reportado_por',
+                'personales_atenciones.servicio',
+                'personales_atenciones.detalle_servicio',
+                'personales_atenciones.solicitud_incidencia',
+                'personales_atenciones.atendido',
+                'personales_atenciones.atendido_por_datos',
+                'personales_atenciones.created_user as utencioncreado')
+            ->where('personales_atenciones.activo', 1)
             ->orderBy('personales.id','desc')
-            // ->distinct()
             ->paginate(10, ['personas.*'], 'personalesPage');
 
-        $lista_inactivos = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
-            ->join('personales_atenciones','personas.id','=','personales_atenciones.persona_id')
+        $lista_inactivos = $this->queryConFiltros()
             ->select('personas.*',
-                'personales.persona_id',
-                'personales.regimen',
-                'personales.tipo_regimen',
-                'personales.cargo',
-                'personales.sedeorigen',
-                'personales.dependenciaorigen',
-                'personales.despachoorigen',
-                'personales.sededestino',
-                'personales.dependenciadestino',
-                'personales.despachodestino')
-            ->where([['personas.activo',0],['personales.activo', 0]])
-            ->when($this->searchi, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('personas.dni', 'like', '%' . $this->searchi . '%')
-                    ->orWhere('personas.datos', 'like', '%' . $this->searchi . '%');
-                });
-            })
-            ->orderBy('personas.datos')
-            ->distinct()
-            ->paginate(10, ['personas.*'], 'personalesiPage');
-
-        $lista_historial = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
-            ->select('personas.*',
-                'personales.id as personal_id',
                 'personales.persona_id',
                 'personales.regimen',
                 'personales.tipo_regimen',
@@ -289,18 +262,46 @@ class Activos extends Component
                 'personales.sededestino',
                 'personales.dependenciadestino',
                 'personales.despachodestino',
-                'personales.numero_convocatoria',
                 'personales.tipo_documento',
-                'personales.fecha_inicio',
-                'personales.fecha_fin',
-                'personales.ruta_documento')
-            ->where('personales.persona_dni', $this->dni)
-            ->when($this->searchhistorial, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('personales.numero_convocatoria', 'like', '%' . $this->searchhistorial . '%')
-                    ->orWhere('personales.tipo_documento', 'like', '%' . $this->searchhistorial . '%');
-                });
-            })
+                'personales_atenciones.reportado_por',
+                'personales_atenciones.servicio',
+                'personales_atenciones.detalle_servicio',
+                'personales_atenciones.solicitud_incidencia',
+                'personales_atenciones.atendido',
+                'personales_atenciones.atendido_por_datos')
+            ->where('personales.activo', 0)
+            ->orderBy('personales_atenciones.id','desc')
+            ->paginate(10, ['personas.*'], 'personalesiPage');
+
+        $estadisticas = PersonalesAtencione::select('created_user')
+            ->selectRaw("COUNT(*) as total")
+            ->selectRaw("SUM(CASE WHEN atendido = 'SI' THEN 1 ELSE 0 END) as atendidos")
+            ->selectRaw("SUM(CASE WHEN atendido = 'NO' THEN 1 ELSE 0 END) as no_atendidos")
+            ->groupBy('created_user')
+            ->get();
+
+        $lista_historial = $this->queryConFiltros()
+            ->select('personas.*',
+                'personales.persona_id',
+                'personales.regimen',
+                'personales.tipo_regimen',
+                'personales.cargo',
+                'personales.sedeorigen',
+                'personales.dependenciaorigen',
+                'personales.despachoorigen',
+                'personales.sededestino',
+                'personales.dependenciadestino',
+                'personales.despachodestino',
+                'personales.tipo_documento',
+                'personales_atenciones.id as personalatencion_id',
+                'personales_atenciones.reportado_por',
+                'personales_atenciones.servicio',
+                'personales_atenciones.detalle_servicio',
+                'personales_atenciones.solicitud_incidencia',
+                'personales_atenciones.atendido',
+                'personales_atenciones.atendido_por_datos',
+                'personales_atenciones.created_user as utencioncreado')
+            ->whereIn('personales_atenciones.activo', [1,0])
             ->orderBy('personales.id','desc')
             ->paginate(10, ['personas.*'], 'historialPage');
 
@@ -347,18 +348,39 @@ class Activos extends Component
             ->where('activo','1')
             ->where('servicio','like','%' . $this->searchservicios . '%')
             ->orderBy('servicio')
-            ->paginate(10,['*'],'serviciosPage');
+            ->paginate(20,['*'],'serviciosPage');
 
         $lista_incidencias_solicitudes = PersonalesAtencionesIncidenciasSolicitudes::select('id','servicio','incidencia_solicitud')
             ->where('activo','1')
             ->where('servicio_id',$this->servicio_id)
             ->where('incidencia_solicitud','like','%' . $this->searchincidenciasolicitud . '%')
             ->orderBy('incidencia_solicitud')
-            ->paginate(10,['*'],'incidenciasolicitudPage');
+            ->paginate(20,['*'],'incidenciasolicitudPage');
 
         return view('livewire.intranet.atenciones.activos',
-                compact('lista_activos','lista_inactivos','lista_historial','lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos',
+                compact('lista_activos','lista_inactivos','estadisticas','lista_historial',
+                            'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos',
                             'lista_servicios','lista_incidencias_solicitudes'));
+    }
+
+    private function queryConFiltros()
+    {
+        return Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
+            ->join('personales_atenciones','personas.id','=','personales_atenciones.persona_id')
+
+            ->when($this->search, function ($query) {
+                $query->where(function ($q) {
+                    $q->where('personas.dni', 'like', '%' . $this->search . '%')
+                    ->orWhere('personas.datos', 'like', '%' . $this->search . '%');
+                });
+            })
+
+            ->when($this->filtroatendido, function ($query) {
+                $query->where(function ($q) {
+                    $q->where('personales.tipo_documento', '=', $this->filtroatendido);
+                    // ->orWhere('', 'like', '%' . $this->search . '%');
+                });
+            });
     }
 
     protected function rules(){
@@ -383,7 +405,7 @@ class Activos extends Component
         $this->resetErrorBag();     // ← opcional extra seguridad
 
         // Restablecer todas las variables
-        $this->reset();
+        // $this->reset();
         $this->foto = null;
         $this->fotoactual = null;
         $this->inputFileKey = rand();
@@ -399,6 +421,245 @@ class Activos extends Component
         $this->colorAgregar = "outline-primary";
 
         $this->tipo_documento = "CONTRATO";
+    }
+
+    public function guardar()
+    {
+        // $this->validate();
+
+        try {
+
+            DB::transaction(function () {
+
+                $usuario = auth()->user()->datos; // Mejor que usar propiedad pública
+
+                // GUARDAR ATENCION
+
+                PersonalesAtencione::create([
+                    'persona_id' => $this->persona_id,
+                    'dni' => $this->dni,
+                    'personal_id' => $this->personal_id,
+                    'datos' => $this->datos,
+                    'codsede_origen' => $this->codsedeorigen,
+                    'sede_origen' => $this->sedeorigen,
+                    'coddependencia_origen' => $this->coddependenciaorigen,
+                    'dependencia_origen' => $this->dependenciaorigen,
+                    'coddespacho_origen' => $this->coddespachoorigen,
+                    'despacho_origen' => $this->despachoorigen,
+                    'codsede_destino' => $this->codsededestino,
+                    'sede_destino' => $this->sededestino,
+                    'coddependencia_destino' => $this->coddependenciadestino,
+                    'dependencia_destino' => $this->dependenciadestino,
+                    'coddespacho_destino' => $this->coddespachodestino,
+                    'despacho_destino' => $this->despachodestino,
+                    'reportado_por' => $this->reportado_por,
+                    'solicitud_incidencia' => $this->solicitud_incidencia,
+                    'servicio' => $this->servicio,
+                    'detalle_servicio' => $this->detalle_servicio,
+                    'cea' => $this->cea,
+                    'sgf' => $this->sgf,
+                    'glpi' => $this->glpi,
+                    'enviado_lima' => $this->enviado_lima,
+                    'detalle_problema' => $this->detalle_problema,
+                    'captura_evidencia' => $this->captura_evidencia,
+                    'atendido' => $this->atendido,
+                    'atendido_por_id' => auth()->user()->id,
+                    'atendido_por_dni' => auth()->user()->dni,
+                    'atendido_por_datos' => $usuario,
+                    'tiempo_atencion' => $this->tiempo_atencion,
+                    'respuesta' => $this->respuesta,
+                    'conformidad' => $this->conformidad,
+                    'activo' => "1",
+                    'created_user' => $usuario,
+                    'updated_user' => $usuario,
+                ]);
+            });
+
+            // $this->resetExcept('searchPersonal');
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Datos actualizados',
+                mensaje: 'Los datos se han actualizado correctamente.',
+                tipo: 'success'
+            );
+
+            // Evento para cerrar el modal
+            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
+
+        // } catch (\Throwable $e) {
+
+        //     dd($e); // 🔥 Esto te dirá TODO
+        // }
+
+        } catch (\Throwable $e) {
+
+            report($e);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'Ocurrió un error al guardar.',
+                tipo: 'error'
+            );
+        }
+    }
+
+    public function editar(PersonalesAtencione $ipersonalatencion)
+    {
+        $this->resetValidation();
+        $this->resetErrorBag();
+
+        $this->funcionGuardarActualizar = "actualizar";
+
+        $this->mostrarBtnBuscarDni = "d-none";
+
+        $this->colorHeaderModal = "success-subtle";
+        $this->textoHeaderModal = "Editar";
+        $this->colorGuardarActualizar = "success";
+        $this->textoGuardarActualizar = "Actualizar";
+        $this->colorAgregar = "outline-success";
+
+        // ===== BLOQUEO DE SECCIONES =====
+        $this->seccionFoto = "";
+        $this->seccionPersona = "";
+        $this->seccionPersonal = "";
+
+        // ===== DATOS ATENCION =====
+        // $ipersonalatencion = PersonalesAtencione::where('id', $personalatencion_id)->where('activo','1')->firstOrFail();
+        $this->atencion_id = $ipersonalatencion->id;
+        $this->persona_id = $ipersonalatencion->persona_id;
+        $this->dni = $ipersonalatencion->dni;
+        $this->reportado_por = $ipersonalatencion->reportado_por;
+        $this->solicitud_incidencia = $ipersonalatencion->solicitud_incidencia;
+        $this->servicio_id = $ipersonalatencion->servicio_id;
+        $this->servicio = $ipersonalatencion->servicio;
+        $this->detalle_servicio_id = $ipersonalatencion->detalle_servicio_id;
+        $this->detalle_servicio = $ipersonalatencion->detalle_servicio;
+        $this->cea = $ipersonalatencion->cea;
+        $this->sgf = $ipersonalatencion->sgf;
+        $this->glpi = $ipersonalatencion->glpi;
+        $this->enviado_lima = $ipersonalatencion->enviado_lima;
+        $this->detalle_problema = $ipersonalatencion->detalle_problema;
+        $this->captura_evidencia = $ipersonalatencion->captura_evidencia;
+        $this->ncopias = $ipersonalatencion->ncopias;
+        $this->atendido = $ipersonalatencion->atendido;
+        $this->atendido_por_id = $ipersonalatencion->atendido_por_dni;
+        $this->atendido_por_dni = $ipersonalatencion->atendido_por_id;
+        $this->atendido_por_datos = $ipersonalatencion->atendido_por_datos;
+        $this->tiempo_atencion = $ipersonalatencion->tiempo_atencion;
+        $this->respuesta = $ipersonalatencion->respuesta;
+        $this->conformidad = $ipersonalatencion->conformidad;
+
+        // ===== DATOS PERSONA =====
+        $ipersona = Persona::where('dni', $this->dni)->where('activo','1')->firstOrFail();
+        $this->persona_id = $ipersona->id;
+        $this->dni = $ipersona->dni;
+        $this->nombres = $ipersona->nombres;
+        $this->appaterno = $ipersona->appaterno;
+        $this->apmaterno = $ipersona->apmaterno;
+        $this->celpersonal = $ipersona->celpersonal;
+        $this->correopersonal = $ipersona->correopersonal;
+
+        $this->fotoactual = $ipersona->foto;
+
+        // // ===== DATOS PERSONAL =====
+        $ipersonal = Personale::where('persona_dni', $ipersonalatencion->dni)->where('activo','1')->firstOrFail();
+
+        $this->personal_id = $ipersonal->id;
+        $this->regimen = $ipersonal->regimen;
+        $this->tipo_regimen = $ipersonal->tipo_regimen;
+        $this->cargo = $ipersonal->cargo;
+        $this->cargo_condicion = $ipersonal->cargo_condicion;
+        $this->codsedeorigen = $ipersonal->codsedeorigen;
+        $this->sedeorigen = $ipersonal->sedeorigen;
+        $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
+        $this->dependenciaorigen = $ipersonal->dependenciaorigen;
+        $this->coddespachoorigen = $ipersonal->coddespachoorigen;
+        $this->despachoorigen = $ipersonal->despachoorigen;
+
+        $this->codsededestino = $ipersonal->codsededestino;
+        $this->sededestino = $ipersonal->sededestino;
+        $this->coddependenciadestino = $ipersonal->coddependenciadestino;
+        $this->dependenciadestino = $ipersonal->dependenciadestino;
+        $this->coddespachodestino = $ipersonal->coddespachodestino;
+        $this->despachodestino = $ipersonal->despachodestino;
+
+        $this->celinstitucional = $ipersonal->celinstitucional;
+        $this->correoinstitucional = $ipersonal->correoinstitucional;
+        
+    }
+
+    public function actualizar(){
+        
+        try {
+
+            DB::transaction(function () {
+
+                $usuario = auth()->user()->datos;
+
+                $ipersonalatencion = PersonalesAtencione::where('id', $this->atencion_id)->where('activo','1')->firstOrFail();
+
+                $ipersonalatencion->update([
+                    'persona_id' => $this->persona_id,
+                    'dni' => $this->dni,
+                    'personal_id' => $this->personal_id,
+                    'datos' => $this->datos,
+                    'codsede_origen' => $this->codsedeorigen,
+                    'sede_origen' => $this->sedeorigen,
+                    'coddependencia_origen' => $this->coddependenciaorigen,
+                    'dependencia_origen' => $this->dependenciaorigen,
+                    'coddespacho_origen' => $this->coddespachoorigen,
+                    'despacho_origen' => $this->despachoorigen,
+                    'codsede_destino' => $this->codsededestino,
+                    'sede_destino' => $this->sededestino,
+                    'coddependencia_destino' => $this->coddependenciadestino,
+                    'dependencia_destino' => $this->dependenciadestino,
+                    'coddespacho_destino' => $this->coddespachodestino,
+                    'despacho_destino' => $this->despachodestino,
+                    'reportado_por' => $this->reportado_por,
+                    'solicitud_incidencia' => $this->solicitud_incidencia,
+                    'servicio' => $this->servicio,
+                    'detalle_servicio' => $this->detalle_servicio,
+                    'cea' => $this->cea,
+                    'sgf' => $this->sgf,
+                    'glpi' => $this->glpi,
+                    'enviado_lima' => $this->enviado_lima,
+                    'detalle_problema' => $this->detalle_problema,
+                    'captura_evidencia' => $this->captura_evidencia,
+                    'atendido' => $this->atendido,
+                    'atendido_por_id' => auth()->user()->id,
+                    'atendido_por_dni' => auth()->user()->dni,
+                    'atendido_por_datos' => $usuario,
+                    'tiempo_atencion' => $this->tiempo_atencion,
+                    'respuesta' => $this->respuesta,
+                    'conformidad' => $this->conformidad,
+                    'activo' => "1",
+                    'updated_user' => $usuario,
+                ]);
+
+            });
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Datos actualizados',
+                mensaje: 'Los datos se han actualizado correctamente.',
+                tipo: 'success'
+            );
+
+            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
+
+        } catch (\Throwable $e) {
+
+            report($e);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'Ocurrió un error al actualizar.',
+                tipo: 'error'
+            );
+        }
     }
 
     public function cerrar()
@@ -431,9 +692,20 @@ class Activos extends Component
 
         $ipersonal = Personale::where([['activo',1],['persona_dni',$this->dni],])->firstOrFail();
 
-        $this->sedeorigen = $ipersonal->sedeorigen;
+        $this->codsedeorigen = $ipersonal->codsedeorigen;
+        $this->sedeorigen = $ipersonal->sedeorigen;   
+        $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
         $this->dependenciaorigen = $ipersonal->dependenciaorigen;
+        $this->coddespachoorigen = $ipersonal->coddespachoorigen;
         $this->despachoorigen = $ipersonal->despachoorigen;
+
+        $this->codsededestino = $ipersonal->codsededestino;
+        $this->sededestino = $ipersonal->sededestino;   
+        $this->coddependenciadestino = $ipersonal->coddependenciadestino;
+        $this->dependenciadestino = $ipersonal->dependenciadestino;
+        $this->coddespachodestino = $ipersonal->coddespachodestino;
+        $this->despachodestino = $ipersonal->despachodestino;
+
         $this->celinstitucional = $ipersonal->celinstitucional;
         $this->correoinstitucional = $ipersonal->correoinstitucional;
         $this->regimen = $ipersonal->regimen;
@@ -448,7 +720,7 @@ class Activos extends Component
         $this->servicio_id = $iservicio->id;
         $this->servicio = $iservicio->servicio;
 
-        $this->incidenciasolicitud = "";
+        $this->detalle_servicio = "";
 
     }
 
@@ -459,8 +731,8 @@ class Activos extends Component
 
     public function agregar_incidencia_solicitud(PersonalesAtencionesIncidenciasSolicitudes $iincidenciasolicitud)
     {
-        $this->incidenciasolicitud_id = $iincidenciasolicitud->id;
-        $this->incidenciasolicitud = $iincidenciasolicitud->incidencia_solicitud;
+        $this->detalle_servicio_id = $iincidenciasolicitud->id;
+        $this->detalle_servicio = $iincidenciasolicitud->incidencia_solicitud;
 
     }
 
