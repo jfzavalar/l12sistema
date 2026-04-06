@@ -8,6 +8,7 @@ use App\Models\Personales_cargo;
 use App\Models\Personales_dependencia;
 use App\Models\Personales_despacho;
 use App\Models\Personales_sede;
+use App\Models\PersonalesAtencione;
 use App\Models\PersonalesRotacione;
 use App\Models\Tbl_cargo;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -38,6 +39,7 @@ class PersonalrotacionComponent extends Component
 
     //Variables bloquear de secciones
     public $seccionFoto = "disabled", $seccionPersona = "disabled", $seccionPersonal = "disabled";
+    public $seccionUbicacion,$seccionRotacion;
 
     // Variable de función Guardar o Actualizar
     public $funcionGuardarActualizar;
@@ -127,7 +129,8 @@ class PersonalrotacionComponent extends Component
             $num_expediente,
             $fecha_iniciou,
             $fecha_finu,
-            $motivo_ubicacion;
+            $motivo_ubicacion,
+            $estado;
 
     public $pdf_acta;
 
@@ -176,7 +179,12 @@ class PersonalrotacionComponent extends Component
                 'personales.sededestino',
                 'personales.dependenciadestino',
                 'personales.despachodestino',
-                'personales.tipo_documento')
+                'personales.tipo_documento',
+                'personales_rotaciones.id as rotacion_id',
+                'personales_rotaciones.fecha_iniciou',
+                'personales_rotaciones.fecha_finu',
+                'personales_rotaciones.motivo_ubicacion',
+                'personales_rotaciones.estado')
             ->where('personales_rotaciones.activo', '1')
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
@@ -206,6 +214,7 @@ class PersonalrotacionComponent extends Component
             ->paginate(30, ['personas.*'], 'personalesPage');
 
         $lista_inactivos = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
+            ->join('personales_rotaciones','personas.id','=','personales_rotaciones.persona_id')
             ->select('personas.*',
                 'personales.persona_id',
                 'personales.regimen',
@@ -216,17 +225,20 @@ class PersonalrotacionComponent extends Component
                 'personales.despachoorigen',
                 'personales.sededestino',
                 'personales.dependenciadestino',
-                'personales.despachodestino')
-            ->where([['personas.activo',0],['personales.activo', 0]])
+                'personales.despachodestino',
+                'personales.tipo_documento',
+                'personales_rotaciones.id as rotacion_id',
+                'personales_rotaciones.estado')
+            ->where('personales_rotaciones.activo', '0')
+            ->where('personales_rotaciones.estado', 'RETORNO')
             ->when($this->searchi, function ($query) {
                 $query->where(function ($q) {
                     $q->where('personas.dni', 'like', '%' . $this->searchi . '%')
                     ->orWhere('personas.datos', 'like', '%' . $this->searchi . '%');
                 });
             })
-            ->orderBy('personas.datos')
-            ->distinct()
-            ->paginate(10, ['personas.*'], 'personalesiPage');
+            ->orderBy('personales.id','desc')
+            ->paginate(30, ['personas.*'], 'personalesPage');
 
         $lista_historial_rotaciones = Persona::join('personales_rotaciones', 'personas.id', '=', 'personales_rotaciones.persona_id')
             ->select('personas.*',
@@ -241,6 +253,7 @@ class PersonalrotacionComponent extends Component
                 'personales_rotaciones.fecha_finu',
                 'personales_rotaciones.ruta_documento')
             ->where('personales_rotaciones.persona_dni', $this->dni)
+            ->whereIn('personales_rotaciones.activo', ['0','1'])
             // ->when($this->searchhistorial, function ($query) {
             //     $query->where(function ($q) {
             //         $q->where('personales.numero_convocatoria', 'like', '%' . $this->searchhistorial . '%')
@@ -369,7 +382,7 @@ class PersonalrotacionComponent extends Component
         $this->resetErrorBag();     // ← opcional extra seguridad
 
         // Restablecer todas las variables
-        // $this->reset();
+        $this->reset();
 
         $this->funcionGuardarActualizar="guardar";
 
@@ -443,6 +456,7 @@ class PersonalrotacionComponent extends Component
                     'fecha_finu' => $this->fecha_finu,
                     'motivo_ubicacion' => $this->motivo_ubicacion,
                     'ruta_documento' => $rutaDocumento,
+                    'estado' => "ROTADO",
                     'activo' => "1",
                     'created_user' => $usuario,
                     'updated_user' => $usuario,
@@ -497,6 +511,9 @@ class PersonalrotacionComponent extends Component
         $this->correopersonal = $ipersona->correopersonal;
         $this->fotoactual = $ipersona->foto;
 
+        $this->seccionUbicacion = "";
+        $this->seccionRotacion = "";
+
         // ===== DATOS PERSONAL =====
         $ipersonal = Personale::where('persona_dni', $this->dni)->where('activo','1')->firstOrFail();
 
@@ -511,13 +528,6 @@ class PersonalrotacionComponent extends Component
         $this->dependenciaorigen = $ipersonal->dependenciaorigen;
         $this->coddespachoorigen = $ipersonal->coddespachoorigen;
         $this->despachoorigen = $ipersonal->despachoorigen;
-
-        // $this->codsededestino = $ipersonal->codsededestino;
-        // $this->sededestino = $ipersonal->sededestino;
-        // $this->coddependenciadestino = $ipersonal->coddependenciadestino;
-        // $this->dependenciadestino = $ipersonal->dependenciadestino;
-        // $this->coddespachodestino = $ipersonal->coddespachodestino;
-        // $this->despachodestino = $ipersonal->despachodestino;
 
         $this->celinstitucional = $ipersonal->celinstitucional;
         $this->correoinstitucional = $ipersonal->correoinstitucional;
@@ -603,6 +613,178 @@ class PersonalrotacionComponent extends Component
                 tipo: 'success'
             );
 
+            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
+
+        } catch (\Throwable $e) {
+
+            report($e);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'Ocurrió un error al actualizar.',
+                tipo: 'error'
+            );
+        }
+    }
+
+    public function nuevo_retorno($id)
+    {
+        $this->resetValidation();   // ← limpia los errores
+        $this->resetErrorBag();     // ← opcional extra seguridad
+
+        // Restablecer todas las variables
+        // $this->reset();
+
+        $this->funcionGuardarActualizar="guardar_retorno";
+
+        $this->mostrarBtnBuscarDni = "d-none";
+
+        $this->colorHeaderModal = "primary-subtle";
+        $this->textoHeaderModal = "Nuevo retorno de personal";
+        $this->colorGuardarActualizar = "primary";
+        $this->textoGuardarActualizar = "Guardar retorno";
+        $this->colorAgregar = "outline-primary";
+
+        $this->codsededestino = "";
+        $this->sededestino = "";
+        $this->coddependenciadestino = "";
+        $this->dependenciadestino = "";
+        $this->coddespachodestino = "";
+        $this->despachodestino = "";
+
+        $this->bandera_documento = "RESOLUCION";
+
+        $this->seccionUbicacion = "disabled";
+        $this->seccionRotacion = "disabled";
+
+        // ===== DATOS PERSONAL ROTADO =====
+
+        $ipersonalrotacion = PersonalesRotacione::findOrFail($id);
+
+        $this->rotacion_id = $ipersonalrotacion->id;
+        $this->dni = $ipersonalrotacion->persona_dni;
+        $this->personal_id = $ipersonalrotacion->personal_id;
+
+        // $this->codsededestino = $ipersonalrotacion->sede_id;
+        // $this->sededestino = $ipersonalrotacion->sede;
+        // $this->coddependenciadestino = $ipersonalrotacion->dependencia_id;
+        // $this->dependenciadestino = $ipersonalrotacion->dependencia;
+        // $this->coddespachodestino = $ipersonalrotacion->despacho_id;
+        // $this->despachodestino = $ipersonalrotacion->despacho;
+
+        $this->num_expediente = $ipersonalrotacion->num_expediente;
+        $this->fecha_iniciou = $ipersonalrotacion->fecha_iniciou;
+        $this->fecha_finu = $ipersonalrotacion->fecha_finu;
+        $this->motivo_ubicacion = $ipersonalrotacion->motivo_ubicacion;
+        $this->ruta_documento = $ipersonalrotacion->ruta_documento;
+
+        // ===== DATOS PERSONA =====
+        $ipersona = Persona::where('dni', $this->dni)->where('activo','1')->firstOrFail();
+
+        $this->persona_id = $ipersona->id;
+        $this->nombres = $ipersona->nombres;
+        $this->appaterno = $ipersona->appaterno;
+        $this->apmaterno = $ipersona->apmaterno;
+        $this->celpersonal = $ipersona->celpersonal;
+        $this->correopersonal = $ipersona->correopersonal;
+        $this->fotoactual = $ipersona->foto;
+
+        // ===== DATOS PERSONAL =====
+        $ipersonal = Personale::where('persona_dni', $this->dni)->where('activo','1')->firstOrFail();
+
+        $this->personal_id = $ipersonal->id;
+        $this->regimen = $ipersonal->regimen;
+        $this->tipo_regimen = $ipersonal->tipo_regimen;
+        $this->cargo = $ipersonal->cargo;
+        $this->cargo_condicion = $ipersonal->cargo_condicion;
+
+        $this->codsedeorigen = $ipersonal->codsedeorigen;
+        $this->sedeorigen = $ipersonal->sedeorigen;
+        $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
+        $this->dependenciaorigen = $ipersonal->dependenciaorigen;
+        $this->coddespachoorigen = $ipersonal->coddespachoorigen;
+        $this->despachoorigen = $ipersonal->despachoorigen;
+
+        $this->codsededestino = $ipersonal->codsedeorigen;
+        $this->sededestino = $ipersonal->sedeorigen;
+        $this->coddependenciadestino = $ipersonal->coddependenciaorigen;
+        $this->dependenciadestino = $ipersonal->dependenciaorigen;
+        $this->coddespachodestino = $ipersonal->coddespachoorigen;
+        $this->despachodestino = $ipersonal->despachoorigen;
+
+        $this->celinstitucional = $ipersonal->celinstitucional;
+        $this->correoinstitucional = $ipersonal->correoinstitucional;
+    }
+
+    public function guardar_retorno()
+    {
+        $this->validate();
+
+        try {
+
+            DB::transaction(function () {
+
+                $usuario = auth()->user()->datos;
+
+                // Buscar Personal
+                // ===== DATOS PERSONAL =====
+                $personal = Personale::where([['activo',"1"],['persona_dni', $this->dni],])->firstOrFail();
+
+                // Actualizar Personal
+                $personal->update([
+                    'codsededestino' => $this->codsededestino,
+                    'sededestino' => $this->sededestino,
+                    'coddependenciadestino' => $this->coddependenciadestino,
+                    'dependenciadestino' => $this->dependenciadestino,
+                    'coddespachodestino' => $this->coddespachodestino,
+                    'despachodestino' => $this->despachodestino,
+                    'updated_user' => $usuario,
+                ]);
+
+                $ipersonalrotacion = PersonalesRotacione::where([['activo',"1"],['persona_dni', $this->dni],])->first();
+
+                if ($ipersonalrotacion) {
+                    $ipersonalrotacion->update([
+                        'activo' => "0",
+                    ]);
+                }
+
+                // FUNCIÓN PARA CARGAR DOCUMENTO
+                $rutaDocumento = $this->guardar_acta();
+
+                //Insertar datos en la tabla historial ubicaciones
+                PersonalesRotacione::create([
+                    'persona_id' => $personal->persona_id,
+                    'persona_dni' => $personal->persona_dni,
+                    'personal_id' => $personal->id,
+                    'sede_id' => $this->codsededestino,
+                    'sede' => $this->sededestino,
+                    'dependencia_id' => $this->coddependenciadestino,
+                    'dependencia' => $this->dependenciadestino,
+                    'despacho_id' => $this->coddespachodestino,
+                    'despacho' => $this->despachodestino,
+                    'num_expediente' => $this->num_expediente,
+                    'fecha_iniciou' => $this->fecha_iniciou,
+                    'fecha_finu' => $this->fecha_finu,
+                    'motivo_ubicacion' => $this->motivo_ubicacion,
+                    'ruta_documento' => $rutaDocumento,
+                    'estado' => "RETORNO",
+                    'activo' => "0",
+                    'created_user' => $usuario,
+                    'updated_user' => $usuario,
+                ]);
+
+            });
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Datos actualizados',
+                mensaje: 'Los datos se han actualizado correctamente.',
+                tipo: 'success'
+            );
+
+            // Evento para cerrar el modal
             $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
 
         } catch (\Throwable $e) {

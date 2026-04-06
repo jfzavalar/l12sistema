@@ -12,11 +12,10 @@
     </div>
 
     <div class="container mt-4">
-        <div class="card shadow-sm border-0 rounded-4 p-3 border-start border-4 border-primary">
+        {{-- <div class="card shadow-sm border-0 rounded-4 p-3 border-start border-4 border-primary">
             
             <div class="d-flex justify-content-between align-items-start">
 
-                <!-- Izquierda -->
                 <div>
                     <h6 class="fw-bold mb-1">Pedido # 9038660227</h6>
                     <small class="text-muted">Entrega el 27 de marzo.</small>
@@ -32,7 +31,7 @@
                     </div>
                 </div>
 
-                <!-- Derecha -->
+
                 <div class="text-center">
                     <div class="position-relative">
                         <div class="bg-light rounded-3 p-2">
@@ -52,7 +51,7 @@
                 </button>
             </div>
 
-        </div>
+        </div> --}}
     </div>
         
 @endsection

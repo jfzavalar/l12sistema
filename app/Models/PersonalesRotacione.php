@@ -23,6 +23,7 @@ class PersonalesRotacione extends Model
         'fecha_finu',
         'motivo_ubicacion',
         'ruta_documento',
+        'estado',
         'activo',
         'created_user',
         'updated_user',

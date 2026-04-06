@@ -541,7 +541,7 @@
                                         @endcan
                                     </ul>
                                     <ul class="nav nav-treeview">
-                                        @can('mpfn.rrhh.personal.index')
+                                        @can('mpfn.intranet.atenciones.index')
                                             <li class="nav-item">
                                                 <a class="nav-link ms-3 {{ request()->routeIs('mpfn.intranet.atenciones.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.intranet.atenciones.index') }}">
                                                     <i class="nav-icon fa-regular fa-circle"></i>

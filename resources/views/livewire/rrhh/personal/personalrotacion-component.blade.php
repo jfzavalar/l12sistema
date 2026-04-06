@@ -86,10 +86,10 @@
                             </th>
                             <th scope="col">DEPENDENCIA ORIGEN</th>
                             <th scope="col">REGIMEN - CARGO</th>
-                            <th scope="col" class="table-danger">ROTACIÓN: UBICACIÓN FÍSICA</th>
                             <th scope="col">CONDICIÓN</th>
+                            <th scope="col" class="table-danger">ROTACIÓN: UBICACIÓN FÍSICA</th>
+                            <th scope="col" class="table-danger">ESTADO</th>
                             <th scope="col" colspan="2"><i class="fa-solid fa-gears"></i></th>
-                            {{-- <th scope="col"><i class="fa-solid fa-gears"></i></th> --}}
                         </tr>
                     </thead>
                     <tbody class="align-middle">
@@ -113,16 +113,6 @@
                                     <br>
                                     <b>CARGO:</b> {{ $item->cargo }}
                                 </td>
-                                <td @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
-                                    <b>SEDE:</b> {{ $item->sededestino }}
-                                    <br>
-                                    <b>DEPENDENCIA:</b> {{ $item->dependenciadestino }}
-                                    <br>
-                                    <b>DESPACHO:</b> {{ $item->despachodestino }}
-                                    <br>
-                                    <b>De:</b>
-                                    <b>Hasta:</b>
-                                </td>
                                 <td class="text-center">
                                     <span class="badge @if(in_array($item->tipo_documento, ['ADENDA','CONTRATO','INCORPORACION'])) text-bg-primary
                                         @elseif(in_array($item->tipo_documento, ['LICENCIA','RENUNCIA']))
@@ -131,139 +121,29 @@
                                         {{ $item->tipo_documento }}
                                     </span>
                                 </td>
-                                <td class="text-end">
-                                    <div class="btn-group" role="group">
-                                        {{-- @can('mpfn.rrhh.personal.edit')
-                                            <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->id }})">
-                                                <i class="fa-solid fa-pen-to-square"></i><br>Editar
-                                            </button>
-                                        @endcan --}}
-                                        {{-- @can('mpfn.rrhh.personal.create')
-                                            <div class="dropdown">
-                                                <button class="btn btn-outline-dark btn-xs dropdown-toggle" 
-                                                        type="button" 
-                                                        data-bs-toggle="dropdown" 
-                                                        aria-expanded="false">
-                                                    <i class="fa-solid fa-list"></i></i> <i class="fa-solid fa-newspaper"></i><br>Trámite
-                                                </button>
-
-                                                <ul class="dropdown-menu">
-
-                                                    @if ($item->tipo_documento === "CONTRATO")
-
-                                                        <li>
-                                                            <button class="dropdown-item text-dark"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#nuevoEditarModal"
-                                                                    wire:click="nuevo_adenda({{ $item->id }})">
-                                                                <i class="fa-solid fa-file"></i> Adenda
-                                                            </button>
-                                                        </li>
-
-                                                        <li>
-                                                            <button class="dropdown-item text-dark"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#nuevoEditarModal"
-                                                                    wire:click="nuevo_licencia({{ $item->id }})">
-                                                                <i class="fa-solid fa-file"></i> Licencia
-                                                            </button>
-                                                        </li>
-
-                                                        <li>
-                                                            <button class="dropdown-item text-dark"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#nuevoEditarModal"
-                                                                    wire:click="nuevo_renuncia({{ $item->id }})">
-                                                                <i class="fa-solid fa-file"></i> Renuncia
-                                                            </button>
-                                                        </li>                                                       
-
-                                                    @elseif($item->tipo_documento === "LICENCIA")
-
-                                                        <li>
-                                                            <button class="dropdown-item text-dark"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#nuevoEditarModal"
-                                                                    wire:click="nuevo_contrato({{ $item->id }})">
-                                                                <i class="fa-solid fa-file"></i> Contrato
-                                                            </button>
-                                                        </li>
-
-                                                        <li>
-                                                            <button class="dropdown-item text-dark"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#nuevoEditarModal"
-                                                                    wire:click="nuevo_incorporacion({{ $item->id }})">
-                                                                <i class="fa-solid fa-file"></i> Incorporación
-                                                            </button>
-                                                        </li>
-
-                                                        <li>
-                                                            <button class="dropdown-item text-dark"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#nuevoEditarModal"
-                                                                    wire:click="nuevo_renuncia({{ $item->id }})">
-                                                                <i class="fa-solid fa-file"></i> Renuncia
-                                                            </button>
-                                                        </li>
-
-                                                    @elseif($item->tipo_documento === "ADENDA")
-
-                                                        <li>
-                                                            <button class="dropdown-item text-dark"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#nuevoEditarModal"
-                                                                    wire:click="nuevo_adenda({{ $item->id }})">
-                                                                <i class="fa-solid fa-file"></i> Adenda
-                                                            </button>
-                                                        </li>
-
-                                                        <li>
-                                                            <button class="dropdown-item text-dark"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#nuevoEditarModal"
-                                                                    wire:click="nuevo_licencia({{ $item->id }})">
-                                                                <i class="fa-solid fa-file"></i> Licencia
-                                                            </button>
-                                                        </li>
-
-                                                        <li>
-                                                            <button class="dropdown-item text-dark"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#nuevoEditarModal"
-                                                                    wire:click="nuevo_renuncia({{ $item->id }})">
-                                                                <i class="fa-solid fa-file"></i> Renuncia
-                                                            </button>
-                                                        </li> 
-
-                                                    @else
-
-                                                        <li>
-                                                            <button class="dropdown-item text-dark"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#nuevoEditarModal"
-                                                                    wire:click="nuevo_contrato({{ $item->id }})">
-                                                                <i class="fa-solid fa-file"></i> Contrato
-                                                            </button>
-                                                        </li>
-
-                                                    @endif
-
-                                                </ul>
-                                            </div>
-                                        @endcan --}}
-                                        {{-- <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#historialModal" wire:click="historial_documentos('{{ $item->dni }}')">
-                                            <i class="fa-solid fa-timeline"></i><br>Historial
-                                        </button> --}}
-                                        {{-- <button type="button" class="btn btn-outline-secondary btn-xs" data-bs-toggle="modal" data-bs-target="#verDetallesModal" wire:click="editar({{ $item->id }})">
-                                            <i class="fa-solid fa-eye"></i><br>Ver
-                                        </button> --}}
-                                    </div>
+                                <td @class(['text-danger' => \Carbon\Carbon::parse($item->fecha_finu)->lt(now())])>
+                                    <b>SEDE:</b> {{ $item->sededestino }}
+                                    <br>
+                                    <b>DEPENDENCIA:</b> {{ $item->dependenciadestino }}
+                                    <br>
+                                    <b>DESPACHO:</b> {{ $item->despachodestino }}
+                                    <br>
+                                    <b>De: </b>{{ $item->fecha_iniciou }}
+                                    <b>Hasta: </b>{{ $item->fecha_finu }}
+                                </td>
+                                <th>
+                                    {{ $item->estado }}
+                                </th>
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
                                         @can('mpfn.rrhh.personalrotacion.edit')
                                             <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->id }})">
                                                 <i class="fa-solid fa-pen-to-square"></i><br>Editar
+                                            </button>
+                                        @endcan
+                                        @can('mpfn.rrhh.personalrotacion.edit')
+                                            <button type="button" class="btn btn-outline-primary btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo_retorno({{ $item->rotacion_id }})">
+                                                <i class="fa-solid fa-arrow-right-arrow-left"></i><br>Retornar
                                             </button>
                                         @endcan
                                         <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#historialrotacionesModal" wire:click="historial_rotaciones('{{ $item->dni }}')">
@@ -275,7 +155,6 @@
                                             </button>
                                         @endcan
                                     </div>
-                                </td>
                                 </td>
                             </tr>
                         @empty
@@ -340,7 +219,7 @@
                         </div>
                         <div class="row">
                             <div class="col-xl-4">
-                                <fieldset class="border p-3 rounded mb-3">
+                                <fieldset class="border p-3 rounded mb-3" {{ $seccionUbicacion }}>
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">ROTACIÓN</legend>
                                     <div class="row">
                                         <div class="col-xl-12 col-sm-12">
@@ -350,7 +229,7 @@
                                 </fieldset>
                             </div>
                             <div class="col-xl-8">
-                                <fieldset class="border p-3 rounded mb-3">
+                                <fieldset class="border p-3 rounded mb-3" {{ $seccionRotacion }}>
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS SUSTENTATORIOS</legend>
                                     <div class="row">
                                         <div class="col-xl-12 col-sm-12 mb-3">
@@ -387,43 +266,80 @@
                 <div class="modal-body">
                     <div class="table-responsive-xl">
                         <div class="input-group mb-3">
-                            <input type="text" id="txtsearchi" class="form-control form-control-sm" wire:model.live="searchi" placeholder="Buscar">
+                            <input type="text" id="txtsearchi" class="form-control form-control-sm" wire:model.live="searchi" placeholder="Buscar por dni o Apellidos y nombres">
                         </div>
                         <table class="table table-striped table-hover table-sm table-xsmall">
-                            <thead class="table-dark text-center align-middle">
+                            <thead class="table-primary text-center align-middle">
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">
-                                        <i class="fa-solid fa-user"></i> PERSONAL
+                                        <i class="fa-solid fa-user"></i> DNI - PERSONAL
                                     </th>
-                                    <th scope="col" class="table-secondary">DEPENDENCIA ORIGEN</th>
-                                    <th scope="col" class="table-secondary">DEPENDENCIA DESTINO</th>
-                                    <th scope="col" class="table-secondary">REGIMEN</th>
-                                    <th scope="col" class="table-secondary">CARGO</th>
-                                    <th scope="col"><i class="fa-solid fa-gears"></i></th>
+                                    <th scope="col">DEPENDENCIA ORIGEN</th>
+                                    <th scope="col">REGIMEN - CARGO</th>
+                                    <th scope="col">CONDICIÓN</th>
+                                    <th scope="col" class="table-danger">ROTACIÓN: UBICACIÓN FÍSICA</th>
+                                    <th scope="col" class="table-danger">ESTADO</th>
+                                    <th scope="col" colspan="2"><i class="fa-solid fa-gears"></i></th>
                                 </tr>
                             </thead>
                             <tbody class="align-middle">
-                                @forelse ($lista_inactivos as $item2)
+                                @forelse ($lista_inactivos as $item)
                                     <tr>
-                                        <th class="text-center">{{ $loop->iteration }}</th>
-                                        <td>
-                                            {{ $item2->dni }}
-                                            <br>{{ $item2->datos }}
-                                        </td>
-                                        <td>
-                                            SEDE: {{ $item2->sedeorigen }}
+                                        <th @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>{{ $loop->iteration }}</th>
+                                        <th @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
+                                            DNI: {{ $item->dni }}
                                             <br>
-                                            DEPENDENCIA: {{ $item2->dependenciaorigen }}
+                                            {{ $item->datos }}
+                                        </th>
+                                        <td @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
+                                            <b>SEDE:</b> {{ $item->sedeorigen }}
+                                            <br>
+                                            <b>DEPENDENCIA:</b> {{ $item->dependenciaorigen }}
+                                            <br>
+                                            <b>DESPACHO:</b> {{ $item->despachoorigen }}
                                         </td>
-                                        <td></td>
-                                        <td>{{ $item2->regimen }}</td>
-                                        <td>{{ $item2->cargo }}</td>
+                                        <td @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
+                                            <b>REGIMEN:</b> {{ $item->regimen }}
+                                            <br>
+                                            <b>CARGO:</b> {{ $item->cargo }}
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge @if(in_array($item->tipo_documento, ['ADENDA','CONTRATO','INCORPORACION'])) text-bg-primary
+                                                @elseif(in_array($item->tipo_documento, ['LICENCIA','RENUNCIA']))
+                                                    text-bg-danger
+                                                @endif">
+                                                {{ $item->tipo_documento }}
+                                            </span>
+                                        </td>
+                                        <td @class(['text-danger' => $item->tipo_documento == 'RENUNCIA'])>
+                                            <b>SEDE:</b> {{ $item->sededestino }}
+                                            <br>
+                                            <b>DEPENDENCIA:</b> {{ $item->dependenciadestino }}
+                                            <br>
+                                            <b>DESPACHO:</b> {{ $item->despachodestino }}
+                                            <br>
+                                            <b>De:</b>
+                                            <b>Hasta:</b>
+                                        </td>
+                                        <th>
+                                            {{ $item->estado }}
+                                        </th>
                                         <td class="text-end">
                                             <div class="btn-group" role="group">
-                                                <button type="button" class="btn btn-outline-danger btn-xs" wire:click="desactivar({{ $item2->id }})">
-                                                    <i class="fa-solid fa-check-double"></i><br>Reactivar
+                                                @can('mpfn.rrhh.personalrotacion.edit')
+                                                    <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->id }})">
+                                                        <i class="fa-solid fa-pen-to-square"></i><br>Editar
+                                                    </button>
+                                                @endcan
+                                                <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#historialrotacionesModal" wire:click="historial_rotaciones('{{ $item->dni }}')">
+                                                    <i class="fa-solid fa-timeline"></i><br>Historial
                                                 </button>
+                                                @can('mpfn.rrhh.personalrotacion.destroy')
+                                                    <button type="button" class="btn btn-outline-danger btn-xs" wire:click="desactivar({{ $item->id }})">
+                                                        <i class="fa-solid fa-trash-can"></i><br>Eliminar
+                                                    </button>
+                                                @endcan
                                             </div>
                                         </td>
                                     </tr>
@@ -437,6 +353,11 @@
                                     </tr>
                                 @endforelse
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="8">{{ $lista_inactivos->links() }}</td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -448,111 +369,6 @@
             </div>
         </div>
     </div>
-
-    {{-- Modal Historial --}}
-    {{-- <div wire:ignore.self class="modal fade" id="historialModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="historialModalLabel" aria-hidden="true">
-        <div class="modal-dialog" style="max-width:90%;">
-            <div class="modal-content">
-                <div class="modal-header bg-warning-subtle">
-                    <h1 class="modal-title fs-5" id="historialModalLabel">
-                        <i class="fa-solid fa-timeline"></i> HISTORIAL CONTRATOS / ADENDAS / RENUNCIAS
-                    </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="table-responsive-xl">
-                        <div class="input-group mb-3">
-                            <input type="text" id="txtsearchhistorial" class="form-control form-control-sm" wire:model.live="searchhistorial" placeholder="Buscar por número de convocatoria">
-                            <a type="button" href="{{ route('pdf.rrhh.personal.reportePDF') }}" target="_blank" class="btn btn-outline-naranja btn-sm">
-                                <i class="fa-regular fa-file-pdf"></i> PDF
-                            </a>
-                        </div>
-                        <table class="table table-striped table-hover table-sm table-xsmall">
-                            <thead class="table-dark text-center align-middle">
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">
-                                        <i class="fa-solid fa-user"></i> PERSONAL
-                                    </th>
-                                    <th scope="col">DEPENDENCIA ORIGEN</th>
-                                    <th scope="col">UBICACIÓN FÍSICA</th>
-                                    <th scope="col">REGIMEN</th>
-                                    <th scope="col">CARGO</th>
-                                    <th scope="col">N° DE CONVOCATORIA</th>
-                                    <th scope="col">DATOS</th>
-                                    <th scope="col"><i class="fa-solid fa-gears"></i></th>
-                                </tr>
-                            </thead>
-                            <tbody class="align-middle">
-                                @forelse ($lista_historial as $item3)
-                                    <tr>
-                                        <th class="text-center">{{ $loop->iteration }}</th>
-                                        <th>
-                                            {{ $item3->dni }}
-                                            <br>{{ $item3->datos }}
-                                        </th>
-                                        <td>
-                                            <b>SEDE:</b> {{ $item3->sedeorigen }}
-                                            <br>
-                                            <b>DEPENDENCIA:</b> {{ $item3->dependenciaorigen }}
-                                            <br>
-                                            <b>DESPACHO:</b> {{ $item3->despachoorigen }}
-                                        </td>
-                                        <td>
-                                            <b>SEDE:</b> {{ $item3->sededestino }}
-                                            <br>
-                                            <b>DEPENDENCIA:</b> {{ $item3->dependenciadestino }}
-                                            <br>
-                                            <b>DESPACHO:</b> {{ $item3->despachodestino }}
-                                        </td>
-                                        <td>{{ $item3->regimen }}</td>
-                                        <td>{{ $item3->cargo }}</td>
-                                        <td>{{ $item3->numero_convocatoria }}</td>
-                                    
-                                        <td class="@if(in_array($item3->tipo_documento, ['ADENDA','CONTRATO','INCORPORACION'])) text-primary
-                                                    @elseif(in_array($item3->tipo_documento, ['LICENCIA','RENUNCIA'])) text-danger
-                                                    @endif">
-                                            {{ $item3->tipo_documento }}
-                                            <br>
-                                            {{ \Carbon\Carbon::parse($item3->fecha_inicio)->format('d/m/Y') . '-' . \Carbon\Carbon::parse($item3->fecha_fin)->format('d/m/Y') }}
-                                        </td>
-                                        <td class="text-end">
-                                            <div class="btn-group" role="group">
-                                                @can('mpfn.rrhh.personal.edit')
-                                                    <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#pdf-cargar-component" wire:click="editar_pdf({{ $item3->personal_id }})">
-                                                        <i class="fa-solid fa-upload"></i><br>Cargar
-                                                    </button>
-                                                @endcan
-                                                
-                                                @if($item3->ruta_documento)
-                                                    <a type="button" class="btn btn-outline-info btn-xs" href="{{ asset('storage/'.$item3->ruta_documento) }}" target="_blank">
-                                                        <i class="fa-solid fa-file-signature"></i><br> Firmado
-                                                    </a>
-                                                @endif
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="10" class="text-center">
-                                            <div class="alert alert-danger" role="alert">
-                                                ¡No se encontraron resultados!
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
-                        <i class="fa-solid fa-rectangle-xmark"></i> Cerrar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div> --}}
 
     {{-- Modal Historial Rotaciones --}}
     <div wire:ignore.self class="modal fade" id="historialrotacionesModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="historialrotacionesModalLabel" aria-hidden="true">
@@ -567,10 +383,10 @@
                 <div class="modal-body">
                     <div class="table-responsive-xl">
                         <div class="input-group mb-3">
-                            <input type="text" id="txtsearchhistorialr" class="form-control form-control-sm" wire:model.live="searchhistorial" placeholder="Buscar por número de convocatoria">
-                            <a type="button" href="{{ route('pdf.rrhh.personal.reportePDF') }}" target="_blank" class="btn btn-outline-naranja btn-sm">
+                            <input type="text" id="txtsearchhistorialr" class="form-control form-control-sm" wire:model.live="searchhistorial" placeholder="Buscar por dni o Apellidos y nombres">
+                            {{-- <a type="button" href="{{ route('pdf.rrhh.personal.reportePDF') }}" target="_blank" class="btn btn-outline-naranja btn-sm">
                                 <i class="fa-regular fa-file-pdf"></i> PDF
-                            </a>
+                            </a> --}}
                         </div>
                         <table class="table table-striped table-hover table-sm table-xsmall">
                             <thead class="table-dark text-center align-middle">

@@ -134,7 +134,7 @@ Route::middleware('auth','can:procesos.informatica.spijweb.index')->group(functi
 
 
 //INTRANET
-Route::middleware('auth','can:procesos.intranet.index')->group(function () {
+Route::middleware('auth','can:mpfn.intranet.atenciones.index')->group(function () {
     Route::resource('atenciones', AtencionesController::class)->names('mpfn.intranet.atenciones');
 });
 
