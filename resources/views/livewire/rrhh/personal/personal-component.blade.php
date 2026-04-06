@@ -427,7 +427,7 @@
                 <div class="modal-body">
                     <div class="table-responsive-xl">
                         <div class="input-group mb-3">
-                            <input type="text" id="txtsearchi" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar">
+                            <input type="text" id="txtsearchi" class="form-control form-control-sm" wire:model.live="searchrenuncias" placeholder="Buscar">
                         </div>
                         <table class="table table-striped table-hover table-sm table-xsmall">
                             <thead class="table-primary text-center align-middle">
@@ -660,7 +660,7 @@
                 <div class="modal-body">
                     <div class="table-responsive-xl">
                         <div class="input-group mb-3">
-                            <input type="text" id="txtsearchi" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar">
+                            <input type="text" id="txtsearchi" class="form-control form-control-sm" wire:model.live="searchlicencias" placeholder="Buscar">
                         </div>
                         <table class="table table-striped table-hover table-sm table-xsmall">
                             <thead class="table-primary text-center align-middle">
@@ -863,7 +863,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="8">{{ $lista_inactivos->links() }}</td>
+                                    <td colspan="8">{{ $lista_licencias->links() }}</td>
                                 </tr>
                             </tfoot>
                         </table>
