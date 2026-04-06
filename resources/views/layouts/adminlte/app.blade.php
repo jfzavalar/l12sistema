@@ -2,6 +2,7 @@
 <html lang="es">
     <head>
         <meta charset="UTF-8">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>@yield('title', config('app.name'))</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -645,24 +646,32 @@
             });
         </script>
 
-        {{-- <script>
-            let tiempo = {{ config('session.lifetime') }} * 60 * 1000;
-            let temporizador;
+        <script>
+            let timeout;
+            let tiempo = 3600000;
 
-            function reiniciarSesion() {
-                clearTimeout(temporizador);
-
-                temporizador = setTimeout(() => {
-                    alert("⚠️ Tu sesión ha expirado");
+            function logout() {
+                fetch('/logout', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                }).then(() => {
                     window.location.href = "/login";
-                }, tiempo);
+                });
             }
 
-            window.onload = reiniciarSesion;
-            document.onmousemove = reiniciarSesion;
-            document.onkeypress = reiniciarSesion;
-            document.onclick = reiniciarSesion;
-        </script> --}}
+            function resetTimer() {
+                clearTimeout(timeout);
+                timeout = setTimeout(logout, tiempo);
+            }
+
+            window.onload = resetTimer;
+            document.onmousemove = resetTimer;
+            document.onkeypress = resetTimer;
+            document.onclick = resetTimer;
+            document.onscroll = resetTimer;
+        </script>
 
     </body>
 </html>
