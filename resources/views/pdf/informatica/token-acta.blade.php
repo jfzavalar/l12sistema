@@ -46,10 +46,10 @@
             <h3>ACTA DE  {{ $instanciaTbl->asignacion }} - TOKEN USB</h3>
             <h5>PERSONAL&nbsp;: {{ $instanciaTbl->datos }}</h5>
             <h5>DNI&nbsp;: {{ $instanciaTbl->dni }}</h5>
-            <h5>SEDE: {{ $instanciaTbl->sede }}</h5>
-            <h5>DEPENDENCIA: {{ $instanciaTbl->dependencia }}</h5>
-            <h5>CARGO: {{ $instanciaTbl->cargo }}</h5>
-            <h5>REGIMEN: {{ $instanciaTbl->regimen }}</h5>
+            <h5>SEDE: {{ $instanciaTbl->sedeorigen }}</h5>
+            <h5>DEPENDENCIA: {{ $instanciaTbl->dependenciaorigen }}</h5>
+            <h5>CARGO: {{ $ipersonal->cargo }}</h5>
+            <h5>REGIMEN: {{ $ipersonal->regimen }}</h5>
             <h4>El {{ date('d/m/Y') }}, la Oficina de Informática del Distrito Fiscal de Junín, registra la {{ $instanciaTbl->asignacion }} de un TOKEN USB</h4>
             <h5>Detalles del bien:</h5>
             <table class="tabla">

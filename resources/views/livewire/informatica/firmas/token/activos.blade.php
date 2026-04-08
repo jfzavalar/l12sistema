@@ -509,7 +509,7 @@
                                                         </button>
                                                     @endcan
                                                     @if ($item->ruta_documento)
-                                                        <a href="{{ asset('storage/'.$item->ruta_documento) }}" target="_blank" class="btn btn-outline-info btn-xs">
+                                                        <a href="{{ asset($item->ruta_documento) }}" target="_blank" class="btn btn-outline-info btn-xs">
                                                             <i class="fa-solid fa-file-pdf"></i><br>Firmado
                                                         </a>
                                                     @endif

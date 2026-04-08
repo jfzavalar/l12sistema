@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Informatica;
 
 use App\Http\Controllers\Controller;
+use App\Models\InformaticasFirmasToken;
+use App\Models\Personale;
 use App\Models\Tbl_tokens_asignado;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -15,9 +17,11 @@ class FirmasdigitalesController extends Controller
 
     public function exportarPDF($id)
     {
-        $instanciaTbl = Tbl_tokens_asignado::findOrFail($id);
+        $instanciaTbl = InformaticasFirmasToken::findOrFail($id);
 
-        $pdf = Pdf::loadView('pdf.informatica.token-acta', compact('instanciaTbl'));
+        $ipersonal = Personale::where('activo','1')->where('persona_dni',$instanciaTbl->dni)->first();
+
+        $pdf = Pdf::loadView('pdf.informatica.token-acta', compact('instanciaTbl','ipersonal'));
 
         //Mostrar PDF
         return $pdf->stream('token_'.$instanciaTbl->dni.'.pdf');
