@@ -1087,12 +1087,14 @@ class Activos extends Component
             . Str::slug($this->token_codigo ?? 'sin-token')
             . '.pdf';
 
-        return $this->pdf_acta->storeAs(
+        $path = $this->pdf_acta->storeAs(
             'archivos/informatica/tokens',
             $fileName,
             'public'
         );
-        
+
+        // 🔥 Guardas con storage/
+        return 'storage/' . $path;
     }
 
     private function actualizar_acta()
@@ -1105,23 +1107,31 @@ class Activos extends Component
             return $rutaDocumento;
         }
 
+        // 🔥 Convertir ruta BD → ruta usable por Storage
+        $rutaStorage = Str::after($rutaDocumento, 'storage/');
+
         // Si no existe archivo previo
         if (!$rutaDocumento) {
             return $this->guardar_acta();
         }
 
-        $fileName = basename($rutaDocumento);
-        $directory = dirname($rutaDocumento);
+        $fileName = basename($rutaStorage);
+        $directory = dirname($rutaStorage);
 
-        if (Storage::disk('public')->exists($rutaDocumento)) {
-            Storage::disk('public')->delete($rutaDocumento);
+        // Eliminar archivo anterior
+        if (Storage::disk('public')->exists($rutaStorage)) {
+            Storage::disk('public')->delete($rutaStorage);
         }
 
-        return $this->pdf_acta->storeAs(
+        // Guardar nuevo archivo con mismo nombre
+        $nuevoPath = $this->pdf_acta->storeAs(
             $directory,
             $fileName,
             'public'
         );
+
+        // 🔥 Volver a formato BD (con storage/)
+        return 'storage/' . $nuevoPath;
     }
 
     // PDF exportar

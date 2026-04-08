@@ -16,6 +16,9 @@ use App\Http\Controllers\Informatica\SpijwebController;
 use App\Http\Controllers\Intranet\AtencionesController;
 use App\Http\Controllers\Intranet\ConfiguracionController;
 use App\Http\Controllers\Intranet\ExpimportantesController;
+use App\Http\Controllers\Patrimonio\BienesasignacionController;
+use App\Http\Controllers\Patrimonio\BienesController;
+use App\Http\Controllers\Patrimonio\BienestrasladoController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Rrhh\PersonaController;
 use App\Http\Controllers\Rrhh\PersonalController;
@@ -133,7 +136,7 @@ Route::middleware('auth','can:procesos.informatica.spijweb.index')->group(functi
 
 
 
-//INTRANET
+// INTRANET
 Route::middleware('auth','can:mpfn.intranet.atenciones.index')->group(function () {
     Route::resource('atenciones', AtencionesController::class)->names('mpfn.intranet.atenciones');
 });
@@ -146,15 +149,26 @@ Route::middleware('auth','can:procesos.intranet.index')->group(function () {
     Route::resource('configuracion', ConfiguracionController::class)->names('mpfn.intranet.configuracion');
 });
 
+// PATRIMONIO
 
-//VOLUNTARIADO
+Route::middleware('auth','can:mpfn.patrimonio.bienes.index')->group(function () {
+    Route::resource('bienes', BienesController::class)->names('mpfn.patrimonio.bienes');
+});
+Route::middleware('auth','can:mpfn.patrimonio.bienesasignacion.index')->group(function () {
+    Route::resource('bienesasignados', BienesasignacionController::class)->names('mpfn.patrimonio.asignaciones');
+});
+Route::middleware('auth','can:mpfn.patrimonio.bienestraslado.index')->group(function () {
+    Route::resource('bienestraslado', BienestrasladoController::class)->names('mpfn.patrimonio.traslado');
+});
+
+// VOLUNTARIADO
 Route::middleware('auth')->group(function () {
     Route::resource('voluntariado', VoluntariadoController::class)->names('procesos.voluntariado');
 });
 
 // -------------------------------------------------------------------
 
-//RRHH
+// RRHH
 Route::middleware('auth')->group(function () {
     Route::resource('personal', PersonalController::class)->names('mpfn.rrhh.personal');
     Route::get('pdf/rrhh/personal/reportePDF/', [PersonalController::class, 'reportePDF'])->name('pdf.rrhh.personal.reportePDF');

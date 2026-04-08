@@ -5,7 +5,7 @@
             <div class="table-responsive small">
                 <div class="input-group mb-3">
                     <input type="text" id="txt_searchabienesdesplazamientoa" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar por código patrimonial">
-                    <button type="button" id="btnnuevo" class="btn btn-outline-primary btn-sm" wire:click="nuevo">
+                    <button type="button" id="btnnuevo" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
                         <i class="fa-solid fa-file"></i> Nuevo
                     </button>
                 </div>
@@ -436,11 +436,6 @@
             </div>
         </div>
     </div>
-
-    {{-- @include('livewire.partials.personal-modal-buscar')
-    @include('livewire.partials.bienes-modal-buscar')
-    @include('livewire.partials.pdf-modal-cargar')
-    @include('livewire.partials.pdf-modal-vista-previa') --}}
 
 </div>
 

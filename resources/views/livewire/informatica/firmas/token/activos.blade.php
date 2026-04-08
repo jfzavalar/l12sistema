@@ -453,9 +453,9 @@
                     <div class="table-responsive-xl">
                         <div class="input-group mb-3">
                             <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="searchhistorial" placeholder="Buscar por dni o apellidos y nombres">
-                            <a type="button" href="{{ route('pdf.rrhh.personal.reportePDF') }}" target="_blank" class="btn btn-outline-naranja btn-sm">
+                            {{-- <a type="button" href="{{ route('pdf.rrhh.personal.reportePDF') }}" target="_blank" class="btn btn-outline-naranja btn-sm">
                                 <i class="fa-regular fa-file-pdf"></i> PDF
-                            </a>
+                            </a> --}}
                         </div>
                         <table class="table table-striped table-hover table-sm table-xsmall">
                             <thead class="table-primary text-center align-middle">
@@ -547,7 +547,8 @@
     </div>
 
 
-    @include('livewire.rrhh.contratos.partials.pdf-cargar-component')
+    @include('livewire.informatica.firmas.partials.pdf-cargar-component')
+
     @include('livewire.rrhh.personal.partials.buscar-personal-component')
 
 </div>
