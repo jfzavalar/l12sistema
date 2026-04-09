@@ -190,11 +190,7 @@
                             <th scope="col" class="bg-success-subtle">MEDIO</th>
                             <th scope="col" class="bg-success-subtle">ESTADO</th>
                             <th scope="col" class="bg-success-subtle">ATENDIDO POR</th>
-                            {{-- <th scope="col" class="bg-success-subtle">SOLUCIÓN</th> --}}
-                            {{-- <th scope="col">GLPI</th>
-                            <th scope="col">CEA</th>
-                            <th scope="col">CARPETA</th> --}}
-                            <th scope="col"><i class="fa-solid fa-gears"></i></th>
+                            <th scope="col" colspan="2" class="table-darck"><i class="fa-solid fa-gears"></i></th>
                         </tr>
                     </thead>
                     <tbody class="align-middle">
@@ -246,13 +242,25 @@
                                                 <i class="fa-solid fa-pen-to-square"></i><br>Editar
                                             </button> 
                                         @endif
-                                        <a type="button" href="#" target="_blank" class="btn btn-outline-dark btn-xs">
-                                            <i class="fa-solid fa-print"></i><br>Acta
-                                        </a>                
                                         <button type="button" class="btn btn-outline-danger btn-xs">
                                             <i class="fa-solid fa-trash-can"></i><br>Eliminar
                                         </button>
                                     </div>
+                                    <td class="text-end">
+                                        <div class="btn-group" role="group">
+                                            <a type="button" class="btn btn-outline-naranja btn-xs" href="{{ route('pdf.informatica.soporte-acta', $item->personalatencion_id) }}" target="_blank">
+                                                <i class="fa-solid fa-file-pdf"></i><br>Acta
+                                            </a>
+                                            <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#pdf-cargar-component" wire:click="editar_pdf({{ $item->personalatencion_id }})">
+                                                <i class="fa-solid fa-upload"></i><br>Cargar
+                                            </button>
+                                            @if($item->ruta_documento)
+                                                <a type="button" class="btn btn-outline-info btn-xs" href="{{ asset('storage/'.$item->ruta_documento) }}" target="_blank">
+                                                    <i class="fa-solid fa-file-signature"></i><br> Firmado
+                                                </a>
+                                            @endif
+                                        </div>
+                                    </td>
                                 </td>
                             </tr>                           
                         @empty
@@ -320,9 +328,6 @@
                                             <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS PERSONALES</legend>
                                             @include('livewire.rrhh.personal.partials.datos-personales-component')
                                         </fieldset>
-                                        <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-personal-component">
-                                            <i class="fa-solid fa-magnifying-glass"></i> Buscar personal
-                                        </button>
                                     </div>
                                     <div class="col-xl-8">
                                         <fieldset class="border p-3 rounded mb-3" {{ $seccionPersonal }} disabled>
@@ -338,6 +343,40 @@
                                                 @endif --}}
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xl-3">
+                                    <div class="input-group mb-3">
+                                        <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs me-2"
+                                            data-bs-toggle="modal" data-bs-target="#buscar-personal-component">
+                                            <i class="fa-solid fa-magnifying-glass"></i> Buscar personal
+                                        </button>
+
+                                        <button type="button" class="btn btn-success btn-xs me-2 {{ $mostrarcontroles }}"
+                                            data-bs-toggle="modal" data-bs-target="#buscar-bienes-component">
+                                            <i class="fa-solid fa-magnifying-glass"></i> Buscar bien patrimonial
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-xl-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text input-group-text-xs {{ $mostrarcontroles }}" id="basic-addon1">Código</span>
+                                        <input type="text" class="form-control form-control-xs {{ $mostrarcontroles }}" wire:model="cod">
+                                    </div>
+                                </div>
+                                <div class="col-xl-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text input-group-text-xs {{ $mostrarcontroles }}" id="basic-addon1">Cod. Patrimonial</span>
+                                        <input type="text" class="form-control form-control-xs {{ $mostrarcontroles }}" wire:model="cod_patrimonial">
+                                    </div>
+                                </div>
+                                <div class="col-xl-5">
+                                    <div class="input-group">
+                                        <span class="input-group-text input-group-text-xs {{ $mostrarcontroles }}" id="basic-addon1">Bien</span>
+                                        <input type="text" class="form-control form-control-xs {{ $mostrarcontroles }}" wire:model="datos_bien">
                                     </div>
                                 </div>
                             </div>
@@ -435,18 +474,14 @@
                                         <div class="col-xl-4 col-sm-12">
                                             <label for="txtobservacion" class="fw-bold fs-6">CARGAR EVIDENCIA</label>
                                             <div class="input-group">
-                                                {{-- <button class="btn btn-outline-dark btn-xs" type="button" id="btnimprimircontrato">
-                                                    <i class="fa-solid fa-print"></i> Imprimir
-                                                </button> --}}
-                                                <input type="file" class="form-control form-control-xs" id="filecontrato" aria-describedby="inputGroupFileAddon04" aria-label="Upload" accept="application/pdf">
-                                                {{-- <button class="btn btn-outline-warning btn-xs" type="button" id="btncargarcontrato">
-                                                    <i class="fa-solid fa-arrow-up-from-bracket"></i> Cargar
-                                                </button> --}}
-                                                {{-- @if ($ruta_documento)
-                                                    <a class="btn btn-{{ $colorAgregar }} btn-xs" type="button" id="btnverevidencia" href="{{ asset('storage/'.$ruta_documento) }}" target="_blank">
-                                                        <i class="fa-solid fa-file-pdf"></i> Ver firmado
-                                                    </a>
-                                                @endif --}}
+                                                <div class="input-group">
+                                                    <input type="file" class="form-control form-control-xs" id="filecontrato" aria-describedby="inputGroupFileAddon04" aria-label="Upload" accept="application/pdf" wire:model="pdf_acta">
+                                                    @if ($ruta_evidencia)
+                                                        <a class="btn btn-{{ $colorAgregar }} btn-xs" type="button" id="btnverevidencia" href="{{ asset('storage/'.$ruta_evidencia) }}" target="_blank">
+                                                            <i class="fa-solid fa-file-pdf"></i> Ver Evidencia
+                                                        </a>
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
                                         @if ($servicio_id === 7 )
@@ -516,6 +551,9 @@
 
     {{-- Modal Incidencias y Solicitudes Detalle --}}
     @include('livewire.intranet.atenciones.partials.buscar-incidencia-solicitud-component')
+
+    {{-- Modal bienes patrimoniales --}}
+    @include('livewire.patrimonio.bienes.partials.buscar-bienes-component')
     
 
 
@@ -588,7 +626,7 @@
     </div> --}}
     
 
-
+    @include('livewire.intranet.atenciones.partials.pdf-cargar-component')
     @include('livewire.rrhh.personal.partials.buscar-personal-component')
 
 </div>

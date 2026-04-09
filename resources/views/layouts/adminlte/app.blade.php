@@ -204,9 +204,15 @@
                 border-radius: 0.2rem !important;    /* esquinas compactas */
             }
 
+            /* ===== Extra Span (xs) ===== */
+            .input-group-text-xs.input-group-text {
+                padding: .25rem .5rem;  /* arriba/abajo - izquierda/derecha */
+                font-size: .75rem;      /* tamaño de letra */
+            }
+
             /* Tamaño extra pequeño para tablas */
             .table-xsmall {
-                font-size: 0.75rem !important;   /* más chico que el normal */
+                font-size: 0.70rem !important;   /* más chico que el normal */
             }
         </style>
 

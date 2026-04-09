@@ -44,6 +44,8 @@ class PersonalesAtencione extends Model
         'respuesta',
         'conformidad',
         'activo',
+        'ruta_evidencia',
+        'ruta_documento',
         'created_user',
         'updated_user',
     ];

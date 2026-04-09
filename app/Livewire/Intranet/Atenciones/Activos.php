@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Intranet\Atenciones;
 
+use App\Models\Patrimonios_biene;
 use App\Models\Persona;
 use App\Models\Personale;
 use App\Models\Personales_cargo;
@@ -38,6 +39,7 @@ class Activos extends Component
     public $colorAgregar;
 
     //Variables PARA OCULTAR Y MOSTRAR TXT_OTROS
+    public $mostrarcontroles = "";
     public $mostrarotrosp = "d-none", $mostrarotrosc = "d-none",$mostrarcargafoto = "d-none";
 
     //Variables bloquear de secciones
@@ -48,7 +50,7 @@ class Activos extends Component
 
     // Variables de búsqueda
     public $search, $searchi,$searchhistorial, $searchpersonas, $searchsedes,$searchdependencias,$searchdespachos,$searchcargos,
-            $searchservicios,$searchincidenciasolicitud;
+            $searchservicios,$searchincidenciasolicitud,$searchbienes;
     public function updatingSearch(){
         $this->resetPage('personalesPage');
     }
@@ -81,6 +83,9 @@ class Activos extends Component
     }
     public function updatingSearchincidenciasolicitud(){
         $this->resetPage('incidenciasolicitudPage');
+    }
+    public function updatingSearchbienes(){
+        $this->resetPage('bienesPage');
     }
 
     public $filtrotipodocumento;
@@ -128,13 +133,8 @@ class Activos extends Component
             $despachodestino,
             
             $celinstitucional,            
-            $correoinstitucional,            
-
-            $numero_convocatoria,
-            $tipo_documento,
-            $fecha_inicio,
-            $fecha_fin,
-            $ruta_documento;
+            $correoinstitucional,
+            $tipo_documento;
 
     public $atencion_id,
             $reportado_por,
@@ -156,36 +156,9 @@ class Activos extends Component
             $atendido_por_datos,
             $tiempo_atencion,
             $respuesta,
-            $conformidad;
-
-            
-
-    // public $soporte_id,
-    //         $preventivo,
-    //         $sede_ubicacion,
-    //         $dependencia_ubicacion,
-    //         $despacho_ubicacion,
-    //         $p01,
-    //         $p02,
-    //         $p03,
-    //         $p04,
-    //         $p05,
-    //         $p06,
-    //         $p07,
-    //         $potros,
-    //         $correctivo,
-    //         $c01,
-    //         $c02,
-    //         $c03,
-    //         $c04,
-    //         $c05,
-    //         $c06,
-    //         $c07,
-    //         $cotros,
-    //         $operativo,
-    //         $observacion_usuario,
-    //         $recomendacion_usuario,
-    //         $ruta_evidencia;
+            $conformidad,
+            $ruta_evidencia,
+            $ruta_documento;
 
     Public $bien_id,
             $cod,
@@ -200,9 +173,11 @@ class Activos extends Component
             $estado,
             $clase,
             $familia,
-            $bien_ip;
+            $bien_ip,
+            $datos_bien;
 
     public $pdf_acta;
+
     public $bandera_documento="EVIDENCIA";
 
     public function updatedEnviadoLima($value)
@@ -245,7 +220,8 @@ class Activos extends Component
                 'personales_atenciones.solicitud_incidencia',
                 'personales_atenciones.atendido',
                 'personales_atenciones.atendido_por_datos',
-                'personales_atenciones.created_user as utencioncreado')
+                'personales_atenciones.created_user as utencioncreado',
+                'personales_atenciones.ruta_documento')
             ->where('personales_atenciones.activo', 1)
             ->orderBy('personales.id','desc')
             ->paginate(10, ['personas.*'], 'personalesPage');
@@ -357,10 +333,16 @@ class Activos extends Component
             ->orderBy('incidencia_solicitud')
             ->paginate(20,['*'],'incidenciasolicitudPage');
 
+        $lista_bienes = Patrimonios_biene::where('activo','1')
+            ->where('cod_patrimonial','like','%' . $this->searchbienes . '%')
+            ->distinct()
+            ->orderBy('bien')
+            ->paginate(10,['*'],'bienesPage');
+
         return view('livewire.intranet.atenciones.activos',
                 compact('lista_activos','lista_inactivos','estadisticas','lista_historial',
                             'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos',
-                            'lista_servicios','lista_incidencias_solicitudes'));
+                            'lista_servicios','lista_incidencias_solicitudes','lista_bienes'));
     }
 
     private function queryConFiltros()
@@ -373,30 +355,24 @@ class Activos extends Component
                     $q->where('personas.dni', 'like', '%' . $this->search . '%')
                     ->orWhere('personas.datos', 'like', '%' . $this->search . '%');
                 });
-            })
-
-            ->when($this->filtroatendido, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('personales.tipo_documento', '=', $this->filtroatendido);
-                    // ->orWhere('', 'like', '%' . $this->search . '%');
-                });
             });
+
+            // ->when($this->filtroatendido, function ($query) {
+            //     $query->where(function ($q) {
+            //         $q->where('personales.tipo_documento', '=', $this->filtroatendido);
+            //         // ->orWhere('', 'like', '%' . $this->search . '%');
+            //     });
+            // });
     }
 
     protected function rules(){
         return [
             'dni' => 'required',
-            'reportado_por' => 'required',
-            'descripcion' => 'required',
-            'detalle' => 'required',
         ];
     }
 
     protected $messages = [
         'dni.required' => 'El DNI es obligatorio',
-        'reportado_por.required' => 'Seleccionar medio',
-        'descripcion.required' => 'Seleccionar el servicio',
-        'detalle.required' => 'Seleccionar la incidencia o solicitud',
     ];
 
     public function nuevo()
@@ -413,6 +389,7 @@ class Activos extends Component
         $this->funcionGuardarActualizar="guardar";
 
         $this->mostrarBtnBuscarDni = "d-none";
+        $this->mostrarcontroles = "d-none";
 
         $this->colorHeaderModal = "primary-subtle";
         $this->textoHeaderModal = "Nuevo";
@@ -433,7 +410,8 @@ class Activos extends Component
 
                 $usuario = auth()->user()->datos; // Mejor que usar propiedad pública
 
-                // GUARDAR ATENCION
+                // FUNCIÓN PARA CARGAR DOCUMENTO
+                $rutaDocumento = $this->guardar_acta();
 
                 PersonalesAtencione::create([
                     'persona_id' => $this->persona_id,
@@ -454,14 +432,15 @@ class Activos extends Component
                     'despacho_destino' => $this->despachodestino,
                     'reportado_por' => $this->reportado_por,
                     'solicitud_incidencia' => $this->solicitud_incidencia,
+                    'servicio_id' => $this->servicio_id,
                     'servicio' => $this->servicio,
+                    'detalle_servicio_id' => $this->detalle_servicio_id,
                     'detalle_servicio' => $this->detalle_servicio,
                     'cea' => $this->cea,
                     'sgf' => $this->sgf,
                     'glpi' => $this->glpi,
                     'enviado_lima' => $this->enviado_lima,
                     'detalle_problema' => $this->detalle_problema,
-                    'captura_evidencia' => $this->captura_evidencia,
                     'atendido' => $this->atendido,
                     'atendido_por_id' => auth()->user()->id,
                     'atendido_por_dni' => auth()->user()->dni,
@@ -469,6 +448,7 @@ class Activos extends Component
                     'tiempo_atencion' => $this->tiempo_atencion,
                     'respuesta' => $this->respuesta,
                     'conformidad' => $this->conformidad,
+                    'ruta_evidencia' => $rutaDocumento,
                     'activo' => "1",
                     'created_user' => $usuario,
                     'updated_user' => $usuario,
@@ -490,7 +470,7 @@ class Activos extends Component
         // } catch (\Throwable $e) {
 
         //     dd($e); // 🔥 Esto te dirá TODO
-        // }
+        // };
 
         } catch (\Throwable $e) {
 
@@ -502,7 +482,7 @@ class Activos extends Component
                 mensaje: 'Ocurrió un error al guardar.',
                 tipo: 'error'
             );
-        }
+        };
     }
 
     public function editar(PersonalesAtencione $ipersonalatencion)
@@ -541,15 +521,15 @@ class Activos extends Component
         $this->glpi = $ipersonalatencion->glpi;
         $this->enviado_lima = $ipersonalatencion->enviado_lima;
         $this->detalle_problema = $ipersonalatencion->detalle_problema;
-        $this->captura_evidencia = $ipersonalatencion->captura_evidencia;
         $this->ncopias = $ipersonalatencion->ncopias;
         $this->atendido = $ipersonalatencion->atendido;
-        $this->atendido_por_id = $ipersonalatencion->atendido_por_dni;
-        $this->atendido_por_dni = $ipersonalatencion->atendido_por_id;
+        $this->atendido_por_id = $ipersonalatencion->atendido_por_id;
+        $this->atendido_por_dni = $ipersonalatencion->atendido_por_dni;
         $this->atendido_por_datos = $ipersonalatencion->atendido_por_datos;
         $this->tiempo_atencion = $ipersonalatencion->tiempo_atencion;
         $this->respuesta = $ipersonalatencion->respuesta;
         $this->conformidad = $ipersonalatencion->conformidad;
+        $this->ruta_evidencia = $ipersonalatencion->ruta_evidencia;
 
         // ===== DATOS PERSONA =====
         $ipersona = Persona::where('dni', $this->dni)->where('activo','1')->firstOrFail();
@@ -598,6 +578,9 @@ class Activos extends Component
 
                 $usuario = auth()->user()->datos;
 
+                // FUNCIÓN PARA CARGAR DOCUMENTO
+                $rutaDocumento = $this->actualizar_acta();
+
                 $ipersonalatencion = PersonalesAtencione::where('id', $this->atencion_id)->where('activo','1')->firstOrFail();
 
                 $ipersonalatencion->update([
@@ -626,7 +609,6 @@ class Activos extends Component
                     'glpi' => $this->glpi,
                     'enviado_lima' => $this->enviado_lima,
                     'detalle_problema' => $this->detalle_problema,
-                    'captura_evidencia' => $this->captura_evidencia,
                     'atendido' => $this->atendido,
                     'atendido_por_id' => auth()->user()->id,
                     'atendido_por_dni' => auth()->user()->dni,
@@ -634,6 +616,7 @@ class Activos extends Component
                     'tiempo_atencion' => $this->tiempo_atencion,
                     'respuesta' => $this->respuesta,
                     'conformidad' => $this->conformidad,
+                    'ruta_evidencia' => $rutaDocumento,
                     'activo' => "1",
                     'updated_user' => $usuario,
                 ]);
@@ -649,7 +632,8 @@ class Activos extends Component
 
             $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
 
-        } catch (\Throwable $e) {
+        } 
+        catch (\Throwable $e) {
 
             report($e);
 
@@ -659,7 +643,11 @@ class Activos extends Component
                 mensaje: 'Ocurrió un error al actualizar.',
                 tipo: 'error'
             );
-        }
+        };
+        // catch (\Throwable $e) {
+
+        //     dd($e); // 🔥 Esto te dirá TODO
+        // };
     }
 
     public function cerrar()
@@ -672,6 +660,67 @@ class Activos extends Component
                 mensaje: 'Se canceló la operación.',
                 tipo: 'error'
             );
+    }
+
+    // FUNCIONES PARA CARGAR PDF
+
+
+    public function editar_pdf($atencion_id)
+    {
+        $this->atencion_id = $atencion_id;
+        
+        $this->bandera_documento = "ACTA";
+    }
+
+    public function actualizar_pdf()
+    {
+        // ===== DATOS PERSONAL =====
+        $iatencion = PersonalesAtencione::where('id', $this->atencion_id)->firstOrFail();
+
+        $this->dni = $iatencion->dni;
+        // $this->cod_patrimonial = $isoporte->bien_cod_patrimonial;
+        
+        // Validar solo el PDF
+        $this->validate([
+            'pdf_acta' => 'required|file|mimes:pdf|max:5120'
+        ]);
+
+        try {
+
+            DB::transaction(function () use ($iatencion) {
+
+                $usuario = auth()->user()->datos;
+
+                // Ruta actual
+                $rutaDocumento = $this->actualizar_acta();
+
+                $iatencion->update([
+                    'ruta_documento' => $rutaDocumento,
+                    'updated_user' => $usuario,
+                ]);
+
+            });
+
+            $this->reset('pdf_acta');
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Documento cargado',
+                mensaje: 'El PDF se cargó correctamente.',
+                tipo: 'success'
+            );
+
+        } catch (\Throwable $e) {
+
+            report($e);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'Ocurrió un error al cargar el PDF.',
+                tipo: 'error'
+            );
+        }
     }
 
 
@@ -722,6 +771,13 @@ class Activos extends Component
 
         $this->detalle_servicio = "";
 
+        if ($this->servicio_id === 9 ) {
+            $this->mostrarcontroles = "";
+        } else {
+            $this->mostrarcontroles = "d-none";
+        }
+        
+
     }
 
     public function cerrar_servicio()
@@ -732,12 +788,164 @@ class Activos extends Component
     public function agregar_incidencia_solicitud(PersonalesAtencionesIncidenciasSolicitudes $iincidenciasolicitud)
     {
         $this->detalle_servicio_id = $iincidenciasolicitud->id;
+        $this->solicitud_incidencia = $iincidenciasolicitud->tipo_desc;
         $this->detalle_servicio = $iincidenciasolicitud->incidencia_solicitud;
-
+        $this->respuesta = $iincidenciasolicitud->respuesta;
     }
 
     public function cerrar_incidencia_solicitud()
     {
         $this->reset('searchincidenciasolicitud');
+    }
+
+    public function agregar_bien(patrimonios_biene $ibien)
+    {
+        $this->reset([
+            'dni','datos','appaterno','apmaterno','nombres','genero','estadocivil',
+            'fechanacimiento','celpersonal','correopersonal','foto',
+            'tipo_regimen','regimen','cargo',
+            'codsedeorigen','sedeorigen',
+            'coddependenciaorigen','dependenciaorigen',
+            'coddespachoorigen','despachoorigen',
+            'codsededestino','sededestino',
+            'coddependenciadestino','dependenciadestino',
+            'coddespachodestino','despachodestino',
+            'celinstitucional','correoinstitucional'
+        ]);
+
+        // Datos del bien
+        $this->bien_id = $ibien->id;
+
+        $this->fill([
+            'cod' => $ibien->cod,
+            'cod_patrimonial' => $ibien->cod_patrimonial,
+            'bien' => $ibien->bien,
+            'marca' => $ibien->marca,
+            'modelo' => $ibien->modelo,
+            'serie' => $ibien->serie,
+            'medida' => $ibien->medida,
+            'color' => $ibien->color,
+            'estado' => $ibien->estado,
+            'bien_ip' => $ibien->ip,
+            'datos_bien' => $ibien->bien ." | ". $ibien->marca ." | " . $ibien->modelo ." | " . $ibien->serie ." | " . $ibien->medida ." | " .$ibien->color ." | " . $ibien->estado,
+        ]);
+
+        $dni = $ibien->persona_dni;
+
+        // Persona
+        if ($persona = Persona::where('activo',1)->where('dni',$dni)->first()) {
+
+            $this->fill([
+                'persona_id' => $persona->id,
+                'dni' => $persona->dni,
+                'appaterno' => $persona->appaterno,
+                'apmaterno' => $persona->apmaterno,
+                'nombres' => $persona->nombres,
+                'datos' => $persona->datos,
+                'celpersonal' => $persona->celpersonal,
+                'correopersonal' => $persona->correopersonal,
+            ]);
+
+            $this->fotoactual = $persona->foto;
+        }
+
+        // Personal
+        if ($personal = Personale::where('activo',1)->where('persona_dni',$dni)->first()) {
+
+            $this->fill([
+                'personal_id' => $personal->id,
+                'sedeorigen' => $personal->sedeorigen,
+                'dependenciaorigen' => $personal->dependenciaorigen,
+                'despachoorigen' => $personal->despachoorigen,
+                'celinstitucional' => $personal->celinstitucional,
+                'correoinstitucional' => $personal->correoinstitucional,
+                'regimen' => $personal->regimen,
+                'tipo_regimen' => $personal->tipo_regimen,
+                'cargo' => $personal->cargo,
+            ]);
+        }
+
+        $this->reset('searchbienes');
+    }
+
+    public function cerrar_bien()
+    {
+
+    }
+
+    // --------------------------------------------------
+
+    private function guardar_acta()
+    {
+        if (!$this->pdf_acta) {
+            return null;
+        }
+
+        if ($this->bandera_documento === "EVIDENCIA") {
+            $fileName =
+            now()->timestamp.'_'
+            .$this->dni.'_'
+            // .$this->cod_patrimonial.'_'
+            ."EVIDENCIA"
+            .'.pdf';
+
+            return $this->pdf_acta->storeAs(
+                'archivos/informatica/atenciones/evidencias',
+                $fileName,
+                'public'
+            );
+        } else {
+            $fileName =
+            now()->timestamp.'_'
+            .$this->dni.'_'
+            // .$this->cod_patrimonial.'_'
+            ."ACTA"
+            .'.pdf';
+
+            return $this->pdf_acta->storeAs(
+                'archivos/informatica/atenciones/actas',
+                $fileName,
+                'public'
+            );
+        }
+        
+    }
+
+    private function editar_acta($personal_id)
+    {
+        $this->personal_id = $personal_id;
+    }
+
+    private function actualizar_acta()
+    {
+        $iatencion = PersonalesAtencione::findOrFail($this->atencion_id);
+
+        if ($this->bandera_documento === "EVIDENCIA") {
+            $rutaDocumento = $iatencion->ruta_evidencia;
+        } else {
+            $rutaDocumento = $iatencion->ruta_documento;
+        }
+
+        if (!$this->pdf_acta) {
+            return $rutaDocumento;
+        }
+
+        // Si no existe archivo previo
+        if (!$rutaDocumento) {
+            return $this->guardar_acta();
+        }
+
+        $fileName = basename($rutaDocumento);
+        $directory = dirname($rutaDocumento);
+
+        if (Storage::disk('public')->exists($rutaDocumento)) {
+            Storage::disk('public')->delete($rutaDocumento);
+        }
+
+        return $this->pdf_acta->storeAs(
+            $directory,
+            $fileName,
+            'public'
+        );
     }
 }
