@@ -417,7 +417,7 @@ class SoporteComponent extends Component
                 'observacion_usuario' => mb_strtoupper($this->observacion_usuario),
                 'recomendacion_usuario' => mb_strtoupper($this->recomendacion_usuario),
 
-                'bien_ip' => $this->bien_id,
+                'bien_ip' => $this->bien_ip,
 
                 'ruta_evidencia' => $rutaDocumento,
 

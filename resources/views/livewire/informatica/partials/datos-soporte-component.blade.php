@@ -79,8 +79,9 @@
 <div class="row mb-3">
     <div class="col-xl-4 mb-2">
         <div class="input-group">
-            <span class="input-group-text form-control form-control-xs" id="basic-addon1">Equipor en estado operativo:</span>
+            <span class="input-group-text form-control form-control-xs" id="basic-addon1">Equipo en estado operativo:</span>
             <select name="cmdoperativo" id="cmdoperativo" class="form-select form-select-xs" wire:model="operativo">
+                <option value="">Seleccionar...</option>
                 <option value="SI">SI</option>
                 <option value="NO">NO</option>
                 <option value="PENDIENTE">PENDIENTE</option>
@@ -92,7 +93,7 @@
             <input type="file" class="form-control form-control-xs" id="filecontrato" aria-describedby="inputGroupFileAddon04" aria-label="Upload" accept="application/pdf" wire:model="pdf_acta">
             @if ($ruta_evidencia)
                 <a class="btn btn-{{ $colorAgregar }} btn-xs" type="button" id="btnverevidencia" href="{{ asset('storage/'.$ruta_evidencia) }}" target="_blank">
-                    <i class="fa-solid fa-file-pdf"></i> Ver firmado
+                    <i class="fa-solid fa-file-pdf"></i> Ver Evidencia
                 </a>
             @endif
         </div>

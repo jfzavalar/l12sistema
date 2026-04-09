@@ -108,10 +108,16 @@
                 <td colspan="4">{{ $ipersonal->observacion_usuario }}</td>
             </tr>
             <tr>
-                <td>EQUIPO EN ESTADO OPERATIVO</td>
-                <td>SI( )</td>
-                <td>NO( )</td>
-                <td>PENDIENTE ( )</td>
+                <td colspan="2">EQUIPO EN ESTADO OPERATIVO</td>
+                <td colspan="2">
+                    @if ($ipersonal->operativo === "SI")
+                        SI
+                    @elseif ($ipersonal->operativo === "NO")
+                        NO
+                    @else
+                        PENDIENTE
+                    @endif
+                </td>
             </tr>
         </tbody>
     </table>

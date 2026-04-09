@@ -102,6 +102,7 @@ class soporteController extends Controller
                 'informaticas_soportes.observacion_usuario',
                 'informaticas_soportes.recomendacion_usuario',
                 'informaticas_soportes.cotros',
+                'informaticas_soportes.operativo',
                 'patrimonios_bienes.bien',
                 'patrimonios_bienes.marca',
                 'patrimonios_bienes.modelo',
