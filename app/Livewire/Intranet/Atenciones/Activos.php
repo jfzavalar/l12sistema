@@ -150,6 +150,9 @@ class Activos extends Component
             $detalle_problema,
             $captura_evidencia,
             $ncopias,
+            $obs_usuario,
+            $obs_informatico,
+            $estado_bien,
             $atendido,
             $atendido_por_id,
             $atendido_por_dni,
@@ -158,7 +161,8 @@ class Activos extends Component
             $respuesta,
             $conformidad,
             $ruta_evidencia,
-            $ruta_documento;
+            $ruta_documento,
+            $formato1;
 
     Public $bien_id,
             $cod,
@@ -381,7 +385,8 @@ class Activos extends Component
         $this->resetErrorBag();     // ← opcional extra seguridad
 
         // Restablecer todas las variables
-        // $this->reset();
+        $this->reset();
+
         $this->foto = null;
         $this->fotoactual = null;
         $this->inputFileKey = rand();
@@ -436,17 +441,26 @@ class Activos extends Component
                     'servicio' => $this->servicio,
                     'detalle_servicio_id' => $this->detalle_servicio_id,
                     'detalle_servicio' => $this->detalle_servicio,
-                    'cea' => $this->cea,
-                    'sgf' => $this->sgf,
-                    'glpi' => $this->glpi,
+                    'bien_id' => $this->bien_id,
+                    'cod' => $this->cod,
+                    'cod_patrimonial' => $this->cod_patrimonial,
+                    'datos_bien' => $this->datos_bien,
+                    'cea' => strtoupper($this->cea),
+                    'sgf' => strtoupper($this->sgf),
+                    'glpi' => strtoupper($this->glpi),
                     'enviado_lima' => $this->enviado_lima,
-                    'detalle_problema' => $this->detalle_problema,
+                    'detalle_problema' => strtoupper($this->detalle_problema),
+
+                    'obs_usuario' => strtoupper($this->obs_usuario),
+                    'obs_informatico' => strtoupper($this->obs_informatico),
+                    'estado' => $this->estado_bien,
+
                     'atendido' => $this->atendido,
                     'atendido_por_id' => auth()->user()->id,
                     'atendido_por_dni' => auth()->user()->dni,
                     'atendido_por_datos' => $usuario,
                     'tiempo_atencion' => $this->tiempo_atencion,
-                    'respuesta' => $this->respuesta,
+                    'respuesta' => strtoupper($this->respuesta),
                     'conformidad' => $this->conformidad,
                     'ruta_evidencia' => $rutaDocumento,
                     'activo' => "1",
@@ -455,7 +469,8 @@ class Activos extends Component
                 ]);
             });
 
-            // $this->resetExcept('searchPersonal');
+            // Restablecer todas las variables
+            $this->reset();
 
             $this->dispatch(
                 'alerta-actualizado',
@@ -516,12 +531,23 @@ class Activos extends Component
         $this->servicio = $ipersonalatencion->servicio;
         $this->detalle_servicio_id = $ipersonalatencion->detalle_servicio_id;
         $this->detalle_servicio = $ipersonalatencion->detalle_servicio;
+
+        $this->bien_id = $ipersonalatencion->bien_id;
+        $this->cod = $ipersonalatencion->cod;
+        $this->cod_patrimonial = $ipersonalatencion->cod_patrimonial;
+        $this->datos_bien = $ipersonalatencion->datos_bien;
+
         $this->cea = $ipersonalatencion->cea;
         $this->sgf = $ipersonalatencion->sgf;
         $this->glpi = $ipersonalatencion->glpi;
         $this->enviado_lima = $ipersonalatencion->enviado_lima;
         $this->detalle_problema = $ipersonalatencion->detalle_problema;
         $this->ncopias = $ipersonalatencion->ncopias;
+
+        $this->obs_usuario = $ipersonalatencion->obs_usuario;
+        $this->obs_informatico = $ipersonalatencion->obs_informatico;
+        $this->estado_bien = $ipersonalatencion->estado;
+
         $this->atendido = $ipersonalatencion->atendido;
         $this->atendido_por_id = $ipersonalatencion->atendido_por_id;
         $this->atendido_por_dni = $ipersonalatencion->atendido_por_dni;
@@ -530,6 +556,13 @@ class Activos extends Component
         $this->respuesta = $ipersonalatencion->respuesta;
         $this->conformidad = $ipersonalatencion->conformidad;
         $this->ruta_evidencia = $ipersonalatencion->ruta_evidencia;
+
+        if (in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA", "SERVIDORES"]))
+        {
+            $this->mostrarcontroles = "";
+        } else {
+            $this->mostrarcontroles = "d-none";
+        }
 
         // ===== DATOS PERSONA =====
         $ipersona = Persona::where('dni', $this->dni)->where('activo','1')->firstOrFail();
@@ -609,6 +642,11 @@ class Activos extends Component
                     'glpi' => $this->glpi,
                     'enviado_lima' => $this->enviado_lima,
                     'detalle_problema' => $this->detalle_problema,
+
+                    'obs_usuario' => $this->obs_usuario,
+                    'obs_informatico' => $this->obs_informatico,
+                    'estado' => $this->estado_bien,
+
                     'atendido' => $this->atendido,
                     'atendido_por_id' => auth()->user()->id,
                     'atendido_por_dni' => auth()->user()->dni,
@@ -771,12 +809,14 @@ class Activos extends Component
 
         $this->detalle_servicio = "";
 
-        if ($this->servicio_id === 9 ) {
+        if (in_array($this->servicio_id, [9, 11, 19])) {
             $this->mostrarcontroles = "";
         } else {
             $this->mostrarcontroles = "d-none";
         }
         
+        $this->reset('searchservicios','searchbienes',
+                        'bien_id','cod','cod_patrimonial','datos_bien');
 
     }
 
@@ -791,6 +831,9 @@ class Activos extends Component
         $this->solicitud_incidencia = $iincidenciasolicitud->tipo_desc;
         $this->detalle_servicio = $iincidenciasolicitud->incidencia_solicitud;
         $this->respuesta = $iincidenciasolicitud->respuesta;
+        // 🔴 LIMPIAR SIEMPRE
+        $this->formato1 = null;
+        $this->formato1 = $iincidenciasolicitud->formato1;
     }
 
     public function cerrar_incidencia_solicitud()

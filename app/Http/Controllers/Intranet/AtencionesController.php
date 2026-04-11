@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Intranet;
 
 use App\Http\Controllers\Controller;
+use App\Models\PatrimoniosBiene;
+use App\Models\Persona;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class AtencionesController extends Controller
@@ -61,5 +64,58 @@ class AtencionesController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function exportarPDF($id)
+    {
+        $ipersonal = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
+            ->join('personales_atenciones','personas.id','=','personales_atenciones.persona_id')
+            // ->join('patrimonios_bienes','personales_atenciones.bien_id','=','patrimonios_bienes.id')
+            ->select('personas.*',
+                'personales.persona_id',
+                'personales.regimen',
+                'personales.tipo_regimen',
+                'personales.cargo',
+                'personales.sedeorigen',
+                'personales.dependenciaorigen',
+                'personales.despachoorigen',
+                'personales.sededestino',
+                'personales.dependenciadestino',
+                'personales.despachodestino',
+                'personales.tipo_documento',
+                'personales_atenciones.servicio',
+                'personales_atenciones.detalle_servicio',
+                'personales_atenciones.estado',
+                'personales_atenciones.obs_usuario',
+                'personales_atenciones.obs_informatico',
+                'personales_atenciones.bien_id',)
+            ->where([['personas.activo',1],['personales.activo', 1]])
+            ->where('personales_atenciones.id',$id)
+            ->orderBy('personas.datos')
+            ->first();
+
+        if ($ipersonal->bien_id) {
+            $ibien = PatrimoniosBiene::select(
+                    'cod',
+                    'cod_patrimonial',
+                    'bien',
+                    'marca',
+                    'modelo',
+                    'serie',
+                    'medidas',
+                    'color',
+                    'estado',
+                )
+                ->where('id',$ipersonal->bien_id)
+                ->first();
+
+            $pdf = Pdf::loadView('pdf.informatica.atencion-acta', compact('ipersonal','ibien'));
+        } else {
+            $pdf = Pdf::loadView('pdf.informatica.atencion-acta', compact('ipersonal'));
+        }
+        
+
+        //Mostrar PDF
+        return $pdf->stream('reportePDF'.'.pdf');
     }
 }

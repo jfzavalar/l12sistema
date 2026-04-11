@@ -139,6 +139,7 @@ Route::middleware('auth','can:procesos.informatica.spijweb.index')->group(functi
 // INTRANET
 Route::middleware('auth','can:mpfn.intranet.atenciones.index')->group(function () {
     Route::resource('atenciones', AtencionesController::class)->names('mpfn.intranet.atenciones');
+    Route::get('pdf/informatica/atencion-acta/{id}', [AtencionesController::class, 'exportarPDF'])->name('pdf.informatica.atencion-acta');
 });
 
 Route::middleware('auth','can:mpfn.intranet.expimportantes.index')->group(function () {

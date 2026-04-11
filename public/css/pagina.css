@@ -1,8 +1,8 @@
 @page {
-    margin-top: 3cm;
+    margin-top: 2cm;
     margin-bottom: 3cm;
-    margin-left: 2.5cm;
-    margin-right: 2.5cm;
+    margin-left: 1.27cm;
+    margin-right: 1.27cm;
 }
 @page :footer {
     content: "Página " counter(page) " de " counter(pages);
@@ -10,15 +10,14 @@
 
 .header {
     position: fixed;
-    top: -130px;
+    top: -80px; /* ajustado al alto real */
     left: 0;
     right: 0;
     height: 80px;
     text-align: center;
     font-size: 14px;
     color: black;
-    /* background-color: gray; */
-    padding: 15px;
+    padding: 10px;
 }
 
 .content {
