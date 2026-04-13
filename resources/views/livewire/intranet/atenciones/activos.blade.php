@@ -538,24 +538,45 @@
                                                 </select>
                                             </div> 
                                         @endif                    
-                                    </div>{{ $formato1 }}
+                                    </div>
                                     @if ($this->detalle_servicio === "REQUISITOS")
                                         <div class="row">
-                                            <div class="col-xl-4">
-                                                <label for="txt_sol_res" class="fw-bold fs-6">FORMATOS</label>
-                                                <br>
-                                                <a href="{{ asset($formato1) }}" target="_blank">
-                                                    <i class="fa-solid fa-file-pdf"></i>Excel de datos
-                                                </a>
-                                            </div>
-                                            <div class="col-xl-4">
-                                                <label for="txt_sol_res" class="fw-bold fs-6">FORMATOS</label>
-                                                <br><i class="fa-solid fa-file-pdf"></i>
-                                            </div>
-                                            <div class="col-xl-4">
-                                                <label for="txt_sol_res" class="fw-bold fs-6">FORMATOS</label>
-                                                <br><i class="fa-solid fa-file-pdf"></i>
-                                            </div>
+                                            @if ($formato1)
+                                                <div class="col-12 col-xl">
+                                                    {{-- <label for="txt_formato1" class="fw-bold fs-6">FORMATOS</label> --}}
+                                                    <br>
+                                                    <a href="{{ asset('storage/' . $formato1) }}" target="_blank">
+                                                        <i class="fa-solid fa-file-pdf"></i>01-Formato
+                                                    </a>
+                                                </div>
+                                            @endif
+                                            @if ($formato2)
+                                                <div class="col-12 col-xl">
+                                                    {{-- <label for="txt_formato2" class="fw-bold fs-6">FORMATOS</label> --}}
+                                                    <br>
+                                                    <a href="{{ asset('storage/' . $formato2) }}" target="_blank">
+                                                        <i class="fa-solid fa-file-pdf"></i>02-Formato
+                                                    </a>
+                                                </div>
+                                            @endif
+                                            @if ($formato3)
+                                                <div class="col-12 col-xl">
+                                                    {{-- <label for="txt_formato2" class="fw-bold fs-6">FORMATOS</label> --}}
+                                                    <br>
+                                                    <a href="{{ asset('storage/' . $formato3) }}" target="_blank">
+                                                        <i class="fa-solid fa-file-pdf"></i>03-Formato
+                                                    </a>
+                                                </div>
+                                            @endif
+                                            @if ($formato4)
+                                                <div class="col-12 col-xl">
+                                                    {{-- <label for="txt_formato2" class="fw-bold fs-6">FORMATOS</label> --}}
+                                                    <br>
+                                                    <a href="{{ asset('storage/' . $formato4) }}" target="_blank">
+                                                        <i class="fa-solid fa-file-pdf"></i>04-Formato
+                                                    </a>
+                                                </div>
+                                            @endif
                                         </div>
                                     @endif
                                 </fieldset>

@@ -162,7 +162,10 @@ class Activos extends Component
             $conformidad,
             $ruta_evidencia,
             $ruta_documento,
-            $formato1;
+            $formato1,
+            $formato2,
+            $formato3,
+            $formato4;
 
     Public $bien_id,
             $cod,
@@ -227,7 +230,7 @@ class Activos extends Component
                 'personales_atenciones.created_user as utencioncreado',
                 'personales_atenciones.ruta_documento')
             ->where('personales_atenciones.activo', 1)
-            ->orderBy('personales.id','desc')
+            ->orderBy('personales_atenciones.id','desc')
             ->paginate(10, ['personas.*'], 'personalesPage');
 
         $lista_inactivos = $this->queryConFiltros()
@@ -833,7 +836,13 @@ class Activos extends Component
         $this->respuesta = $iincidenciasolicitud->respuesta;
         // 🔴 LIMPIAR SIEMPRE
         $this->formato1 = null;
+        $this->formato2 = null;
+        $this->formato3 = null;
+        $this->formato4 = null;
         $this->formato1 = $iincidenciasolicitud->formato1;
+        $this->formato2 = $iincidenciasolicitud->formato2;
+        $this->formato3 = $iincidenciasolicitud->formato3;
+        $this->formato4 = $iincidenciasolicitud->formato4;
     }
 
     public function cerrar_incidencia_solicitud()
