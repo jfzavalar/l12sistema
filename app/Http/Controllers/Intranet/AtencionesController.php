@@ -70,8 +70,8 @@ class AtencionesController extends Controller
     {
         $ipersonal = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
             ->join('personales_atenciones','personas.id','=','personales_atenciones.persona_id')
-            // ->join('patrimonios_bienes','personales_atenciones.bien_id','=','patrimonios_bienes.id')
-            ->select('personas.*',
+            ->select(
+                'personas.*',
                 'personales.persona_id',
                 'personales.regimen',
                 'personales.tipo_regimen',
@@ -88,13 +88,23 @@ class AtencionesController extends Controller
                 'personales_atenciones.estado',
                 'personales_atenciones.obs_usuario',
                 'personales_atenciones.obs_informatico',
-                'personales_atenciones.bien_id',)
-            ->where([['personas.activo',1],['personales.activo', 1]])
-            ->where('personales_atenciones.id',$id)
+                'personales_atenciones.bien_id'
+            )
+            ->where('personas.activo', 1)
+            ->where('personales.activo', 1)
+            ->where('personales_atenciones.id', $id)
             ->orderBy('personas.datos')
             ->first();
 
-        if ($ipersonal->bien_id) {
+        // 🔴 Validación importante
+        if (!$ipersonal) {
+            abort(404, 'Registro no encontrado');
+        }
+
+        // 🔹 Inicializar SIEMPRE
+        $ibien = null;
+
+        if (!empty($ipersonal->bien_id)) {
             $ibien = PatrimoniosBiene::select(
                     'cod',
                     'cod_patrimonial',
@@ -104,18 +114,18 @@ class AtencionesController extends Controller
                     'serie',
                     'medidas',
                     'color',
-                    'estado',
+                    'estado'
                 )
-                ->where('id',$ipersonal->bien_id)
+                ->where('id', $ipersonal->bien_id)
                 ->first();
-
-            $pdf = Pdf::loadView('pdf.informatica.atencion-acta', compact('ipersonal','ibien'));
-        } else {
-            $pdf = Pdf::loadView('pdf.informatica.atencion-acta', compact('ipersonal'));
         }
-        
 
-        //Mostrar PDF
-        return $pdf->stream('reportePDF'.'.pdf');
+        // 🔹 UNA sola carga de vista
+        $pdf = Pdf::loadView('pdf.informatica.atencion-acta', [
+            'ipersonal' => $ipersonal,
+            'ibien' => $ibien
+        ]);
+
+        return $pdf->stream('reportePDF.pdf');
     }
 }

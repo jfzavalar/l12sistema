@@ -66,39 +66,41 @@
 
     <br>
 
-    <table width="100%">
-        <thead>
-            <tr>
-                <th style="background-color: #e9ecef; color: black; text-align: center;">DATOS DEL EQUIPO INFORMÁTICO</th>
-            </tr>
-        </thead>
-    </table>
+    @if ($ibien)
+        <table width="100%">
+            <thead>
+                <tr>
+                    <th style="background-color: #e9ecef; color: black; text-align: center;">DATOS DEL EQUIPO INFORMÁTICO</th>
+                </tr>
+            </thead>
+        </table>
 
-    <br>
-    
-    <table class="tabla">
-        <thead>
-            <tr>
-                <th colspan="4">
-                    {{ $ipersonal->bien }}
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><b>COD: </b>{{ $ipersonal->cod }}</td>
-                <td><b>COD PATRIMONIO: </b>{{ $ipersonal->cod_patrimonial }}</td>
-                <td><b>MARCA: </b>{{ $ipersonal->marca }}</td>
-                <td><b>MODELO: </b>{{ $ipersonal->modelo }}</td>
-            </tr>
-            <tr>
-                <td><b>SERIE: </b>{{ $ipersonal->serie }}</td>
-                <td><b>MEDIDAS: </b>{{ $ipersonal->medidas }}</td>
-                <td><b>COLOR: </b>{{ $ipersonal->color }}</td>
-                <td><b>ESTADO: </b>{{ $ipersonal->estado }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <br>
+        
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th colspan="4">
+                        {{ $ipersonal->bien }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><b>COD: </b>{{ $ibien->cod }}</td>
+                    <td><b>COD PATRIMONIO: </b>{{ $ibien->cod_patrimonial }}</td>
+                    <td><b>MARCA: </b>{{ $ibien->marca }}</td>
+                    <td><b>MODELO: </b>{{ $ibien->modelo }}</td>
+                </tr>
+                <tr>
+                    <td><b>SERIE: </b>{{ $ibien->serie }}</td>
+                    <td><b>MEDIDAS: </b>{{ $ibien->medidas }}</td>
+                    <td><b>COLOR: </b>{{ $ibien->color }}</td>
+                    <td><b>ESTADO: </b>{{ $ibien->estado }}</td>
+                </tr>
+            </tbody>
+        </table>
+    @endif
 
     <br>
 
