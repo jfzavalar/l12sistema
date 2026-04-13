@@ -51,7 +51,7 @@
             </tr>
             <tr>
                 <td><b>CARGO:</b></td>
-                <td colspan="3"></td>
+                <td colspan="3">{{ $ipersonal->cargo }}</td>
             </tr>
             <tr>
                 <td><b>SEDE:</b></td>

@@ -242,9 +242,11 @@
                                                 <i class="fa-solid fa-pen-to-square"></i><br>Editar
                                             </button> 
                                         @endif
-                                        <button type="button" class="btn btn-outline-danger btn-xs">
-                                            <i class="fa-solid fa-trash-can"></i><br>Eliminar
-                                        </button>
+                                        @can('mpfn.intranet.atenciones.destroy')
+                                            <button type="button" class="btn btn-outline-danger btn-xs">
+                                                <i class="fa-solid fa-trash-can"></i><br>Eliminar
+                                            </button>
+                                        @endcan
                                     </div>
                                     <td class="text-end">
                                         <div class="btn-group" role="group">
