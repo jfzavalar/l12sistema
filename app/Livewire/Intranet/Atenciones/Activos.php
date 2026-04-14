@@ -3,6 +3,7 @@
 namespace App\Livewire\Intranet\Atenciones;
 
 use App\Models\Patrimonios_biene;
+use App\Models\PatrimoniosBiene;
 use App\Models\Persona;
 use App\Models\Personale;
 use App\Models\Personales_cargo;
@@ -342,10 +343,10 @@ class Activos extends Component
             ->orderBy('incidencia_solicitud')
             ->paginate(20,['*'],'incidenciasolicitudPage');
 
-        $lista_bienes = Patrimonios_biene::where('activo','1')
-            ->where('cod_patrimonial','like','%' . $this->searchbienes . '%')
+        $lista_bienes = PatrimoniosBiene::where('activo','1')
+            ->where('codigo_patrimonial','like','%' . $this->searchbienes . '%')
             ->distinct()
-            ->orderBy('bien')
+            ->orderBy('descripcion')
             ->paginate(10,['*'],'bienesPage');
 
         return view('livewire.intranet.atenciones.activos',
@@ -871,20 +872,20 @@ class Activos extends Component
         $this->bien_id = $ibien->id;
 
         $this->fill([
-            'cod' => $ibien->cod,
-            'cod_patrimonial' => $ibien->cod_patrimonial,
-            'bien' => $ibien->bien,
+            'cod' => $ibien->codigo_barra,
+            'cod_patrimonial' => $ibien->codigo_patrimonial,
+            'bien' => $ibien->descripcion,
             'marca' => $ibien->marca,
             'modelo' => $ibien->modelo,
-            'serie' => $ibien->serie,
-            'medida' => $ibien->medida,
+            'serie' => $ibien->nro_serie,
+            'medida' => $ibien->medidas,
             'color' => $ibien->color,
             'estado' => $ibien->estado,
             'bien_ip' => $ibien->ip,
             'datos_bien' => $ibien->bien ." | ". $ibien->marca ." | " . $ibien->modelo ." | " . $ibien->serie ." | " . $ibien->medida ." | " .$ibien->color ." | " . $ibien->estado,
         ]);
 
-        $dni = $ibien->persona_dni;
+        $dni = $ibien->usuario_dni;
 
         // Persona
         if ($persona = Persona::where('activo',1)->where('dni',$dni)->first()) {
