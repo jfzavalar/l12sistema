@@ -537,7 +537,7 @@
                                             <label for="txt_sol_res" class="fw-bold fs-6">SOLUCIÓN / RESPUESTA</label>
                                             <input type="text" id="txt_sol_res" class="form-control form-control-xs text-uppercase" wire:model="respuesta">
                                         </div>
-                                        @if (in_array($this->servicio_id, [9, 11, 19]))
+                                        @if (in_array($this->servicio_id, [9, 11, 19]) || in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA", "SERVIDORES"]))
                                             <div class="col-12 col-xl">
                                                 <label for="cmb_estado" class="fw-bold fs-6 {{ $mostrarcontroles }}">ESTADO DEL EQUIPO</label>
                                                 <select id="cmb_estado" class="form-select form-select-xs {{ $mostrarcontroles }}" wire:model="estado_bien" required>

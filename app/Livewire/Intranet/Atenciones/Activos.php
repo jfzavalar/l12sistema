@@ -542,6 +542,11 @@ class Activos extends Component
         $this->cod = $ipersonalatencion->cod;
         $this->cod_patrimonial = $ipersonalatencion->cod_patrimonial;
         $this->datos_bien = $ipersonalatencion->datos_bien;
+        // $this->datos_bien = $ipersonalatencion->datos_bien;
+        // $this->datos_bien = $ipersonalatencion->datos_bien;
+
+        $ibien = PatrimoniosBiene::where('id', $this->bien_id)->where('activo','1')->firstOrFail();
+        $this->bien_ip = $ibien->ip;
 
         $this->cea = $ipersonalatencion->cea;
         $this->sgf = $ipersonalatencion->sgf;
@@ -552,6 +557,7 @@ class Activos extends Component
 
         $this->obs_usuario = $ipersonalatencion->obs_usuario;
         $this->obs_informatico = $ipersonalatencion->obs_informatico;
+        
         $this->estado_bien = $ipersonalatencion->estado;
 
         $this->atendido = $ipersonalatencion->atendido;
@@ -651,6 +657,7 @@ class Activos extends Component
 
                     'obs_usuario' => $this->obs_usuario,
                     'obs_informatico' => $this->obs_informatico,
+
                     'estado' => $this->estado_bien,
 
                     'atendido' => $this->atendido,
