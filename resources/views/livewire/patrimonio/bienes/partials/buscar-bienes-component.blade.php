@@ -36,9 +36,9 @@
                                 @forelse ($lista_bienes as $bien)
                                     <tr>
                                         <th>{{ $loop->iteration }}</th>
-                                        <th>{{ $bien->cod }}</th>
-                                        <td>{{ $bien->cod_patrimonial }}</td>
-                                        <td>{{ $bien->bien }}</td>
+                                        <th>{{ $bien->cod_barra }}</th>
+                                        <td>{{ $bien->codigo_patrimonial }}</td>
+                                        <td>{{ $bien->descripcion }}</td>
                                         <td>
                                             <span class="badge rounded-pill {{ $bien->asignacion === 'ASIGNADO' ? 'text-bg-success' : 'text-bg-danger' }}">
                                                 {{ $bien->asignacion === 'ASIGNADO' ? 'ASIGNADO' : 'LIBRE' }}

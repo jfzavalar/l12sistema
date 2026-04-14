@@ -115,12 +115,12 @@ class BienesasignacionController extends Controller
         if ($iasignacion->id) {
             $ibien = PatrimoniosBiene::join('patrimonios_bienes_asignaciones_detalles','patrimonios_bienes.id','=','patrimonios_bienes_asignaciones_detalles.bien_id')
                 ->select(
-                    'patrimonios_bienes.cod',
-                    'patrimonios_bienes.cod_patrimonial',
-                    'patrimonios_bienes.bien',
+                    'patrimonios_bienes.codigo_barra',
+                    'patrimonios_bienes.codigo_patrimonial',
+                    'patrimonios_bienes.descripcion',
                     'patrimonios_bienes.marca',
                     'patrimonios_bienes.modelo',
-                    'patrimonios_bienes.serie',
+                    'patrimonios_bienes.nro_serie',
                     'patrimonios_bienes.medidas',
                     'patrimonios_bienes.estado',
                 )

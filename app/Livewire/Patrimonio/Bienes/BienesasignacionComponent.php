@@ -309,10 +309,10 @@ class BienesasignacionComponent extends Component
             ->orderBy('nombre')
             ->get();
 
-        $lista_bienes = Patrimonios_biene::where('activo','1')
-            ->where('cod_patrimonial','like','%' . $this->searchbienes . '%')
+        $lista_bienes = PatrimoniosBiene::where('activo','1')
+            ->where('codigo_patrimonial','like','%' . $this->searchbienes . '%')
             ->distinct()
-            ->orderBy('bien')
+            ->orderBy('descripcion')
             ->paginate(10,['*'],'bienesPage');
 
         return view('livewire.patrimonio.bienes.bienesasignacion-component',
@@ -347,7 +347,6 @@ class BienesasignacionComponent extends Component
     {
         try {
 
-            // ✅ Validación previa
             if (empty($this->bienes)) {
                 $this->dispatch(
                     'alerta-actualizado',
@@ -396,52 +395,57 @@ class BienesasignacionComponent extends Component
                     'updated_user' => $usuario,
                 ]);
 
-                // ✅ Preparar datos
                 $detalles = [];
                 $ids = [];
 
                 foreach ($this->bienes as $bien) {
 
-                    // Validación básica
-                    if (!isset($bien['id'], $bien['cod'], $bien['cod_patrimonial'], $bien['bien'])) {
+                    $id = data_get($bien, 'id');
+                    $codigoBarra = data_get($bien, 'codigo_barra');
+                    $codigoPatrimonial = data_get($bien, 'codigo_patrimonial');
+                    $descripcion = data_get($bien, 'descripcion');
+
+                    if (!$id || !$codigoPatrimonial) {
                         continue;
                     }
 
                     $detalles[] = [
                         'asignacion_id' => $iasignacion->id,
-                        'bien_id' => $bien['id'],
-                        'cod' => $bien['cod'],
-                        'cod_patrimonial' => $bien['cod_patrimonial'],
-                        'bien' => $bien['bien'],
+                        'bien_id' => $id,
+                        'cod' => $codigoBarra,
+                        'cod_patrimonial' => $codigoPatrimonial,
+                        'bien' => $descripcion,
+                        'activo' => "1",
                         'created_user' => $usuario,
                         'updated_user' => $usuario,
                         'created_at' => $now,
                         'updated_at' => $now,
                     ];
 
-                    $ids[] = $bien['id'];
+                    $ids[] = $id;
+                }
+
+                if (empty($detalles)) {
+                    throw new \Exception('No hay bienes válidos para registrar.');
+                }
+
+                // ✅ VALIDAR ANTES (CORRECTO)
+                $yaAsignados = PatrimoniosBiene::whereIn('id', $ids)
+                    ->where('asignacion', 'ASIGNADO')
+                    ->exists();
+
+                if ($yaAsignados) {
+                    throw new \Exception('Algunos bienes ya fueron asignados.');
                 }
 
                 // ✅ Insertar detalles
-                if (!empty($detalles)) {
-                    PatrimoniosBienesAsignacionesDetalle::insert($detalles);
-                }
+                PatrimoniosBienesAsignacionesDetalle::insert($detalles);
 
-                // ✅ Actualizar estado (1 solo query)
-                if (!empty($ids)) {
-
-                    $updated = PatrimoniosBiene::whereIn('id', $ids)
-                        ->where('asignacion', '!=', 'ASIGNADO')
-                        ->update(['asignacion' => 'ASIGNADO']);
-
-                    // 🔥 Control de concurrencia
-                    if ($updated !== count($ids)) {
-                        throw new \Exception('Algunos bienes ya fueron asignados.');
-                    }
-                }
+                // ✅ Update sin validación incorrecta
+                PatrimoniosBiene::whereIn('id', $ids)
+                    ->update(['asignacion' => 'ASIGNADO']);
             });
 
-            // ✅ Reset
             $this->reset();
 
             $this->dispatch(
@@ -460,7 +464,7 @@ class BienesasignacionComponent extends Component
             $this->dispatch(
                 'alerta-actualizado',
                 titulo: 'Error',
-                mensaje: $e->getMessage(), // 👈 ahora muestra el error real
+                mensaje: $e->getMessage(),
                 tipo: 'error'
             );
         }
@@ -607,22 +611,22 @@ class BienesasignacionComponent extends Component
         $this->cargo = $icargo->nombre;
     }
 
-    public function agregar_bien(patrimonios_biene $ibien)
+    public function agregar_bien(PatrimoniosBiene $ibien)
     {
         // Datos del bien
         $item = [
             'id' => $ibien->id,
-            'cod' => $ibien->cod,
-            'cod_patrimonial' => $ibien->cod_patrimonial,
-            'bien' => $ibien->bien,
+            'codigo_barra' => $ibien->codigo_barra,
+            'codigo_patrimonial' => $ibien->codigo_patrimonial,
+            'descripcion' => $ibien->descripcion,
             'marca' => $ibien->marca,
             'modelo' => $ibien->modelo,
-            'serie' => $ibien->serie,
-            'medida' => $ibien->medida,
+            'nro_serie' => $ibien->nro_serie,
+            'medidas' => $ibien->medidas,
             'color' => $ibien->color,
             'estado' => $ibien->estado,
             'ip' => $ibien->ip,
-            'datos_bien' => $ibien->bien ." | ". $ibien->marca ." | " . $ibien->modelo ." | " . $ibien->serie ." | " . $ibien->medida ." | " .$ibien->color ." | " . $ibien->estado,
+            'datos_bien' => $ibien->descripcion ." | ". $ibien->marca ." | " . $ibien->modelo ." | " . $ibien->nro_serie ." | " . $ibien->medidas ." | " .$ibien->color ." | " . $ibien->estado,
         ];
 
         // Evitar duplicados (opcional)

@@ -156,13 +156,13 @@
                                                 @forelse($bienes as $index => $bien)
                                                     <tr>
                                                         <th>{{ $index + 1 }}</th>
-                                                        <td>{{ $bien['cod'] }}</td>
-                                                        <td>{{ $bien['cod_patrimonial'] }}</td>
-                                                        <td>{{ $bien['bien'] }}</td>
+                                                        <td>{{ $bien['codigo_barra'] }}</td>
+                                                        <td>{{ $bien['codigo_patrimonial'] }}</td>
+                                                        <td>{{ $bien['descripcion'] }}</td>
                                                         <td>{{ $bien['marca'] }}</td>
                                                         <td>{{ $bien['modelo'] }}</td>
-                                                        <td>{{ $bien['serie'] }}</td>
-                                                        <td>{{ $bien['medida'] }}</td>
+                                                        <td>{{ $bien['nro_serie'] }}</td>
+                                                        <td>{{ $bien['medidas'] }}</td>
                                                         <td>{{ $bien['color'] }}</td>
                                                         <td>{{ $bien['estado'] }}</td>
                                                         <td class="text-end">

@@ -109,12 +109,12 @@
             @foreach ($ibien ?? [] as $item)
                 <tr>
                     <td><b>{{ $loop->iteration }}</b></td>
-                    <td>{{ $item->cod_patrimonial }}</td>
-                    <td>{{ $item->cod }}</td>
-                    <td>{{ $item->bien }}</td>
+                    <td>{{ $item->codigo_patrimonial }}</td>
+                    <td>{{ $item->codigo_barra }}</td>
+                    <td>{{ $item->descripcion }}</td>
                     <td>{{ $item->marca }}</td>
                     <td>{{ $item->modelo }}</td>
-                    <td>{{ $item->serie }}</td>
+                    <td>{{ $item->nro_serie }}</td>
                     <td>{{ $item->medidas }}</td>
                     <td>{{ $item->estado }}</td>
                 </tr>
