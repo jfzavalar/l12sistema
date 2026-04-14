@@ -39,7 +39,7 @@ class Activos extends Component
     public $colorAgregar;
 
     //Variables PARA OCULTAR Y MOSTRAR TXT_OTROS
-    public $mostrarcontroles = "";
+    public $mostrarcontroles = "d-none",$mostrarcontrolgpli="d-none";
     public $mostrarotrosp = "d-none", $mostrarotrosc = "d-none",$mostrarcargafoto = "d-none";
 
     //Variables bloquear de secciones
@@ -191,8 +191,10 @@ class Activos extends Component
     {
         if ($value === "SI") {
             $this->atendido = "NO";
+            $this->mostrarcontrolgpli = "";
         } else {
             $this->atendido = "SI";
+            $this->mostrarcontrolgpli = "d-none";
         }
         
     }

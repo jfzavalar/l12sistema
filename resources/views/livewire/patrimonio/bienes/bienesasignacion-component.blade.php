@@ -20,30 +20,43 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">
-                                <i class="fa-solid fa-user"></i> CODIGO
+                                <i class="fa-solid fa-user"></i> PERSONAL QUE TRANSFIERE
                             </th>
-                            <th scope="col">SEDE</th>
-                            <th scope="col">IDENTIFICADOR</th>
-                            <th scope="col">DIRECCIÓN</th>
-                            <th scope="col">DEPARTAMENTO</th>
-                            <th scope="col">PROVINCIA</th>
-                            <th scope="col">DISTRITO</th>
+                            <th scope="col" class="table-success">
+                                <i class="fa-solid fa-user"></i> PERSONAL QUE RECEPCIONA
+                            </th>
+                            <th scope="col">CANTIDAD DE BIENES ASIGNADOS</th>
                             <th scope="col" class="table-dark"><i class="fa-solid fa-gears"></i></th>
-                            {{-- <th scope="col"><i class="fa-solid fa-gears"></i></th> --}}
                         </tr>
                     </thead>
                     <tbody class="align-middle">
                         @forelse ($lista_activos as $item)
                             <tr>
                                 <th>{{ $loop->iteration }}</th>
-                                <td>{{ $item->cod }}</td>
-                                <td>{{ $item->nombre }}</td>
-                                <td>{{ $item->nombred }}</td>
-                                <td>{{ $item->direccion }}</td>
-                                <td>{{ $item->departamento }}</td>
-                                <td>{{ $item->provincia }}</td>
-                                <td>{{ $item->distrito }}</td>
+                                <td>
+                                    <b>DNI:</b> {{ $item->dni }}
+                                    <br><b>DATOS:</b> {{ $item->datos }}
+                                    <br><b>CARGO:</b> {{ $item->cargo }}
+                                    <br><b>SEDE:</b> {{ $item->sede }}
+                                    <br><b>DEPENDENCIA:</b> {{ $item->dependencia }}
+                                    <br><b>DESPACHO:</b> {{ $item->despacho }}
+                                </td>
+                                <td>
+                                    <b>DNI:</b> {{ $item->dni2 }}
+                                    <br><b>DATOS:</b> {{ $item->datos2 }}
+                                    <br><b>CARGO:</b> {{ $item->cargo2 }}
+                                    <br><b>SEDE:</b> {{ $item->sede2 }}
+                                    <br><b>DEPENDENCIA:</b> {{ $item->dependencia2 }}
+                                    <br><b>DESPACHO:</b> {{ $item->despacho2 }}
+                                </td>
                                 <td></td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a type="button" class="btn btn-outline-naranja btn-xs" href="{{ route('pdf.patrimonio.bienesasignados-acta', $item->id) }}" target="_blank">
+                                            <i class="fa-solid fa-file-pdf"></i><br>Acta
+                                        </a>
+                                    </div>
+                                </td>
                             </tr>
                         @empty
                             <tr>
@@ -114,7 +127,62 @@
                             <div class="col">
                                 <fieldset class="border p-3 rounded mt-3 mb-3">
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">BIENES EN ASIGNACIÓN</legend>
-                                    {{-- @include('livewire.rrhh.contratos.partials.datos-contrato-component') --}}
+                                    <div class="table-responsive-xl">
+                                        <table class="table table-striped table-hover table-sm table-xsmall">
+                                            <thead class="table-dark text-center align-middle">
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">
+                                                        <i class="fa-solid fa-user"></i> COD
+                                                    </th>
+                                                    <th scope="col">COD PATRIMONIAL</th>
+                                                    <th scope="col">BIEN</th>
+                                                    <th scope="col">MARCA</th>
+                                                    <th scope="col">MODELO</th>
+                                                    <th scope="col">SERIE</th>
+                                                    <th scope="col">MEDIDAS</th>
+                                                    <th scope="col">COLOR</th>
+                                                    <th scope="col">ESTADO</th>
+                                                    <th scope="col" class="table-dark text-end">
+                                                        <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs"
+                                                            data-bs-toggle="modal" data-bs-target="#buscar-bienes-component">
+                                                            <i class="fa-solid fa-circle-plus"></i> Agregar bienes
+                                                        </button>
+                                                    </th>
+                                                    {{-- <th scope="col"><i class="fa-solid fa-gears"></i></th> --}}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @forelse($bienes as $index => $bien)
+                                                    <tr>
+                                                        <th>{{ $index + 1 }}</th>
+                                                        <td>{{ $bien['cod'] }}</td>
+                                                        <td>{{ $bien['cod_patrimonial'] }}</td>
+                                                        <td>{{ $bien['bien'] }}</td>
+                                                        <td>{{ $bien['marca'] }}</td>
+                                                        <td>{{ $bien['modelo'] }}</td>
+                                                        <td>{{ $bien['serie'] }}</td>
+                                                        <td>{{ $bien['medida'] }}</td>
+                                                        <td>{{ $bien['color'] }}</td>
+                                                        <td>{{ $bien['estado'] }}</td>
+                                                        <td class="text-end">
+                                                            <button type="button" wire:click="eliminarBien({{ $index }})" class="btn btn-danger btn-xs">
+                                                                <i class="fa-solid fa-trash"></i> Quitar
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                @empty
+                                                    <tr>
+                                                        <td colspan="11" class="text-center">
+                                                            <div class="alert alert-danger" role="alert">
+                                                                ¡No se encontraron resultados!
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endforelse
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </fieldset>
                             </div>
                         </div>
@@ -145,5 +213,8 @@
     @include('livewire.rrhh.personal.partials.2buscar-despachos-component') --}}
 
     @include('livewire.rrhh.contratos.partials.pdf-cargar-component')
+
+    {{-- Modal bienes patrimoniales --}}
+    @include('livewire.patrimonio.bienes.partials.buscar-bienes-component')
 
 </div>

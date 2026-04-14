@@ -279,7 +279,9 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="13"><br></td>
+                            <td colspan="13">
+                                {{ $lista_historial->links() }}
+                            </td>
                         </tr>
                     </tfoot>
                 </table>
@@ -376,7 +378,7 @@
                                                 <option value="WHATSAPP">WHATSAPP</option>
                                             </select>
                                         </div>
-                                        <div class="col-xl-2">
+                                        <div class="col-xl-3">
                                             <label for="txtservicio" class="fw-bold fs-6">SERVICIO</label>
                                             <div class="input-group">
                                                 <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-servicio-component">
@@ -385,7 +387,7 @@
                                                 <input type="text" id="txtservicio" class="form-control form-control-xs bg-light" wire:model="servicio" readonly required>
                                             </div>
                                         </div>
-                                        <div class="col-xl-3">
+                                        <div class="col-xl-4">
                                             <label for="txtdetalle_servicio" class="fw-bold fs-6">SOLICITUD / INCIDENCIA</label>
                                             <div class="input-group">
                                                 <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-inicidencia-solicitud-component">
@@ -404,20 +406,10 @@
                                                 <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="tipos">SOLICITUD</label>
                                             </div>
                                         </div>
-                                        <div class="col-xl-2">
-                                            <label class="fw-bold fs-6">Enviado a Lima</label>
-                                            <div class="d-flex gap-2">
-                                                <input type="radio" id="enviadoSi" name="enviadoLima" class="btn-check" value="SI" autocomplete="off" wire:model.live="enviado_lima" required>
-                                                <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="enviadoSi">Si</label>
-
-                                                <input type="radio" id="enviadoNo" name="enviadoLima" class="btn-check" value="NO" autocomplete="off" wire:model.live="enviado_lima" required>
-                                                <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="enviadoNo">No</label>
-                                            </div>
-                                        </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-xl-3">
-                                            <label for="txtservicio" class="fw-bold fs-6 {{ $mostrarcontroles }}">COD</label>
+                                        <div class="col-xl-2">
+                                            <label for="txtcod" class="fw-bold fs-6 {{ $mostrarcontroles }}">COD</label>
                                             <div class="input-group">
                                                 <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs {{ $mostrarcontroles }}"
                                                     data-bs-toggle="modal" data-bs-target="#buscar-bienes-component">
@@ -426,19 +418,23 @@
                                                 <input type="text" class="form-control form-control-xs {{ $mostrarcontroles }} bg-light is-valid" wire:model="cod" readonly>
                                             </div>
                                         </div>
-                                        <div class="col-xl-3">
-                                            <label for="txtservicio" class="fw-bold fs-6 {{ $mostrarcontroles }}">COD_PATRIMONIAL</label>
+                                        <div class="col-xl-2">
+                                            <label for="txtcodpatrimonial" class="fw-bold fs-6 {{ $mostrarcontroles }}">COD_PATRIMONIAL</label>
                                             <div class="input-group">
                                                 {{-- <span class="input-group-text input-group-text-xs {{ $mostrarcontroles }}" id="basic-addon1">Cod. Patrimonial</span> --}}
                                                 <input type="text" class="form-control form-control-xs {{ $mostrarcontroles }} bg-light is-valid" wire:model="cod_patrimonial" readonly>
                                             </div>
                                         </div>
                                         <div class="col-xl-6">
-                                            <label for="txtservicio" class="fw-bold fs-6 {{ $mostrarcontroles }}">BIEN</label>
+                                            <label for="txtequipo" class="fw-bold fs-6 {{ $mostrarcontroles }}">PC / LAPTOP</label>
                                             <div class="input-group">
                                                 {{-- <span class="input-group-text input-group-text-xs {{ $mostrarcontroles }}" id="basic-addon1">Bien</span> --}}
                                                 <input type="text" class="form-control form-control-xs {{ $mostrarcontroles }} bg-light is-valid" wire:model="datos_bien" readonly>
                                             </div>
+                                        </div>
+                                        <div class="col-xl-2">
+                                            <label for="txtip" class="fw-bold fs-6 {{ $mostrarcontroles }}">IP</label>
+                                            <input type="text" class="form-control form-control-xs {{ $mostrarcontroles }} bg-light is-valid" wire:model="bien_ip"  readonly>
                                         </div>
                                     </div>
                                     <div class="row">                                       
@@ -451,9 +447,21 @@
                                             <input type="text" id="txtsgf" class="form-control form-control-xs text-uppercase" wire:model="sgf">
                                         </div>
                                         <div class="col-12 col-xl">
-                                            <label for="txtglpi" class="fw-bold fs-6">GLPI</label>
-                                            <input type="text" id="txtglpi" class="form-control form-control-xs text-uppercase" wire:model=glpi>
+                                            <label class="fw-bold fs-6">Enviado a Lima</label>
+                                            <div class="d-flex gap-2">
+                                                <input type="radio" id="enviadoSi" name="enviadoLima" class="btn-check" value="SI" autocomplete="off" wire:model.live="enviado_lima" required>
+                                                <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="enviadoSi">Si</label>
+
+                                                <input type="radio" id="enviadoNo" name="enviadoLima" class="btn-check" value="NO" autocomplete="off" wire:model.live="enviado_lima" required>
+                                                <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="enviadoNo">No</label>
+                                            </div>
                                         </div>
+                                        @if ($enviado_lima === "SI")
+                                            <div class="col-12 col-xl">
+                                                <label for="txtglpi" class="fw-bold fs-6 {{ $mostrarcontrolgpli }}">GLPI</label>
+                                                <input type="text" id="txtglpi" class="form-control form-control-xs text-uppercase {{ $mostrarcontrolgpli }}" wire:model=glpi>
+                                            </div>
+                                        @endif
                                     </div>
                                     <div class="row">
                                         <div class="col-12 col-xl">

@@ -2,6 +2,10 @@
 
 namespace App\Livewire\Patrimonio\Bienes;
 
+use App\Models\Patrimonios_biene;
+use App\Models\PatrimoniosBiene;
+use App\Models\PatrimoniosBienesAsignacione;
+use App\Models\PatrimoniosBienesAsignacionesDetalle;
 use App\Models\Persona;
 use App\Models\Personale;
 use App\Models\Personales_cargo;
@@ -42,7 +46,7 @@ class BienesasignacionComponent extends Component
     public $funcionGuardarActualizar;
 
     // Variables de búsqueda
-    public $search, $searchlicencias,$searchrenuncias,$searchhistorial, $searchpersonas, $searchsedes,$searchdependencias,$searchdespachos,$searchcargos;
+    public $search, $searchlicencias,$searchrenuncias,$searchhistorial, $searchpersonas, $searchsedes,$searchdependencias,$searchdespachos,$searchcargos,$searchbienes;
     public function updatingSearch(){
         $this->resetPage('bienesasignacionPage');
     }
@@ -69,6 +73,9 @@ class BienesasignacionComponent extends Component
     }
     public function updatingSearchcargos(){
         $this->resetPage('cargosPage');
+    }
+    public function updatingSearchbienes(){
+        $this->resetPage('bienesPage');
     }
 
     Public $filtrosede, $filtrodependencia;
@@ -192,39 +199,58 @@ class BienesasignacionComponent extends Component
             $ndoc_adq,
             $fecha_adq;
 
+    public $pdf_acta;
+
+    public $bienes = [];
+
     public function render()
     {
-        $lista_activos = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
-            ->join('patrimonios_bienes_asignaciones','personas.id', '=', 'patrimonios_bienes_asignaciones.persona_id')
-            ->select(
-                'personas.*',
-                'personales.persona_id',
-                'personales.celinstitucional',
-                'personales.correoinstitucional',
-                'personales.regimen',
-                'personales.tipo_regimen',
-                'personales.cargo',
-                'personales.sedeorigen',
-                'personales.dependenciaorigen',
-                'personales.despachoorigen',
-                'personales.sededestino',
-                'personales.dependenciadestino',
-                'personales.despachodestino',
-                'personales.tipo_documento'
+        $lista_activos = PatrimoniosBienesAsignacione::select(
+                'id',
+                'persona_id',
+                'dni',
+                'personal_id',
+                'datos',
+                'regimen',
+                'cargo',
+                'sede_id',
+                'sede',
+                'dependencia_id',
+                'dependencia',
+                'despacho_id',
+                'persona_id2',
+                'dni2',
+                'personal_id2',
+                'datos2',
+                'regimen2',
+                'cargo2',
+                'sede_id2',
+                'sede2',
+                'dependencia_id2',
+                'dependencia2',
+                'despacho_id2',
+                'despacho2',
+                'bien_id',
+                'cod',
+                'cod_patrimonial',
+                'bien',
+                'ruta_documento',
+                'activo',
+                'created_user',
+                'updated_user',
             )
-            ->where('personales.tipo_documento','CONTRATO')
-            ->where('personales.activo', "1")
+            ->where('activo', "1")
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('personas.dni', 'like', '%' . $this->search . '%')
-                    ->orWhere('personas.datos', 'like', '%' . $this->search . '%');
+                    $q->where('dni2', 'like', '%' . $this->search . '%')
+                    ->orWhere('datos2', 'like', '%' . $this->search . '%');
                 });
             })
-            ->when($this->filtrosede, fn($q) => $q->where('personales.codsedeorigen', $this->filtrosede))
-            ->when($this->filtrodependencia, fn($q) => $q->where('personales.coddependenciaorigen', $this->filtrodependencia))
-            ->when($this->filtroregimen, fn($q) => $q->where('personales.regimen', 'like', '%' . $this->filtroregimen . '%'))
-            ->when($this->filtrocargo, fn($q) => $q->where('personales.cargo', '=', $this->filtrocargo))
-            ->orderBy('personales.id', 'desc')
+            // ->when($this->filtrosede, fn($q) => $q->where('personales.codsedeorigen', $this->filtrosede))
+            // ->when($this->filtrodependencia, fn($q) => $q->where('personales.coddependenciaorigen', $this->filtrodependencia))
+            // ->when($this->filtroregimen, fn($q) => $q->where('personales.regimen', 'like', '%' . $this->filtroregimen . '%'))
+            // ->when($this->filtrocargo, fn($q) => $q->where('personales.cargo', '=', $this->filtrocargo))
+            ->orderBy('id', 'desc')
             ->paginate(30, ['*'], 'bienesasignacionPage');
 
         $lista_personas = Persona::where('activo','1')
@@ -283,9 +309,16 @@ class BienesasignacionComponent extends Component
             ->orderBy('nombre')
             ->get();
 
+        $lista_bienes = Patrimonios_biene::where('activo','1')
+            ->where('cod_patrimonial','like','%' . $this->searchbienes . '%')
+            ->distinct()
+            ->orderBy('bien')
+            ->paginate(10,['*'],'bienesPage');
+
         return view('livewire.patrimonio.bienes.bienesasignacion-component',
                         compact('lista_activos',
-                                    'lista_personas','lista_personas2','lista_sedes','lista_dependencias','lista_despachos','lista_cargos','lista_cargos2'));
+                                    'lista_personas','lista_personas2','lista_sedes','lista_dependencias','lista_despachos','lista_cargos','lista_cargos2',
+                                    'lista_bienes'));
     }
 
     public function nuevo()
@@ -308,6 +341,129 @@ class BienesasignacionComponent extends Component
         $this->colorGuardarActualizar = "primary";
         $this->textoGuardarActualizar = "Guardar";
         $this->colorAgregar = "outline-primary";
+    }
+
+    public function guardar()
+    {
+        try {
+
+            // ✅ Validación previa
+            if (empty($this->bienes)) {
+                $this->dispatch(
+                    'alerta-actualizado',
+                    titulo: 'Error',
+                    mensaje: 'Debe agregar al menos un bien.',
+                    tipo: 'error'
+                );
+                return;
+            }
+
+            DB::transaction(function () {
+
+                $usuario = auth()->user()->datos;
+                $now = now();
+
+                // ✅ Crear cabecera
+                $iasignacion = PatrimoniosBienesAsignacione::create([
+                    'persona_id' => $this->persona_id,
+                    'dni' => $this->dni,
+                    'personal_id' => $this->personal_id,
+                    'datos' => $this->datos,
+                    'regimen' => $this->regimen,
+                    'cargo' => $this->cargo,
+                    'sede_id' => $this->codsedeorigen,
+                    'sede' => $this->sedeorigen,
+                    'dependencia_id' => $this->coddependenciaorigen,
+                    'dependencia' => $this->dependenciaorigen,
+                    'despacho_id' => $this->coddespachoorigen,
+                    'despacho' => $this->despachoorigen,
+
+                    'persona_id2' => $this->persona_id2,
+                    'dni2' => $this->dni2,
+                    'personal_id2' => $this->personal_id2,
+                    'datos2' => $this->datos2,
+                    'regimen2' => $this->regimen2,
+                    'cargo2' => $this->cargo2,
+                    'sede_id2' => $this->codsedeorigen2,
+                    'sede2' => $this->sedeorigen2,
+                    'dependencia_id2' => $this->coddependenciaorigen2,
+                    'dependencia2' => $this->dependenciaorigen2,
+                    'despacho_id2' => $this->coddespachoorigen2,
+                    'despacho2' => $this->despachoorigen2,
+
+                    'activo' => "1",
+                    'created_user' => $usuario,
+                    'updated_user' => $usuario,
+                ]);
+
+                // ✅ Preparar datos
+                $detalles = [];
+                $ids = [];
+
+                foreach ($this->bienes as $bien) {
+
+                    // Validación básica
+                    if (!isset($bien['id'], $bien['cod'], $bien['cod_patrimonial'], $bien['bien'])) {
+                        continue;
+                    }
+
+                    $detalles[] = [
+                        'asignacion_id' => $iasignacion->id,
+                        'bien_id' => $bien['id'],
+                        'cod' => $bien['cod'],
+                        'cod_patrimonial' => $bien['cod_patrimonial'],
+                        'bien' => $bien['bien'],
+                        'created_user' => $usuario,
+                        'updated_user' => $usuario,
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ];
+
+                    $ids[] = $bien['id'];
+                }
+
+                // ✅ Insertar detalles
+                if (!empty($detalles)) {
+                    PatrimoniosBienesAsignacionesDetalle::insert($detalles);
+                }
+
+                // ✅ Actualizar estado (1 solo query)
+                if (!empty($ids)) {
+
+                    $updated = PatrimoniosBiene::whereIn('id', $ids)
+                        ->where('asignacion', '!=', 'ASIGNADO')
+                        ->update(['asignacion' => 'ASIGNADO']);
+
+                    // 🔥 Control de concurrencia
+                    if ($updated !== count($ids)) {
+                        throw new \Exception('Algunos bienes ya fueron asignados.');
+                    }
+                }
+            });
+
+            // ✅ Reset
+            $this->reset();
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Datos actualizados',
+                mensaje: 'Los datos se han actualizado correctamente.',
+                tipo: 'success'
+            );
+
+            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
+
+        } catch (\Throwable $e) {
+
+            report($e);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: $e->getMessage(), // 👈 ahora muestra el error real
+                tipo: 'error'
+            );
+        }
     }
 
     public function cerrar()
@@ -348,7 +504,7 @@ class BienesasignacionComponent extends Component
         $this->tipo_regimen = $ipersonal->tipo_regimen;
         $this->cargo = $ipersonal->cargo;
 
-        // $this->reset('searchpersonas');
+        $this->reset('searchpersonas');
     }
 
     public function agregar_persona2(Persona $ipersona){
@@ -365,7 +521,7 @@ class BienesasignacionComponent extends Component
 
         $this->fotoactual2 = $ipersona->foto;
 
-        $ipersonal = Personale::where([['activo',1],['persona_dni',$this->dni],])->firstOrFail();
+        $ipersonal = Personale::where([['activo',1],['persona_dni',$this->dni2],])->firstOrFail();
 
         $this->sedeorigen2 = $ipersonal->sedeorigen;
         $this->dependenciaorigen2 = $ipersonal->dependenciaorigen;
@@ -376,7 +532,7 @@ class BienesasignacionComponent extends Component
         $this->tipo_regimen2 = $ipersonal->tipo_regimen;
         $this->cargo2 = $ipersonal->cargo;
 
-        // $this->reset('searchpersonas');
+        $this->reset('searchpersonas');
     }
 
     public function agregar_sede(Personales_sede $isede)
@@ -449,5 +605,37 @@ class BienesasignacionComponent extends Component
     public function agregar_cargo(Personales_cargo $icargo)
     {
         $this->cargo = $icargo->nombre;
+    }
+
+    public function agregar_bien(patrimonios_biene $ibien)
+    {
+        // Datos del bien
+        $item = [
+            'id' => $ibien->id,
+            'cod' => $ibien->cod,
+            'cod_patrimonial' => $ibien->cod_patrimonial,
+            'bien' => $ibien->bien,
+            'marca' => $ibien->marca,
+            'modelo' => $ibien->modelo,
+            'serie' => $ibien->serie,
+            'medida' => $ibien->medida,
+            'color' => $ibien->color,
+            'estado' => $ibien->estado,
+            'ip' => $ibien->ip,
+            'datos_bien' => $ibien->bien ." | ". $ibien->marca ." | " . $ibien->modelo ." | " . $ibien->serie ." | " . $ibien->medida ." | " .$ibien->color ." | " . $ibien->estado,
+        ];
+
+        // Evitar duplicados (opcional)
+        if (!collect($this->bienes)->contains('id', $ibien->id)) {
+            $this->bienes[] = $item;
+        }
+
+        $this->reset('searchbienes');
+    }
+
+    public function eliminarBien($index)
+    {
+        unset($this->bienes[$index]);
+        $this->bienes = array_values($this->bienes); // reindexar
     }
 }

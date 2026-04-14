@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PatrimoniosBienesAsignacione extends Model
+class PatrimoniosBienesAsignacionesDetalle extends Model
 {
-    protected $table = 'patrimonios_bienes_asignaciones';
+    protected $table = 'patrimonios_bienes_asignaciones_detalles';
 
     protected $fillable = [
         'persona_id',
@@ -20,7 +20,6 @@ class PatrimoniosBienesAsignacione extends Model
         'dependencia_id',
         'dependencia',
         'despacho_id',
-        'despacho',
         'persona_id2',
         'dni2',
         'personal_id2',
@@ -37,7 +36,6 @@ class PatrimoniosBienesAsignacione extends Model
         'cod',
         'cod_patrimonial',
         'bien',
-        'ruta_documento',
         'activo',
         'created_user',
         'updated_user',

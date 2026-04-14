@@ -27,6 +27,7 @@
                                     <th scope="col">COD</th>
                                     <th scope="col">COD PATRIMONIAL</th>
                                     <th scope="col">BIEN</th>
+                                    <th scope="col">ESTADO</th>
                                     <th scope="col"></th>
                                     <th scope="col"><i class="fa-solid fa-gears"></i></th>
                                 </tr>
@@ -38,6 +39,11 @@
                                         <th>{{ $bien->cod }}</th>
                                         <td>{{ $bien->cod_patrimonial }}</td>
                                         <td>{{ $bien->bien }}</td>
+                                        <td>
+                                            <span class="badge rounded-pill {{ $bien->asignacion === 'ASIGNADO' ? 'text-bg-success' : 'text-bg-danger' }}">
+                                                {{ $bien->asignacion === 'ASIGNADO' ? 'ASIGNADO' : 'LIBRE' }}
+                                            </span>
+                                        </td>
                                         <td></td>
                                         <td>
                                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
