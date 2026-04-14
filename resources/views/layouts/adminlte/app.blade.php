@@ -468,30 +468,30 @@
                                     </a>
 
                                     <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a class="nav-link ms-3 {{ request()->routeIs('mpfn.patrimonio.asignaciones.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.patrimonio.asignaciones.index') }}">
-                                                <i class="nav-icon fa-regular fa-circle"></i>
-                                                <p>Asignación de bienes</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a class="nav-link ms-3 {{ request()->routeIs('mpfn.patrimonio.bienes.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.patrimonio.bienes.index') }}">
-                                                <i class="nav-icon fa-regular fa-circle"></i>
-                                                <p>Bienes patrimoniales</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-
-                                    <ul class="nav nav-treeview">
+                                        @can('mpfn.patrimonio.asignaciones.index')
+                                            <li class="nav-item">
+                                                <a class="nav-link ms-3 {{ request()->routeIs('mpfn.patrimonio.asignaciones.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.patrimonio.asignaciones.index') }}">
+                                                    <i class="nav-icon fa-regular fa-circle"></i>
+                                                    <p>Asignación de bienes</p>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('mpfn.patrimonio.bienes.index')
+                                            <li class="nav-item">
+                                                <a class="nav-link ms-3 {{ request()->routeIs('mpfn.patrimonio.bienes.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.patrimonio.bienes.index') }}">
+                                                    <i class="nav-icon fa-regular fa-circle"></i>
+                                                    <p>Bienes patrimoniales</p>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('mpfn.patrimonio.traslado.index')
                                         <li class="nav-item">
                                             <a class="nav-link ms-3 {{ request()->routeIs('mpfn.patrimonio.traslado.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.patrimonio.traslado.index') }}">
                                                 <i class="nav-icon fa-regular fa-circle"></i>
                                                 <p>Traslado temporal</p>
                                             </a>
                                         </li>
+                                        @endcan
                                     </ul>
                                 </li>
                             @endcan
