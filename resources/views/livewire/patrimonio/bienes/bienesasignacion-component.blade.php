@@ -7,7 +7,7 @@
                         <div class="input-group input-group-sm mb-2">
                             <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
                             <input type="text" id="txtsearchusuario" class="form-control form-control-sm me-2" wire:model.live="search" placeholder="Buscar por SEDE">
-                            @can('mpfn.rrhh.personal.create')
+                            @can('mpfn.patrimonio.asignaciones.create')
                                 <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
                                     <i class="fa-solid fa-file"></i> Nuevo
                                 </button>
@@ -52,9 +52,11 @@
                                 <td></td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->id }})">
-                                            <i class="fa-solid fa-pen-to-square"></i><br>Editar
-                                        </button> 
+                                        @can('mpfn.patrimonio.asignaciones.create')
+                                            <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->id }})">
+                                                <i class="fa-solid fa-pen-to-square"></i><br>Editar
+                                            </button>
+                                        @endcan
                                         <a type="button" class="btn btn-outline-naranja btn-xs" href="{{ route('pdf.patrimonio.bienesasignados-acta', $item->id) }}" target="_blank">
                                             <i class="fa-solid fa-file-pdf"></i><br>Acta
                                         </a>
