@@ -208,6 +208,7 @@
             .input-group-text-xs.input-group-text {
                 padding: .25rem .5rem;  /* arriba/abajo - izquierda/derecha */
                 font-size: .75rem;      /* tamaño de letra */
+                font-weight: bold;      /* negrita */
             }
 
             /* Tamaño extra pequeño para tablas */

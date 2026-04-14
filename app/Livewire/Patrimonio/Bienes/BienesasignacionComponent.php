@@ -199,6 +199,8 @@ class BienesasignacionComponent extends Component
             $ndoc_adq,
             $fecha_adq;
 
+    public $referencia, $motivo;
+
     public $pdf_acta;
 
     public $bienes = [];
@@ -389,6 +391,9 @@ class BienesasignacionComponent extends Component
                     'dependencia2' => $this->dependenciaorigen2,
                     'despacho_id2' => $this->coddespachoorigen2,
                     'despacho2' => $this->despachoorigen2,
+
+                    'referencia' => $this->referencia,
+                    'motivo' => $this->motivo,
 
                     'activo' => "1",
                     'created_user' => $usuario,

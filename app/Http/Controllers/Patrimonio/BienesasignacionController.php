@@ -96,6 +96,8 @@ class BienesasignacionController extends Controller
                 'dependencia2',
                 'despacho_id2',
                 'despacho2',
+                'referencia',
+                'motivo',
                 'bien_id',
                 'cod',
                 'cod_patrimonial',

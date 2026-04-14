@@ -106,9 +106,19 @@
                                             @include('livewire.rrhh.personal.partials.datos-personales-component')
                                             @include('livewire.rrhh.personal.partials.datos-institucionales-component')
                                         </fieldset>
-                                        <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-personal-component">
-                                            <i class="fa-solid fa-magnifying-glass"></i> Buscar personal
-                                        </button>
+                                        <div class="row">
+                                            <div class="col-xl-2">
+                                                <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-personal-component">
+                                                    <i class="fa-solid fa-magnifying-glass"></i> Buscar personal
+                                                </button>
+                                            </div>
+                                            <div class="col-xl-10">
+                                                <div class="input-group">
+                                                    <span class="input-group-text input-group-text-xs" id="basic-addon1">Referencia</span>
+                                                    <input type="text" class="form-control form-control-xs" wire:model="referencia">
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-xl-6">
                                         <fieldset class="border p-3 rounded mb-3" {{ $seccionPersonal }}>
@@ -116,9 +126,19 @@
                                             @include('livewire.rrhh.personal.partials.datos-personales-component2')
                                             @include('livewire.rrhh.personal.partials.datos-institucionales-component2')
                                         </fieldset>
-                                        <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-personal-component2">
-                                            <i class="fa-solid fa-magnifying-glass"></i> Buscar personal
-                                        </button>
+                                        <div class="row">
+                                            <div class="col-xl-2">
+                                                <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-personal-component2">
+                                                    <i class="fa-solid fa-magnifying-glass"></i> Buscar personal
+                                                </button>
+                                            </div>
+                                            <div class="col-xl-10">
+                                                <div class="input-group">
+                                                    <span class="input-group-text input-group-text-xs" id="basic-addon1">Motivo</span>
+                                                    <input type="text" class="form-control form-control-xs" wire:model="motivo">
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

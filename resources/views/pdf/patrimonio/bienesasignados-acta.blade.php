@@ -32,7 +32,7 @@
         <thead>
             <tr>
                 <th style="background-color: black; color: white; text-align: center;">
-                    ORDEN DE DESPLAZAMIENTO INTERNO DE BIENES PATRIMONIALES N°
+                    ORDEN DE DESPLAZAMIENTO INTERNO DE BIENES PATRIMONIALES N° {{ $iasignacion->id }}
                     <br>MES: {{ strtoupper(\Carbon\Carbon::now()->locale('es')->translatedFormat('F')) }}
                 </th>
             </tr>
@@ -81,10 +81,10 @@
         </thead>
         <tbody>
             <tr>
-                <th style="text-align: left; vertical-align: top;">Referencia: </th>
-                <td style="text-align: left; vertical-align: top;"></td>
-                <th style="text-align: left; vertical-align: top;">Motivo: </th>
-                <td style="text-align: left; vertical-align: top;"></td>
+                <th style="text-align: left; vertical-align: top;"><b>Referencia:</b> </th>
+                <td style="text-align: left; vertical-align: top;">{{ $iasignacion->referencia }}</td>
+                <th style="text-align: left; vertical-align: top;"><b>Motivo:</b> </th>
+                <td style="text-align: left; vertical-align: top;">{{ $iasignacion->motivo }}</td>
             </tr>
         </tbody>
     </table>
@@ -150,7 +150,7 @@
 
         // 🔥 HEADER (derecha)
         $pdf->page_text(
-            735, 60, // 👈 ajusta posición (x, y)
+            735, 15, // 👈 ajusta posición (x, y)
             "Página {PAGE_NUM} de {PAGE_COUNT}",
             $font,
             $size
