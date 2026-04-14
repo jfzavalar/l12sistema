@@ -52,6 +52,9 @@
                                 <td></td>
                                 <td>
                                     <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->id }})">
+                                            <i class="fa-solid fa-pen-to-square"></i><br>Editar
+                                        </button> 
                                         <a type="button" class="btn btn-outline-naranja btn-xs" href="{{ route('pdf.patrimonio.bienesasignados-acta', $item->id) }}" target="_blank">
                                             <i class="fa-solid fa-file-pdf"></i><br>Acta
                                         </a>

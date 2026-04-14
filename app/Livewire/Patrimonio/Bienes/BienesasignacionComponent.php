@@ -199,7 +199,7 @@ class BienesasignacionComponent extends Component
             $ndoc_adq,
             $fecha_adq;
 
-    public $referencia, $motivo;
+    public $asignacion_id,$referencia, $motivo;
 
     public $pdf_acta;
 
@@ -474,6 +474,241 @@ class BienesasignacionComponent extends Component
             );
         }
     }
+
+
+    public function editar($id)
+    {
+        $this->resetValidation();
+        $this->resetErrorBag();
+
+        $this->funcionGuardarActualizar = "actualizar";
+
+        $this->mostrarBtnBuscarDni = "d-none";
+
+        $this->colorHeaderModal = "success-subtle";
+        $this->textoHeaderModal = "Editar";
+        $this->colorGuardarActualizar = "success";
+        $this->textoGuardarActualizar = "Actualizar";
+        $this->colorAgregar = "outline-success";
+        
+        $asignacion = PatrimoniosBienesAsignacione::findOrFail($id);
+
+        $this->asignacion_id = $asignacion->id;
+
+        // ===== ORIGEN =====
+        $this->persona_id = $asignacion->persona_id;
+        $this->dni = $asignacion->dni;
+        $this->personal_id = $asignacion->personal_id;
+        $this->datos = $asignacion->datos;
+        $this->regimen = $asignacion->regimen;
+        $this->cargo = $asignacion->cargo;
+
+        $this->codsedeorigen = $asignacion->sede_id;
+        $this->sedeorigen = $asignacion->sede;
+
+        $this->coddependenciaorigen = $asignacion->dependencia_id;
+        $this->dependenciaorigen = $asignacion->dependencia;
+
+        $this->coddespachoorigen = $asignacion->despacho_id;
+        $this->despachoorigen = $asignacion->despacho;
+
+        // ===== DESTINO =====
+        $this->persona_id2 = $asignacion->persona_id2;
+        $this->dni2 = $asignacion->dni2;
+        $this->personal_id2 = $asignacion->personal_id2;
+        $this->datos2 = $asignacion->datos2;
+        $this->regimen2 = $asignacion->regimen2;
+        $this->cargo2 = $asignacion->cargo2;
+
+        $this->codsedeorigen2 = $asignacion->sede_id2;
+        $this->sedeorigen2 = $asignacion->sede2;
+
+        $this->coddependenciaorigen2 = $asignacion->dependencia_id2;
+        $this->dependenciaorigen2 = $asignacion->dependencia2;
+
+        $this->coddespachoorigen2 = $asignacion->despacho_id2;
+        $this->despachoorigen2 = $asignacion->despacho2;
+
+        $this->referencia = $asignacion->referencia;
+        $this->motivo = $asignacion->motivo;
+
+        // ===== DETALLES =====
+        $this->bienes = PatrimoniosBienesAsignacionesDetalle::where('asignacion_id', $id)
+            ->join('patrimonios_bienes as pb', 'pb.id', '=', 'patrimonios_bienes_asignaciones_detalles.bien_id')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'id' => $item->bien_id,
+                    'codigo_barra' => $item->cod,
+                    'codigo_patrimonial' => $item->cod_patrimonial,
+                    'descripcion' => $item->bien,
+                    'marca' => $item->marca,
+                    'modelo' => $item->modelo,
+                    'nro_serie' => $item->nro_serie,
+                    'medidas' => $item->medidas,
+                    'color' => $item->color,
+                    'estado' => $item->estado,
+                ];
+            })
+            ->toArray();
+    }
+
+
+    public function actualizar()
+    {
+        try {
+
+            if (empty($this->bienes)) {
+                $this->dispatch(
+                    'alerta-actualizado',
+                    titulo: 'Error',
+                    mensaje: 'Debe agregar al menos un bien.',
+                    tipo: 'error'
+                );
+                return;
+            }
+
+            DB::transaction(function () {
+
+                $usuario = auth()->user()->datos;
+                $now = now();
+
+                $asignacion = PatrimoniosBienesAsignacione::findOrFail($this->asignacion_id);
+
+                // =========================
+                // 🔥 OBTENER BIENES ANTERIORES
+                // =========================
+                $bienesAntiguos = PatrimoniosBienesAsignacionesDetalle::where('asignacion_id', $asignacion->id)
+                    ->pluck('bien_id')
+                    ->toArray();
+
+                // =========================
+                // 🔓 LIBERAR ANTERIORES
+                // =========================
+                if (!empty($bienesAntiguos)) {
+                    PatrimoniosBiene::whereIn('id', $bienesAntiguos)
+                        ->update(['asignacion' => 'DISPONIBLE']);
+                }
+
+                // =========================
+                // ✏️ ACTUALIZAR CABECERA
+                // =========================
+                $asignacion->update([
+                    'persona_id' => $this->persona_id,
+                    'dni' => $this->dni,
+                    'personal_id' => $this->personal_id,
+                    'datos' => $this->datos,
+                    'regimen' => $this->regimen,
+                    'cargo' => $this->cargo,
+                    'sede_id' => $this->codsedeorigen,
+                    'sede' => $this->sedeorigen,
+                    'dependencia_id' => $this->coddependenciaorigen,
+                    'dependencia' => $this->dependenciaorigen,
+                    'despacho_id' => $this->coddespachoorigen,
+                    'despacho' => $this->despachoorigen,
+
+                    'persona_id2' => $this->persona_id2,
+                    'dni2' => $this->dni2,
+                    'personal_id2' => $this->personal_id2,
+                    'datos2' => $this->datos2,
+                    'regimen2' => $this->regimen2,
+                    'cargo2' => $this->cargo2,
+                    'sede_id2' => $this->codsedeorigen2,
+                    'sede2' => $this->sedeorigen2,
+                    'dependencia_id2' => $this->coddependenciaorigen2,
+                    'dependencia2' => $this->dependenciaorigen2,
+                    'despacho_id2' => $this->coddespachoorigen2,
+                    'despacho2' => $this->despachoorigen2,
+
+                    'referencia' => $this->referencia,
+                    'motivo' => $this->motivo,
+
+                    'updated_user' => $usuario,
+                ]);
+
+                // =========================
+                // 🗑️ ELIMINAR DETALLES
+                // =========================
+                PatrimoniosBienesAsignacionesDetalle::where('asignacion_id', $asignacion->id)->delete();
+
+                // =========================
+                // 🆕 NUEVOS DETALLES
+                // =========================
+                $detalles = [];
+                $ids = [];
+
+                foreach ($this->bienes as $bien) {
+
+                    $id = data_get($bien, 'id');
+
+                    if (!$id) continue;
+
+                    $detalles[] = [
+                        'asignacion_id' => $asignacion->id,
+                        'bien_id' => $id,
+                        'cod' => data_get($bien, 'codigo_barra'),
+                        'cod_patrimonial' => data_get($bien, 'codigo_patrimonial'),
+                        'bien' => data_get($bien, 'descripcion'),
+                        'activo' => "1",
+                        'created_user' => $usuario,
+                        'updated_user' => $usuario,
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ];
+
+                    $ids[] = $id;
+                }
+
+                if (empty($detalles)) {
+                    throw new \Exception('No hay bienes válidos.');
+                }
+
+                // =========================
+                // ⚠️ VALIDAR
+                // =========================
+                $yaAsignados = PatrimoniosBiene::whereIn('id', $ids)
+                    ->where('asignacion', 'ASIGNADO')
+                    ->whereNotIn('id', $bienesAntiguos)
+                    ->exists();
+
+                if ($yaAsignados) {
+                    throw new \Exception('Algunos bienes ya están asignados.');
+                }
+
+                // =========================
+                // 💾 GUARDAR
+                // =========================
+                PatrimoniosBienesAsignacionesDetalle::insert($detalles);
+
+                PatrimoniosBiene::whereIn('id', $ids)
+                    ->update(['asignacion' => 'ASIGNADO']);
+            });
+
+            $this->reset();
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Actualizado',
+                mensaje: 'Registro actualizado correctamente.',
+                tipo: 'success'
+            );
+
+            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
+
+        } catch (\Throwable $e) {
+
+            report($e);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: $e->getMessage(),
+                tipo: 'error'
+            );
+        }
+    }
+
+
 
     public function cerrar()
     {
