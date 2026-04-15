@@ -179,21 +179,21 @@ class Activos extends Component
     public function filtrarVerificados()
     {
         $this->resetFiltros();
-        $this->filtro_verificar = '1';
+        $this->filtro_verificar = 1; // ✅
     }
 
     public function filtrarNoVerificados()
     {
         $this->resetFiltros();
-        $this->filtro_verificar = '0';
+        $this->filtro_verificar = 0; // ✅
     }
 
     private function resetFiltros()
     {
-        $this->search = '';
-        $this->filtro_firma = '';
-        $this->filtro_asignacion = '';
-        $this->filtro_verificar= '';
+        $this->search = null;
+        $this->filtro_firma = null;
+        $this->filtro_asignacion = null;
+        $this->filtro_verificar = null;
 
         $this->resetPage('firmastokensPage');
     }
