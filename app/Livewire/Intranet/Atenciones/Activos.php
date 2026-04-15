@@ -54,7 +54,7 @@ class Activos extends Component
     public $search, $searchi,$searchhistorial, $searchpersonas, $searchsedes,$searchdependencias,$searchdespachos,$searchcargos,
             $searchservicios,$searchincidenciasolicitud,$searchbienes;
     public function updatingSearch(){
-        $this->resetPage('personalesPage');
+        $this->resetPage('atencionesPage');
     }
     public function updatingSearchi(){
         $this->resetPage('personalesiPage');
@@ -90,9 +90,7 @@ class Activos extends Component
         $this->resetPage('bienesPage');
     }
 
-    public $filtrotipodocumento;
-    public $filtroregimen;
-    public $filtroatendido;
+    Public $filtro_atendido,$filtro_atendidou;
 
     public $user_login;
 
@@ -209,6 +207,41 @@ class Activos extends Component
         $this->filtro_mes = date('n');
     }
 
+    
+    public function filtrarTotal()
+    {
+        $this->resetFiltros();
+    }
+    public function filtrarAtendido()
+    {
+        $this->resetFiltros();
+        $this->filtro_atendido = 'SI';
+    }
+    public function filtrarNoatendido()
+    {
+        $this->resetFiltros();
+        $this->filtro_atendido = 'NO';
+    }
+    public function filtrarAtendidou()
+    {
+        $this->resetFiltros();
+        $this->filtro_atendidou = 'SI';
+    }
+    public function filtrarNoatendidou()
+    {
+        $this->resetFiltros();
+        $this->filtro_atendidou = 'NO';
+    }
+    private function resetFiltros()
+    {
+        $this->search = null;
+        $this->filtro_atendido = null;
+        $this->filtro_atendidou = null;
+        $this->resetPage('atencionesPage');
+    }
+
+
+
     public function render()
     {
         $lista_activos = $this->queryConFiltros()
@@ -235,7 +268,7 @@ class Activos extends Component
                 'personales_atenciones.ruta_documento')
             ->where('personales_atenciones.activo', 1)
             ->orderBy('personales_atenciones.id','desc')
-            ->paginate(10, ['personas.*'], 'personalesPage');
+            ->paginate(10, ['*'], 'atencionesPage');
 
         $lista_inactivos = $this->queryConFiltros()
             ->select('personas.*',
@@ -266,6 +299,22 @@ class Activos extends Component
             ->selectRaw("SUM(CASE WHEN atendido = 'NO' THEN 1 ELSE 0 END) as no_atendidos")
             ->groupBy('created_user')
             ->get();
+
+        $estadisticas2 = PersonalesAtencione::where('activo', '1')
+            ->selectRaw("
+                COUNT(*) as total,
+
+                SUM(CASE 
+                    WHEN atendido = 'SI' 
+                    THEN 1 ELSE 0 
+                END) as atendidos,
+
+                SUM(CASE 
+                    WHEN atendido = 'NO' 
+                    THEN 1 ELSE 0 
+                END) as no_atendidos
+            ")
+            ->first();
 
         $lista_historial = $this->queryConFiltros()
             ->select('personas.*',
@@ -351,7 +400,7 @@ class Activos extends Component
             ->paginate(10,['*'],'bienesPage');
 
         return view('livewire.intranet.atenciones.activos',
-                compact('lista_activos','lista_inactivos','estadisticas','lista_historial',
+                compact('lista_activos','lista_inactivos','estadisticas','estadisticas2','lista_historial',
                             'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos',
                             'lista_servicios','lista_incidencias_solicitudes','lista_bienes'));
     }
@@ -366,7 +415,13 @@ class Activos extends Component
                     $q->where('personas.dni', 'like', '%' . $this->search . '%')
                     ->orWhere('personas.datos', 'like', '%' . $this->search . '%');
                 });
-            });
+            })
+            ->when($this->filtro_atendido, fn($q) =>
+                $q->where('atendido', $this->filtro_atendido)
+            )
+            ->when($this->filtro_atendidou, fn($q) =>
+                $q->where('atendido', $this->filtro_atendidou)
+            );
 
             // ->when($this->filtroatendido, function ($query) {
             //     $query->where(function ($q) {
@@ -1023,4 +1078,5 @@ class Activos extends Component
             'public'
         );
     }
+
 }

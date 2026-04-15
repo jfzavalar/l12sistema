@@ -32,19 +32,19 @@
                                     <td>
                                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                             <div class="input-group input-group-xs">
-                                                <button class="input-group-text bg-success text-white">
+                                                <button class="input-group-text bg-success text-white" wire:click="filtrarAtendidou">
                                                     <i class="fa-solid fa-check me-2"></i>Atendidos
                                                 </button>
                                                 <label class="form-control form-control-xs text-end">{{ $item->atendidos }}</label>
                                             </div>
                                             <div class="input-group input-group-xs">
-                                                <button class="input-group-text bg-danger text-white">
+                                                <button class="input-group-text bg-danger text-white" wire:click="filtrarNoatendidou">
                                                     <i class="fa-solid fa-triangle-exclamation me-2"></i>Pendientes
                                                 </button>
                                                 <label class="form-control form-control-xs text-end">{{ $item->no_atendidos }}</label>
                                             </div>
                                             <div class="input-group input-group-xs">
-                                                <button class="input-group-text bg-info text-white">
+                                                <button class="input-group-text bg-info text-white" wire:click="filtrarNoatendidou">
                                                     <i class="fa-solid fa-envelope"></i> Lima
                                                 </button>
                                                 <label class="form-control form-control-xs text-end">{{ $item->no_atendidos }}</label>
@@ -97,33 +97,45 @@
 
                 <div class="col-xl-3 col-gl-6 col-sm-12">
                     <div class="row">
-                        <div class="col-xl-4 col-lg-4 col-sm-4">
+                        <div class="col-xl-12 col-lg-4 col-sm-4">
                             <div class="alert alert-primary" role="alert">
-                                <h5 class="card-title">
+                                <h6 class="card-title">
                                     Total
-                                </h5>
+                                </h6>
+                                <br>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h4><i class="fa-solid fa-chart-simple text-primary"></i></h4>
+                                    <h5><i class="fa-solid fa-chart-simple text-primary"></i>{{ $estadisticas2->total }}</h5>
+                                    <button class="btn btn-outline-primary btn-sm" wire:click="filtrarTotal">
+                                        <i class="fa-solid fa-bars"></i> Listar
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-4 col-lg-4 col-sm-4">
+                        <div class="col-xl-6 col-lg-4 col-sm-4">
                             <div class="alert alert-success" role="alert">
-                                <h5 class="card-title">
-                                    A
-                                </h5>
+                                <h6 class="card-title">
+                                    Atendido
+                                </h6>
+                                <br>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h4><i class="fa-solid fa-file-signature text-success"></i></h4>
+                                    <h5><i class="fa-solid fa-check-double"></i> {{ $estadisticas2->atendidos }}</h5>
+                                    <button class="btn btn-outline-success btn-sm" wire:click="filtrarAtendido">
+                                        <i class="fa-solid fa-bars"></i> Listar
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-4 col-lg-4 col-sm-4">
+                        <div class="col-xl-6 col-lg-4 col-sm-4">
                             <div class="alert alert-danger" role="alert">
-                                <h5 class="card-title">
-                                    B
-                                </h5>
+                                <h6 class="card-title">
+                                    No atendido
+                                </h6>
+                                <br>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h4><i class="fa-solid fa-signature text-danger"></i></h4>
+                                    <h5><i class="fa-solid fa-check"></i> {{ $estadisticas2->no_atendidos }}</h5>
+                                    <button class="btn btn-outline-danger btn-sm" wire:click="filtrarNoatendido">
+                                        <i class="fa-solid fa-bars"></i> Listar
+                                    </button>
                                 </div>
                             </div>
                         </div>
