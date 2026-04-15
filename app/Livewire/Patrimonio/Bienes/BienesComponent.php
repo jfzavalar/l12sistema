@@ -151,14 +151,13 @@ class BienesComponent extends Component
 
     public function render()
     {
-        $lista_activos = PatrimoniosBiene::select('id','cod_patrimonial','cod','bien','marca','modelo','serie','medidas','color','estado',
-                'clase','familia','observa',
-                'nro_pecosa','doc_adq','ndoc_adq','fecha_adq')
+        $lista_activos = PatrimoniosBiene::select('id','codigo_patrimonial','codigo_barra','descripcion','marca','modelo','nro_serie','medidas','color','estado',
+                'asignacion')
             ->when($this->search !== '', function ($query) {
                 $query->where(function ($q) {
-                    $q->where('cod_patrimonial', 'like', '%' . $this->search . '%')
-                    ->orWhere('cod', 'like', '%' . $this->search . '%')
-                    ->orWhere('bien', 'like', '%' . $this->search . '%');
+                    $q->where('codigo_patrimonial', 'like', '%' . $this->search . '%')
+                    ->orWhere('codigo_barra', 'like', '%' . $this->search . '%')
+                    ->orWhere('descripcion', 'like', '%' . $this->search . '%');
                 });
             })
             ->paginate(30,['*'],'bienesPage');

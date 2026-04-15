@@ -6,7 +6,7 @@
                     <div class="col-xl-12">
                         <div class="input-group input-group-sm mb-2">
                             <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
-                            <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar por DNI o Apellidos y Nombres">
+                            <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar por código patrimonial">
                             @can('mpfn.rrhh.personal.create')
                                 <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
                                     <i class="fa-solid fa-file"></i> Nuevo
@@ -21,16 +21,17 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">
-                                <i class="fa-solid fa-user"></i> COD PATRIMONIAL
+                                <i class="fa-solid fa-user"></i> CODIGO
                             </th>
                             <th scope="col">COD</th>
                             <th scope="col">BIEN</th>
-                            <th scope="col">MARCA</th>
+                            <th scope="col">CARACTERÍSTICAS</th>
                             <th scope="col">MODELO</th>
                             <th scope="col">SERIE</th>
                             <th scope="col">MEDIDAS</th>
                             <th scope="col">COLOR</th>
                             <th scope="col">ESTADO</th>
+                            <th scope="col">ASIGNACIÓN</th>
                             <th scope="col" class="table-dark"><i class="fa-solid fa-gears"></i></th>
                         </tr>
                     </thead>
@@ -38,15 +39,36 @@
                         @forelse ($lista_activos as $item)
                             <tr>
                                 <th>{{ $loop->iteration }}</th>
-                                <td>{{ $item->cod_patrimonial }}</td>
-                                <td>{{ $item->cod }}</td>
-                                <td>{{ $item->bien }}</td>
-                                <td>{{ $item->marca }}</td>
-                                <td>{{ $item->modelo }}</td>
-                                <td>{{ $item->serie }}</td>
-                                <td>{{ $item->medidas }}</td>
-                                <td>{{ $item->color }}</td>
-                                <td>{{ $item->estado }}</td>
+                                <td>
+                                    <b>Patrimonial: </b>{{ $item->codigo_patrimonial }}
+                                    <br>
+                                    <b>Barra: </b>{{ $item->codigo_barra }}
+                                </td>
+                                <td></td>
+                                <td>{{ $item->descripcion }}</td>
+                                <td>
+                                    <b>Marca: </b>{{ $item->marca }}
+                                    <br>
+                                    <b>Modelo: </b>{{ $item->modelo }}
+                                    <br>
+                                    <b>Serie: </b>{{ $item->nro_serie }}
+                                    <br>
+                                    <b>Medidas: </b>{{ $item->medidas }}
+                                    <br>
+                                    <b>Color: </b>{{ $item->color }}
+                                    <br>
+                                    <b>Estado: </b>{{ $item->estado }}
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <span class="badge rounded-pill {{ $item->asignacion === 'ASIGNADO' ? 'text-bg-success' : 'text-bg-danger' }}">
+                                        {{ $item->asignacion === 'ASIGNADO' ? 'ASIGNADO' : 'LIBRE' }}
+                                    </span>
+                                </td>
                                 <td>
                                     <button class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->id }})">
                                         <i class="fa-solid fa-pen-to-square"></i> Editar
