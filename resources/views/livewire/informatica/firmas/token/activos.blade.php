@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="row">
-                        <div class="col-xl-4 col-lg-4 col-sm-4">
+                        <div class="col-xl-2 col-lg-4 col-sm-4">
                             <div class="alert alert-primary" role="alert">
                                 <h5 class="card-title">
                                     Total Tokens
@@ -69,6 +69,41 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-xl-2 col-lg-4 col-sm-4">
+
+                            <!-- ✅ Verificados -->
+                            <div class="alert alert-secondary mb-2" role="alert">
+                                <h5 class="card-title">Verificados</h5>
+                                <br>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h3>
+                                        <i class="fa-solid fa-file-signature"></i> 
+                                        {{ $estadisticas->verificados }}
+                                    </h3>
+
+                                    <button class="btn btn-outline-secondary btn-sm" wire:click="filtrarVerificados">
+                                        <i class="fa-solid fa-bars"></i> Listar
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- ✅ No verificados -->
+                            <div class="alert alert-secondary" role="alert">
+                                <h5 class="card-title">No Verificados</h5>
+                                <br>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h3>
+                                        <i class="fa-solid fa-file-signature"></i> 
+                                        {{ $estadisticas->no_verificados }}
+                                    </h3>
+
+                                    <button class="btn btn-outline-secondary btn-sm" wire:click="filtrarNoVerificados">
+                                        <i class="fa-solid fa-bars"></i> Listar
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -111,7 +146,7 @@
                             <th scope="col">#</th>
                             <th scope="col"><i class="fa-solid fa-user"></i> DNI - DATOS</th>
                             <th scope="col">SEDE <br> DEPENDENCIA</th>
-                            {{-- <th scope="col">SEDE <br> DEPENDENCIA</th> --}}
+                            <th scope="col">VERIFICAR</th>
                             <th scope="col">CARGO</th>
                             <th scope="col">CODTOKEN</th>
                             <th scope="col">EXPIRACION</th>
@@ -135,10 +170,13 @@
                                     <br>
                                     {{ $item->dependenciaorigen }}
                                 </td>
-                                {{-- <td><b>SEDE: {{ $item->sededestino }}</b>
-                                    <br>
-                                    {{ $item->dependenciadestino }}
-                                </td> --}}
+                                <td>
+                                    <button 
+                                        wire:click="verificarfirmatoken({{ $item->id }})"
+                                        class="btn {{ $item->verificar == '1' ? 'btn-success' : 'btn-danger' }} btn-sm rounded-circle">
+                                        {{ $item->verificar == '1' ? 'OK' : 'X' }}
+                                    </button>
+                                </td>
                                 <td>{{ $item->cargo }}</td>
                                 <td>{{ $item->token_codigo }}</td>
                                 <td>{{ $item->fecha_expiracion }}</td>

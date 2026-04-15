@@ -6,6 +6,7 @@
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
             <input type="text" id="txt_sede" class="form-control form-control-xs bg-light" wire:model="sedeorigen" readonly required>
+            {{-- {{ $codsedeorigen }}-{{ $codsededestino }} --}}
         </div>
         @error('sedeorigen')
             <small class="text-danger">{{ $message }}</small>
@@ -18,6 +19,7 @@
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
             <input type="text" id="txt_dependencia" class="form-control form-control-xs bg-light" wire:model="dependenciaorigen" readonly required>
+            {{-- {{ $coddependenciaorigen }}-{{ $coddependenciadestino }} --}}
         </div>
         @error('dependenciaorigen')
             <small class="text-danger">{{ $message }}</small>
@@ -30,6 +32,7 @@
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
             <input type="text" id="txt_despacho" class="form-control form-control-xs bg-light" wire:model="despachoorigen" readonly required>
+            {{-- {{ $coddespachoorigen }}-{{ $coddespachodestino }} --}}
         </div>
         @error('despachoorigen')
             <small class="text-danger">{{ $message }}</small>

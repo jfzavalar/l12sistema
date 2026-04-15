@@ -31,6 +31,7 @@ class InformaticasFirmasToken extends Model
         'fecha_expiracion',
         'observacion',
         'ruta_documento',
+        'verificar',
         'activo',
         'created_user',
         'updated_user',

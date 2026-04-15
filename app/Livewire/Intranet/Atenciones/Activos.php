@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Intranet\Atenciones;
 
+use App\Models\InformaticasFirmasToken;
 use App\Models\Patrimonios_biene;
 use App\Models\PatrimoniosBiene;
 use App\Models\Persona;
@@ -889,7 +890,7 @@ class Activos extends Component
             'color' => $ibien->color,
             'estado' => $ibien->estado,
             'bien_ip' => $ibien->ip,
-            'datos_bien' => $ibien->bien ." | ". $ibien->marca ." | " . $ibien->modelo ." | " . $ibien->serie ." | " . $ibien->medida ." | " .$ibien->color ." | " . $ibien->estado,
+            'datos_bien' => $ibien->descripcion ." | ". $ibien->marca ." | " . $ibien->modelo ." | " . $ibien->nro_serie ." | " . $ibien->medidas ." | " .$ibien->color ." | " . $ibien->estado,
         ]);
 
         $dni = $ibien->usuario_dni;
@@ -916,9 +917,21 @@ class Activos extends Component
 
             $this->fill([
                 'personal_id' => $personal->id,
+
+                'codsedeorigen' => $personal->codsedeorigen,
                 'sedeorigen' => $personal->sedeorigen,
+                'coddependenciaorigen' => $personal->coddependenciaorigen,
                 'dependenciaorigen' => $personal->dependenciaorigen,
+                'coddespachoorigen' => $personal->coddespachoorigen,
                 'despachoorigen' => $personal->despachoorigen,
+
+                'codsededestino' => $personal->codsededestino,
+                'sededestino' => $personal->sededestino,
+                'coddependenciadestino' => $personal->coddependenciadestino,
+                'dependenciadestino' => $personal->dependenciadestino,
+                'coddespachodestino' => $personal->coddespachodestino,
+                'despachodestino' => $personal->despachodestino,
+
                 'celinstitucional' => $personal->celinstitucional,
                 'correoinstitucional' => $personal->correoinstitucional,
                 'regimen' => $personal->regimen,

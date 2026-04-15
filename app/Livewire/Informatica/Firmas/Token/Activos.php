@@ -83,7 +83,7 @@ class Activos extends Component
         $this->resetPage('tokensPage');
     }
 
-    Public $filtro_firma,$filtro_asignacion;
+    Public $filtro_firma,$filtro_asignacion,$filtro_verificar;
 
     public $persona_id,
             $dni,
@@ -135,6 +135,7 @@ class Activos extends Component
             $token_codigo,          
             $asignacion,
             $fecha_expiracion,
+            $verificar,
             $observacion;
 
     public $token_id,
@@ -175,11 +176,24 @@ class Activos extends Component
         $this->filtro_asignacion = 'DEVOLUCION';
     }
 
+    public function filtrarVerificados()
+    {
+        $this->resetFiltros();
+        $this->filtro_verificar = '1';
+    }
+
+    public function filtrarNoVerificados()
+    {
+        $this->resetFiltros();
+        $this->filtro_verificar = '0';
+    }
+
     private function resetFiltros()
     {
         $this->search = '';
         $this->filtro_firma = '';
         $this->filtro_asignacion = '';
+        $this->filtro_verificar= '';
 
         $this->resetPage('firmastokensPage');
     }
@@ -216,7 +230,19 @@ class Activos extends Component
                     WHEN asignacion IS NULL 
                     OR asignacion = 'DEVOLUCION' 
                     THEN 1 ELSE 0 
-                END) as devolucion
+                END) as devolucion,
+
+                -- 🔥 NUEVO: verificar = 1
+                SUM(CASE 
+                    WHEN verificar = 1 
+                    THEN 1 ELSE 0 
+                END) as verificados,
+
+                -- 🔥 NUEVO: verificar = 0
+                SUM(CASE 
+                    WHEN verificar = 0 
+                    THEN 1 ELSE 0 
+                END) as no_verificados
             ")
             ->first();
 
@@ -307,6 +333,10 @@ class Activos extends Component
 
             ->when($this->filtro_asignacion, fn($q) =>
                 $q->where('asignacion', $this->filtro_asignacion)
+            )
+
+            ->when($this->filtro_verificar !== null, fn($q) =>
+                $q->where('verificar', $this->filtro_verificar)
             );
     }
 
@@ -1152,5 +1182,17 @@ class Activos extends Component
             fn () => print($pdf->output()),
             'reporte-activos.pdf'
         );
+    }
+
+    public function verificarfirmatoken($id)
+    {
+        $registro = InformaticasFirmasToken::find($id);
+
+        if (!$registro) return;
+
+        // 🔄 Toggle (0 ↔ 1)
+        $registro->verificar = $registro->verificar == 1 ? 0 : 1;
+
+        $registro->save(); // 🔥 ESTO FALTABA
     }
 }

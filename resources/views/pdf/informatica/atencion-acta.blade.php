@@ -59,7 +59,7 @@
             </tr>
             <tr>
                 <td><b>DEPENDENCIA:</b></td>
-                <td colspan="3">{{ $ipersonal->dependenciadestino }}</td>
+                <td colspan="3">{{ $ipersonal->dependenciaorigen }}...</td>
             </tr>
         </thead>
     </table>

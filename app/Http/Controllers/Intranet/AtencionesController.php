@@ -106,12 +106,12 @@ class AtencionesController extends Controller
 
         if (!empty($ipersonal->bien_id)) {
             $ibien = PatrimoniosBiene::select(
-                    'cod',
-                    'cod_patrimonial',
-                    'bien',
+                    'codigo_barra',
+                    'codigo_patrimonial',
+                    'descripcion',
                     'marca',
                     'modelo',
-                    'serie',
+                    'nro_serie',
                     'medidas',
                     'color',
                     'estado'
