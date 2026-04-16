@@ -26,32 +26,34 @@
                         </thead>
                         <tbody>
                             @forelse ($estadisticas as $item)
-                                <tr class="align-middle" style="font-size: 12px;">
-                                    <th scope="row">{{ $item->created_user }}</th>
-                                    <th style="white-space: nowrap;"></th>
-                                    <td>
-                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                            <div class="input-group input-group-xs">
-                                                <button class="input-group-text bg-success text-white" wire:click="filtrarAtendidou">
-                                                    <i class="fa-solid fa-check me-2"></i>Atendidos
-                                                </button>
-                                                <label class="form-control form-control-xs text-end">{{ $item->atendidos }}</label>
+                                @if ($item->created_user_cargo === "INFORMATICO" || $item->created_user_cargo === "SOPORTE")
+                                    <tr class="align-middle" style="font-size: 12px;">
+                                        <th scope="row">{{ $item->created_user }}</th>
+                                        <th style="white-space: nowrap;"></th>
+                                        <td>
+                                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                <div class="input-group input-group-xs">
+                                                    <button class="input-group-text bg-success text-white">
+                                                        <i class="fa-solid fa-check me-2"></i>Atendidos
+                                                    </button>
+                                                    <label class="form-control form-control-xs text-end">{{ $item->atendidos }}</label>
+                                                </div>
+                                                <div class="input-group input-group-xs">
+                                                    <button class="input-group-text bg-danger text-white">
+                                                        <i class="fa-solid fa-triangle-exclamation me-2"></i>Pendientes
+                                                    </button>
+                                                    <label class="form-control form-control-xs text-end">{{ $item->no_atendidos }}</label>
+                                                </div>
+                                                <div class="input-group input-group-xs">
+                                                    <button class="input-group-text bg-info text-white">
+                                                        <i class="fa-solid fa-envelope"></i> Lima
+                                                    </button>
+                                                    <label class="form-control form-control-xs text-end">{{ $item->enviado_lima }}</label>
+                                                </div>
                                             </div>
-                                            <div class="input-group input-group-xs">
-                                                <button class="input-group-text bg-danger text-white" wire:click="filtrarNoatendidou">
-                                                    <i class="fa-solid fa-triangle-exclamation me-2"></i>Pendientes
-                                                </button>
-                                                <label class="form-control form-control-xs text-end">{{ $item->no_atendidos }}</label>
-                                            </div>
-                                            <div class="input-group input-group-xs">
-                                                <button class="input-group-text bg-info text-white" wire:click="filtrarNoatendidou">
-                                                    <i class="fa-solid fa-envelope"></i> Lima
-                                                </button>
-                                                <label class="form-control form-control-xs text-end">{{ $item->enviado_lima }}</label>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
+                                @endif
                             @empty
                                 <tr class="align-middle"><td colspan="3">Sin registros.</td></tr>
                             @endforelse
@@ -67,30 +69,32 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @forelse ($totales_asignados as $tactivos) --}}
-                                <tr class="align-middle" style="font-size: 12px;">
-                                    <th scope="row">Usuario</th>
-                                    <th style="white-space: nowrap;"></th>
-                                    <td>
-                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                            <div class="input-group input-group-xs">
-                                                <button class="input-group-text bg-success text-white">
-                                                    <i class="fa-solid fa-check me-2"></i>Atendidos
-                                                </button>
-                                                <label class="form-control form-control-xs"></label>
+                            @forelse ($estadisticas as $item)
+                                @if ($item->created_user_cargo === "TERCERO")
+                                    <tr class="align-middle" style="font-size: 12px;">
+                                        <th scope="row">{{ $item->created_user }}</th>
+                                        <th style="white-space: nowrap;"></th>
+                                        <td>
+                                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                <div class="input-group input-group-xs">
+                                                    <button class="input-group-text bg-success text-white">
+                                                        <i class="fa-solid fa-check me-2"></i>Atendidos
+                                                    </button>
+                                                    <label class="form-control form-control-xs text-end">{{ $item->atendidos }}</label>
+                                                </div>
+                                                <div class="input-group input-group-xs">
+                                                    <button class="input-group-text bg-info text-white">
+                                                        <i class="fa-solid fa-file-pdf"></i>Folios
+                                                    </button>
+                                                    <label class="form-control form-control-xs">{{ $item->digitalizado }}</label>
+                                                </div>
                                             </div>
-                                            <div class="input-group input-group-xs">
-                                                <button class="input-group-text bg-info text-white">
-                                                    <i class="fa-solid fa-file-pdf"></i>Folios
-                                                </button>
-                                                <label class="form-control form-control-xs"></label>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            {{-- @empty
+                                        </td>
+                                    </tr>
+                                @endif
+                            @empty
                                 <tr class="align-middle"><td colspan="3">Sin registros.</td></tr>
-                            @endforelse --}}
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -160,17 +164,19 @@
             <div class="table-responsive-xl">
                 {{-- <div class="input-group mb-3"> --}}
                     <div class="row g-3">
-                        <div class="col-lg-2 col-sm-12">
+                        {{-- <div class="col-lg-2 col-sm-12">
                             <label class="btn btn-outline-primary btn-sm me-2">Total: {{ $lista_activos->total() }}</label>
-                        </div>
-                        
+                        </div> --}}                      
                         <div class="col-lg-2 col-sm-12">
-                            <select wire:model="filtro_anio" class="form-select form-select-sm me-2">
-                                <option value="">-- Año --</option>
-                                @foreach(range(date('Y'), date('Y') - 5) as $anio)
-                                    <option value="{{ $anio }}">{{ $anio }}</option>
-                                @endforeach
-                            </select>
+                            <div class="input-group">
+                                <span class="input-group-text input-group-text-xs fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
+                                <select wire:model="filtro_anio" class="form-select form-select-sm me-2">
+                                    <option value="">-- Año --</option>
+                                    @foreach(range(date('Y'), date('Y') - 5) as $anio)
+                                        <option value="{{ $anio }}">{{ $anio }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
 
                         <div class="col-lg-2 col-sm-12">
@@ -186,7 +192,7 @@
                             </select>
                         </div>
 
-                        <div class="col-lg-6 col-sm-12">
+                        <div class="col-lg-8 col-sm-12">
                             <div class="input-group mb-3"> 
                                 <input type="text" id="txtsearchpersonalatenciones2" class="form-control form-control-sm" placeholder="Buscar por DNI o Datos del Personal" wire:model.live="search">
                                 <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
@@ -505,7 +511,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        @if ($servicio_id === 7 )
+                                        @if ($servicio_id === 7 || $servicio === "DIGITALIZACION - CARPETAS" )
                                             <div class="col-12 col-xl">
                                                 <label for="txtncopias" class="fw-bold fs-6"># DE COPIAS</label>
                                                 <div class="input-group input-group">

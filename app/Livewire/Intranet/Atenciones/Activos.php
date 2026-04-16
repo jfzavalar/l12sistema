@@ -168,7 +168,8 @@ class Activos extends Component
             $formato1,
             $formato2,
             $formato3,
-            $formato4;
+            $formato4,
+            $created_user_cargo;
 
     Public $bien_id,
             $cod,
@@ -284,7 +285,8 @@ class Activos extends Component
                 'personales_atenciones.atendido',
                 'personales_atenciones.atendido_por_datos',
                 'personales_atenciones.created_user as utencioncreado',
-                'personales_atenciones.ruta_documento')
+                'personales_atenciones.ruta_documento',
+                'personales_atenciones.created_user_cargo')
             ->where('personales_atenciones.activo', 1)
             ->orderBy('personales_atenciones.id','desc')
             ->paginate(10, ['*'], 'atencionesPage');
@@ -312,11 +314,12 @@ class Activos extends Component
             ->orderBy('personales_atenciones.id','desc')
             ->paginate(10, ['personas.*'], 'personalesiPage');
 
-        $estadisticas = PersonalesAtencione::select('created_user')
+        $estadisticas = PersonalesAtencione::select('created_user_cargo','created_user')
             ->selectRaw("COUNT(*) as total")
             ->selectRaw("SUM(CASE WHEN atendido = 'SI' THEN 1 ELSE 0 END) as atendidos")
             ->selectRaw("SUM(CASE WHEN atendido = 'NO' THEN 1 ELSE 0 END) as no_atendidos")
             ->selectRaw("SUM(CASE WHEN enviado_lima = 'SI' THEN 1 ELSE 0 END) as enviado_lima")
+            ->selectRaw("SUM(COALESCE(ncopias, 0)) as digitalizado")
             // 🔥 FILTRO AÑO
             ->when($this->filtro_anio, function ($q) {
                 $q->whereYear('created_at', $this->filtro_anio);
@@ -326,7 +329,7 @@ class Activos extends Component
             ->when($this->filtro_mes, function ($q) {
                 $q->whereMonth('created_at', $this->filtro_mes);
             })
-            ->groupBy('created_user')
+            ->groupBy('created_user_cargo','created_user')
             ->get();
 
         $estadisticas2 = PersonalesAtencione::where('activo', '1')
@@ -574,6 +577,8 @@ class Activos extends Component
                     'enviado_lima' => $this->enviado_lima,
                     'detalle_problema' => strtoupper($this->detalle_problema),
 
+                    'ncopias' => $this->ncopias,
+
                     'obs_usuario' => strtoupper($this->obs_usuario),
                     'obs_informatico' => strtoupper($this->obs_informatico),
 
@@ -590,6 +595,8 @@ class Activos extends Component
                     'informatico_dni' => $this->informatico_dni,
                     'informatico' => $this->informatico,
                     'activo' => "1",
+
+                    'created_user_cargo' => auth()->user()->cargo,
                     'created_user' => $usuario,
                     'updated_user' => $usuario,
                 ]);
@@ -669,14 +676,20 @@ class Activos extends Component
             'datos' => $ipersonalatencion->informatico
         ]);
 
-        $ibien = PatrimoniosBiene::where('id', $this->bien_id)->where('activo','1')->firstOrFail();
-        $this->bien_ip = $ibien->ip;
+        if ($this->bien_id) {
+            $ibien = PatrimoniosBiene::where('id', $this->bien_id)
+                ->where('activo','1')
+                ->first();
+
+            $this->bien_ip = $ibien?->ip;
+        }
 
         $this->cea = $ipersonalatencion->cea;
         $this->sgf = $ipersonalatencion->sgf;
         $this->glpi = $ipersonalatencion->glpi;
         $this->enviado_lima = $ipersonalatencion->enviado_lima;
         $this->detalle_problema = $ipersonalatencion->detalle_problema;
+        
         $this->ncopias = $ipersonalatencion->ncopias;
 
         $this->obs_usuario = $ipersonalatencion->obs_usuario;
@@ -691,6 +704,7 @@ class Activos extends Component
         $this->tiempo_atencion = $ipersonalatencion->tiempo_atencion;
         $this->respuesta = $ipersonalatencion->respuesta;
         $this->conformidad = $ipersonalatencion->conformidad;
+
         $this->ruta_evidencia = $ipersonalatencion->ruta_evidencia;
 
         if (in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA", "SERVIDORES"]))
@@ -795,6 +809,7 @@ class Activos extends Component
                     'ruta_evidencia' => $rutaDocumento,
                     'informatico_dni' => $this->informatico_dni,
                     'informatico' => $this->informatico,
+                    'ncopias' => $this->ncopias,
                     'activo' => "1",
                     'updated_user' => $usuario,
                 ]);
@@ -979,10 +994,12 @@ class Activos extends Component
         $this->formato2 = null;
         $this->formato3 = null;
         $this->formato4 = null;
+        $this->ncopias = null;
         $this->formato1 = $iincidenciasolicitud->formato1;
         $this->formato2 = $iincidenciasolicitud->formato2;
         $this->formato3 = $iincidenciasolicitud->formato3;
         $this->formato4 = $iincidenciasolicitud->formato4;
+
     }
 
     public function cerrar_incidencia_solicitud()
