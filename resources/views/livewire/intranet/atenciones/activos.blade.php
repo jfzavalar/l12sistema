@@ -47,7 +47,7 @@
                                                 <button class="input-group-text bg-info text-white" wire:click="filtrarNoatendidou">
                                                     <i class="fa-solid fa-envelope"></i> Lima
                                                 </button>
-                                                <label class="form-control form-control-xs text-end">{{ $item->no_atendidos }}</label>
+                                                <label class="form-control form-control-xs text-end">{{ $item->enviado_lima }}</label>
                                             </div>
                                         </div>
                                     </td>
@@ -97,7 +97,7 @@
 
                 <div class="col-xl-3 col-gl-6 col-sm-12">
                     <div class="row">
-                        <div class="col-xl-12 col-lg-4 col-sm-4">
+                        <div class="col-xl-6 col-lg-4 col-sm-4">
                             <div class="alert alert-primary" role="alert">
                                 <h6 class="card-title">
                                     Total
@@ -106,6 +106,20 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5><i class="fa-solid fa-chart-simple text-primary"></i>{{ $estadisticas2->total }}</h5>
                                     <button class="btn btn-outline-primary btn-sm" wire:click="filtrarTotal">
+                                        <i class="fa-solid fa-bars"></i> Listar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-4 col-sm-4">
+                            <div class="alert alert-info" role="alert">
+                                <h6 class="card-title">
+                                    Lima
+                                </h6>
+                                <br>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5><i class="fa-solid fa-check-double"></i> {{ $estadisticas2->enviado_lima }}</h5>
+                                    <button class="btn btn-outline-info btn-sm" wire:click="filtrarEnviadolima">
                                         <i class="fa-solid fa-bars"></i> Listar
                                     </button>
                                 </div>
@@ -128,11 +142,11 @@
                         <div class="col-xl-6 col-lg-4 col-sm-4">
                             <div class="alert alert-danger" role="alert">
                                 <h6 class="card-title">
-                                    No atendido
+                                    Pendientes
                                 </h6>
                                 <br>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h5><i class="fa-solid fa-check"></i> {{ $estadisticas2->no_atendidos }}</h5>
+                                    <h5><i class="fa-solid fa-check-double"></i> {{ $estadisticas2->no_atendidos }}</h5>
                                     <button class="btn btn-outline-danger btn-sm" wire:click="filtrarNoatendido">
                                         <i class="fa-solid fa-bars"></i> Listar
                                     </button>
@@ -151,27 +165,23 @@
                         </div>
                         
                         <div class="col-lg-2 col-sm-12">
-                            <select name="filtro_anio" wire:model="filtro_anio" class="form-select form-select-sm me-2">
+                            <select wire:model="filtro_anio" class="form-select form-select-sm me-2">
                                 <option value="">-- Año --</option>
                                 @foreach(range(date('Y'), date('Y') - 5) as $anio)
-                                    <option value="{{ $anio }}" {{ $anio == date('Y') ? 'selected' : '' }}>
-                                        {{ $anio }}
-                                    </option>
+                                    <option value="{{ $anio }}">{{ $anio }}</option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="col-lg-2 col-sm-12">
-                            <select name="filtro_mes" wire:model="filtro_mes" class="form-select form-select-sm me-2">
+                            <select wire:model.live="filtro_mes" class="form-select form-select-sm me-2">
                                 <option value="">-- Mes --</option>
-                                @foreach ([
-                                    1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril',
-                                    5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto',
-                                    9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre'
+                                @foreach([
+                                    1=>'Enero',2=>'Febrero',3=>'Marzo',4=>'Abril',
+                                    5=>'Mayo',6=>'Junio',7=>'Julio',8=>'Agosto',
+                                    9=>'Septiembre',10=>'Octubre',11=>'Noviembre',12=>'Diciembre'
                                 ] as $num => $mes)
-                                    <option value="{{ $num }}" {{ $num == date('n') ? 'selected' : '' }}>
-                                        {{ $mes }}
-                                    </option>
+                                    <option value="{{ $num }}">{{ $mes }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -507,11 +517,11 @@
                                     <div class="row">
                                         <div class="col-xl-6">
                                             <label for="txt_obs_usuario" class="fw-bold fs-6">USUARIO - OBSERVACION</label>
-                                            <input type="text" id="txt_obs_usuario" class="form-control form-control-xs text-uppercase" wire.model="obs_usuario">
+                                            <input type="text" id="txt_obs_usuario" class="form-control form-control-xs text-uppercase" wire:model="obs_usuario">
                                         </div>
                                         <div class="col-xl-6">
                                             <label for="txt_obs_informatico" class="fw-bold fs-6">INFORMÁTICO - RECOMENDACIÓN</label>
-                                            <input type="text" id="txt_obs_informatico" class="form-control form-control-xs text-uppercase" wire.model="obs_informatico">
+                                            <input type="text" id="txt_obs_informatico" class="form-control form-control-xs text-uppercase" wire:model="obs_informatico">
                                         </div>
                                     </div>
                                 </fieldset>
@@ -559,7 +569,19 @@
                                                     <option value="PENDIENTE">PENDIENTE</option>
                                                 </select>
                                             </div> 
-                                        @endif                    
+                                        @endif
+                                        <div class="col-xl12">
+                                            <label for="txt_informatico" class="fw-bold fs-6">INFORMÁTICO RESPONSABLE</label>
+                                            <select id="txt_informatico" class="form-select form-select-xs" wire:model="informatico" required>
+                                                <option value="">Seleccionar...</option>
+                                                @foreach ($lista_informaticos as $item)
+                                                    <option value='@json(["dni"=>$item->dni,"datos"=>$item->datos])'>
+                                                        {{ $item->datos }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>   
+                                        {{-- {{ $informatico_dni }} - {{ $informatico }}          --}}
                                     </div>
                                     @if ($this->detalle_servicio === "REQUISITOS")
                                         <div class="row">

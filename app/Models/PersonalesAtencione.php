@@ -53,6 +53,8 @@ class PersonalesAtencione extends Model
         'activo',
         'ruta_evidencia',
         'ruta_documento',
+        'informatico_dni',
+        'informatico',
         'created_user',
         'updated_user',
     ];

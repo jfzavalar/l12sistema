@@ -88,7 +88,9 @@ class AtencionesController extends Controller
                 'personales_atenciones.estado',
                 'personales_atenciones.obs_usuario',
                 'personales_atenciones.obs_informatico',
-                'personales_atenciones.bien_id'
+                'personales_atenciones.bien_id',
+                'personales_atenciones.informatico_dni',
+                'personales_atenciones.informatico',
             )
             ->where('personas.activo', 1)
             ->where('personales.activo', 1)

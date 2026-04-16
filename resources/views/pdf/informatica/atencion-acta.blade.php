@@ -61,6 +61,10 @@
                 <td><b>DEPENDENCIA:</b></td>
                 <td colspan="3">{{ $ipersonal->dependenciaorigen }}...</td>
             </tr>
+            <tr>
+                <td><b>DESPACHO:</b></td>
+                <td colspan="3">{{ $ipersonal->despachoorigen }}...</td>
+            </tr>
         </thead>
     </table>
 
@@ -147,7 +151,7 @@
     <table class="tabla-firma">
         <tbody>
             <tr>
-                <td class="borde-superior">INFORMÁTICO<br>{{ auth()->user()->datos }}<br>{{ auth()->user()->dni }}</td>
+                <td class="borde-superior">INFORMÁTICO<br>{{ $ipersonal->informatico }}<br>{{ $ipersonal->informatico_dni }}</td>
                 <td></td>
                 <td></td>
                 <td></td>

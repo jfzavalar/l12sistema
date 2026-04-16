@@ -14,6 +14,7 @@ use App\Models\Personales_sede;
 use App\Models\PersonalesAtencione;
 use App\Models\PersonalesAtencionesIncidenciasSolicitudes;
 use App\Models\PersonalesAtencionesServicio;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -90,7 +91,7 @@ class Activos extends Component
         $this->resetPage('bienesPage');
     }
 
-    Public $filtro_atendido,$filtro_atendidou;
+    Public $filtro_atendido,$filtro_enviadolima,$filtro_atendidou;
 
     public $user_login;
 
@@ -162,6 +163,8 @@ class Activos extends Component
             $conformidad,
             $ruta_evidencia,
             $ruta_documento,
+            $informatico_dni,
+            $informatico,
             $formato1,
             $formato2,
             $formato3,
@@ -195,8 +198,20 @@ class Activos extends Component
         } else {
             $this->atendido = "SI";
             $this->mostrarcontrolgpli = "d-none";
+        }       
+    }
+
+    public function updatedInformatico($value)
+    {
+        if ($value) {
+            $data = json_decode($value, true);
+
+            $this->informatico_dni = $data['dni'];
+            $this->informatico     = $data['datos'];
+        } else {
+            $this->informatico_dni = null;
+            $this->informatico     = null;
         }
-        
     }
 
     public $filtro_anio,$filtro_mes;
@@ -204,7 +219,7 @@ class Activos extends Component
     public function mount()
     {
         $this->filtro_anio = date('Y');
-        $this->filtro_mes = date('n');
+        $this->filtro_mes = date('n'); // 🔥 mes actual sin cero (1-12)
     }
 
     
@@ -222,6 +237,11 @@ class Activos extends Component
         $this->resetFiltros();
         $this->filtro_atendido = 'NO';
     }
+    public function filtrarEnviadolima()
+    {
+        $this->resetFiltros();
+        $this->filtro_enviadolima = 'SI';
+    }
     public function filtrarAtendidou()
     {
         $this->resetFiltros();
@@ -236,11 +256,10 @@ class Activos extends Component
     {
         $this->search = null;
         $this->filtro_atendido = null;
+        $this->filtro_enviadolima = null; 
         $this->filtro_atendidou = null;
         $this->resetPage('atencionesPage');
     }
-
-
 
     public function render()
     {
@@ -297,6 +316,16 @@ class Activos extends Component
             ->selectRaw("COUNT(*) as total")
             ->selectRaw("SUM(CASE WHEN atendido = 'SI' THEN 1 ELSE 0 END) as atendidos")
             ->selectRaw("SUM(CASE WHEN atendido = 'NO' THEN 1 ELSE 0 END) as no_atendidos")
+            ->selectRaw("SUM(CASE WHEN enviado_lima = 'SI' THEN 1 ELSE 0 END) as enviado_lima")
+            // 🔥 FILTRO AÑO
+            ->when($this->filtro_anio, function ($q) {
+                $q->whereYear('created_at', $this->filtro_anio);
+            })
+
+            // 🔥 FILTRO MES
+            ->when($this->filtro_mes, function ($q) {
+                $q->whereMonth('created_at', $this->filtro_mes);
+            })
             ->groupBy('created_user')
             ->get();
 
@@ -312,8 +341,22 @@ class Activos extends Component
                 SUM(CASE 
                     WHEN atendido = 'NO' 
                     THEN 1 ELSE 0 
-                END) as no_atendidos
+                END) as no_atendidos,
+
+                SUM(CASE 
+                    WHEN enviado_lima = 'SI' 
+                    THEN 1 ELSE 0 
+                END) as enviado_lima
             ")
+            // 🔥 FILTRO AÑO
+            ->when($this->filtro_anio, function ($q) {
+                $q->whereYear('created_at', $this->filtro_anio);
+            })
+
+            // 🔥 FILTRO MES
+            ->when($this->filtro_mes, function ($q) {
+                $q->whereMonth('created_at', $this->filtro_mes);
+            })
             ->first();
 
         $lista_historial = $this->queryConFiltros()
@@ -399,16 +442,28 @@ class Activos extends Component
             ->orderBy('descripcion')
             ->paginate(10,['*'],'bienesPage');
 
+        $lista_informaticos = User::select('dni','datos','cargo')
+            ->where('activo','1')
+            ->where('cargo','INFORMATICO')
+            ->orderBy('datos')
+            ->get();
+
         return view('livewire.intranet.atenciones.activos',
                 compact('lista_activos','lista_inactivos','estadisticas','estadisticas2','lista_historial',
                             'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos',
-                            'lista_servicios','lista_incidencias_solicitudes','lista_bienes'));
+                            'lista_servicios','lista_incidencias_solicitudes','lista_bienes',
+                            'lista_informaticos'));
     }
 
     private function queryConFiltros()
     {
+
         return Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
             ->join('personales_atenciones','personas.id','=','personales_atenciones.persona_id')
+
+            // 🔥 FILTRO AÑO Y MES ACTUAL
+            // ->whereYear('personales_atenciones.created_at', Carbon::now()->year)
+            // ->whereMonth('personales_atenciones.created_at', Carbon::now()->month)
 
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
@@ -419,16 +474,21 @@ class Activos extends Component
             ->when($this->filtro_atendido, fn($q) =>
                 $q->where('atendido', $this->filtro_atendido)
             )
+            ->when($this->filtro_enviadolima, fn($q) =>
+                $q->where('enviado_lima', $this->filtro_enviadolima)
+            )
             ->when($this->filtro_atendidou, fn($q) =>
                 $q->where('atendido', $this->filtro_atendidou)
-            );
+            )
+            // 🔥 FILTRO AÑO
+            ->when($this->filtro_anio, function ($q) {
+                $q->whereYear('personales_atenciones.created_at', $this->filtro_anio);
+            })
 
-            // ->when($this->filtroatendido, function ($query) {
-            //     $query->where(function ($q) {
-            //         $q->where('personales.tipo_documento', '=', $this->filtroatendido);
-            //         // ->orWhere('', 'like', '%' . $this->search . '%');
-            //     });
-            // });
+            // 🔥 FILTRO MES
+            ->when($this->filtro_mes, function ($q) {
+                $q->whereMonth('personales_atenciones.created_at', $this->filtro_mes);
+            });
     }
 
     protected function rules(){
@@ -447,7 +507,8 @@ class Activos extends Component
         $this->resetErrorBag();     // ← opcional extra seguridad
 
         // Restablecer todas las variables
-        $this->reset();
+        // Restablecer todas las variables
+        $this->resetExcept(['filtro_anio', 'filtro_mes']);
 
         $this->foto = null;
         $this->fotoactual = null;
@@ -515,6 +576,7 @@ class Activos extends Component
 
                     'obs_usuario' => strtoupper($this->obs_usuario),
                     'obs_informatico' => strtoupper($this->obs_informatico),
+
                     'estado' => $this->estado_bien,
 
                     'atendido' => $this->atendido,
@@ -525,6 +587,8 @@ class Activos extends Component
                     'respuesta' => strtoupper($this->respuesta),
                     'conformidad' => $this->conformidad,
                     'ruta_evidencia' => $rutaDocumento,
+                    'informatico_dni' => $this->informatico_dni,
+                    'informatico' => $this->informatico,
                     'activo' => "1",
                     'created_user' => $usuario,
                     'updated_user' => $usuario,
@@ -532,7 +596,7 @@ class Activos extends Component
             });
 
             // Restablecer todas las variables
-            $this->reset();
+            $this->resetExcept(['filtro_anio', 'filtro_mes']);
 
             $this->dispatch(
                 'alerta-actualizado',
@@ -598,8 +662,12 @@ class Activos extends Component
         $this->cod = $ipersonalatencion->cod;
         $this->cod_patrimonial = $ipersonalatencion->cod_patrimonial;
         $this->datos_bien = $ipersonalatencion->datos_bien;
-        // $this->datos_bien = $ipersonalatencion->datos_bien;
-        // $this->datos_bien = $ipersonalatencion->datos_bien;
+
+        $this->informatico_dni = $ipersonalatencion->informatico_dni;
+        $this->informatico = json_encode([
+            'dni'   => $ipersonalatencion->informatico_dni,
+            'datos' => $ipersonalatencion->informatico
+        ]);
 
         $ibien = PatrimoniosBiene::where('id', $this->bien_id)->where('activo','1')->firstOrFail();
         $this->bien_ip = $ibien->ip;
@@ -641,6 +709,7 @@ class Activos extends Component
         $this->apmaterno = $ipersona->apmaterno;
         $this->celpersonal = $ipersona->celpersonal;
         $this->correopersonal = $ipersona->correopersonal;
+        $this->datos = $ipersona->datos;
 
         $this->fotoactual = $ipersona->foto;
 
@@ -724,11 +793,16 @@ class Activos extends Component
                     'respuesta' => $this->respuesta,
                     'conformidad' => $this->conformidad,
                     'ruta_evidencia' => $rutaDocumento,
+                    'informatico_dni' => $this->informatico_dni,
+                    'informatico' => $this->informatico,
                     'activo' => "1",
                     'updated_user' => $usuario,
                 ]);
 
             });
+
+            // Restablecer todas las variables
+            $this->resetExcept(['filtro_anio', 'filtro_mes']);
 
             $this->dispatch(
                 'alerta-actualizado',
@@ -759,7 +833,7 @@ class Activos extends Component
 
     public function cerrar()
     {
-        $this->reset();
+        $this->resetExcept(['filtro_anio', 'filtro_mes']);
 
         $this->dispatch(
                 'alerta-cancelar',
