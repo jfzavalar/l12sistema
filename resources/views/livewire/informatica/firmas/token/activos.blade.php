@@ -4,13 +4,13 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="row">
-                        <div class="col-xl-2 col-lg-4 col-sm-4">
+                        <div class="col-xl-4 col-lg-4 col-sm-4">
                             <div class="alert alert-primary" role="alert">
                                 <h5 class="card-title">
                                     Total Tokens
                                 </h5><br>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h3><i class="fa-solid fa-chart-simple text-primary"></i> {{ $estadisticas->total }}</h3>
+                                    <h5><i class="fa-solid fa-chart-simple text-primary"></i> {{ $estadisticas->total }}</h5>
                                     <button class="btn btn-outline-primary btn-sm" wire:click="filtrarTotal">
                                         <i class="fa-solid fa-bars"></i> Listar
                                     </button>
@@ -23,7 +23,7 @@
                                     Actas Firmadas
                                 </h5><br>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h3><i class="fa-solid fa-signature text-success"></i> {{ $estadisticas->firmadas }}</h3>
+                                    <h5><i class="fa-solid fa-signature text-success"></i> {{ $estadisticas->firmadas }}</h5>
                                     <button class="btn btn-outline-success btn-sm" wire:click="filtrarFirmadas">
                                         <i class="fa-solid fa-bars"></i> Listar
                                     </button>
@@ -36,7 +36,7 @@
                                     Actas sin Firmar
                                 </h5><br>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h3><i class="fa-solid fa-signature text-success"></i> {{ $estadisticas->sin_firmar }}</h3>
+                                    <h5><i class="fa-solid fa-signature text-success"></i> {{ $estadisticas->sin_firmar }}</h5>
                                     <button class="btn btn-outline-success btn-sm" wire:click="filtrarSinFirmar">
                                         <i class="fa-solid fa-bars"></i> Listar
                                     </button>
@@ -49,7 +49,7 @@
                                     Asignados
                                 </h5><br>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h3><i class="fa-solid fa-file-signature text-danger"></i> {{ $estadisticas->asignacion }}</h3>
+                                    <h5><i class="fa-solid fa-file-signature text-danger"></i> {{ $estadisticas->asignacion }}</h5>
                                     <button class="btn btn-outline-danger btn-sm" wire:click="filtrarAsignados">
                                         <i class="fa-solid fa-bars"></i> Listar
                                     </button>
@@ -62,47 +62,46 @@
                                     Devueltos
                                 </h5><br>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h3><i class="fa-solid fa-file-signature text-danger"></i>  {{ $estadisticas->devolucion }}</h3>
+                                    <h5><i class="fa-solid fa-file-signature text-danger"></i>  {{ $estadisticas->devolucion }}</h5>
                                     <button class="btn btn-outline-danger btn-sm" wire:click="filtrarDevueltos">
                                         <i class="fa-solid fa-bars"></i> Listar
                                     </button>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-2 col-lg-4 col-sm-4">
-
+                        <div class="col-xl-6 col-lg-4 col-sm-4">
                             <!-- ✅ Verificados -->
                             <div class="alert alert-secondary mb-2" role="alert">
                                 <h5 class="card-title">Verificados</h5>
                                 <br>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h3>
+                                    <h5>
                                         <i class="fa-solid fa-file-signature"></i> 
                                         {{ $estadisticas->verificados }}
-                                    </h3>
+                                    </h5>
 
                                     <button class="btn btn-outline-secondary btn-sm" wire:click="filtrarVerificados">
                                         <i class="fa-solid fa-bars"></i> Listar
                                     </button>
                                 </div>
                             </div>
-
+                        </div>
+                        <div class="col-xl-6 col-lg-4 col-sm-4">
                             <!-- ✅ No verificados -->
                             <div class="alert alert-secondary" role="alert">
                                 <h5 class="card-title">No Verificados</h5>
                                 <br>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h3>
+                                    <h5>
                                         <i class="fa-solid fa-file-signature"></i> 
                                         {{ $estadisticas->no_verificados }}
-                                    </h3>
+                                    </h5>
 
                                     <button class="btn btn-outline-secondary btn-sm" wire:click="filtrarNoVerificados">
                                         <i class="fa-solid fa-bars"></i> Listar
                                     </button>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>

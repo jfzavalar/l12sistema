@@ -520,16 +520,18 @@
                                             </div>
                                         @endif
                                     </div>
-                                    <div class="row">
-                                        <div class="col-xl-6">
-                                            <label for="txt_obs_usuario" class="fw-bold fs-6">USUARIO - OBSERVACION</label>
-                                            <input type="text" id="txt_obs_usuario" class="form-control form-control-xs text-uppercase" wire:model="obs_usuario">
+                                    @if (in_array($this->servicio_id, [9, 11, 19]) || in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA", "SERVIDORES"]))
+                                        <div class="row">
+                                            <div class="col-xl-6">
+                                                <label for="txt_obs_usuario" class="fw-bold fs-6">USUARIO - OBSERVACION</label>
+                                                <input type="text" id="txt_obs_usuario" class="form-control form-control-xs text-uppercase" wire:model="obs_usuario">
+                                            </div>
+                                            <div class="col-xl-6">
+                                                <label for="txt_obs_informatico" class="fw-bold fs-6">INFORMÁTICO - RECOMENDACIÓN</label>
+                                                <input type="text" id="txt_obs_informatico" class="form-control form-control-xs text-uppercase" wire:model="obs_informatico">
+                                            </div>
                                         </div>
-                                        <div class="col-xl-6">
-                                            <label for="txt_obs_informatico" class="fw-bold fs-6">INFORMÁTICO - RECOMENDACIÓN</label>
-                                            <input type="text" id="txt_obs_informatico" class="form-control form-control-xs text-uppercase" wire:model="obs_informatico">
-                                        </div>
-                                    </div>
+                                    @endif
                                 </fieldset>
                             </div>
                             <div class="col-xl-5">
@@ -575,18 +577,19 @@
                                                     <option value="PENDIENTE">PENDIENTE</option>
                                                 </select>
                                             </div> 
-                                        @endif
-                                        <div class="col-xl12">
-                                            <label for="txt_informatico" class="fw-bold fs-6">INFORMÁTICO RESPONSABLE</label>
-                                            <select id="txt_informatico" class="form-select form-select-xs" wire:model="informatico" required>
-                                                <option value="">Seleccionar...</option>
-                                                @foreach ($lista_informaticos as $item)
-                                                    <option value='@json(["dni"=>$item->dni,"datos"=>$item->datos])'>
-                                                        {{ $item->datos }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>   
+                                        
+                                            <div class="col-xl-12">
+                                                <label for="txt_informatico" class="fw-bold fs-6 {{ $mostrarcontroles }}">INFORMÁTICO RESPONSABLE</label>
+                                                <select id="txt_informatico" class="form-select form-select-xs {{ $mostrarcontroles }}" wire:model="informatico" required>
+                                                    <option value="">Seleccionar...</option>
+                                                    @foreach ($lista_informaticos as $item)
+                                                        <option value='@json(["dni"=>$item->dni,"datos"=>$item->datos])'>
+                                                            {{ $item->datos }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div> 
+                                        @endif 
                                         {{-- {{ $informatico_dni }} - {{ $informatico }}          --}}
                                     </div>
                                     @if ($this->detalle_servicio === "REQUISITOS")
