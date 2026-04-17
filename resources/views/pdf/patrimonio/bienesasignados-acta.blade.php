@@ -124,23 +124,6 @@
     
 </div>
 
-<div class="footer">
-    <table class="tabla-firma">
-        <tbody>
-            <tr>
-                <td class="borde-superior">Entregué conforme<br><br></td>
-                <td></td>
-                <td class="borde-superior">Recibí conforme<br><br></td>
-                <td></td>
-                <td class="borde-superior">Control Patrimonial<br><br></td>
-            </tr>
-        </tbody>
-    </table>
-
-    <p></p>
-    <hr>
-    Ministerio Público - Fiscalía de Nación - Distrito Fiscal Junín
-</div>
 
 <script type="text/php">
     if (isset($pdf)) {

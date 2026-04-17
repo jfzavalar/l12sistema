@@ -1,37 +1,39 @@
 @page {
-    size: A4 landscape; /* 👈 AQUÍ el cambio */
+    size: A4 landscape;
     margin-top: 2cm;
-    margin-bottom: 3cm;
+    margin-bottom: 4cm; /* 🔥 MÁS ESPACIO para el footer */
     margin-left: 1.27cm;
     margin-right: 1.27cm;
 }
+
+/* ❌ ELIMINAR ESTO (no sirve en DOMPDF) */
+/*
 @page :footer {
     content: "Página " counter(page) " de " counter(pages);
 }
+*/
 
 .header {
     position: fixed;
-    top: -80px; /* ajustado al alto real */
+    top: -60px; /* ajusta según tu header real */
     left: 0;
     right: 0;
-    height: 80px;
+    height: 60px;
     text-align: center;
     font-size: 14px;
-    color: black;
-    padding: 10px;
 }
 
+/* 🔥 CONTENIDO */
 .content {
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
+/* 🔥 FOOTER REAL (REPETIBLE) */
 .footer {
     position: fixed;
-    bottom: 10px;
+    bottom: -80px; /* 👈 CLAVE para DOMPDF */
     left: 0;
     right: 0;
-    height: 30px;
-    text-align: center;
-    font-size: 12px;
-    color: black;
+    height: 80px; /* 👈 acorde a tus firmas */
+    font-size: 10px;
 }

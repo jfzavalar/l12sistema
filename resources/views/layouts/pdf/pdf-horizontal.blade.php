@@ -30,10 +30,24 @@
             </div>
         </main>
 
-        {{-- Footer --}}
-        {{-- <footer class="app-footer text-center">
-            <strong>© {{ date('Y') }} {{ config('app.name') }}</strong>
-        </footer> --}}
+        {{-- ✅ FOOTER GLOBAL --}}
+        <div class="footer">
+            <p></p>
+            <p></p>
+            <p></p>
+            <table class="tabla-firma" width="100%">
+                <tr>
+                    <td class="borde-superior">Entregué conforme</td>
+                    <td></td>
+                    <td class="borde-superior">Recibí conforme</td>
+                    <td></td>
+                    <td class="borde-superior">Control Patrimonial</td>
+                </tr>
+            </table>
+
+            <hr>
+            Ministerio Público - Fiscalía de Nación - Distrito Fiscal Junín
+        </div>
 
     </body>
 </html>
