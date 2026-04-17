@@ -320,13 +320,25 @@
                                             @include('livewire.rrhh.personal.partials.datos-institucionales-component')
                                         </fieldset>
                                         <div class="row">
-                                            <div class="col">
+                                            <div class="input-group">
+                                                <span 
+                                                    class="input-group-text input-group-text-xs 
+                                                    {{ is_null($tipo_documento) 
+                                                        ? 'bg-secondary text-white' 
+                                                        : ($tipo_documento == 'CONTRATO' 
+                                                            ? 'bg-success text-white' 
+                                                            : 'bg-danger text-white') }}"
+                                                    id="basic-addon1">
+                                                    Estado: {{ $tipo_documento }}
+                                                </span>
+                                            </div>
+                                            {{-- <div class="col">
                                                 @if ($dni)
                                                     <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#transferencia-personal-component" wire:click="nuevo_transferir_personal({{ $persona_id }})">
                                                         <i class="fa-solid fa-people-arrows"></i> Cambiar Ubicación
                                                     </button>
                                                 @endif
-                                            </div>
+                                            </div> --}}
                                             {{-- <div class="col">
                                                 <input type="text" class="form-control form-control-xs" wire:model="sededestino" disabled>                                      
                                             </div>

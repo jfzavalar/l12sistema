@@ -15,6 +15,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="input-group mb-2">
+                                        <span class="input-group-text input-group-text-xs fw-bold" id="basic-addon2">Total: {{ $lista_personas->total() }}</span>
                                         <input type="text" id="searchsede" class="form-control form-control-sm" placeholder="Buscar personal" wire:model.live="searchpersonas">
                                     </div>
                                 </div>

@@ -212,9 +212,7 @@
                             <th scope="col">DEPENDENCIA ORIGEN</th>
                             <th scope="col">REGIMEN - CARGO</th>
                             <th scope="col" class="table-danger">ROTACIÓN: UBICACIÓN FÍSICA</th>
-                            <th scope="col" class="bg-success-subtle">TIPO</th>
-                            <th scope="col" class="bg-success-subtle">PEDIDO</th>
-                            <th scope="col" class="bg-success-subtle">DESCRIPCION</th>
+                            <th scope="col" class="bg-success-subtle">DESCRIPCIÓN DEL SERVICIO</th>
                             <th scope="col" class="bg-success-subtle">MEDIO</th>
                             <th scope="col" class="bg-success-subtle">ESTADO</th>
                             <th scope="col" class="bg-success-subtle">ATENDIDO POR</th>
@@ -229,32 +227,30 @@
                                 </th>
                                 <td><b>{{ $item->dni }}</b> <br> {{ $item->datos }}</td>
                                 <td>
-                                    {{ $item->sedeorigen }}
+                                    <b>SEDE: </b>{{ $item->sedeorigen }}
                                     <br>
-                                    {{ $item->dependenciaorigen }}
+                                    <b>DEPENDENCIA: </b>{{ $item->dependenciaorigen }}
                                     <br>
-                                    {{ $item->despachoorigen }}
+                                    <b>DESPACHO: </b>{{ $item->despachoorigen }}
                                 </td>
                                 <td>
-                                    {{ $item->regimen }}
+                                    <b>{{ $item->regimen }}</b>
                                     <br>
                                     {{ $item->cargo }}
                                 </td>
                                 <td>
-                                    {{ $item->sededestino }}
+                                    <b>SEDE: </b>{{ $item->sededestino }}
                                     <br>
-                                    {{ $item->dependenciadestino }}
+                                    <b>DEPENDENCIA: </b>{{ $item->dependenciadestino }}
                                     <br>
-                                    {{ $item->despachodestino }}
+                                    <b>DESPACHO: </b>{{ $item->despachodestino }}
                                 </td>
                                 <td>
-                                    {{ $item->solicitud_incidencia }}
-                                </td>
-                                <td>
-                                    {{ $item->servicio }}
-                                </td>
-                                <td>
-                                    {{ $item->detalle_servicio }}
+                                    <b>TIPO: </b>{{ $item->solicitud_incidencia }}
+                                    <br>
+                                    <b>SERVICIO: </b> {{ $item->servicio }}
+                                    <br>
+                                    <b>DESCRIPCIÓN: </b>{{ $item->detalle_servicio }}
                                 </td>
                                 <td>{{ $item->reportado_por }}</td>
                                 <td>

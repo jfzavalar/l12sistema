@@ -159,14 +159,16 @@ class AnexosComponent extends Component
 
     public function render()
     {
-        $lista_personas = Persona::where('activo','1')
+        $lista_personas = Persona::join('personales','personas.id','=','personales.persona_id')
+            ->where('personales.tipo_documento','CONTRATO')
+            ->where('personales.activo', "1")
             ->when($this->searchpersonas !== '', function ($query) {
                 $query->where(function ($q) {
-                    $q->where('dni', 'like', '%' . $this->searchpersonas . '%')
-                    ->orWhere('datos', 'like', '%' . $this->searchpersonas . '%');
+                    $q->where('personas.dni', 'like', '%' . $this->searchpersonas . '%')
+                    ->orWhere('personas.datos', 'like', '%' . $this->searchpersonas . '%');
                 });
             })
-            ->orderBy('datos')
+            ->orderBy('personas.datos')
             ->paginate(10,['*'],'personasPage');
 
         $lista_sedes = Personales_sede::select('id','nombre','nombred')
