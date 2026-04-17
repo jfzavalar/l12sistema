@@ -256,16 +256,14 @@ class Activos extends Component
             ->orderBy('id','desc')
             ->paginate(10,['*'],'historialPaginate');
 
-        $lista_personas = Persona::join('personales','personas.id','=','personales.persona_id')
-            ->where('personales.tipo_documento','CONTRATO')
-            ->where('personales.activo', "1")
+        $lista_personas = Persona::where('activo','1')
             ->when($this->searchpersonas !== '', function ($query) {
                 $query->where(function ($q) {
-                    $q->where('personas.dni', 'like', '%' . $this->searchpersonas . '%')
-                    ->orWhere('personas.datos', 'like', '%' . $this->searchpersonas . '%');
+                    $q->where('dni', 'like', '%' . $this->searchpersonas . '%')
+                    ->orWhere('datos', 'like', '%' . $this->searchpersonas . '%');
                 });
             })
-            ->orderBy('personas.datos')
+            ->orderBy('datos')
             ->paginate(10,['*'],'personasPage');
 
         $lista_sedes = Personales_sede::select('id','nombre','nombre')
