@@ -170,7 +170,7 @@
                         <div class="col-lg-2 col-sm-12">
                             <div class="input-group">
                                 <span class="input-group-text input-group-text-xs fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
-                                <select wire:model="filtro_anio" class="form-select form-select-sm me-2">
+                                <select id="cmbfiltro_anio" wire:model="filtro_anio" class="form-select form-select-sm me-2">
                                     <option value="">-- Año --</option>
                                     @foreach(range(date('Y'), date('Y') - 5) as $anio)
                                         <option value="{{ $anio }}">{{ $anio }}</option>
@@ -180,7 +180,7 @@
                         </div>
 
                         <div class="col-lg-2 col-sm-12">
-                            <select wire:model.live="filtro_mes" class="form-select form-select-sm me-2">
+                            <select id="cmbfiltro_mes" wire:model.live="filtro_mes" class="form-select form-select-sm me-2">
                                 <option value="">-- Mes --</option>
                                 @foreach([
                                     1=>'Enero',2=>'Febrero',3=>'Marzo',4=>'Abril',
@@ -436,26 +436,26 @@
                                                     data-bs-toggle="modal" data-bs-target="#buscar-bienes-component">
                                                     <i class="fa-solid fa-magnifying-glass"></i>
                                                 </button>
-                                                <input type="text" class="form-control form-control-xs {{ $mostrarcontroles }} bg-light is-valid" wire:model="cod" readonly>
+                                                <input type="text" id="txtcod" class="form-control form-control-xs {{ $mostrarcontroles }} bg-light is-valid" wire:model="cod" readonly>
                                             </div>
                                         </div>
                                         <div class="col-xl-2">
                                             <label for="txtcodpatrimonial" class="fw-bold fs-6 {{ $mostrarcontroles }}">COD_PATRIMONIAL</label>
                                             <div class="input-group">
                                                 {{-- <span class="input-group-text input-group-text-xs {{ $mostrarcontroles }}" id="basic-addon1">Cod. Patrimonial</span> --}}
-                                                <input type="text" class="form-control form-control-xs {{ $mostrarcontroles }} bg-light is-valid" wire:model="cod_patrimonial" readonly>
+                                                <input type="text" id="txtcodpatrimonial" class="form-control form-control-xs {{ $mostrarcontroles }} bg-light is-valid" wire:model="cod_patrimonial" readonly>
                                             </div>
                                         </div>
                                         <div class="col-xl-6">
                                             <label for="txtequipo" class="fw-bold fs-6 {{ $mostrarcontroles }}">PC / LAPTOP</label>
                                             <div class="input-group">
                                                 {{-- <span class="input-group-text input-group-text-xs {{ $mostrarcontroles }}" id="basic-addon1">Bien</span> --}}
-                                                <input type="text" class="form-control form-control-xs {{ $mostrarcontroles }} bg-light is-valid" wire:model="datos_bien" readonly>
+                                                <input type="text" id="txtequipo" class="form-control form-control-xs {{ $mostrarcontroles }} bg-light is-valid" wire:model="datos_bien" readonly>
                                             </div>
                                         </div>
                                         <div class="col-xl-2">
                                             <label for="txtip" class="fw-bold fs-6 {{ $mostrarcontroles }}">IP</label>
-                                            <input type="text" class="form-control form-control-xs {{ $mostrarcontroles }} bg-light is-valid" wire:model="bien_ip"  readonly>
+                                            <input type="text" id="txtip" class="form-control form-control-xs {{ $mostrarcontroles }} bg-light is-valid" wire:model="bien_ip"  readonly>
                                         </div>
                                     </div>
                                     <div class="row">                                       
