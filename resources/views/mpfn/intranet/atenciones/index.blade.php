@@ -29,61 +29,60 @@
 @section('js')
     <script>
         document.addEventListener('livewire:init', () => {
-            Livewire.on('copiar-portapapeles', (texto) => {
+            Livewire.on('copiar-portapapeles', async (texto) => {
 
-                console.log('Copiar:', texto);
+                console.log('Texto recibido:', texto);
 
-                // 🔥 MÉTODO 1: Clipboard API (si hay HTTPS)
-                if (navigator.clipboard && window.isSecureContext) {
-                    navigator.clipboard.writeText(texto)
-                        .then(() => {
-                            alert('Copiado ✅');
-                        })
-                        .catch(err => {
-                            console.error('Clipboard API falló:', err);
-                            fallbackCopy(texto);
-                        });
-                } else {
-                    // 🔥 MÉTODO 2: fallback
-                    fallbackCopy(texto);
+                if (!texto) {
+                    alert('Texto vacío ❌');
+                    return;
+                }
+
+                // 🔥 1. MÉTODO MODERNO (requiere HTTPS)
+                try {
+                    if (navigator.clipboard && window.isSecureContext) {
+                        await navigator.clipboard.writeText(texto);
+                        alert('Copiado ✅ (moderno)');
+                        return;
+                    }
+                } catch (e) {
+                    console.warn('Clipboard API falló:', e);
+                }
+
+                // 🔥 2. FALLBACK REAL
+                try {
+                    const textarea = document.createElement("textarea");
+                    textarea.value = texto;
+
+                    // 👇 IMPORTANTE (visible para algunos navegadores)
+                    textarea.style.position = "fixed";
+                    textarea.style.top = "10px";
+                    textarea.style.left = "10px";
+                    textarea.style.width = "200px";
+                    textarea.style.height = "50px";
+                    textarea.style.opacity = "1";
+
+                    document.body.appendChild(textarea);
+
+                    textarea.focus();
+                    textarea.select();
+
+                    const successful = document.execCommand('copy');
+
+                    document.body.removeChild(textarea);
+
+                    if (successful) {
+                        alert('Copiado ✅');
+                    } else {
+                        alert('No se pudo copiar ❌');
+                    }
+
+                } catch (err) {
+                    console.error(err);
+                    alert('Error al copiar ❌');
                 }
 
             });
-
-            function fallbackCopy(texto) {
-
-                let textarea = document.createElement("textarea");
-                textarea.value = texto;
-
-                // 🔥 MUY IMPORTANTE
-                textarea.style.position = "fixed";
-                textarea.style.top = "0";
-                textarea.style.left = "0";
-                textarea.style.width = "1px";
-                textarea.style.height = "1px";
-                textarea.style.opacity = "1"; // 👈 NO usar 0
-
-                document.body.appendChild(textarea);
-
-                textarea.focus();
-                textarea.select();
-
-                let success = false;
-
-                try {
-                    success = document.execCommand('copy');
-                } catch (err) {
-                    console.error('Fallback error:', err);
-                }
-
-                document.body.removeChild(textarea);
-
-                if (success) {
-                    alert('Copiado ✅');
-                } else {
-                    alert('No se pudo copiar ❌');
-                }
-            }
         });
     </script>
 @stop
