@@ -368,15 +368,6 @@
                                             <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS INSTITUCIONALES</legend>
                                             @include('livewire.rrhh.personal.partials.datos-institucionales-component')
                                         </fieldset>
-                                        <div class="row">
-                                            <div class="col">
-                                                {{-- @if ($dni)
-                                                    <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#transferencia-personal-component" wire:click="nuevo_transferir_personal({{ $persona_id }})">
-                                                        <i class="fa-solid fa-people-arrows"></i> Cambiar Ubicación
-                                                    </button>
-                                                @endif --}}
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -410,6 +401,9 @@
                                                 </button>
                                                 <input type="text" id="txtservicio" class="form-control form-control-xs bg-light" wire:model="servicio" readonly required>
                                             </div>
+                                            @error('servicio')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
                                         </div>
                                         <div class="col-xl-4">
                                             <label for="txtdetalle_servicio" class="fw-bold fs-6">SOLICITUD / INCIDENCIA</label>
@@ -419,14 +413,17 @@
                                                 </button>
                                                 <input type="text" id="txtdetalle_servicio" class="form-control form-control-xs bg-light" wire:model="detalle_servicio" readonly required>
                                             </div>
+                                            @error('detalle_servicio')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
                                         </div>
                                         <div class="col-xl-3">
                                             <label for="tipoi" class="fw-bold fs-6">TIPO</label>
                                             <div class="d-flex gap-2">
-                                                <input type="radio" id="tipoi" name="solicitud_incidencia" class="btn-check" value="INCIDENCIA" autocomplete="off" wire:model.live="solicitud_incidencia">
+                                                <input type="radio" id="tipoi" name="solicitud_incidencia" class="btn-check" value="INCIDENCIA" autocomplete="off" wire:model.live="solicitud_incidencia" required>
                                                 <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="tipoi">INCIDENCIA</label>
 
-                                                <input type="radio" id="tipos" name="solicitud_incidencia" class="btn-check" value="SOLICITUD" autocomplete="off" wire:model.live="solicitud_incidencia">
+                                                <input type="radio" id="tipos" name="solicitud_incidencia" class="btn-check" value="SOLICITUD" autocomplete="off" wire:model.live="solicitud_incidencia" required>
                                                 <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="tipos">SOLICITUD</label>
                                             </div>
                                         </div>
@@ -634,7 +631,10 @@
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-{{ $colorGuardarActualizar }} btn-sm">
-                            <i class="fa-solid fa-floppy-disk"></i> {{ $textoGuardarActualizar }}
+                            <i class="fa-solid fa-floppy-disk"></i> {{ $textoGuardarActualizar }} y reponder <i class="fa-solid fa-envelope"></i>
+                        </button>
+                        <button type="button" class="btn btn-dark btn-sm" wire:click="copiarDatos">
+                            <i class="fa-solid fa-copy"></i> Copiar datos
                         </button>
                         <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" wire:click="cerrar">
                             <i class="fa-solid fa-rectangle-xmark"></i> Cerrar

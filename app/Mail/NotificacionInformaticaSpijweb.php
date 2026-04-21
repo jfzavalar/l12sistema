@@ -13,7 +13,7 @@ class NotificacionInformaticaSpijweb extends Mailable
 {
     use Queueable, SerializesModels;
 
-     public $dni,$datos,$cargo,$sede,$dependencia,$usuariospijweb,$passwordspijweb;
+    public $dni,$datos,$cargo,$sede,$dependencia,$usuariospijweb,$passwordspijweb;
 
     public function __construct($dni,$datos,$cargo,$sede,$dependencia,$usuariospijweb,$passwordspijweb)
     {

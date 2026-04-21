@@ -27,5 +27,17 @@
 
 
 @section('js')
-
+    <script>
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('copiar-portapapeles', (event) => {
+                navigator.clipboard.writeText(event.texto)
+                    .then(() => {
+                        alert('Copiado al portapapeles ✅');
+                    })
+                    .catch(err => {
+                        console.error('Error al copiar:', err);
+                    });
+            });
+        });
+    </script>
 @stop

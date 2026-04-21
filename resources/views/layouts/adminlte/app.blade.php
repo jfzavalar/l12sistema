@@ -698,5 +698,7 @@
             document.onscroll = resetTimer;
         </script>
 
+        @yield('js')
+        
     </body>
 </html>

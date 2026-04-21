@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Intranet\Atenciones;
 
+use App\Mail\NotificacionInformaticaTicket;
 use App\Models\InformaticasFirmasToken;
 use App\Models\Patrimonios_biene;
 use App\Models\PatrimoniosBiene;
@@ -17,6 +18,7 @@ use App\Models\PersonalesAtencionesServicio;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -388,16 +390,14 @@ class Activos extends Component
             ->orderBy('personales.id','desc')
             ->paginate(10, ['personas.*'], 'historialPage');
 
-        $lista_personas = Persona::join('personales','personas.id','=','personales.persona_id')
-            ->where('personales.tipo_documento','CONTRATO')
-            ->where('personales.activo', "1")
+        $lista_personas = Persona::where('activo','1')
             ->when($this->searchpersonas !== '', function ($query) {
                 $query->where(function ($q) {
-                    $q->where('personas.dni', 'like', '%' . $this->searchpersonas . '%')
-                    ->orWhere('personas.datos', 'like', '%' . $this->searchpersonas . '%');
+                    $q->where('dni', 'like', '%' . $this->searchpersonas . '%')
+                    ->orWhere('datos', 'like', '%' . $this->searchpersonas . '%');
                 });
             })
-            ->orderBy('personas.datos')
+            ->orderBy('datos')
             ->paginate(10,['*'],'personasPage');
 
         $lista_sedes = Personales_sede::select('id','nombre','nombred')
@@ -500,11 +500,15 @@ class Activos extends Component
     protected function rules(){
         return [
             'dni' => 'required',
+            'servicio' => 'required',
+            'detalle_servicio' => 'required'
         ];
     }
 
     protected $messages = [
         'dni.required' => 'El DNI es obligatorio',
+        'servicio.required' => 'El Servicio es obligatorio',
+        'detalle_servicio.required' => 'El Servicio es obligatorio',
     ];
 
     public function nuevo()
@@ -536,18 +540,21 @@ class Activos extends Component
 
     public function guardar()
     {
-        // $this->validate();
-
+        $this->validate();
+        
         try {
 
-            DB::transaction(function () {
+            $registro = null;
 
-                $usuario = auth()->user()->datos; // Mejor que usar propiedad pública
+            DB::transaction(function () use (&$registro) {
 
-                // FUNCIÓN PARA CARGAR DOCUMENTO
+                $usuario = auth()->user()->datos;
+
+                // 📄 Guardar documento
                 $rutaDocumento = $this->guardar_acta();
 
-                PersonalesAtencione::create([
+                // 💾 Crear registro
+                $registro = PersonalesAtencione::create([
                     'persona_id' => $this->persona_id,
                     'dni' => $this->dni,
                     'personal_id' => $this->personal_id,
@@ -579,14 +586,10 @@ class Activos extends Component
                     'glpi' => strtoupper($this->glpi),
                     'enviado_lima' => $this->enviado_lima,
                     'detalle_problema' => strtoupper($this->detalle_problema),
-
                     'ncopias' => $this->ncopias,
-
                     'obs_usuario' => strtoupper($this->obs_usuario),
                     'obs_informatico' => strtoupper($this->obs_informatico),
-
                     'estado' => $this->estado_bien,
-
                     'atendido' => $this->atendido,
                     'atendido_por_id' => auth()->user()->id,
                     'atendido_por_dni' => auth()->user()->dni,
@@ -598,42 +601,48 @@ class Activos extends Component
                     'informatico_dni' => $this->informatico_dni,
                     'informatico' => $this->informatico,
                     'activo' => "1",
-
                     'created_user_cargo' => auth()->user()->cargo,
                     'created_user' => $usuario,
                     'updated_user' => $usuario,
                 ]);
+
             });
 
-            // Restablecer todas las variables
+            // ✅ Asignar ID recién creado
+            $this->atencion_id = $registro->id;
+
+            // ✅ Enviar correo (FUERA de la transacción)
+            $this->enviar_correo();
+
+            // 🔄 Reset (mantiene filtros)
             $this->resetExcept(['filtro_anio', 'filtro_mes']);
 
+            // ✅ Mensaje éxito
             $this->dispatch(
                 'alerta-actualizado',
-                titulo: 'Datos actualizados',
-                mensaje: 'Los datos se han actualizado correctamente.',
+                titulo: 'Datos guardados',
+                mensaje: 'Se guardó y se envió el correo correctamente.',
                 tipo: 'success'
             );
 
-            // Evento para cerrar el modal
+            // ❌ Cerrar modal
             $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
 
-        // } catch (\Throwable $e) {
+        }
+        // catch (\Throwable $e) {
 
-        //     dd($e); // 🔥 Esto te dirá TODO
-        // };
+        //     report($e);
 
-        } catch (\Throwable $e) {
-
-            report($e);
-
-            $this->dispatch(
-                'alerta-actualizado',
-                titulo: 'Error',
-                mensaje: 'Ocurrió un error al guardar.',
-                tipo: 'error'
-            );
-        };
+        //     $this->dispatch(
+        //         'alerta-actualizado',
+        //         titulo: 'Error',
+        //         mensaje: 'Ocurrió un error al guardar o enviar el correo.',
+        //         tipo: 'error'
+        //     );
+        // }
+        catch (\Throwable $e) {
+            dd($e);
+        }
     }
 
     public function editar(PersonalesAtencione $ipersonalatencion)
@@ -1172,6 +1181,83 @@ class Activos extends Component
             $fileName,
             'public'
         );
+    }
+
+    // -----------------------------------------------------------------------------------------------
+    // Modal enviar Correo
+    public function enviar_correo()
+    {
+        $instanciaTbl = PersonalesAtencione::findOrFail($this->atencion_id);
+
+        // 📎 Array dinámico de adjuntos
+        $adjuntos = [];
+
+        if ($this->servicio === "CERTIFICADO DIGITAL" && $this->detalle_servicio === "REQUISITOS") {
+
+            $archivos = [
+                public_path('formatos/certificado_digital/formato01.pdf'),
+                public_path('formatos/certificado_digital/formato02.pdf'),
+                public_path('formatos/certificado_digital/formato03.xlsx'),
+            ];
+
+            foreach ($archivos as $file) {
+                if (!file_exists($file)) {
+                    session()->flash('error', "El archivo no existe: {$file}");
+                    return;
+                }
+                $adjuntos[] = $file;
+            }
+
+        } elseif ($this->detalle_servicio === "REQUISITOS") {
+
+            $file = public_path('formatos/carta_de_riesgo.docx');
+
+            if (file_exists($file)) {
+                $adjuntos[] = $file;
+            }
+        }
+
+        // 📧 Enviar correo
+        Mail::to($this->correoinstitucional)->queue(
+            new NotificacionInformaticaTicket(
+                $this->dni,
+                $this->datos,
+                $this->cargo,
+                $this->sedeorigen,
+                $this->dependenciaorigen,
+                $this->despachoorigen,
+
+                $this->servicio,
+                $this->detalle_servicio,
+
+                $adjuntos // 👈 ahora envías un array
+            )
+        );
+
+        session()->flash('success', "Correo enviado correctamente");
+    }
+
+
+    // -----------------------------------------------------------------------------------------------
+    // Copiar datos
+    public function generarTexto()
+    {
+        return "DATOS:
+    - Solicitud/Incidente: {$this->servicio}
+    - Nombres: {$this->datos}
+    - DNI: {$this->dni}
+    - Correo: {$this->correoinstitucional}
+    - Celular: {$this->celinstitucional}
+    - Cargo: {$this->cargo}
+    - Dependencia/Fiscalía: {$this->dependenciaorigen}
+    - Despacho: {$this->despachoorigen}";
+    }
+
+    public function copiarDatos()
+    {
+        $texto = $this->generarTexto();
+
+        $this->dispatch('copiar-portapapeles', texto: $texto);
     }
 
 }
