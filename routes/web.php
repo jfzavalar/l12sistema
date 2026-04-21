@@ -17,6 +17,7 @@ use App\Http\Controllers\Intranet\AtencionesController;
 use App\Http\Controllers\Intranet\ConfiguracionController;
 use App\Http\Controllers\Intranet\ExpimportantesController;
 use App\Http\Controllers\Patrimonio\BienesasignacionController;
+use App\Http\Controllers\Patrimonio\BienesasignacionsobranteController;
 use App\Http\Controllers\Patrimonio\BienesController;
 use App\Http\Controllers\Patrimonio\BienestrasladoController;
 use App\Http\Controllers\RoleController;
@@ -158,6 +159,10 @@ Route::middleware('auth','can:mpfn.patrimonio.bienes.index')->group(function () 
 Route::middleware('auth','can:mpfn.patrimonio.asignaciones.index')->group(function () {
     Route::resource('bienesasignados', BienesasignacionController::class)->names('mpfn.patrimonio.asignaciones');
     Route::get('pdf/patrimio/bienesasignados-acta/{id}', [BienesasignacionController::class, 'exportarPDF'])->name('pdf.patrimonio.bienesasignados-acta');
+});
+Route::middleware('auth','can:mpfn.patrimonio.asignacionessobrantes.index')->group(function () {
+    Route::resource('bienesasignadossobrantes', BienesasignacionsobranteController::class)->names('mpfn.patrimonio.asignacionessobrantes');
+    // Route::get('pdf/patrimio/bienesasignados-acta/{id}', [BienesasignacionsobranteController::class, 'exportarPDF'])->name('pdf.patrimonio.bienesasignados-acta');
 });
 Route::middleware('auth','can:mpfn.patrimonio.traslado.index')->group(function () {
     Route::resource('bienestraslado', BienestrasladoController::class)->names('mpfn.patrimonio.traslado');

@@ -476,6 +476,14 @@
                                                 </a>
                                             </li>
                                         @endcan
+                                        @can('mpfn.patrimonio.asignacionessobrantes.index')
+                                            <li class="nav-item">
+                                                <a class="nav-link ms-3 {{ request()->routeIs('mpfn.patrimonio.asignacionessobrantes.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.patrimonio.asignacionessobrantes.index') }}">
+                                                    <i class="nav-icon fa-regular fa-circle"></i>
+                                                    <p>Asignación de sobrantes</p>
+                                                </a>
+                                            </li>
+                                        @endcan
                                         @can('mpfn.patrimonio.bienes.index')
                                             <li class="nav-item">
                                                 <a class="nav-link ms-3 {{ request()->routeIs('mpfn.patrimonio.bienes.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.patrimonio.bienes.index') }}">
