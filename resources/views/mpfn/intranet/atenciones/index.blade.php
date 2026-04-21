@@ -29,15 +29,40 @@
 @section('js')
     <script>
         document.addEventListener('livewire:init', () => {
-            Livewire.on('copiar-portapapeles', (event) => {
-                navigator.clipboard.writeText(event.texto)
-                    .then(() => {
-                        alert('Copiado al portapapeles ✅');
-                    })
-                    .catch(err => {
-                        console.error('Error al copiar:', err);
-                    });
+            Livewire.on('copiar-portapapeles', (texto) => {
+
+                // ✅ Método moderno (solo HTTPS)
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(texto)
+                        .then(() => {
+                            alert('Copiado ✅');
+                        })
+                        .catch(err => {
+                            console.error('Clipboard error:', err);
+                        });
+
+                } else {
+                    // 🔥 Fallback universal
+                    let textarea = document.createElement("textarea");
+                    textarea.value = texto;
+                    textarea.style.position = "fixed"; // evita scroll
+                    textarea.style.opacity = "0";
+
+                    document.body.appendChild(textarea);
+                    textarea.focus();
+                    textarea.select();
+
+                    try {
+                        document.execCommand('copy');
+                        alert('Copiado (fallback) ✅');
+                    } catch (err) {
+                        console.error('Fallback error:', err);
+                    }
+
+                    document.body.removeChild(textarea);
+                }
+
             });
         });
-    </script>
+        </script>
 @stop
