@@ -1257,7 +1257,7 @@ class Activos extends Component
     {
         $texto = $this->generarTexto();
 
-        $this->dispatch('copiar-portapapeles', texto: $texto);
+        $this->dispatch('copiar-portapapeles', $texto);
     }
 
 }

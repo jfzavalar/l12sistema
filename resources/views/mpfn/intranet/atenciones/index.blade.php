@@ -31,38 +31,59 @@
         document.addEventListener('livewire:init', () => {
             Livewire.on('copiar-portapapeles', (texto) => {
 
-                // ✅ Método moderno (solo HTTPS)
+                console.log('Copiar:', texto);
+
+                // 🔥 MÉTODO 1: Clipboard API (si hay HTTPS)
                 if (navigator.clipboard && window.isSecureContext) {
                     navigator.clipboard.writeText(texto)
                         .then(() => {
                             alert('Copiado ✅');
                         })
                         .catch(err => {
-                            console.error('Clipboard error:', err);
+                            console.error('Clipboard API falló:', err);
+                            fallbackCopy(texto);
                         });
-
                 } else {
-                    // 🔥 Fallback universal
-                    let textarea = document.createElement("textarea");
-                    textarea.value = texto;
-                    textarea.style.position = "fixed"; // evita scroll
-                    textarea.style.opacity = "0";
-
-                    document.body.appendChild(textarea);
-                    textarea.focus();
-                    textarea.select();
-
-                    try {
-                        document.execCommand('copy');
-                        alert('Copiado (fallback) ✅');
-                    } catch (err) {
-                        console.error('Fallback error:', err);
-                    }
-
-                    document.body.removeChild(textarea);
+                    // 🔥 MÉTODO 2: fallback
+                    fallbackCopy(texto);
                 }
 
             });
+
+            function fallbackCopy(texto) {
+
+                let textarea = document.createElement("textarea");
+                textarea.value = texto;
+
+                // 🔥 MUY IMPORTANTE
+                textarea.style.position = "fixed";
+                textarea.style.top = "0";
+                textarea.style.left = "0";
+                textarea.style.width = "1px";
+                textarea.style.height = "1px";
+                textarea.style.opacity = "1"; // 👈 NO usar 0
+
+                document.body.appendChild(textarea);
+
+                textarea.focus();
+                textarea.select();
+
+                let success = false;
+
+                try {
+                    success = document.execCommand('copy');
+                } catch (err) {
+                    console.error('Fallback error:', err);
+                }
+
+                document.body.removeChild(textarea);
+
+                if (success) {
+                    alert('Copiado ✅');
+                } else {
+                    alert('No se pudo copiar ❌');
+                }
+            }
         });
-        </script>
+    </script>
 @stop
