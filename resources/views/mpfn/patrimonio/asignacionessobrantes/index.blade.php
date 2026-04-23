@@ -11,7 +11,7 @@
 
     </div>
 
-    {{-- <livewire:patrimonio.bienes.bienesasignacion-component /> --}}
+    <livewire:patrimonio.bienes.bienesasignacionsobrantes-component />
 @endsection
 
 @push('scripts')

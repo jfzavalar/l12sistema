@@ -162,7 +162,7 @@ Route::middleware('auth','can:mpfn.patrimonio.asignaciones.index')->group(functi
 });
 Route::middleware('auth','can:mpfn.patrimonio.asignacionessobrantes.index')->group(function () {
     Route::resource('bienesasignadossobrantes', BienesasignacionsobranteController::class)->names('mpfn.patrimonio.asignacionessobrantes');
-    // Route::get('pdf/patrimio/bienesasignados-acta/{id}', [BienesasignacionsobranteController::class, 'exportarPDF'])->name('pdf.patrimonio.bienesasignados-acta');
+    Route::get('pdf/patrimio/bienessobrantesasignados-acta/{id}', [BienesasignacionsobranteController::class, 'exportarPDF'])->name('pdf.patrimonio.bienessobrantesasignados-acta');
 });
 Route::middleware('auth','can:mpfn.patrimonio.traslado.index')->group(function () {
     Route::resource('bienestraslado', BienestrasladoController::class)->names('mpfn.patrimonio.traslado');
