@@ -497,8 +497,19 @@ class BienesasignacionComponent extends Component
 
         // ===== ORIGEN =====
         $this->persona_id = $asignacion->persona_id;
-        $this->dni = $asignacion->dni;
+
+        $persona = Persona::findOrFail($this->persona_id);
+        $this->dni = $persona->dni;
+        $this->nombres = $persona->nombres;
+        $this->appaterno = $persona->appaterno;
+        $this->apmaterno = $persona->apmaterno;
+        $this->celpersonal = $persona->celpersonal;
+        $this->correopersonal = $persona->correopersonal;
+
         $this->personal_id = $asignacion->personal_id;
+        // $personal = Personale::findOrFail($this->personal_id);
+        // $this->correoinstitucional = $personal->correoinstitucional;
+
         $this->datos = $asignacion->datos;
         $this->regimen = $asignacion->regimen;
         $this->cargo = $asignacion->cargo;
@@ -514,7 +525,15 @@ class BienesasignacionComponent extends Component
 
         // ===== DESTINO =====
         $this->persona_id2 = $asignacion->persona_id2;
-        $this->dni2 = $asignacion->dni2;
+
+        $persona2 = Persona::findOrFail($this->persona_id2);
+        $this->dni2 = $persona2->dni;
+        $this->nombres2 = $persona2->nombres;
+        $this->appaterno2 = $persona2->appaterno;
+        $this->apmaterno2 = $persona2->apmaterno;
+        $this->celpersonal2 = $persona2->celpersonal;
+        $this->correopersonal2 = $persona2->correopersonal;
+
         $this->personal_id2 = $asignacion->personal_id2;
         $this->datos2 = $asignacion->datos2;
         $this->regimen2 = $asignacion->regimen2;

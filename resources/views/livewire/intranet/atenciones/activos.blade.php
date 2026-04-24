@@ -344,29 +344,25 @@
                 <form wire:submit.prevent="{{ $funcionGuardarActualizar }}">
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-xl-2 col-sm-12">
+                            {{-- <div class="col-xl-1 col-sm-12">
                                 <fieldset class="border p-3 rounded text-center mb-3" {{ $seccionFoto }} disabled>
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">FOTO DE PERFIL</legend>
-                                    @include('livewire.rrhh.personal.partials.datos-foto-component')
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">PERFIL</legend>
+                                    @include('livewire.partials.componentes.persona-foto')
                                 </fieldset>
-                            </div>
+                            </div> --}}
 
-                            <div class="col-xl-10 col-sm-12">
+                            <div class="col-xl-12 col-sm-12">
                                 <div class="row">
-                                    <div class="col-xl-4">
-                                        <fieldset class="border p-3 rounded mb-3" {{ $seccionPersona }} disabled>
+                                    <div class="col-xl-6">
+                                        <fieldset class="border p-3 rounded mb-3" {{ $seccionPersona }}>
                                             <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS PERSONALES</legend>
-                                            @include('livewire.rrhh.personal.partials.datos-personales-component')
+                                            @include('livewire.partials.componentes.persona-datos')
                                         </fieldset>
-                                        <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs me-2"
-                                            data-bs-toggle="modal" data-bs-target="#buscar-personal-component">
-                                            <i class="fa-solid fa-magnifying-glass"></i> Buscar personal
-                                        </button>
                                     </div>
-                                    <div class="col-xl-8">
-                                        <fieldset class="border p-3 rounded mb-3" {{ $seccionPersonal }} disabled>
+                                    <div class="col-xl-6">
+                                        <fieldset class="border p-3 rounded mb-3" {{ $seccionPersonal }}>
                                             <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS INSTITUCIONALES</legend>
-                                            @include('livewire.rrhh.personal.partials.datos-institucionales-component')
+                                            @include('livewire.partials.componentes.personal-datos')
                                         </fieldset>
                                     </div>
                                 </div>
