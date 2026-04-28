@@ -628,42 +628,160 @@ class Activos extends Component
 
             });
 
-            // ✅ Asignar ID recién creado
+            // ✅ ID generado
             $this->atencion_id = $registro->id;
 
-            // ✅ Enviar correo (FUERA de la transacción)
-            $this->enviar_correo();
+            // 📧 VALIDACIÓN DE CORREO
+            if (empty($this->correoinstitucional)) {
+                throw new \Exception("El correo institucional está vacío");
+            }
 
-            // 🔄 Reset (mantiene filtros)
+            if (!filter_var($this->correoinstitucional, FILTER_VALIDATE_EMAIL)) {
+                throw new \Exception("El correo institucional no es válido");
+            }
+
+            // 📧 ENVÍO DE CORREO
+            try {
+                $this->enviar_correo();
+
+                $mensaje = 'Se guardó y se envió el correo correctamente.';
+                $tipo = 'success';
+
+            } catch (\Throwable $mailError) {
+
+                // 🔥 No rompe el flujo si falla el correo
+                report($mailError);
+
+                $mensaje = 'Se guardó correctamente, pero falló el envío del correo.';
+                $tipo = 'warning';
+            }
+
+            // 🔄 Reset
             $this->resetExcept(['filtro_anio', 'filtro_mes']);
 
-            // ✅ Mensaje éxito
+            // ✅ Mensaje
             $this->dispatch(
                 'alerta-actualizado',
-                titulo: 'Datos guardados',
-                mensaje: 'Se guardó y se envió el correo correctamente.',
-                tipo: 'success'
+                titulo: 'Proceso completado',
+                mensaje: $mensaje,
+                tipo: $tipo
             );
 
-            // ❌ Cerrar modal
             $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
 
-        }
-        // catch (\Throwable $e) {
+        } catch (\Throwable $e) {
 
-        //     report($e);
+            dd($e); // 🔥 Déjalo mientras pruebas
 
-        //     $this->dispatch(
-        //         'alerta-actualizado',
-        //         titulo: 'Error',
-        //         mensaje: 'Ocurrió un error al guardar o enviar el correo.',
-        //         tipo: 'error'
-        //     );
-        // }
-        catch (\Throwable $e) {
-            dd($e);
         }
     }
+
+    // public function guardar()
+    // {
+    //     $this->validate();
+        
+    //     try {
+
+    //         $registro = null;
+
+    //         DB::transaction(function () use (&$registro) {
+
+    //             $usuario = auth()->user()->datos;
+
+    //             // 📄 Guardar documento
+    //             $rutaDocumento = $this->guardar_acta();
+
+    //             // 💾 Crear registro
+    //             $registro = PersonalesAtencione::create([
+    //                 'persona_id' => $this->persona_id,
+    //                 'dni' => $this->dni,
+    //                 'personal_id' => $this->personal_id,
+    //                 'datos' => $this->datos,
+    //                 'codsede_origen' => $this->codsedeorigen,
+    //                 'sede_origen' => $this->sedeorigen,
+    //                 'coddependencia_origen' => $this->coddependenciaorigen,
+    //                 'dependencia_origen' => $this->dependenciaorigen,
+    //                 'coddespacho_origen' => $this->coddespachoorigen,
+    //                 'despacho_origen' => $this->despachoorigen,
+    //                 'codsede_destino' => $this->codsededestino,
+    //                 'sede_destino' => $this->sededestino,
+    //                 'coddependencia_destino' => $this->coddependenciadestino,
+    //                 'dependencia_destino' => $this->dependenciadestino,
+    //                 'coddespacho_destino' => $this->coddespachodestino,
+    //                 'despacho_destino' => $this->despachodestino,
+    //                 'reportado_por' => $this->reportado_por,
+    //                 'solicitud_incidencia' => $this->solicitud_incidencia,
+    //                 'servicio_id' => $this->servicio_id,
+    //                 'servicio' => $this->servicio,
+    //                 'detalle_servicio_id' => $this->detalle_servicio_id,
+    //                 'detalle_servicio' => $this->detalle_servicio,
+    //                 'bien_id' => $this->bien_id,
+    //                 'cod' => $this->cod,
+    //                 'cod_patrimonial' => $this->cod_patrimonial,
+    //                 'datos_bien' => $this->datos_bien,
+    //                 'cea' => strtoupper($this->cea),
+    //                 'sgf' => strtoupper($this->sgf),
+    //                 'glpi' => strtoupper($this->glpi),
+    //                 'enviado_lima' => $this->enviado_lima,
+    //                 'detalle_problema' => strtoupper($this->detalle_problema),
+    //                 'ncopias' => $this->ncopias,
+    //                 'obs_usuario' => strtoupper($this->obs_usuario),
+    //                 'obs_informatico' => strtoupper($this->obs_informatico),
+    //                 'estado' => $this->estado_bien,
+    //                 'atendido' => $this->atendido,
+    //                 'atendido_por_id' => auth()->user()->id,
+    //                 'atendido_por_dni' => auth()->user()->dni,
+    //                 'atendido_por_datos' => $usuario,
+    //                 'tiempo_atencion' => $this->tiempo_atencion,
+    //                 'respuesta' => strtoupper($this->respuesta),
+    //                 'conformidad' => $this->conformidad,
+    //                 'ruta_evidencia' => $rutaDocumento,
+    //                 'informatico_dni' => $this->informatico_dni,
+    //                 'informatico' => $this->informatico,
+    //                 'activo' => "1",
+    //                 'created_user_cargo' => auth()->user()->cargo,
+    //                 'created_user' => $usuario,
+    //                 'updated_user' => $usuario,
+    //             ]);
+
+    //         });
+
+    //         // ✅ Asignar ID recién creado
+    //         $this->atencion_id = $registro->id;
+
+    //         // ✅ Enviar correo (FUERA de la transacción)
+    //         $this->enviar_correo();
+
+    //         // 🔄 Reset (mantiene filtros)
+    //         $this->resetExcept(['filtro_anio', 'filtro_mes']);
+
+    //         // ✅ Mensaje éxito
+    //         $this->dispatch(
+    //             'alerta-actualizado',
+    //             titulo: 'Datos guardados',
+    //             mensaje: 'Se guardó y se envió el correo correctamente.',
+    //             tipo: 'success'
+    //         );
+
+    //         // ❌ Cerrar modal
+    //         $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
+
+    //     }
+    //     catch (\Throwable $e) {
+
+    //         report($e);
+
+    //         $this->dispatch(
+    //             'alerta-actualizado',
+    //             titulo: 'Error',
+    //             mensaje: 'Ocurrió un error al guardar o enviar el correo.',
+    //             tipo: 'error'
+    //         );
+    //     }
+    //     catch (\Throwable $e) {
+    //         dd($e);
+    //     }
+    // }
 
     public function editar(PersonalesAtencione $ipersonalatencion)
     {
@@ -1238,8 +1356,16 @@ class Activos extends Component
             }
         }
 
+        // ✅ AQUÍ VA LA VALIDACIÓN / NORMALIZACIÓN
+        $enviado_lima = filled($this->enviado_lima) ? $this->enviado_lima : null;
+        $glpi = filled($this->glpi) ? $this->glpi : null;
+        $ncopias = filled($this->ncopias) ? $this->ncopias : null;
+        $cod_patrimonial = filled($this->cod_patrimonial) ? $this->cod_patrimonial : null;
+        $datos_bien      = filled($this->datos_bien) ? $this->datos_bien : null;
+
         // 📧 Enviar correo
-        Mail::to($this->correoinstitucional)->queue(
+        // Mail::to($this->correoinstitucional)->queue(
+        Mail::to($this->correoinstitucional)->send(
             new NotificacionInformaticaTicket(
                 $this->dni,
                 $this->datos,
@@ -1250,6 +1376,12 @@ class Activos extends Component
 
                 $this->servicio,
                 $this->detalle_servicio,
+                $this->respuesta,
+                $enviado_lima,
+                $glpi,
+                $ncopias,
+                $cod_patrimonial,
+                $datos_bien,
 
                 $adjuntos // 👈 ahora envías un array
             )

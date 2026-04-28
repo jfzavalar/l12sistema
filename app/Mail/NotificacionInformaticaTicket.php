@@ -12,10 +12,13 @@ use Illuminate\Queue\SerializesModels;
 class NotificacionInformaticaTicket extends Mailable
 {
     public $dni, $datos, $cargo, $sede, $dependencia, $despacho;
-    public $servicio, $detalle_servicio;
+    public $servicio, $detalle_servicio, $respuesta;
+    public $enviado_lima, $glpi, $ncopias, $cod_patrimonial, $datos_bien;
     public $adjuntos;
 
-    public function __construct($dni, $datos, $cargo, $sede, $dependencia, $despacho, $servicio, $detalle_servicio, $adjuntos = [])
+    public function __construct($dni, $datos, $cargo, $sede, $dependencia, $despacho, $servicio, $detalle_servicio, $respuesta,
+                                $enviado_lima, $glpi, $ncopias, $cod_patrimonial, $datos_bien,
+                                $adjuntos = [])
     {
         $this->dni = $dni;
         $this->datos = $datos;
@@ -26,13 +29,20 @@ class NotificacionInformaticaTicket extends Mailable
 
         $this->servicio = $servicio;
         $this->detalle_servicio = $detalle_servicio;
+        $this->respuesta = $respuesta;
+
+        $this->enviado_lima = $enviado_lima;
+        $this->glpi = $glpi;
+        $this->ncopias = $ncopias;
+        $this->cod_patrimonial = $cod_patrimonial;
+        $this->datos_bien = $datos_bien;
 
         $this->adjuntos = $adjuntos;
     }
 
     public function build()
     {
-        $mail = $this->subject('DFJunin: Notificación Informática')
+        $mail = $this->subject($this->servicio . ': ' . $this->detalle_servicio)
             ->view('emails.informatica.ticket');
 
 

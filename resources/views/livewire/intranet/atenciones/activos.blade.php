@@ -108,7 +108,7 @@
                                 </h6>
                                 <br>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h5><i class="fa-solid fa-chart-simple text-primary"></i>{{ $estadisticas2->total }}</h5>
+                                    <h5><i class="fa-solid fa-chart-simple text-primary"></i> {{ $estadisticas2->total }}</h5>
                                     <button class="btn btn-outline-primary btn-sm" wire:click="filtrarTotal">
                                         <i class="fa-solid fa-bars"></i> Listar
                                     </button>
@@ -424,36 +424,38 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-xl-2">
-                                            <label for="txtcod" class="fw-bold fs-6 {{ $mostrarcontroles }}">COD</label>
-                                            <div class="input-group">
-                                                <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs {{ $mostrarcontroles }}"
-                                                    data-bs-toggle="modal" data-bs-target="#buscar-bienes-component">
-                                                    <i class="fa-solid fa-magnifying-glass"></i>
-                                                </button>
-                                                <input type="text" id="txtcod" class="form-control form-control-xs {{ $mostrarcontroles }} bg-light is-valid" wire:model="cod" readonly>
+                                    @if (in_array($this->servicio_id, [9, 11, 19]))
+                                        <div class="row">
+                                            <div class="col-xl-2">
+                                                <label for="txtcod" class="fw-bold fs-6 {{ $mostrarcontroles }}">COD</label>
+                                                <div class="input-group">
+                                                    <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs {{ $mostrarcontroles }}"
+                                                        data-bs-toggle="modal" data-bs-target="#buscar-bienes-component">
+                                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                                    </button>
+                                                    <input type="text" id="txtcod" class="form-control form-control-xs {{ $mostrarcontroles }} bg-light is-valid" wire:model="cod" readonly >
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-2">
+                                                <label for="txtcodpatrimonial" class="fw-bold fs-6 {{ $mostrarcontroles }}">COD_PATRIMONIAL</label>
+                                                <div class="input-group">
+                                                    {{-- <span class="input-group-text input-group-text-xs {{ $mostrarcontroles }}" id="basic-addon1">Cod. Patrimonial</span> --}}
+                                                    <input type="text" id="txtcodpatrimonial" class="form-control form-control-xs {{ $mostrarcontroles }} bg-light is-valid" wire:model="cod_patrimonial" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-6">
+                                                <label for="txtequipo" class="fw-bold fs-6 {{ $mostrarcontroles }}">BIEN INFORMATICO</label>
+                                                <div class="input-group">
+                                                    {{-- <span class="input-group-text input-group-text-xs {{ $mostrarcontroles }}" id="basic-addon1">Bien</span> --}}
+                                                    <input type="text" id="txtequipo" class="form-control form-control-xs {{ $mostrarcontroles }} bg-light is-valid" wire:model="datos_bien" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-2">
+                                                <label for="txtip" class="fw-bold fs-6 {{ $mostrarcontroles }}">IP</label>
+                                                <input type="text" id="txtip" class="form-control form-control-xs {{ $mostrarcontroles }} bg-light is-valid" wire:model="bien_ip"  readonly>
                                             </div>
                                         </div>
-                                        <div class="col-xl-2">
-                                            <label for="txtcodpatrimonial" class="fw-bold fs-6 {{ $mostrarcontroles }}">COD_PATRIMONIAL</label>
-                                            <div class="input-group">
-                                                {{-- <span class="input-group-text input-group-text-xs {{ $mostrarcontroles }}" id="basic-addon1">Cod. Patrimonial</span> --}}
-                                                <input type="text" id="txtcodpatrimonial" class="form-control form-control-xs {{ $mostrarcontroles }} bg-light is-valid" wire:model="cod_patrimonial" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-6">
-                                            <label for="txtequipo" class="fw-bold fs-6 {{ $mostrarcontroles }}">PC / LAPTOP</label>
-                                            <div class="input-group">
-                                                {{-- <span class="input-group-text input-group-text-xs {{ $mostrarcontroles }}" id="basic-addon1">Bien</span> --}}
-                                                <input type="text" id="txtequipo" class="form-control form-control-xs {{ $mostrarcontroles }} bg-light is-valid" wire:model="datos_bien" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-2">
-                                            <label for="txtip" class="fw-bold fs-6 {{ $mostrarcontroles }}">IP</label>
-                                            <input type="text" id="txtip" class="form-control form-control-xs {{ $mostrarcontroles }} bg-light is-valid" wire:model="bien_ip"  readonly>
-                                        </div>
-                                    </div>
+                                    @endif
                                     <div class="row">                                       
                                         <div class="col-12 col-xl">
                                             <label for="txtcea" class="fw-bold fs-6">CEA</label>
