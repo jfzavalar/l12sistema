@@ -6,7 +6,7 @@
                     <div class="col-xl-12">
                         <div class="input-group input-group-sm mb-2">
                             <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
-                            <input type="text" id="txtsearchusuario" class="form-control form-control-sm me-2" wire:model.live="search" placeholder="Buscar por SEDE">
+                            <input type="text" id="txtsearchusuario" class="form-control form-control-sm me-2" wire:model.live="search" placeholder="Buscar quién transfiere">
                             @can('mpfn.patrimonio.asignaciones.create')
                                 <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
                                     <i class="fa-solid fa-file"></i> Nuevo

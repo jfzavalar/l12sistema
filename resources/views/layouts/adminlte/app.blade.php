@@ -436,14 +436,14 @@
                                                 </a>
                                             </li>
                                         @endcan
-                                        @can('mpfn.informatica.soporte.index')
+                                        {{-- @can('mpfn.informatica.soporte.index')
                                             <li class="nav-item">
                                                 <a class="nav-link ms-3 {{ request()->routeIs('mpfn.informatica.soporte.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.informatica.soporte.index') }}">
                                                     <i class="nav-icon fa-regular fa-circle"></i>
                                                     <p>Soporte</p>
                                                 </a>
                                             </li>
-                                        @endcan
+                                        @endcan --}}
                                         @can('procesos.informatica.spijweb.index')
                                             <li class="nav-item">
                                                 <a class="nav-link ms-3 {{ request()->routeIs('procesos.informatica.spijweb.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.spijweb.index') }}">

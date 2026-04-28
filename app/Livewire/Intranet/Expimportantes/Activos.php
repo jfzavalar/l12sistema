@@ -508,7 +508,8 @@ class Activos extends Component
         $this->regimen = $ipersonal->regimen;
         $this->tipo_regimen = $ipersonal->tipo_regimen;
         $this->cargo = $ipersonal->cargo;
-
+        $this->cargo_condicion = $ipersonal->cargo_condicion;
+        $this->tipo_documento = $ipersonal->tipo_documento;
         $this->reset('searchpersonas');
     }
 

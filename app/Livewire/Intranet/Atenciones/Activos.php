@@ -390,14 +390,34 @@ class Activos extends Component
             ->orderBy('personales.id','desc')
             ->paginate(10, ['personas.*'], 'historialPage');
 
-        $lista_personas = Persona::where('activo','1')
+        $lista_personas = Persona::join('personales','personas.id','=','personales.persona_id')
+            ->select(
+                'personas.*',
+                'personales.persona_id',
+                'personales.celinstitucional',
+                'personales.correoinstitucional',
+                'personales.regimen',
+                'personales.tipo_regimen',
+                'personales.cargo',
+                'personales.cargo_condicion',
+                'personales.sedeorigen',
+                'personales.dependenciaorigen',
+                'personales.despachoorigen',
+                'personales.sededestino',
+                'personales.dependenciadestino',
+                'personales.despachodestino',
+                'personales.tipo_documento'
+            )
+            ->where('personales.tipo_documento','CONTRATO')
+            ->where('personales.activo', "1")
+            ->where('personas.activo','1')
             ->when($this->searchpersonas !== '', function ($query) {
                 $query->where(function ($q) {
-                    $q->where('dni', 'like', '%' . $this->searchpersonas . '%')
-                    ->orWhere('datos', 'like', '%' . $this->searchpersonas . '%');
+                    $q->where('personas.dni', 'like', '%' . $this->searchpersonas . '%')
+                    ->orWhere('personas.datos', 'like', '%' . $this->searchpersonas . '%');
                 });
             })
-            ->orderBy('datos')
+            ->orderBy('personas.datos')
             ->paginate(10,['*'],'personasPage');
 
         $lista_sedes = Personales_sede::select('id','nombre','nombred')
@@ -968,6 +988,7 @@ class Activos extends Component
         $this->regimen = $ipersonal->regimen;
         $this->tipo_regimen = $ipersonal->tipo_regimen;
         $this->cargo = $ipersonal->cargo;
+        $this->cargo_condicion = $ipersonal->cargo_condicion;
         $this->tipo_documento = $ipersonal->tipo_documento;
 
         // $this->reset('searchpersonas');

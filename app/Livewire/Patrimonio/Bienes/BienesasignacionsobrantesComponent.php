@@ -244,8 +244,8 @@ class BienesasignacionsobrantesComponent extends Component
             ->where('activo', "1")
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('dni2', 'like', '%' . $this->search . '%')
-                    ->orWhere('datos2', 'like', '%' . $this->search . '%');
+                    $q->where('dni', 'like', '%' . $this->search . '%')
+                    ->orWhere('datos', 'like', '%' . $this->search . '%');
                 });
             })
             // ->when($this->filtrosede, fn($q) => $q->where('personales.codsedeorigen', $this->filtrosede))
@@ -255,15 +255,36 @@ class BienesasignacionsobrantesComponent extends Component
             ->orderBy('id', 'desc')
             ->paginate(30, ['*'], 'bienesasignacionPage');
 
-        $lista_personas = Persona::where('activo','1')
+        $lista_personas = Persona::join('personales','personas.id','=','personales.persona_id')
+            ->select(
+                'personas.*',
+                'personales.persona_id',
+                'personales.celinstitucional',
+                'personales.correoinstitucional',
+                'personales.regimen',
+                'personales.tipo_regimen',
+                'personales.cargo',
+                'personales.cargo_condicion',
+                'personales.sedeorigen',
+                'personales.dependenciaorigen',
+                'personales.despachoorigen',
+                'personales.sededestino',
+                'personales.dependenciadestino',
+                'personales.despachodestino',
+                'personales.tipo_documento'
+            )
+            ->where('personales.tipo_documento','CONTRATO')
+            ->where('personales.activo', "1")
+            ->where('personas.activo','1')
             ->when($this->searchpersonas !== '', function ($query) {
                 $query->where(function ($q) {
-                    $q->where('dni', 'like', '%' . $this->searchpersonas . '%')
-                    ->orWhere('datos', 'like', '%' . $this->searchpersonas . '%');
+                    $q->where('personas.dni', 'like', '%' . $this->searchpersonas . '%')
+                    ->orWhere('personas.datos', 'like', '%' . $this->searchpersonas . '%');
                 });
             })
-            ->orderBy('datos')
+            ->orderBy('personas.datos')
             ->paginate(10,['*'],'personasPage');
+
         
         $lista_personas2 = Persona::where('activo','1')
             ->when($this->searchpersonas !== '', function ($query) {
@@ -747,6 +768,8 @@ class BienesasignacionsobrantesComponent extends Component
         $this->regimen = $ipersonal->regimen;
         $this->tipo_regimen = $ipersonal->tipo_regimen;
         $this->cargo = $ipersonal->cargo;
+        $this->cargo_condicion = $ipersonal->cargo_condicion;
+        $this->tipo_documento = $ipersonal->tipo_documento;
 
         $this->reset('searchpersonas');
     }
@@ -775,6 +798,8 @@ class BienesasignacionsobrantesComponent extends Component
         $this->regimen2 = $ipersonal->regimen;
         $this->tipo_regimen2 = $ipersonal->tipo_regimen;
         $this->cargo2 = $ipersonal->cargo;
+        $this->cargo_condicion2 = $ipersonal->cargo_condicion;
+        $this->tipo_documento2 = $ipersonal->tipo_documento;
 
         $this->reset('searchpersonas');
     }

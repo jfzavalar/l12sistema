@@ -6,7 +6,7 @@
                     <div class="col-xl-12">
                         <div class="input-group input-group-sm mb-2">
                             <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
-                            <input type="text" id="txtsearchusuario" class="form-control form-control-sm me-2" wire:model.live="search" placeholder="Buscar por SEDE">
+                            <input type="text" id="txtsearchusuario" class="form-control form-control-sm me-2" wire:model.live="search" placeholder="Buscar quién transfiere">
                             @can('mpfn.patrimonio.asignaciones.create')
                                 <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
                                     <i class="fa-solid fa-file"></i> Nuevo
@@ -106,18 +106,18 @@
                             <div class="col-xl-12 col-sm-12">
                                 <div class="row">
                                     <div class="col-xl-6">
-                                        <fieldset class="border p-3 rounded mb-3" {{ $seccionPersona }}>
+                                        <fieldset class="border p-3 rounded mb-3">
                                             <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS ASIGNADO</legend>
-                                            @include('livewire.rrhh.personal.partials.datos-personales-component')
-                                            @include('livewire.rrhh.personal.partials.datos-institucionales-component')
+                                            @include('livewire.partials.componentes.persona-datos')
+                                            @include('livewire.partials.componentes.personal-datos')
                                         </fieldset>
                                         <div class="row">
-                                            <div class="col-xl-2">
+                                            {{-- <div class="col-xl-2">
                                                 <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-personal-component">
                                                     <i class="fa-solid fa-magnifying-glass"></i> Buscar personal
                                                 </button>
-                                            </div>
-                                            <div class="col-xl-10">
+                                            </div> --}}
+                                            <div class="col-xl-12">
                                                 <div class="input-group">
                                                     <span class="input-group-text input-group-text-xs" id="basic-addon1">Referencia</span>
                                                     <input type="text" class="form-control form-control-xs" wire:model="referencia">
@@ -126,18 +126,18 @@
                                         </div>
                                     </div>
                                     <div class="col-xl-6">
-                                        <fieldset class="border p-3 rounded mb-3" {{ $seccionPersonal }}>
+                                        <fieldset class="border p-3 rounded mb-3">
                                             <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS PERSONAL POR ASIGNAR</legend>
-                                            @include('livewire.rrhh.personal.partials.datos-personales-component2')
-                                            @include('livewire.rrhh.personal.partials.datos-institucionales-component2')
+                                            @include('livewire.partials.componentes.persona-datos2')
+                                            @include('livewire.partials.componentes.personal-datos2')
                                         </fieldset>
                                         <div class="row">
-                                            <div class="col-xl-2">
+                                            {{-- <div class="col-xl-2">
                                                 <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-personal-component2">
                                                     <i class="fa-solid fa-magnifying-glass"></i> Buscar personal
                                                 </button>
-                                            </div>
-                                            <div class="col-xl-10">
+                                            </div> --}}
+                                            <div class="col-xl-12">
                                                 <div class="input-group">
                                                     <span class="input-group-text input-group-text-xs" id="basic-addon1">Motivo</span>
                                                     <input type="text" class="form-control form-control-xs" wire:model="motivo">
