@@ -521,16 +521,16 @@ class Activos extends Component
 
     protected function rules(){
         return [
-            'nombres' => 'required',
-            // 'servicio' => 'required',
-            // 'detalle_servicio' => 'required'
+            'dni' => 'required',
+            'servicio' => 'required',
+            'detalle_servicio' => 'required'
         ];
     }
 
     protected $messages = [
-        'nombres.required' => 'El DNI es obligatorio',
-        // 'servicio.required' => 'El Servicio es obligatorio',
-        // 'detalle_servicio.required' => 'El Servicio es obligatorio',
+        'dni.required' => 'El DNI es obligatorio',
+        'servicio.required' => 'El Servicio es obligatorio',
+        'detalle_servicio.required' => 'El Servicio es obligatorio',
     ];
 
     public function nuevo()
@@ -1333,9 +1333,8 @@ class Activos extends Component
 
     public function copiarDatos()
     {
-        $texto = $this->generarTexto();
 
-        $this->dispatch('copiar-portapapeles', $texto);
+        $this->dispatch('copiar-portapapeles', texto: $this->generarTexto());
     }
 
 }

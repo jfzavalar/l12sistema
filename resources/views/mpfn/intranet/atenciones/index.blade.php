@@ -28,59 +28,16 @@
 
 @section('js')
     <script>
-        document.addEventListener('livewire:init', () => {
-            Livewire.on('copiar-portapapeles', async (texto) => {
+        document.addEventListener('livewire:initialized', () => {
+            Livewire.on('copiar-portapapeles', (event) => {
 
-                console.log('Texto recibido:', texto);
-
-                if (!texto) {
-                    alert('Texto vacío ❌');
-                    return;
-                }
-
-                // 🔥 1. MÉTODO MODERNO (requiere HTTPS)
-                try {
-                    if (navigator.clipboard && window.isSecureContext) {
-                        await navigator.clipboard.writeText(texto);
-                        alert('Copiado ✅ (moderno)');
-                        return;
-                    }
-                } catch (e) {
-                    console.warn('Clipboard API falló:', e);
-                }
-
-                // 🔥 2. FALLBACK REAL
-                try {
-                    const textarea = document.createElement("textarea");
-                    textarea.value = texto;
-
-                    // 👇 IMPORTANTE (visible para algunos navegadores)
-                    textarea.style.position = "fixed";
-                    textarea.style.top = "10px";
-                    textarea.style.left = "10px";
-                    textarea.style.width = "200px";
-                    textarea.style.height = "50px";
-                    textarea.style.opacity = "1";
-
-                    document.body.appendChild(textarea);
-
-                    textarea.focus();
-                    textarea.select();
-
-                    const successful = document.execCommand('copy');
-
-                    document.body.removeChild(textarea);
-
-                    if (successful) {
-                        alert('Copiado ✅');
-                    } else {
-                        alert('No se pudo copiar ❌');
-                    }
-
-                } catch (err) {
-                    console.error(err);
-                    alert('Error al copiar ❌');
-                }
+                navigator.clipboard.writeText(event.texto)
+                    .then(() => {
+                        alert('Datos copiados correctamente');
+                    })
+                    .catch(err => {
+                        console.error('Error al copiar:', err);
+                    });
 
             });
         });
