@@ -289,6 +289,8 @@ class Activos extends Component
                 'personales_atenciones.created_user as utencioncreado',
                 'personales_atenciones.ruta_documento',
                 'personales_atenciones.created_user_cargo')
+            ->where('personas.activo', 1)
+            ->where('personales.activo', 1)
             ->where('personales_atenciones.activo', 1)
             ->orderBy('personales_atenciones.id','desc')
             ->paginate(10, ['*'], 'atencionesPage');
@@ -917,6 +919,8 @@ class Activos extends Component
 
                 $ipersonalatencion = PersonalesAtencione::where('id', $this->atencion_id)->where('activo','1')->firstOrFail();
 
+                $data = json_decode($this->informatico, true);
+
                 $ipersonalatencion->update([
                     'persona_id' => $this->persona_id,
                     'dni' => $this->dni,
@@ -958,7 +962,8 @@ class Activos extends Component
                     'conformidad' => $this->conformidad,
                     'ruta_evidencia' => $rutaDocumento,
                     'informatico_dni' => $this->informatico_dni,
-                    'informatico' => $this->informatico,
+                    
+                    'informatico' => $data['datos'] ?? null,
                     'ncopias' => $this->ncopias,
                     'activo' => "1",
                     'updated_user' => $usuario,

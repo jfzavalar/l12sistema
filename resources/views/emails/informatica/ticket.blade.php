@@ -89,7 +89,7 @@
             <table class="table">
                 <tr>
                     <td><strong>DATOS</strong></td>
-                    <td>{{ $dni . ' - ' . $datos . '-' . $cargo }}</td>
+                    <td>{{ $dni . ' - ' . $datos . ' - ' . $cargo }}</td>
                 </tr>
                 <tr>
                     <td><strong>SEDE</strong></td>
