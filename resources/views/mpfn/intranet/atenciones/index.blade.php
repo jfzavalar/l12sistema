@@ -28,16 +28,27 @@
 
 @section('js')
     <script>
-        document.addEventListener('livewire:initialized', () => {
-            Livewire.on('copiar-portapapeles', (event) => {
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('copiar-portapapeles', (texto) => {
 
-                navigator.clipboard.writeText(event.texto)
-                    .then(() => {
-                        alert('Datos copiados correctamente');
-                    })
-                    .catch(err => {
-                        console.error('Error al copiar:', err);
-                    });
+                let textarea = document.createElement("textarea");
+                textarea.value = texto;
+                textarea.style.position = "fixed";
+                textarea.style.opacity = "0";
+
+                document.body.appendChild(textarea);
+                textarea.focus();
+                textarea.select();
+
+                try {
+                    document.execCommand('copy');
+                    alert('Copiado correctamente');
+                } catch (err) {
+                    console.error('Error al copiar: ', err);
+                    alert('No se pudo copiar');
+                }
+
+                document.body.removeChild(textarea);
 
             });
         });
