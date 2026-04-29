@@ -356,17 +356,23 @@
 
                             <div class="col-xl-12 col-sm-12">
                                 <div class="row">
-                                    <div class="col-xl-6">
+                                    <div class="col-xl-5">
                                         <fieldset class="border p-3 rounded mb-3" {{ $seccionPersona }}>
                                             <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS PERSONALES</legend>
                                             @include('livewire.partials.componentes.persona-datos')
                                         </fieldset>
                                     </div>
-                                    <div class="col-xl-6">
+                                    <div class="col-xl-5">
                                         <fieldset class="border p-3 rounded mb-3" {{ $seccionPersonal }}>
                                             <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS INSTITUCIONALES</legend>
                                             @include('livewire.partials.componentes.personal-datos')
                                         </fieldset>
+                                    </div>
+                                    <div class="col-xl-2">
+                                        <textarea id="textoCopiar" class="form-control" rows="10" style="font-size: 12px; white-space: nowrap; overflow-x: auto;" readonly>{{ $this->generarTexto() }}</textarea>
+                                        <button onclick="copiarTexto()" class="btn btn-dark btn-xs mb-1">
+                                            <i class="fa-solid fa-copy"></i> Copiar Datos
+                                        </button>                                 
                                     </div>
                                 </div>
                             </div>
@@ -651,9 +657,6 @@
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-{{ $colorGuardarActualizar }} btn-sm">
                             <i class="fa-solid fa-floppy-disk"></i> {{ $textoGuardarActualizar }} y reponder <i class="fa-solid fa-envelope"></i>
-                        </button>
-                        <button type="button" class="btn btn-dark btn-sm" wire:click="copiarDatos">
-                            <i class="fa-solid fa-copy"></i> Copiar datos
                         </button>
                         <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" wire:click="cerrar">
                             <i class="fa-solid fa-rectangle-xmark"></i> Cerrar

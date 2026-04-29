@@ -28,29 +28,25 @@
 
 @section('js')
     <script>
-        document.addEventListener('livewire:init', () => {
-            Livewire.on('copiar-portapapeles', (texto) => {
+        function copiarTexto() {
+            const textarea = document.getElementById("textoCopiar");
 
-                let textarea = document.createElement("textarea");
-                textarea.value = texto;
-                textarea.style.position = "fixed";
-                textarea.style.opacity = "0";
+            textarea.focus();
+            textarea.select();
 
-                document.body.appendChild(textarea);
-                textarea.focus();
-                textarea.select();
+            try {
+                const ok = document.execCommand('copy');
 
-                try {
-                    document.execCommand('copy');
+                if (ok) {
                     alert('Copiado correctamente');
-                } catch (err) {
-                    console.error('Error al copiar: ', err);
+                } else {
                     alert('No se pudo copiar');
                 }
 
-                document.body.removeChild(textarea);
-
-            });
-        });
+            } catch (err) {
+                console.error(err);
+                alert('Error al copiar');
+            }
+        }
     </script>
 @stop

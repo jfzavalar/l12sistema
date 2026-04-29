@@ -1012,12 +1012,12 @@ class Activos extends Component
 
         $ipersonal = Personale::where([['activo',1],['persona_dni',$this->dni],])->firstOrFail();
 
-        $this->codsedeorigen = $ipersonal->codsedeorigen;
-        $this->sedeorigen = $ipersonal->sedeorigen;   
-        $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
-        $this->dependenciaorigen = $ipersonal->dependenciaorigen;
-        $this->coddespachoorigen = $ipersonal->coddespachoorigen;
-        $this->despachoorigen = $ipersonal->despachoorigen;
+        $this->codsedeorigen = $ipersonal->codsededestino;
+        $this->sedeorigen = $ipersonal->sededestino;   
+        $this->coddependenciaorigen = $ipersonal->coddependenciadestino;
+        $this->dependenciaorigen = $ipersonal->dependenciadestino;
+        $this->coddespachoorigen = $ipersonal->coddespachodestino;
+        $this->despachoorigen = $ipersonal->despachodestino;
 
         $this->codsededestino = $ipersonal->codsededestino;
         $this->sededestino = $ipersonal->sededestino;   
@@ -1333,8 +1333,9 @@ class Activos extends Component
 
     public function copiarDatos()
     {
+        $texto = $this->generarTexto();
 
-        $this->dispatch('copiar-portapapeles', texto: $this->generarTexto());
+        $this->dispatch('copiar-portapapeles', texto: $texto);
     }
 
 }
