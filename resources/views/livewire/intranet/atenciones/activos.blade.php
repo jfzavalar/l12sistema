@@ -194,10 +194,13 @@
 
                         <div class="col-lg-8 col-sm-12">
                             <div class="input-group mb-3"> 
-                                <input type="text" id="txtsearchpersonalatenciones2" class="form-control form-control-sm" placeholder="Buscar por DNI o Datos del Personal" wire:model.live="search">
-                                <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
+                                <input type="text" id="txtsearchpersonalatenciones2" class="form-control form-control-sm me-1" placeholder="Buscar por DNI o Datos del Personal" wire:model.live="search">
+                                <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3 me-1" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
                                     <i class="fa-solid fa-file"></i> Nuevo
                                 </button>
+                                {{-- <button type="button" id="btnnuevoext" class="btn btn-info btn-sm rounded-3" data-bs-toggle="modal" data-bs-target="#nuevoEditarModalExt" wire:click="nuevo_externo">
+                                    <i class="fa-solid fa-file"></i> Nuevo Externo
+                                </button> --}}
                             </div>
                         </div>
                     </div>
@@ -456,32 +459,6 @@
                                             </div>
                                         </div>
                                     @endif
-                                    <div class="row">                                       
-                                        <div class="col-12 col-xl">
-                                            <label for="txtcea" class="fw-bold fs-6">CEA</label>
-                                            <input type="text" id="txtcea" class="form-control form-control-xs text-uppercase" wire:model="cea">
-                                        </div>
-                                        <div class="col-12 col-xl">
-                                            <label for="txtsgf" class="fw-bold fs-6">N° CARPETA FISCAL</label>
-                                            <input type="text" id="txtsgf" class="form-control form-control-xs text-uppercase" wire:model="sgf">
-                                        </div>
-                                        <div class="col-12 col-xl">
-                                            <label class="fw-bold fs-6">Enviado a Lima</label>
-                                            <div class="d-flex gap-2">
-                                                <input type="radio" id="enviadoSi" name="enviadoLima" class="btn-check" value="SI" autocomplete="off" wire:model.live="enviado_lima" required>
-                                                <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="enviadoSi">Si</label>
-
-                                                <input type="radio" id="enviadoNo" name="enviadoLima" class="btn-check" value="NO" autocomplete="off" wire:model.live="enviado_lima" required>
-                                                <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="enviadoNo">No</label>
-                                            </div>
-                                        </div>
-                                        @if ($enviado_lima === "SI")
-                                            <div class="col-12 col-xl">
-                                                <label for="txtglpi" class="fw-bold fs-6 {{ $mostrarcontrolgpli }}">GLPI</label>
-                                                <input type="text" id="txtglpi" class="form-control form-control-xs text-uppercase {{ $mostrarcontrolgpli }}" wire:model=glpi>
-                                            </div>
-                                        @endif
-                                    </div>
                                     <div class="row">
                                         <div class="col-12 col-xl">
                                             <label for="txtobservacion" class="fw-bold fs-6">DETALLE DEL PROBLEMA</label>
@@ -511,6 +488,32 @@
                                             </div>
                                         @endif
                                     </div>
+                                    <div class="row">                                       
+                                        <div class="col-12 col-xl">
+                                            <label for="txtcea" class="fw-bold fs-6">CEA</label>
+                                            <input type="text" id="txtcea" class="form-control form-control-xs text-uppercase" wire:model="cea">
+                                        </div>
+                                        <div class="col-12 col-xl">
+                                            <label for="txtsgf" class="fw-bold fs-6">N° CARPETA FISCAL</label>
+                                            <input type="text" id="txtsgf" class="form-control form-control-xs text-uppercase" wire:model="sgf">
+                                        </div>
+                                        {{-- <div class="col-12 col-xl">
+                                            <label class="fw-bold fs-6">Enviado a Lima</label>
+                                            <div class="d-flex gap-2">
+                                                <input type="radio" id="enviadoSi" name="enviadoLima" class="btn-check" value="SI" autocomplete="off" wire:model.live="enviado_lima" required>
+                                                <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="enviadoSi">Si</label>
+
+                                                <input type="radio" id="enviadoNo" name="enviadoLima" class="btn-check" value="NO" autocomplete="off" wire:model.live="enviado_lima" required>
+                                                <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="enviadoNo">No</label>
+                                            </div>
+                                        </div>
+                                        @if ($enviado_lima === "SI")
+                                            <div class="col-12 col-xl">
+                                                <label for="txtglpi" class="fw-bold fs-6 {{ $mostrarcontrolgpli }}">GLPI</label>
+                                                <input type="text" id="txtglpi" class="form-control form-control-xs text-uppercase {{ $mostrarcontrolgpli }}" wire:model=glpi>
+                                            </div>
+                                        @endif --}}
+                                    </div>
                                     @if (in_array($this->servicio_id, [9, 11, 19]) || in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA", "SERVIDORES"]))
                                         <div class="row">
                                             <div class="col-xl-6">
@@ -529,7 +532,23 @@
                                 <fieldset class="border p-3 rounded mb-3">
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">ATENCIÓN</legend>
                                     <div class="row">
-                                        <div class="col-xl-12">
+                                        <div class="col-12 col-xl">
+                                            <label class="fw-bold fs-6">Enviado a Lima</label>
+                                            <div class="d-flex gap-2">
+                                                <input type="radio" id="enviadoSi" name="enviadoLima" class="btn-check" value="SI" autocomplete="off" wire:model.live="enviado_lima" required>
+                                                <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="enviadoSi">Si</label>
+
+                                                <input type="radio" id="enviadoNo" name="enviadoLima" class="btn-check" value="NO" autocomplete="off" wire:model.live="enviado_lima" required>
+                                                <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="enviadoNo">No</label>
+                                            </div>
+                                        </div>
+                                        @if ($enviado_lima === "SI")
+                                            <div class="col-12 col-xl">
+                                                <label for="txtglpi" class="fw-bold fs-6 {{ $mostrarcontrolgpli }}">GLPI</label>
+                                                <input type="text" id="txtglpi" class="form-control form-control-xs text-uppercase {{ $mostrarcontrolgpli }}" wire:model=glpi>
+                                            </div>
+                                        @endif
+                                        <div class="col-12 col-xl">
                                             <label class="fw-bold fs-6">ATENDIDO</label>
                                             <div class="d-flex gap-2">
                                                 <input type="radio" id="atendidoSi" name="atendido" class="btn-check" value="SI" autocomplete="off" wire:model.live="atendido" required>
@@ -539,6 +558,8 @@
                                                 <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="atendidoNo">No</label>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-xl-12">
                                             <label for="normal" class="fw-bold fs-6">TIEMPO DE ATENCIÓN</label>
                                             <div class="d-flex gap-2">
