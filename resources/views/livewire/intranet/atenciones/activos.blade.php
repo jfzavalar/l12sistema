@@ -201,6 +201,9 @@
                                 {{-- <button type="button" id="btnnuevoext" class="btn btn-info btn-sm rounded-3" data-bs-toggle="modal" data-bs-target="#nuevoEditarModalExt" wire:click="nuevo_externo">
                                     <i class="fa-solid fa-file"></i> Nuevo Externo
                                 </button> --}}
+                                <button class="btn btn-success btn-sm rounded-3" wire:click="exportarExcel">
+                                    <i class="fa-solid fa-file-excel"></i> Exportar a Excel
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -392,6 +395,7 @@
                                                 <option value="CEA">CEA</option>
                                                 <option value="CORREO">CORREO</option>
                                                 <option value="DOCUMENTO">DOCUMENTO</option>
+                                                <option value="DOCUMENTO">GESTION</option>
                                                 <option value="LLAMADA">LLAMADA</option>
                                                 <option value="PERSONALMENTE">PERSONALMENTE</option>
                                                 <option value="SISTEMA">SISTEMA</option>

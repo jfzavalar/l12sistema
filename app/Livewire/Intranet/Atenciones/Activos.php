@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Intranet\Atenciones;
 
+use App\Exports\TicketsfiltrosExport;
 use App\Mail\NotificacionInformaticaTicket;
 use App\Models\InformaticasFirmasToken;
 use App\Models\Patrimonios_biene;
@@ -1336,6 +1337,22 @@ class Activos extends Component
         $texto = $this->generarTexto();
 
         $this->dispatch('copiar-portapapeles', texto: $texto);
+    }
+
+    // Exportar a Excel
+    public function exportarExcel()
+    {
+        return Excel::download(
+            new TicketsfiltrosExport(
+                $this->search,
+                $this->filtro_atendido, 
+                $this->filtro_enviadolima, 
+                $this->filtro_atendidou,
+                $this->filtro_anio,
+                $this->filtro_mes,
+            ),
+            'reporte_tickes.xlsx'
+        );
     }
 
 }
