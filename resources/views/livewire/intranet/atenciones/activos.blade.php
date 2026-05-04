@@ -46,7 +46,7 @@
                                                 </div>
                                                 <div class="input-group input-group-xs">
                                                     <button class="input-group-text bg-info text-white">
-                                                        <i class="fa-solid fa-envelope"></i> Lima
+                                                        <i class="fa-solid fa-envelope"></i>Lima
                                                     </button>
                                                     <label class="form-control form-control-xs text-end">{{ $item->enviado_lima }}</label>
                                                 </div>
@@ -364,6 +364,12 @@
                                             <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS PERSONALES</legend>
                                             @include('livewire.partials.componentes.persona-datos')
                                         </fieldset>
+                                        {{-- <input list="personales" class="form-control form-control-sm" placeholder="Seleccionar...">
+                                        <datalist id="personales">
+                                            @foreach ($lista_personas2 as $personal)
+                                                <option value="{{ $personal->dni }}">{{ $personal->datos }}</option>
+                                            @endforeach
+                                        </datalist> --}}
                                     </div>
                                     <div class="col-xl-5">
                                         <fieldset class="border p-3 rounded mb-3" {{ $seccionPersonal }}>
