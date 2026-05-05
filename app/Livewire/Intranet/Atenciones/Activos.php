@@ -569,7 +569,7 @@ class Activos extends Component
 
             $registro = null;
 
-            if ( $this->servicio === "EQUIPO DE COMPUTO" && PatrimoniosBiene::where('ip', $this->bien_ip)->exists())
+            if ( in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA", "SERVIDORES"]) && PatrimoniosBiene::where('ip', $this->bien_ip)->exists())
             {
                 $this->dispatch(
                     'alerta-actualizado',
