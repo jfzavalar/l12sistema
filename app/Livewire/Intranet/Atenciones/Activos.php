@@ -5,6 +5,7 @@ namespace App\Livewire\Intranet\Atenciones;
 use App\Exports\TicketsfiltrosExport;
 use App\Mail\NotificacionInformaticaTicket;
 use App\Models\InformaticasFirmasToken;
+use App\Models\Ip;
 use App\Models\Patrimonios_biene;
 use App\Models\PatrimoniosBiene;
 use App\Models\Persona;
@@ -648,7 +649,18 @@ class Activos extends Component
 
                     $ibien->update([
                         'ip' => $this->bien_ip,
+                        'updated_user' => $usuario,
                     ]);
+
+                    $iip = Ip::where('ip', $this->bien_ip)
+                        ->where('activo','1')
+                        ->first();
+
+                    $iip->update([
+                        'estado' => '1',
+                        'updated_user' => $usuario,
+                    ]);
+
                 }
 
             });

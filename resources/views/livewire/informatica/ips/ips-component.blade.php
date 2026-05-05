@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card-body">
             <div class="row mt-3">
-                <div class="col-xl-5 col-gl-6 col-sm-12">
+                {{-- <div class="col-xl-5 col-gl-6 col-sm-12">
                     <table class="table">
                         <thead class="table-dark">
                             <tr>
@@ -11,7 +11,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @forelse ($estadisticas as $item)
+                            @forelse ($estadisticas as $item)
                                 @if ($item->created_user_cargo === "INFORMATICO" || $item->created_user_cargo === "SOPORTE")
                                     <tr class="align-middle" style="font-size: 12px;">
                                         <th scope="row">{{ $item->created_user }}</th>
@@ -42,7 +42,7 @@
                                 @endif
                             @empty
                                 <tr class="align-middle"><td colspan="3">Sin registros.</td></tr>
-                            @endforelse --}}
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -55,7 +55,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @forelse ($estadisticas as $item)
+                            @forelse ($estadisticas as $item)
                                 @if ($item->created_user_cargo === "TERCERO")
                                     <tr class="align-middle" style="font-size: 12px;">
                                         <th scope="row">{{ $item->created_user }}</th>
@@ -80,12 +80,12 @@
                                 @endif
                             @empty
                                 <tr class="align-middle"><td colspan="3">Sin registros.</td></tr>
-                            @endforelse --}}
+                            @endforelse
                         </tbody>
                     </table>
-                </div>
+                </div> --}}
 
-                <div class="col-xl-3 col-gl-6 col-sm-12">
+                {{-- <div class="col-xl-3 col-gl-6 col-sm-12">
                     <div class="row">
                         <div class="col-xl-6 col-lg-4 col-sm-4">
                             <div class="alert alert-primary" role="alert">
@@ -144,41 +144,20 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
 
             <div class="table-responsive-xl">
                 {{-- <div class="input-group mb-3"> --}}
-                    <div class="row g-3">
-                        {{-- <div class="col-lg-2 col-sm-12">
-                            <label class="btn btn-outline-primary btn-sm me-2">Total: {{ $lista_activos->total() }}</label>
-                        </div> --}}                      
+                    <div class="row g-3">                   
                         <div class="col-lg-2 col-sm-12">
                             <div class="input-group">
-                                <span class="input-group-text input-group-text-xs fw-bold" id="basic-addon2">Total: </span>
-                                <select id="cmbfiltro_anio" wire:model="filtro_anio" class="form-select form-select-sm me-2">
-                                    <option value="">-- Año --</option>
-                                    {{-- @foreach(range(date('Y'), date('Y') - 5) as $anio)
-                                        <option value="{{ $anio }}">{{ $anio }}</option>
-                                    @endforeach --}}
-                                </select>
+                                <span class="input-group-text input-group-text-xs fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
+                                
                             </div>
                         </div>
 
-                        <div class="col-lg-2 col-sm-12">
-                            <select id="cmbfiltro_mes" wire:model.live="filtro_mes" class="form-select form-select-sm me-2">
-                                <option value="">-- Mes --</option>
-                                {{-- @foreach([
-                                    1=>'Enero',2=>'Febrero',3=>'Marzo',4=>'Abril',
-                                    5=>'Mayo',6=>'Junio',7=>'Julio',8=>'Agosto',
-                                    9=>'Septiembre',10=>'Octubre',11=>'Noviembre',12=>'Diciembre'
-                                ] as $num => $mes)
-                                    <option value="{{ $num }}">{{ $mes }}</option>
-                                @endforeach --}}
-                            </select>
-                        </div>
-
-                        <div class="col-lg-8 col-sm-12">
+                        <div class="col-lg-10 col-sm-12">
                             <div class="input-group mb-3"> 
                                 <input type="text" id="txtsearchpersonalatenciones2" class="form-control form-control-sm me-1" placeholder="Buscar por IP" wire:model.live="search">
                                 <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3 me-1" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
@@ -217,17 +196,15 @@
                                     {{ $item->ip}}
                                 </td>
                                 <td>
-                                    <span class="badge rounded-pill {{ $item->estado === '1' ? 'text-bg-success' : 'text-bg-danger' }}">
+                                    <span class="badge rounded-pill {{ $item->estado === '1' ? 'text-bg-primary' : 'text-bg-success' }}">
                                         {{ $item->estado === '1' ? 'Asignado' : 'Libre' }}
                                     </span>
                                 </td>
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
-                                        @if ($item->utencioncreado === auth()->user()->datos)
-                                            <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->personalatencion_id }})">
-                                                <i class="fa-solid fa-pen-to-square"></i><br>Editar
-                                            </button> 
-                                        @endif
+                                        <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->personalatencion_id }})">
+                                            <i class="fa-solid fa-pen-to-square"></i><br>Editar
+                                        </button> 
                                         @can('mpfn.intranet.atenciones.destroy')
                                             <button type="button" class="btn btn-outline-danger btn-xs">
                                                 <i class="fa-solid fa-trash-can"></i><br>Eliminar
