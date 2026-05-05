@@ -9,6 +9,6 @@ class IpsController extends Controller
 {
     public function index()
     {
-        return view('procesos.informatica.ips.index');
+        return view('mpfn.informatica.ips.index');
     }
 }

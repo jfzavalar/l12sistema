@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('patrimonios_bienes_sobrantes', function (Blueprint $table) {
+        Schema::create('_ips', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
         });
@@ -22,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('patrimonios_bienes_sobrantes');
+        Schema::dropIfExists('_ips');
     }
 };

@@ -443,7 +443,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @if (in_array($this->servicio_id, [9, 11, 19]))
+                                    @if (in_array($this->servicio_id, [9, 11, 19]) || in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA", "SERVIDORES"]))
                                         <div class="row">
                                             <div class="col-xl-2">
                                                 <label for="txtcod" class="fw-bold fs-6 {{ $mostrarcontroles }}">COD</label>
@@ -471,7 +471,7 @@
                                             </div>
                                             <div class="col-xl-2">
                                                 <label for="txtip" class="fw-bold fs-6 {{ $mostrarcontroles }}">IP</label>
-                                                <input type="text" id="txtip" class="form-control form-control-xs {{ $mostrarcontroles }} bg-light is-valid" wire:model="bien_ip"  readonly>
+                                                <input type="text" id="txtip" class="form-control form-control-xs {{ $mostrarcontroles }} is-valid" wire:model.defer="bien_ip" oninput="this.value = this.value.replace(/[^0-9.]/g, '')">
                                             </div>
                                         </div>
                                     @endif
@@ -504,32 +504,18 @@
                                             </div>
                                         @endif
                                     </div>
-                                    <div class="row">                                       
-                                        <div class="col-12 col-xl">
-                                            <label for="txtcea" class="fw-bold fs-6">CEA</label>
-                                            <input type="text" id="txtcea" class="form-control form-control-xs text-uppercase" wire:model="cea">
-                                        </div>
-                                        <div class="col-12 col-xl">
-                                            <label for="txtsgf" class="fw-bold fs-6">N° CARPETA FISCAL</label>
-                                            <input type="text" id="txtsgf" class="form-control form-control-xs text-uppercase" wire:model="sgf">
-                                        </div>
-                                        {{-- <div class="col-12 col-xl">
-                                            <label class="fw-bold fs-6">Enviado a Lima</label>
-                                            <div class="d-flex gap-2">
-                                                <input type="radio" id="enviadoSi" name="enviadoLima" class="btn-check" value="SI" autocomplete="off" wire:model.live="enviado_lima" required>
-                                                <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="enviadoSi">Si</label>
-
-                                                <input type="radio" id="enviadoNo" name="enviadoLima" class="btn-check" value="NO" autocomplete="off" wire:model.live="enviado_lima" required>
-                                                <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="enviadoNo">No</label>
-                                            </div>
-                                        </div>
-                                        @if ($enviado_lima === "SI")
+                                    @if (!in_array($this->servicio_id, [9, 11, 19]) || !in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA", "SERVIDORES"]))
+                                        <div class="row">                                       
                                             <div class="col-12 col-xl">
-                                                <label for="txtglpi" class="fw-bold fs-6 {{ $mostrarcontrolgpli }}">GLPI</label>
-                                                <input type="text" id="txtglpi" class="form-control form-control-xs text-uppercase {{ $mostrarcontrolgpli }}" wire:model=glpi>
+                                                <label for="txtcea" class="fw-bold fs-6">CEA</label>
+                                                <input type="text" id="txtcea" class="form-control form-control-xs text-uppercase" wire:model="cea">
                                             </div>
-                                        @endif --}}
-                                    </div>
+                                            <div class="col-12 col-xl">
+                                                <label for="txtsgf" class="fw-bold fs-6">N° CARPETA FISCAL</label>
+                                                <input type="text" id="txtsgf" class="form-control form-control-xs text-uppercase" wire:model="sgf">
+                                            </div>
+                                        </div>
+                                    @endif
                                     @if (in_array($this->servicio_id, [9, 11, 19]) || in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA", "SERVIDORES"]))
                                         <div class="row">
                                             <div class="col-xl-6">

@@ -150,18 +150,18 @@ class Activos extends Component
             $cea,
             $sgf,
             $glpi,
-            $enviado_lima,
+            $enviado_lima = "NO",
             $detalle_problema,
             $captura_evidencia,
             $ncopias,
             $obs_usuario,
             $obs_informatico,
-            $estado_bien,
-            $atendido,
+            $estado_bien = "OPERATIVO",
+            $atendido = "SI",
             $atendido_por_id,
             $atendido_por_dni,
             $atendido_por_datos,
-            $tiempo_atencion,
+            $tiempo_atencion = "NORMAL",
             $respuesta,
             $conformidad,
             $ruta_evidencia,
@@ -569,6 +569,18 @@ class Activos extends Component
 
             $registro = null;
 
+            if ( $this->servicio === "EQUIPO DE COMPUTO" && PatrimoniosBiene::where('ip', $this->bien_ip)->exists())
+            {
+                $this->dispatch(
+                    'alerta-actualizado',
+                    titulo: 'Duplicado',
+                    mensaje: 'La IP ya está registrada.',
+                    tipo: 'warning'
+                );
+
+                return;
+            }
+
             DB::transaction(function () use (&$registro) {
 
                 $usuario = auth()->user()->datos;
@@ -629,6 +641,16 @@ class Activos extends Component
                     'updated_user' => $usuario,
                 ]);
 
+                if ($this->bien_id) {
+                    $ibien = PatrimoniosBiene::where('id', $this->bien_id)
+                        ->where('activo','1')
+                        ->first();
+
+                    $ibien->update([
+                        'ip' => $this->bien_ip,
+                    ]);
+                }
+
             });
 
             // ✅ ID generado
@@ -645,7 +667,9 @@ class Activos extends Component
 
             // 📧 ENVÍO DE CORREO
             try {
-                $this->enviar_correo();
+                if (!in_array($this->detalle_servicio_id, [101, 102])) {
+                    $this->enviar_correo();
+                }
 
                 $mensaje = 'Se guardó y se envió el correo correctamente.';
                 $tipo = 'success';
@@ -753,7 +777,7 @@ class Activos extends Component
 
         $this->ruta_evidencia = $ipersonalatencion->ruta_evidencia;
 
-        if (in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA", "SERVIDORES"]))
+        if (in_array($this->servicio_id, [9, 11, 19]) || in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA", "SERVIDORES"]))
         {
             $this->mostrarcontroles = "";
         } else {
@@ -895,33 +919,6 @@ class Activos extends Component
         // };
     }
 
-    public function nuevo_externo()
-    {
-        $this->resetValidation();   // ← limpia los errores
-        $this->resetErrorBag();     // ← opcional extra seguridad
-
-        // Restablecer todas las variables
-        // Restablecer todas las variables
-        $this->resetExcept(['filtro_anio', 'filtro_mes']);
-
-        $this->foto = null;
-        $this->fotoactual = null;
-        $this->inputFileKey = rand();
-
-        $this->funcionGuardarActualizar="guardar";
-
-        $this->mostrarBtnBuscarDni = "d-none";
-        $this->mostrarcontroles = "d-none";
-
-        $this->colorHeaderModal = "info-subtle";
-        $this->textoHeaderModal = "Nuevo Externo";
-        $this->colorGuardarActualizar = "info";
-        $this->textoGuardarActualizar = "Guardar";
-        $this->colorAgregar = "outline-info";
-
-        $this->tipo_documento = "CONTRATO";
-    }
-
     public function cerrar()
     {
         $this->resetExcept(['filtro_anio', 'filtro_mes']);
@@ -932,7 +929,7 @@ class Activos extends Component
                 mensaje: 'Se canceló la operación.',
                 tipo: 'error'
             );
-    }
+    }    
 
     // FUNCIONES PARA CARGAR PDF
 
@@ -1067,12 +1064,14 @@ class Activos extends Component
         $this->solicitud_incidencia = $iincidenciasolicitud->tipo_desc;
         $this->detalle_servicio = $iincidenciasolicitud->incidencia_solicitud;
         $this->respuesta = $iincidenciasolicitud->respuesta;
+        
         // 🔴 LIMPIAR SIEMPRE
         $this->formato1 = null;
         $this->formato2 = null;
         $this->formato3 = null;
         $this->formato4 = null;
         $this->ncopias = null;
+
         $this->formato1 = $iincidenciasolicitud->formato1;
         $this->formato2 = $iincidenciasolicitud->formato2;
         $this->formato3 = $iincidenciasolicitud->formato3;
@@ -1315,7 +1314,6 @@ class Activos extends Component
 
         session()->flash('success', "Correo enviado correctamente");
     }
-
 
     // -----------------------------------------------------------------------------------------------
     // Copiar datos
