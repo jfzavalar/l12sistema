@@ -106,6 +106,16 @@ class IpsComponent extends Component
             // )
             ->orderBy('ips.ip')
             ->paginate(20, ['*'], 'ipsPage');
+        
+        $reportes = Ip::select('red')
+            ->selectRaw("COUNT(*) as total")
+            ->selectRaw("SUM(estado = 1) as asignados")
+            ->selectRaw("SUM(estado = 0) as libres")
+            ->where('activo', 1)
+            // ->whereNotNull('updated_user') // 🔥 clave
+            ->groupBy('red')
+            ->orderBy('red')
+            ->get();
 
         $estadisticas = Ip::select('updated_user')
             ->selectRaw("COUNT(*) as total")
@@ -136,6 +146,6 @@ class IpsComponent extends Component
             ->get();
 
         return view('livewire.informatica.ips.ips-component',
-                    compact('lista_activos','estadisticas','estadisticas2','lista_redes','lista_informaticos'));
+                    compact('lista_activos','reportes','estadisticas','estadisticas2','lista_redes','lista_informaticos'));
     }
 }
