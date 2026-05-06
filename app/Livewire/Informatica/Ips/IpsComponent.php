@@ -48,7 +48,10 @@ class IpsComponent extends Component
         $this->resetPage('ipsPage');
     }
 
-    public $filtro_estado; // 1 = asignado, 0 = libre, null = todos
+    // FILTROS
+    public $filtro_estado,$filtrored,$filtroinformatico; // 1 = asignado, 0 = libre, null = todos
+
+    
 
     public function filtrarTotal()
     {
@@ -71,21 +74,37 @@ class IpsComponent extends Component
     {
         $this->search = null;
         $this->filtro_estado = null;
+        $this->filtrored = null;
+        $this->filtroinformatico = null;
         $this->resetPage('ipsPage');
     }
 
     public function render()
     {
-        $lista_activos = Ip::where('activo', 1)
+        $lista_activos = Ip::leftJoin('patrimonios_bienes','ips.ip','=','patrimonios_bienes.ip')
+            ->select('ips.*',
+                'patrimonios_bienes.codigo_patrimonial',
+                'patrimonios_bienes.descripcion',
+                'patrimonios_bienes.ubicac_fisica')
+            ->where('ips.activo', 1)
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('grupo', 'like', '%' . $this->search . '%')
-                    ->orWhere('ip', 'like', '%' . $this->search . '%');
+                    $q->where('ips.grupo', 'like', '%' . $this->search . '%')
+                    ->orWhere('ips.ip', 'like', '%' . $this->search . '%');
                 });
             })
             ->when($this->filtro_estado !== null, fn($q) =>
-                $q->where('estado', $this->filtro_estado)
+                $q->where('ips.estado', $this->filtro_estado)
             )
+            ->when($this->filtrored, fn($q) => $q->where('ips.red', $this->filtrored))
+            ->when($this->filtroinformatico, fn($q) => $q->where('ips.updated_user', $this->filtroinformatico))
+            // ->when($this->filtrored !== null, fn($q) =>
+            //     $q->where('ips.red', $this->filtrored)
+            // )
+            // ->when($this->filtroinformatico !== null, fn($q) =>
+            //     $q->where('ips.updated_user', $this->filtroinformatico)
+            // )
+            ->orderBy('ips.ip')
             ->paginate(20, ['*'], 'ipsPage');
 
         $estadisticas = Ip::select('updated_user')
@@ -104,8 +123,19 @@ class IpsComponent extends Component
                 SUM(estado = '0') as libres
             ")
             ->first();
+        
+        $lista_redes = Ip::select('red')
+            ->where('activo','1')
+            ->distinct()
+            ->get();
+
+        $lista_informaticos = Ip::select('updated_user')
+            ->where('activo','1')
+            ->whereNotNull('updated_user') // 🔥 clave
+            ->distinct()
+            ->get();
 
         return view('livewire.informatica.ips.ips-component',
-                    compact('lista_activos','estadisticas','estadisticas2'));
+                    compact('lista_activos','estadisticas','estadisticas2','lista_redes','lista_informaticos'));
     }
 }

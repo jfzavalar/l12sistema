@@ -150,14 +150,37 @@
             <div class="table-responsive-xl">
                 {{-- <div class="input-group mb-3"> --}}
                     <div class="row g-3">                   
-                        <div class="col-lg-2 col-sm-12">
-                            <div class="input-group">
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="input-group input-group-sm">
                                 <span class="input-group-text input-group-text-xs fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
-                                
+                                <select id="cmb_filtrored" class="form-select formselect-sm me-2"  wire:model.live="filtrored">
+                                    <option value="">RED</option>
+                                    @foreach ($lista_redes as $red)
+                                        <option value="{{ $red->red }}">{{ $red->red }}</option>
+                                    @endforeach
+                                </select>
+                                {{-- <input list="redes" id="txt_filtro_redes" class="form-control form-control-sm" placeholder="Filtrar Red" wire:model.live="filtro_red">
+                                <datalist id="redes">
+                                    @foreach ($lista_redes as $red)
+                                        <option value="{{ $red->red }}">{{ $red->red }}</option>
+                                    @endforeach
+                                </datalist> --}}
+                                <select id="cmb_filtroinformatico" class="form-select formselect-sm" wire:model.live="filtroinformatico">
+                                    <option value="">INFORMATICO</option>
+                                    @foreach ($lista_informaticos as $informatico)
+                                        <option value="{{ $informatico->updated_user }}">{{ $informatico->updated_user }}</option>
+                                    @endforeach
+                                </select>
+                                {{-- <input list="informaticos" id="txt_filtro_redes" class="form-control form-control-sm" placeholder="Filtrar Informático" wire:model.live="filtro_informatico">
+                                <datalist id="informaticos">
+                                    @foreach ($lista_informaticos as $informatico)
+                                        <option value="{{ $informatico->updated_user }}">{{ $informatico->updated_user }}</option>
+                                    @endforeach
+                                </datalist> --}}
                             </div>
                         </div>
 
-                        <div class="col-lg-10 col-sm-12">
+                        <div class="col-lg-8 col-sm-12">
                             <div class="input-group mb-3"> 
                                 <input type="text" id="txtsearchpersonalatenciones2" class="form-control form-control-sm me-1" placeholder="Buscar por IP" wire:model.live="search">
                                 {{-- <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3 me-1" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
@@ -177,6 +200,9 @@
                             <th scope="col">RED</th>
                             <th scope="col">GRUPO</th>
                             <th scope="col">IP</th>
+                            <th scope="col">COD PATRIMONIAL</th>
+                            <th scope="col">BIEN INFORMATICO</th>
+                            <th scope="col">DEPENDENCIA</th>
                             <th scope="col">ESTADO</th>
                             <th scope="col">REGISTRADO POR</th>
                             <th scope="col" colspan="2" class="table-darck"><i class="fa-solid fa-gears"></i></th>
@@ -191,22 +217,25 @@
                                 <th>{{ $item->red }}</th>
                                 <td>{{ $item->grupo }}</td>
                                 <td>{{ $item->ip}}</td>
+                                <td>{{ $item->codigo_patrimonial}}</td>
+                                <td>{{ $item->descripcion}}</td>
+                                <td>{{ $item->ubicac_fisica}}</td>
                                 <td class="text-center">
-                                    <span class="badge px-3 py-2 rounded-pill {{ $item->estado == 1 ? 'text-bg-success' : 'text-bg-danger' }}">
+                                    <span class="badge px-3 py-1 rounded-pill {{ $item->estado == 1 ? 'text-bg-success' : 'text-bg-danger' }}">
                                         {{ $item->estado === '1' ? 'ASIGNADO' : 'LIBRE' }}
                                     </span>
                                 </td>
                                 <td>{{ $item->updated_user}}</td>
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
-                                        {{-- <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->personalatencion_id }})">
-                                            <i class="fa-solid fa-pen-to-square"></i><br>Editar
+                                        <button type="button" class="btn btn-outline-success btn-sm rounded-4 me-1" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->personalatencion_id }})">
+                                            <i class="fa-solid fa-pen-to-square"></i><br>
                                         </button> 
                                         @can('mpfn.intranet.atenciones.destroy')
-                                            <button type="button" class="btn btn-outline-danger btn-xs">
-                                                <i class="fa-solid fa-trash-can"></i><br>Eliminar
+                                            <button type="button" class="btn btn-outline-danger btn-sm rounded-4 me-1">
+                                                <i class="fa-solid fa-trash-can"></i><br>
                                             </button>
-                                        @endcan --}}
+                                        @endcan
                                     </div>
                                     <td class="text-end">
                                         <div class="btn-group" role="group">
