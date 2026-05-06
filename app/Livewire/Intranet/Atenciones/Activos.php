@@ -95,7 +95,7 @@ class Activos extends Component
         $this->resetPage('bienesPage');
     }
 
-    Public $filtro_atendido,$filtro_enviadolima,$filtro_atendidou;
+    public $filtro_atendido,$filtro_enviadolima,$filtro_atendidou;
 
     public $user_login;
 

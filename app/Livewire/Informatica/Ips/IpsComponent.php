@@ -48,18 +48,64 @@ class IpsComponent extends Component
         $this->resetPage('ipsPage');
     }
 
+    public $filtro_estado; // 1 = asignado, 0 = libre, null = todos
+
+    public function filtrarTotal()
+    {
+        $this->resetFiltros();
+    }
+
+    public function filtrarAsignados()
+    {
+        $this->resetFiltros();
+        $this->filtro_estado = 1;
+    }
+
+    public function filtrarLibres()
+    {
+        $this->resetFiltros();
+        $this->filtro_estado = 0;
+    }
+
+    private function resetFiltros()
+    {
+        $this->search = null;
+        $this->filtro_estado = null;
+        $this->resetPage('ipsPage');
+    }
+
     public function render()
     {
-        $lista_activos = Ip::where('activo',1)
+        $lista_activos = Ip::where('activo', 1)
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('grupo', 'like', '%' . $this->search . '%')
                     ->orWhere('ip', 'like', '%' . $this->search . '%');
                 });
             })
+            ->when($this->filtro_estado !== null, fn($q) =>
+                $q->where('estado', $this->filtro_estado)
+            )
             ->paginate(20, ['*'], 'ipsPage');
 
+        $estadisticas = Ip::select('updated_user')
+            ->selectRaw("COUNT(*) as total")
+            ->selectRaw("SUM(estado = 1) as asignados")
+            ->where('activo', 1)
+            ->whereNotNull('updated_user') // 🔥 clave
+            ->groupBy('updated_user')
+            ->orderBy('updated_user')
+            ->get();
+
+        $estadisticas2 = Ip::where('activo', '1')
+            ->selectRaw("
+                COUNT(*) as total,
+                SUM(estado = '1') as asignados,
+                SUM(estado = '0') as libres
+            ")
+            ->first();
+
         return view('livewire.informatica.ips.ips-component',
-                    compact('lista_activos'));
+                    compact('lista_activos','estadisticas','estadisticas2'));
     }
 }
