@@ -126,8 +126,8 @@ Route::middleware('auth','can:procesos.informatica.firmasdigitales.index')->grou
     Route::get('pdf/informatica/token-acta/{id}', [FirmasdigitalesController::class, 'exportarPDF'])->name('pdf.informatica.token-acta');
 });
 
-Route::middleware('auth','can:procesos.informatica.ips.index')->group(function () {
-    Route::resource('ips', IpsController::class)->names('procesos.informatica.ips');
+Route::middleware('auth','can:mpfn.informatica.ips.index')->group(function () {
+    Route::resource('ips', IpsController::class)->names('mpfn.informatica.ips');
     // Route::get('pdf/informatica/firmapc-acta/{id}', [IpsController::class, 'exportarPDF'])->name('pdf.informatica.firmapc-acta');
 });
 Route::middleware('auth','can:procesos.informatica.spijweb.index')->group(function () {

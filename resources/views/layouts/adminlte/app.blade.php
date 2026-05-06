@@ -428,9 +428,9 @@
                                                 </a>
                                             </li>
                                         @endcan
-                                        @can('procesos.informatica.ips.index')
+                                        @can('mpfn.informatica.ips.index')
                                             <li class="nav-item">
-                                                <a class="nav-link ms-3 {{ request()->routeIs('procesos.informatica.ips.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.ips.index') }}">
+                                                <a class="nav-link ms-3 {{ request()->routeIs('mpfn.informatica.ips.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.informatica.ips.index') }}">
                                                     <i class="nav-icon fa-regular fa-circle"></i>
                                                     <p>IPs</p>
                                                 </a>
