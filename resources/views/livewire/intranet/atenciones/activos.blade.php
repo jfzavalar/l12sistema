@@ -15,8 +15,63 @@
 
     <div class="card">
         <div class="card-body">
-            <div class="row mt-3">
-                <div class="col-xl-5 col-gl-6 col-sm-12">
+            <div class="row">
+                <div class="col-xl-3 col-lg-4 col-sm-4">
+                    <div class="alert alert-primary" role="alert">
+                        <h6 class="card-title">
+                            <i class="fa-solid fa-chart-simple text-primary"></i> Total : 
+                        </h6>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5>{{ $estadisticas2->total }}</h5>
+                            <button class="btn btn-outline-primary btn-sm" wire:click="filtrarTotal">
+                                <i class="fa-solid fa-bars"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-4 col-sm-4">
+                    <div class="alert alert-info" role="alert">
+                        <h6 class="card-title">
+                            <i class="fa-solid fa-check-double"></i> Lima : 
+                        </h6>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5>{{ $estadisticas2->enviado_lima }}</h5>
+                            <button class="btn btn-outline-info btn-sm" wire:click="filtrarEnviadolima">
+                                <i class="fa-solid fa-bars"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-4 col-sm-4">
+                    <div class="alert alert-success" role="alert">
+                        <h6 class="card-title">
+                            <i class="fa-solid fa-check-double"></i> Atendido :
+                        </h6>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5>{{ $estadisticas2->atendidos }}</h5>
+                            <button class="btn btn-outline-success btn-sm" wire:click="filtrarAtendido">
+                                <i class="fa-solid fa-bars"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-4 col-sm-4">
+                    <div class="alert alert-danger" role="alert">
+                        <h6 class="card-title">
+                            <i class="fa-solid fa-check-double"></i> Pendientes : 
+                        </h6>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5> {{ $estadisticas2->no_atendidos }}</h5>
+                            <button class="btn btn-outline-danger btn-sm" wire:click="filtrarNoatendido">
+                                <i class="fa-solid fa-bars"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-xl-6 col-gl-6 col-sm-12">
                     <table class="table">
                         <thead class="table-dark">
                             <tr>
@@ -27,7 +82,7 @@
                         <tbody>
                             @forelse ($estadisticas as $item)
                                 @if ($item->created_user_cargo === "INFORMATICO" || $item->created_user_cargo === "SOPORTE")
-                                    <tr class="align-middle" style="font-size: 12px;">
+                                    <tr class="align-middle" style="font-size: 10px;">
                                         <th scope="row">{{ $item->created_user }}</th>
                                         <th style="white-space: nowrap;"></th>
                                         <td>
@@ -60,7 +115,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="col-xl-4 col-gl-6 col-sm-12">
+                <div class="col-xl-6 col-gl-6 col-sm-12">
                     <table class="table">
                         <thead class="table-dark">
                             <tr>
@@ -71,7 +126,7 @@
                         <tbody>
                             @forelse ($estadisticas as $item)
                                 @if ($item->created_user_cargo === "TERCERO")
-                                    <tr class="align-middle" style="font-size: 12px;">
+                                    <tr class="align-middle" style="font-size: 10px;">
                                         <th scope="row">{{ $item->created_user }}</th>
                                         <th style="white-space: nowrap;"></th>
                                         <td>
@@ -99,7 +154,7 @@
                     </table>
                 </div>
 
-                <div class="col-xl-3 col-gl-6 col-sm-12">
+                {{-- <div class="col-xl-3 col-gl-6 col-sm-12">
                     <div class="row">
                         <div class="col-xl-6 col-lg-4 col-sm-4">
                             <div class="alert alert-primary" role="alert">
@@ -110,7 +165,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5><i class="fa-solid fa-chart-simple text-primary"></i> {{ $estadisticas2->total }}</h5>
                                     <button class="btn btn-outline-primary btn-sm" wire:click="filtrarTotal">
-                                        <i class="fa-solid fa-bars"></i> Listar
+                                        <i class="fa-solid fa-bars"></i>
                                     </button>
                                 </div>
                             </div>
@@ -124,7 +179,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5><i class="fa-solid fa-check-double"></i> {{ $estadisticas2->enviado_lima }}</h5>
                                     <button class="btn btn-outline-info btn-sm" wire:click="filtrarEnviadolima">
-                                        <i class="fa-solid fa-bars"></i> Listar
+                                        <i class="fa-solid fa-bars"></i>
                                     </button>
                                 </div>
                             </div>
@@ -138,7 +193,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5><i class="fa-solid fa-check-double"></i> {{ $estadisticas2->atendidos }}</h5>
                                     <button class="btn btn-outline-success btn-sm" wire:click="filtrarAtendido">
-                                        <i class="fa-solid fa-bars"></i> Listar
+                                        <i class="fa-solid fa-bars"></i>
                                     </button>
                                 </div>
                             </div>
@@ -152,13 +207,13 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5><i class="fa-solid fa-check-double"></i> {{ $estadisticas2->no_atendidos }}</h5>
                                     <button class="btn btn-outline-danger btn-sm" wire:click="filtrarNoatendido">
-                                        <i class="fa-solid fa-bars"></i> Listar
+                                        <i class="fa-solid fa-bars"></i>
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
 
             <div class="table-responsive-xl">
