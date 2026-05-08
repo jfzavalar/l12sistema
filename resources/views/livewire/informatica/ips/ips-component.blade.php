@@ -2,49 +2,65 @@
     <div class="card">
         <div class="card-body">
             <div class="row">
-                <div class="col-xl-3">
+                <div class="col-xl-12">
                     <table class="table">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th scope="col">REDES</th>
-                                        <th scope="col" colspan="3" class="text-center">DISTRIBUCIÓN DE IPS</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse ($reportes as $item)
-                                        {{-- @if ($item->created_user_cargo === "INFORMATICO" || $item->created_user_cargo === "SOPORTE") --}}
-                                            <tr class="align-middle" style="font-size: 12px;">
-                                                <th scope="row">{{ $item->red }}</th>
-                                                <th style="white-space: nowrap;"></th>
-                                                <td>
-                                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                        <div class="input-group input-group-xs">
-                                                            <button class="input-group-text bg-primary text-white">
-                                                                <i class="fa-solid fa-check-double"></i> {{ $item->total }}
-                                                            </button>
-                                                            {{-- <label class="text-end" style="font-size: 10px;">{{ $item->total }}</label> --}}
-                                                        </div>
-                                                        <div class="input-group input-group-xs">
-                                                            <button class="input-group-text bg-success text-white">
-                                                                <i class="fa-solid fa-check me-2"></i> {{ $item->asignados }}
-                                                            </button>
-                                                            {{-- <label class="text-end" style="font-size: 10px;">{{ $item->asignados }}</label> --}}
-                                                        </div>
-                                                        <div class="input-group input-group-xs">
-                                                            <button class="input-group-text bg-danger text-white">
-                                                                <i class="fa-solid fa-triangle-exclamation me-2"></i> {{ $item->libres }}
-                                                            </button>
-                                                            {{-- <label class="text-end" style="font-size: 10px;">{{ $item->libres }}</label> --}}
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        {{-- @endif --}}
-                                    @empty
-                                        <tr class="align-middle"><td colspan="3">Sin registros.</td></tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
+                        <thead class="table-dark">
+                            <tr>
+                                <th scope="col">REDES</th>
+                                <th scope="col" class="text-center">
+                                    <button type="button" class="btn btn-primary btn-xs text-nowrap w-100" data-bs-toggle="modal" data-bs-target="#listaIpsModal" wire:click = "filtrarTotal('')">
+                                        <i class="fa-solid fa-check-double"></i>TOTAL
+                                    </button>
+                                </th>
+                                <th scope="col" class="text-center">
+                                    <button type="button" class="btn btn-success btn-xs text-nowrap w-100" data-bs-toggle="modal" data-bs-target="#listaIpsModal" wire:click = "filtrarAsignados('')">
+                                        <i class="fa-solid fa-check me-2"></i>ASIGNADOS
+                                    </button>
+                                </th>
+                                <th scope="col" class="text-center">
+                                    <button type="button" class="btn btn-danger btn-xs text-nowrap w-100" data-bs-toggle="modal" data-bs-target="#listaIpsModal" wire:click = "filtrarLibres('')">
+                                        <i class="fa-solid fa-triangle-exclamation me-2"></i>LIBRES
+                                    </button>
+                                </th>
+                                <th scope="col" class="text-center">
+                                    PCs
+                                </th>
+                                <th scope="col" class="text-center">
+                                    LAPTOPs
+                                </th>
+                                <th scope="col" class="text-center">
+                                    IMPRESORAS
+                                </th>
+                                <th scope="col" class="text-center">
+                                    FOTOCOPIADORAS
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($reportes as $item)
+                                <tr class="align-middle" style="font-size: 10px;">
+                                    <th scope="row">{{ $item->red }}</th>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-primary btn-xs text-nowrap w-100" data-bs-toggle="modal" data-bs-target="#listaIpsModal" wire:click = "filtrarTotal('{{ $item->red }}')">
+                                            <i class="fa-solid fa-check-double"></i> {{ $item->total }}
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-success btn-xs text-nowrap w-100" data-bs-toggle="modal" data-bs-target="#listaIpsModal" wire:click = "filtrarAsignados('{{ $item->red }}')">
+                                            <i class="fa-solid fa-check me-2"></i> {{ $item->asignados }}
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-danger btn-xs text-nowrap w-100" data-bs-toggle="modal" data-bs-target="#listaIpsModal" wire:click = "filtrarLibres('{{ $item->red }}')">
+                                            <i class="fa-solid fa-triangle-exclamation me-2"></i> {{ $item->libres }}
+                                        </button>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr class="align-middle"><td colspan="3">Sin registros.</td></tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
                 <div class="col">
                     <div class="row">
@@ -193,54 +209,84 @@
                         </div> --}}
                     </div>
 
-                    <div class="table-responsive-xl">
-                        {{-- <div class="input-group mb-3"> --}}
-                            <div class="row g-3">                   
-                                <div class="col-lg-4 col-sm-12">
-                                    <div class="input-group input-group-sm">
-                                        <span class="input-group-text input-group-text-xs fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
-                                        <select id="cmb_filtrored" class="form-select formselect-sm me-2"  wire:model.live="filtrored">
-                                            <option value="">RED</option>
-                                            @foreach ($lista_redes as $red)
-                                                <option value="{{ $red->red }}">{{ $red->red }}</option>
-                                            @endforeach
-                                        </select>
-                                        {{-- <input list="redes" id="txt_filtro_redes" class="form-control form-control-sm" placeholder="Filtrar Red" wire:model.live="filtro_red">
-                                        <datalist id="redes">
-                                            @foreach ($lista_redes as $red)
-                                                <option value="{{ $red->red }}">{{ $red->red }}</option>
-                                            @endforeach
-                                        </datalist> --}}
-                                        <select id="cmb_filtroinformatico" class="form-select formselect-sm" wire:model.live="filtroinformatico">
-                                            <option value="">INFORMATICO</option>
-                                            @foreach ($lista_informaticos as $informatico)
-                                                <option value="{{ $informatico->updated_user }}">{{ $informatico->updated_user }}</option>
-                                            @endforeach
-                                        </select>
-                                        {{-- <input list="informaticos" id="txt_filtro_redes" class="form-control form-control-sm" placeholder="Filtrar Informático" wire:model.live="filtro_informatico">
-                                        <datalist id="informaticos">
-                                            @foreach ($lista_informaticos as $informatico)
-                                                <option value="{{ $informatico->updated_user }}">{{ $informatico->updated_user }}</option>
-                                            @endforeach
-                                        </datalist> --}}
-                                    </div>
-                                </div>
+                    {{-- <div class="table-responsive-xl">
+                        
+                    </div> --}}
+                </div>
+            </div>          
+        </div>
+    </div>
 
-                                <div class="col-lg-8 col-sm-12">
-                                    <div class="input-group mb-3"> 
-                                        <input type="text" id="txtsearchpersonalatenciones2" class="form-control form-control-sm me-1" placeholder="Buscar por IP" wire:model.live="search">
-                                        {{-- <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3 me-1" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
-                                            <i class="fa-solid fa-file"></i> Nuevo
-                                        </button>
-                                        <button class="btn btn-success btn-sm rounded-3" wire:click="exportarExcel">
-                                            <i class="fa-solid fa-file-excel"></i> Exportar a Excel
-                                        </button> --}}
-                                    </div>
+    {{-- Modal Usuario del Equipo --}}
+    <div wire:ignore.self class="modal fade" id="verPersonalModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="verPersonalModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width:95%;">
+            <div class="modal-content">
+                <div class="modal-header bg-{{ $colorHeaderModal }}">
+                    <h1 class="modal-title fs-5" id="verPersonalModalLabel">
+                        <i class="fa-solid fa-file"></i> {{ $textoHeaderModal }}
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" wire:click="cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xl-12 col-sm-12">
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <fieldset class="border p-3 rounded mb-3" {{ $seccionPersona }} disabled>
+                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS PERSONALES</legend>
+                                        @include('livewire.partials.componentes.persona-datos')
+                                    </fieldset>
+                                </div>
+                                <div class="col-xl-6">
+                                    <fieldset class="border p-3 rounded mb-3" {{ $seccionPersonal }} disabled>
+                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS INSTITUCIONALES</legend>
+                                        @include('livewire.partials.componentes.personal-datos')
+                                    </fieldset>
+                                </div>
+                                {{-- <div class="col-xl-2">
+                                    <textarea id="textoCopiar" class="form-control" rows="10" style="font-size: 12px; white-space: nowrap; overflow-x: auto;" readonly>{{ $this->generarTexto() }}</textarea>
+                                    <button onclick="copiarTexto()" class="btn btn-dark btn-xs mb-1">
+                                        <i class="fa-solid fa-copy"></i> Copiar Datos
+                                    </button>                                 
+                                </div> --}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- Modal Ips --}}
+    <div wire:ignore.self class="modal fade" id="listaIpsModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="listaIpsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width:95%;">
+            <div class="modal-content">
+                <div class="modal-header bg-primary-subtle">
+                    <h1 class="modal-title fs-5" id="listaIpsModalLabel">
+                        <i class="fa-solid fa-file"></i> {{ $textoHeaderModal }}
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" wire:click="cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive-xl">
+
+                        <div class="row g-3">                   
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text input-group-text-xs fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
                                 </div>
                             </div>
-                        {{-- </div> --}}
+
+                            <div class="col-lg-10 col-sm-12">
+                                <div class="input-group mb-3"> 
+                                    <input type="text" id="txtsearchpersonalatenciones2" class="form-control form-control-sm me-1" placeholder="Buscar por IP" wire:model.live="search">
+                                </div>
+                            </div>
+                        </div>
+
                         <table class="table table-striped table-hover table-sm table-xsmall">
-                            <thead class="table-primary text-center align-middle">
+                            <thead class="table-dark text-center align-middle">
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">RED</th>
@@ -248,7 +294,7 @@
                                     <th scope="col">IP</th>
                                     <th scope="col">COD PATRIMONIAL</th>
                                     <th scope="col">BIEN INFORMATICO</th>
-                                    <th scope="col">DEPENDENCIA</th>
+                                    {{-- <th scope="col">DEPENDENCIA</th> --}}
                                     <th scope="col">ESTADO</th>
                                     <th scope="col">REGISTRADO POR</th>
                                     <th scope="col" colspan="2" class="table-darck"><i class="fa-solid fa-gears"></i></th>
@@ -265,7 +311,7 @@
                                         <td>{{ $item->ip}}</td>
                                         <td>{{ $item->codigo_patrimonial}}</td>
                                         <td>{{ $item->bien}}</td>
-                                        <td>{{ $item->ubicac_fisica}}</td>
+                                        {{-- <td>{{ $item->ubicac_fisica}}</td> --}}
                                         <td class="text-center">
                                             <span class="badge px-3 py-1 rounded-pill {{ $item->estado == 1 ? 'text-bg-success' : 'text-bg-danger' }}">
                                                 {{ $item->estado === '1' ? 'ASIGNADO' : 'LIBRE' }}
@@ -274,32 +320,20 @@
                                         <td>{{ $item->updated_user}}</td>
                                         <td class="text-end">
                                             <div class="btn-group" role="group">
-                                                <button type="button" class="btn btn-outline-success btn-sm rounded-4 me-1" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->personalatencion_id }})">
+                                                @if ( $item->codigo_patrimonial )
+                                                    <button type="button" class="btn btn-outline-dark btn-sm rounded-4 me-1" data-bs-toggle="modal" data-bs-target="#verPersonalModal" wire:click="ver_personal('{{ $item->codigo_patrimonial }}')">
+                                                        <i class="fa-solid fa-user-tie"></i>
+                                                    </button> 
+                                                @endif
+                                                {{-- <button type="button" class="btn btn-outline-success btn-sm rounded-4 me-1" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->personalatencion_id }})">
                                                     <i class="fa-solid fa-pen-to-square"></i><br>
-                                                </button> 
+                                                </button>
                                                 @can('mpfn.intranet.atenciones.destroy')
                                                     <button type="button" class="btn btn-outline-danger btn-sm rounded-4 me-1">
                                                         <i class="fa-solid fa-trash-can"></i><br>
                                                     </button>
-                                                @endcan
+                                                @endcan --}}
                                             </div>
-                                            <td class="text-end">
-                                                <div class="btn-group" role="group">
-                                                    {{-- <a type="button" class="btn btn-outline-naranja btn-xs" href="{{ route('pdf.informatica.atencion-acta', $item->personalatencion_id) }}" target="_blank">
-                                                        <i class="fa-solid fa-file-pdf"></i><br>Acta
-                                                    </a>
-                                                    @if ($item->utencioncreado === auth()->user()->datos)
-                                                        <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#pdf-cargar-component" wire:click="editar_pdf({{ $item->personalatencion_id }})">
-                                                            <i class="fa-solid fa-upload"></i><br>Cargar
-                                                        </button>
-                                                    @endif
-                                                    @if($item->ruta_documento)
-                                                        <a type="button" class="btn btn-outline-info btn-xs" href="{{ asset('storage/'.$item->ruta_documento) }}" target="_blank">
-                                                            <i class="fa-solid fa-file-signature"></i><br> Firmado
-                                                        </a>
-                                                    @endif --}}
-                                                </div>
-                                            </td>
                                         </td>
                                     </tr>                           
                                 @empty
@@ -322,7 +356,9 @@
                         </table>
                     </div>
                 </div>
-            </div>          
+                <div class="modal-footer">
+                </div>
+            </div>
         </div>
     </div>
 </div>

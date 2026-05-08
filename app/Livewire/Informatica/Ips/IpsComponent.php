@@ -3,6 +3,9 @@
 namespace App\Livewire\Informatica\Ips;
 
 use App\Models\Ip;
+use App\Models\Patrimonios_biene;
+use App\Models\Persona;
+use App\Models\Personale;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
@@ -40,6 +43,48 @@ class IpsComponent extends Component
     // Variable de función Guardar o Actualizar
     public $funcionGuardarActualizar;
 
+    public $persona_id,
+            $dni,
+            $datos,
+            $appaterno,
+            $apmaterno,
+            $nombres,
+            $genero,
+            $estadocivil,
+            $fechanacimiento,
+            $celpersonal,
+            $correopersonal,
+            $foto,$fotoactual,$inputFileKey,
+            $activo,
+            $created_user,
+            $updated_user,
+            $created_at,
+            $updated_at;
+
+    public $personal_id,
+            $regimen,
+            $tipo_regimen,
+            $cargo,
+            $cargo_condicion,
+
+            $codsedeorigen,
+            $sedeorigen,
+            $coddependenciaorigen,
+            $dependenciaorigen,
+            $coddespachoorigen,
+            $despachoorigen,
+
+            $codsededestino,
+            $sededestino,
+            $coddependenciadestino,
+            $dependenciadestino,
+            $coddespachodestino,
+            $despachodestino,
+            
+            $celinstitucional,            
+            $correoinstitucional,
+            $tipo_documento;
+
     // Variables de búsqueda
     public $search, $searchi,$searchhistorial, $searchpersonas, $searchsedes,$searchdependencias,$searchdespachos,$searchcargos,
             $searchservicios,$searchincidenciasolicitud,$searchbienes;
@@ -53,21 +98,27 @@ class IpsComponent extends Component
 
     
 
-    public function filtrarTotal()
+    public function filtrarTotal($value)
     {
         $this->resetFiltros();
+        $this->filtrored = trim($value);
+        $this->resetPage(); // si usas paginación
     }
 
-    public function filtrarAsignados()
+    public function filtrarAsignados($value)
     {
         $this->resetFiltros();
+        $this->filtrored = trim($value);
         $this->filtro_estado = 1;
+        $this->resetPage(); // si usas paginación
     }
 
-    public function filtrarLibres()
+    public function filtrarLibres($value)
     {
         $this->resetFiltros();
+        $this->filtrored = trim($value);
         $this->filtro_estado = 0;
+        $this->resetPage(); // si usas paginación
     }
 
     private function resetFiltros()
@@ -136,5 +187,68 @@ class IpsComponent extends Component
 
         return view('livewire.informatica.ips.ips-component',
                     compact('lista_activos','reportes','estadisticas','estadisticas2','lista_redes','lista_informaticos'));
+    }
+
+    public function cerrar()
+    {
+
+        // $this->dispatch(
+        //         'alerta-cancelar',
+        //         titulo: 'Cancelar',
+        //         mensaje: 'Se canceló la operación.',
+        //         tipo: 'error'
+        //     );
+    }
+
+    public function ver_personal($codigo_patrimonial)
+    {
+
+        $this->mostrarBtnBuscarDni = "d-none";
+        $this->mostrarcontroles = "d-none";
+
+        $this->colorHeaderModal = "primary-subtle";
+        $this->textoHeaderModal = "USUARIO DEL EQUIPO INFORMATICO";
+        $this->colorGuardarActualizar = "primary";
+        $this->textoGuardarActualizar = "Guardar";
+        $this->colorAgregar = "outline-primary";
+
+        $ibien = Patrimonios_biene::select('usuario_dni')->where('activo',1)->where('codigo_patrimonial',$codigo_patrimonial)->first();
+
+        // ===== DATOS PERSONA =====
+        $ipersona = Persona::where('dni', $ibien->usuario_dni)->where('activo','1')->firstOrFail();
+        $this->persona_id = $ipersona->id;
+        $this->dni = $ipersona->dni;
+        $this->nombres = $ipersona->nombres;
+        $this->appaterno = $ipersona->appaterno;
+        $this->apmaterno = $ipersona->apmaterno;
+        $this->celpersonal = $ipersona->celpersonal;
+        $this->correopersonal = $ipersona->correopersonal;
+        $this->datos = $ipersona->datos;
+
+        $this->fotoactual = $ipersona->foto;
+
+        // // ===== DATOS PERSONAL =====
+        $ipersonal = Personale::where('persona_dni', $ibien->usuario_dni)->where('activo','1')->firstOrFail();
+
+        $this->personal_id = $ipersonal->id;
+        $this->regimen = $ipersonal->regimen;
+        $this->tipo_regimen = $ipersonal->tipo_regimen;
+        $this->cargo = $ipersonal->cargo;
+        $this->cargo_condicion = $ipersonal->cargo_condicion;
+        $this->codsedeorigen = $ipersonal->codsedeorigen;
+        $this->sedeorigen = $ipersonal->sedeorigen;
+        $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
+        $this->dependenciaorigen = $ipersonal->dependenciaorigen;
+        $this->coddespachoorigen = $ipersonal->coddespachoorigen;
+        $this->despachoorigen = $ipersonal->despachoorigen;
+
+        $this->codsededestino = $ipersonal->codsededestino;
+        $this->sededestino = $ipersonal->sededestino;
+        $this->coddependenciadestino = $ipersonal->coddependenciadestino;
+        $this->dependenciadestino = $ipersonal->dependenciadestino;
+        $this->coddespachodestino = $ipersonal->coddespachodestino;
+        $this->despachodestino = $ipersonal->despachodestino;
+
+        $this->celinstitucional = $ipersonal->celinstitucional;
     }
 }
