@@ -657,6 +657,9 @@ class Activos extends Component
                         ->first();
 
                     $iip->update([
+                        'codigo' => $this->cod,
+                        'codigo_patrimonial' => $this->cod_patrimonial,
+                        'bien' => $this->datos_bien,
                         'estado' => '1',
                         'updated_user' => $usuario,
                     ]);
@@ -898,6 +901,27 @@ class Activos extends Component
                     'activo' => "1",
                     'updated_user' => $usuario,
                 ]);
+
+                if ($this->bien_id) {
+                    $ibien = PatrimoniosBiene::where('id', $this->bien_id)
+                        ->where('activo','1')
+                        ->first();
+
+                    $ibien->update([
+                        'ip' => $this->bien_ip,
+                        'updated_user' => $usuario,
+                    ]);
+
+                    $iip = Ip::where('ip', $this->bien_ip)
+                        ->where('activo','1')
+                        ->first();
+
+                    $iip->update([
+                        'estado' => '1',
+                        'updated_user' => $usuario,
+                    ]);
+
+                }
 
             });
 

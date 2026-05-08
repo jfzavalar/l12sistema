@@ -81,30 +81,19 @@ class IpsComponent extends Component
 
     public function render()
     {
-        $lista_activos = Ip::leftJoin('patrimonios_bienes','ips.ip','=','patrimonios_bienes.ip')
-            ->select('ips.*',
-                'patrimonios_bienes.codigo_patrimonial',
-                'patrimonios_bienes.descripcion',
-                'patrimonios_bienes.ubicac_fisica')
-            ->where('ips.activo', 1)
+        $lista_activos = Ip::where('ips.activo', 1)
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('ips.grupo', 'like', '%' . $this->search . '%')
-                    ->orWhere('ips.ip', 'like', '%' . $this->search . '%');
+                    $q->where('grupo', 'like', '%' . $this->search . '%')
+                    ->orWhere('ip', 'like', '%' . $this->search . '%');
                 });
             })
             ->when($this->filtro_estado !== null, fn($q) =>
-                $q->where('ips.estado', $this->filtro_estado)
+                $q->where('estado', $this->filtro_estado)
             )
-            ->when($this->filtrored, fn($q) => $q->where('ips.red', $this->filtrored))
-            ->when($this->filtroinformatico, fn($q) => $q->where('ips.updated_user', $this->filtroinformatico))
-            // ->when($this->filtrored !== null, fn($q) =>
-            //     $q->where('ips.red', $this->filtrored)
-            // )
-            // ->when($this->filtroinformatico !== null, fn($q) =>
-            //     $q->where('ips.updated_user', $this->filtroinformatico)
-            // )
-            ->orderBy('ips.ip')
+            ->when($this->filtrored, fn($q) => $q->where('red', $this->filtrored))
+            ->when($this->filtroinformatico, fn($q) => $q->where('updated_user', $this->filtroinformatico))
+            ->orderBy('ip')
             ->paginate(20, ['*'], 'ipsPage');
         
         $reportes = Ip::select('red')

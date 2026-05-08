@@ -20,21 +20,21 @@
                                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                         <div class="input-group input-group-xs">
                                                             <button class="input-group-text bg-primary text-white">
-                                                                Total
+                                                                <i class="fa-solid fa-check-double"></i> {{ $item->total }}
                                                             </button>
-                                                            <label class="form-control form-control-xs text-end">{{ $item->total }}</label>
+                                                            {{-- <label class="text-end" style="font-size: 10px;">{{ $item->total }}</label> --}}
                                                         </div>
                                                         <div class="input-group input-group-xs">
                                                             <button class="input-group-text bg-success text-white">
-                                                                <i class="fa-solid fa-check me-2"></i>
+                                                                <i class="fa-solid fa-check me-2"></i> {{ $item->asignados }}
                                                             </button>
-                                                            <label class="form-control form-control-xs text-end">{{ $item->asignados }}</label>
+                                                            {{-- <label class="text-end" style="font-size: 10px;">{{ $item->asignados }}</label> --}}
                                                         </div>
                                                         <div class="input-group input-group-xs">
                                                             <button class="input-group-text bg-danger text-white">
-                                                                <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                                                                <i class="fa-solid fa-triangle-exclamation me-2"></i> {{ $item->libres }}
                                                             </button>
-                                                            <label class="form-control form-control-xs text-end">{{ $item->libres }}</label>
+                                                            {{-- <label class="text-end" style="font-size: 10px;">{{ $item->libres }}</label> --}}
                                                         </div>
                                                     </div>
                                                 </td>
@@ -48,7 +48,7 @@
                 </div>
                 <div class="col">
                     <div class="row">
-                        <div class="col-xl-6 col-gl-6 col-sm-12">
+                        {{-- <div class="col-xl-6 col-gl-6 col-sm-12">
                             <table class="table">
                                 <thead class="table-dark">
                                     <tr>
@@ -58,7 +58,7 @@
                                 </thead>
                                 <tbody>
                                     @forelse ($estadisticas as $item)
-                                        {{-- @if ($item->created_user_cargo === "INFORMATICO" || $item->created_user_cargo === "SOPORTE") --}}
+                                        @if ($item->created_user_cargo === "INFORMATICO" || $item->created_user_cargo === "SOPORTE")
                                             <tr class="align-middle" style="font-size: 12px;">
                                                 <th scope="row">{{ $item->updated_user }}</th>
                                                 <th style="white-space: nowrap;"></th>
@@ -70,7 +70,7 @@
                                                             </button>
                                                             <label class="form-control form-control-xs text-end">{{ $item->asignados }}</label>
                                                         </div>
-                                                        {{-- <div class="input-group input-group-xs">
+                                                        <div class="input-group input-group-xs">
                                                             <button class="input-group-text bg-danger text-white">
                                                                 <i class="fa-solid fa-triangle-exclamation me-2"></i>Pendientes
                                                             </button>
@@ -81,17 +81,17 @@
                                                                 <i class="fa-solid fa-envelope"></i>Lima
                                                             </button>
                                                             <label class="form-control form-control-xs text-end">{{ $item->enviado_lima }}</label>
-                                                        </div> --}}
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>
-                                        {{-- @endif --}}
+                                        @endif
                                     @empty
                                         <tr class="align-middle"><td colspan="3">Sin registros.</td></tr>
                                     @endforelse
                                 </tbody>
                             </table>
-                        </div>
+                        </div> --}}
                         {{-- <div class="col-xl-4 col-gl-6 col-sm-12">
                             <table class="table">
                                 <thead class="table-dark">
@@ -264,7 +264,7 @@
                                         <td>{{ $item->grupo }}</td>
                                         <td>{{ $item->ip}}</td>
                                         <td>{{ $item->codigo_patrimonial}}</td>
-                                        <td>{{ $item->descripcion}}</td>
+                                        <td>{{ $item->bien}}</td>
                                         <td>{{ $item->ubicac_fisica}}</td>
                                         <td class="text-center">
                                             <span class="badge px-3 py-1 rounded-pill {{ $item->estado == 1 ? 'text-bg-success' : 'text-bg-danger' }}">
