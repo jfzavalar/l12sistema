@@ -2,37 +2,25 @@
     <div class="card">
         <div class="card-body">
             <div class="row">
-                <div class="col-xl-12">
+                <div class="col-xl-3">
                     <table class="table">
                         <thead class="table-dark">
                             <tr>
                                 <th scope="col">REDES</th>
                                 <th scope="col" class="text-center">
-                                    <button type="button" class="btn btn-primary btn-xs text-nowrap w-100" data-bs-toggle="modal" data-bs-target="#listaIpsModal" wire:click = "filtrarTotal('')">
+                                    <button type="button" class="btn btn-primary btn-xs text-nowrap w-100" wire:click = "filtrarTotal('')">
                                         <i class="fa-solid fa-check-double"></i>TOTAL
                                     </button>
                                 </th>
                                 <th scope="col" class="text-center">
-                                    <button type="button" class="btn btn-success btn-xs text-nowrap w-100" data-bs-toggle="modal" data-bs-target="#listaIpsModal" wire:click = "filtrarAsignados('')">
-                                        <i class="fa-solid fa-check me-2"></i>ASIGNADOS
+                                    <button type="button" class="btn btn-success btn-xs text-nowrap w-100" wire:click = "filtrarAsignados('')">
+                                        <i class="fa-solid fa-check me-2"></i>COPADO
                                     </button>
                                 </th>
                                 <th scope="col" class="text-center">
-                                    <button type="button" class="btn btn-danger btn-xs text-nowrap w-100" data-bs-toggle="modal" data-bs-target="#listaIpsModal" wire:click = "filtrarLibres('')">
+                                    <button type="button" class="btn btn-danger btn-xs text-nowrap w-100" wire:click = "filtrarLibres('')">
                                         <i class="fa-solid fa-triangle-exclamation me-2"></i>LIBRES
                                     </button>
-                                </th>
-                                <th scope="col" class="text-center">
-                                    PCs
-                                </th>
-                                <th scope="col" class="text-center">
-                                    LAPTOPs
-                                </th>
-                                <th scope="col" class="text-center">
-                                    IMPRESORAS
-                                </th>
-                                <th scope="col" class="text-center">
-                                    FOTOCOPIADORAS
                                 </th>
                             </tr>
                         </thead>
@@ -41,17 +29,17 @@
                                 <tr class="align-middle" style="font-size: 10px;">
                                     <th scope="row">{{ $item->red }}</th>
                                     <td>
-                                        <button type="button" class="btn btn-outline-primary btn-xs text-nowrap w-100" data-bs-toggle="modal" data-bs-target="#listaIpsModal" wire:click = "filtrarTotal('{{ $item->red }}')">
+                                        <button type="button" class="btn btn-outline-primary btn-xs text-nowrap w-100 d-flex justify-content-between align-items-center" wire:click = "filtrarTotal('{{ $item->red }}')">
                                             <i class="fa-solid fa-check-double"></i> {{ $item->total }}
                                         </button>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-outline-success btn-xs text-nowrap w-100" data-bs-toggle="modal" data-bs-target="#listaIpsModal" wire:click = "filtrarAsignados('{{ $item->red }}')">
+                                        <button type="button" class="btn btn-outline-success btn-xs text-nowrap w-100 d-flex justify-content-between align-items-center" wire:click = "filtrarAsignados('{{ $item->red }}')">
                                             <i class="fa-solid fa-check me-2"></i> {{ $item->asignados }}
                                         </button>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-outline-danger btn-xs text-nowrap w-100" data-bs-toggle="modal" data-bs-target="#listaIpsModal" wire:click = "filtrarLibres('{{ $item->red }}')">
+                                        <button type="button" class="btn btn-outline-danger btn-xs text-nowrap w-100 d-flex justify-content-between align-items-center" wire:click = "filtrarLibres('{{ $item->red }}')">
                                             <i class="fa-solid fa-triangle-exclamation me-2"></i> {{ $item->libres }}
                                         </button>
                                     </td>
@@ -209,9 +197,91 @@
                         </div> --}}
                     </div>
 
-                    {{-- <div class="table-responsive-xl">
-                        
-                    </div> --}}
+                    <div class="table-responsive-xl">
+                        <div class="row g-3">                   
+                            <div class="col-lg-2 col-sm-12">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text input-group-text-xs fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-10 col-sm-12">
+                                <div class="input-group mb-3"> 
+                                    <input type="text" id="txtsearchpersonalatenciones2" class="form-control form-control-sm me-1" placeholder="Buscar por IP" wire:model.live="search">
+                                </div>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped table-hover table-sm table-xsmall">
+                            <thead class="table-dark text-center align-middle">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">RED</th>
+                                    <th scope="col">GRUPO</th>
+                                    <th scope="col">IP</th>
+                                    <th scope="col">COD PATRIMONIAL</th>
+                                    <th scope="col">BIEN INFORMATICO</th>
+                                    {{-- <th scope="col">DEPENDENCIA</th> --}}
+                                    <th scope="col">ESTADO</th>
+                                    <th scope="col">REGISTRADO POR</th>
+                                    <th scope="col" colspan="2" class="table-darck"><i class="fa-solid fa-gears"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody class="align-middle">
+                                @forelse ($lista_activos as $item)
+                                    <tr>
+                                        <th class="text-center">
+                                            <i class="fa-solid fa-desktop {{ $item->estado === '1' ? 'text-success' : 'text-danger' }}"></i> {{ $loop->iteration }}
+                                        </th>
+                                        <th>{{ $item->red }}</th>
+                                        <td>{{ $item->grupo }}</td>
+                                        <td>{{ $item->ip}}</td>
+                                        <td>{{ $item->codigo_patrimonial}}</td>
+                                        <td>{{ $item->bien}}</td>
+                                        {{-- <td>{{ $item->ubicac_fisica}}</td> --}}
+                                        <td class="text-center">
+                                            <span class="badge px-3 py-1 rounded-pill {{ $item->estado == 1 ? 'text-bg-success' : 'text-bg-danger' }}">
+                                                {{ $item->estado === '1' ? 'ASIGNADO' : 'LIBRE' }}
+                                            </span>
+                                        </td>
+                                        <td>{{ $item->updated_user}}</td>
+                                        <td class="text-end">
+                                            <div class="btn-group" role="group">
+                                                @if ( $item->codigo_patrimonial )
+                                                    <button type="button" class="btn btn-outline-dark btn-sm rounded-4 me-1" data-bs-toggle="modal" data-bs-target="#verPersonalModal" wire:click="ver_personal('{{ $item->codigo_patrimonial }}')">
+                                                        <i class="fa-solid fa-user-tie"></i>
+                                                    </button> 
+                                                @endif
+                                                {{-- <button type="button" class="btn btn-outline-success btn-sm rounded-4 me-1" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->personalatencion_id }})">
+                                                    <i class="fa-solid fa-pen-to-square"></i><br>
+                                                </button>
+                                                @can('mpfn.intranet.atenciones.destroy')
+                                                    <button type="button" class="btn btn-outline-danger btn-sm rounded-4 me-1">
+                                                        <i class="fa-solid fa-trash-can"></i><br>
+                                                    </button>
+                                                @endcan --}}
+                                            </div>
+                                        </td>
+                                    </tr>                           
+                                @empty
+                                    <tr>
+                                        <td colspan="12" class="text-center">
+                                            <div class="alert alert-danger" role="alert">
+                                                No se encontraron resultados!
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="13">
+                                        {{ $lista_activos->links() }}
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
             </div>          
         </div>
