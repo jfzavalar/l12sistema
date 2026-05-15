@@ -79,30 +79,26 @@
                 <form wire:submit.prevent="{{ $funcionGuardarActualizar }}">
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-xl-2 col-sm-12">
-                                <fieldset class="border p-3 rounded text-center mb-3" {{ $seccionFoto }} disabled>
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">FOTO DE PERFIL</legend>
-                                    @include('livewire.rrhh.personal.partials.datos-foto-component')
-                                </fieldset>
-                            </div>
-
-                            <div class="col-xl-10 col-sm-12">
+                            <div class="col-xl-12 col-sm-12">
                                 <div class="row">
-                                    <div class="col-xl-4">
-                                        <fieldset class="border p-3 rounded mb-3" {{ $seccionPersona }} disabled>
+                                    <div class="col-xl-6">
+                                        <fieldset class="border p-3 rounded mb-3" {{ $seccionPersona }}>
                                             <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS PERSONALES</legend>
-                                            @include('livewire.rrhh.personal.partials.datos-personales-component')
+                                            @include('livewire.partials.componentes.persona-datos')
                                         </fieldset>
-                                        <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-personal-component">
-                                            <i class="fa-solid fa-magnifying-glass"></i> Buscar personal
-                                        </button>
                                     </div>
-                                    <div class="col-xl-8">
-                                        <fieldset class="border p-3 rounded mb-3" {{ $seccionPersonal }} disabled>
+                                    <div class="col-xl-6">
+                                        <fieldset class="border p-3 rounded mb-3" {{ $seccionPersonal }}>
                                             <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS INSTITUCIONALES</legend>
-                                            @include('livewire.rrhh.personal.partials.datos-institucionales-component')
+                                            @include('livewire.partials.componentes.personal-datos')
                                         </fieldset>
                                     </div>
+                                    {{-- <div class="col-xl-2">
+                                        <textarea id="textoCopiar" class="form-control" rows="10" style="font-size: 12px; white-space: nowrap; overflow-x: auto;" readonly>{{ $this->generarTexto() }}</textarea>
+                                        <button onclick="copiarTexto()" class="btn btn-dark btn-xs mb-1">
+                                            <i class="fa-solid fa-copy"></i> Copiar Datos
+                                        </button>                                 
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -116,7 +112,7 @@
                                             <div class="row">
                                                 <div class="col-xl-6">
                                                     <label for="txtanexo" class="fw-bold fs-6">ANEXO:</label>
-                                                    <div class="input-group">
+                                                    <div class="input-group input-group-xs">
                                                         <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-sedes-component">
                                                             <i class="fa-solid fa-magnifying-glass"></i> Buscar anexo
                                                         </button>

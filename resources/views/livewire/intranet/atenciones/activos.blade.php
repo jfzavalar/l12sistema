@@ -88,19 +88,19 @@
                                         <td>
                                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                 <div class="input-group input-group-xs">
-                                                    <button class="input-group-text bg-success text-white">
+                                                    <button class="input-group-text bg-success text-white" wire:click="filtrarAtendido('{{ $item->created_user}}')">
                                                         <i class="fa-solid fa-check me-2"></i>Atendidos
                                                     </button>
                                                     <label class="form-control form-control-xs text-end">{{ $item->atendidos }}</label>
                                                 </div>
                                                 <div class="input-group input-group-xs">
-                                                    <button class="input-group-text bg-danger text-white">
+                                                    <button class="input-group-text bg-danger text-white" wire:click="filtrarNoatendido('{{ $item->created_user}}')">
                                                         <i class="fa-solid fa-triangle-exclamation me-2"></i>Pendientes
                                                     </button>
                                                     <label class="form-control form-control-xs text-end">{{ $item->no_atendidos }}</label>
                                                 </div>
                                                 <div class="input-group input-group-xs">
-                                                    <button class="input-group-text bg-info text-white">
+                                                    <button class="input-group-text bg-info text-white" wire:click="filtrarEnviadolima('{{ $item->created_user}}')">
                                                         <i class="fa-solid fa-envelope"></i>Lima
                                                     </button>
                                                     <label class="form-control form-control-xs text-end">{{ $item->enviado_lima }}</label>
@@ -132,7 +132,7 @@
                                         <td>
                                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                 <div class="input-group input-group-xs">
-                                                    <button class="input-group-text bg-success text-white">
+                                                    <button class="input-group-text bg-success text-white" wire:click="filtrarAtendido('{{ $item->created_user}}')">
                                                         <i class="fa-solid fa-check me-2"></i>Atendidos
                                                     </button>
                                                     <label class="form-control form-control-xs text-end">{{ $item->atendidos }}</label>
@@ -634,7 +634,7 @@
                                     <div class="row">
                                         <div class="col-12 col-xl">
                                             <label for="txt_sol_res" class="fw-bold fs-6">SOLUCIÓN / RESPUESTA</label>
-                                            <input type="text" id="txt_sol_res" class="form-control form-control-xs text-uppercase" wire:model="respuesta">
+                                            <input type="text" id="txt_sol_res" class="form-control form-control-xs" wire:model="respuesta">
                                         </div>
                                         @if (in_array($this->servicio_id, [9, 11, 19]) || in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA", "SERVIDORES"]))
                                             <div class="col-12 col-xl">

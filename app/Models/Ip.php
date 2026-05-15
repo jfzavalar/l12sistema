@@ -9,6 +9,9 @@ class Ip extends Model
     protected $fillable = [
         'grupo',
         'ip',
+        'codigo',
+        'codigo_patrimonial',
+        'bien',
         'estado',
         'activo',
         'created_user',

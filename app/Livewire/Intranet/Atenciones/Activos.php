@@ -219,7 +219,7 @@ class Activos extends Component
         }
     }
 
-    public $filtro_anio,$filtro_mes;
+    public $filtro_anio,$filtro_mes,$filtroinformatico;
 
     public function mount()
     {
@@ -228,41 +228,46 @@ class Activos extends Component
     }
 
     
-    public function filtrarTotal()
+    public function filtrarTotal($value)
     {
         $this->resetFiltros();
+        $this->filtroinformatico = trim($value);
     }
-    public function filtrarAtendido()
+    public function filtrarAtendido($value)
     {
         $this->resetFiltros();
         $this->filtro_atendido = 'SI';
+        $this->filtroinformatico = trim($value);
     }
-    public function filtrarNoatendido()
+    public function filtrarNoatendido($value)
     {
         $this->resetFiltros();
         $this->filtro_atendido = 'NO';
+        $this->filtroinformatico = trim($value);
     }
-    public function filtrarEnviadolima()
+    public function filtrarEnviadolima($value)
     {
         $this->resetFiltros();
         $this->filtro_enviadolima = 'SI';
+        $this->filtroinformatico = trim($value);
     }
-    public function filtrarAtendidou()
-    {
-        $this->resetFiltros();
-        $this->filtro_atendidou = 'SI';
-    }
-    public function filtrarNoatendidou()
-    {
-        $this->resetFiltros();
-        $this->filtro_atendidou = 'NO';
-    }
+    // public function filtrarAtendidou()
+    // {
+    //     $this->resetFiltros();
+    //     $this->filtro_atendidou = 'SI';
+    // }
+    // public function filtrarNoatendidou()
+    // {
+    //     $this->resetFiltros();
+    //     $this->filtro_atendidou = 'NO';
+    // }
     private function resetFiltros()
     {
         $this->search = null;
         $this->filtro_atendido = null;
         $this->filtro_enviadolima = null; 
         $this->filtro_atendidou = null;
+        $this->filtroinformatico = null;
         $this->resetPage('atencionesPage');
     }
 
@@ -491,10 +496,6 @@ class Activos extends Component
         return Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
             ->join('personales_atenciones','personas.id','=','personales_atenciones.persona_id')
 
-            // 🔥 FILTRO AÑO Y MES ACTUAL
-            // ->whereYear('personales_atenciones.created_at', Carbon::now()->year)
-            // ->whereMonth('personales_atenciones.created_at', Carbon::now()->month)
-
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('personas.dni', 'like', '%' . $this->search . '%')
@@ -502,14 +503,15 @@ class Activos extends Component
                 });
             })
             ->when($this->filtro_atendido, fn($q) =>
-                $q->where('atendido', $this->filtro_atendido)
+                $q->where('personales_atenciones.atendido', $this->filtro_atendido)
             )
             ->when($this->filtro_enviadolima, fn($q) =>
-                $q->where('enviado_lima', $this->filtro_enviadolima)
+                $q->where('personales_atenciones.enviado_lima', $this->filtro_enviadolima)
             )
             ->when($this->filtro_atendidou, fn($q) =>
-                $q->where('atendido', $this->filtro_atendidou)
+                $q->where('personales_atenciones.atendido', $this->filtro_atendidou)
             )
+            ->when($this->filtroinformatico, fn($q) => $q->where('personales_atenciones.updated_user', $this->filtroinformatico))
             // 🔥 FILTRO AÑO
             ->when($this->filtro_anio, function ($q) {
                 $q->whereYear('personales_atenciones.created_at', $this->filtro_anio);
