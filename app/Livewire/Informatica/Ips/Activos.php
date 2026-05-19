@@ -119,9 +119,12 @@ class Activos extends Component
             })
             ->when($this->filtro_ip !== null, function ($query) {
                 if ($this->filtro_ip === "1") {
+
                     // Con IP
                     $query->whereNotNull('ip');
+
                 } elseif ($this->filtro_ip === "0") {
+
                     // Sin IP
                     $query->whereNull('ip');
                 }
@@ -133,7 +136,9 @@ class Activos extends Component
                     ->orWhere('ip','like','%' . $this->searcha . '%');
                 });
             })
-            ->orderBy('desc_usuario', 'desc')
+
+            ->orderByRaw('INET_ATON(ip) DESC')
+
             ->paginate();
 
         $lista_sedes = Tbl_sede::select('codsedeofi','nomsedeofi')

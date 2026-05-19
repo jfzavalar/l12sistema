@@ -21,7 +21,35 @@
                     <div class="col-xl-4">
                         <fieldset class="border p-3 rounded mb-3">
                             {{-- <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center text-decoration-underline">DATOS PERSONALES</legend> --}}
-                            @include('livewire.partials.voluntarios-datos-personales')
+                            <div class="row">
+                                <div class="col-xl-4 col-lg-6 col-sm-12">
+                                    <label for="txt_dni" class="fw-bold fs-6">DNI</label>
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-{{ $colorGuardarActualizar}} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-personal-component">
+                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                        </button>
+                                        <input type="text" id="txt_dni" class="form-control form-control-xs" wire:model.live="dni" maxlength="8" required>
+                                    </div>
+                                    @error('dni')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                                <div class="col-xl-8 col-lg-6 col-sm-12">
+                                    <label for="txt_datos" class="fw-bold fs-6">Voluntario</label>
+                                    <input type="text" id="txt_datos" class="form-control form-control-xs text-uppercase" wire:model="datos" disabled>
+                                    @error('datos')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-sm-12">
+                                    <label for="txt_celular_personal" class="fw-bold fs-6">Celular personal</label>
+                                    <input type="text" id="txt_celular_personal" class="form-control form-control-xs" wire:model="cel_personal" disabled>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-sm-12">
+                                    <label for="txt_correo_personal" class="fw-bold fs-6">Correo personal</label>
+                                    <input type="text" id="txt_correo_personal" class="form-control form-control-xs text-lowercase" wire:model="correo_personal" disabled>
+                                </div>
+                            </div> 
                         </fieldset> 
                     </div>
                     <div class="col-xl-8">
@@ -135,83 +163,79 @@
     </div>
 
     <!-- Modal Nuevo-Editar-->
-    <div class="modal fade @if($modal_abierto_personal) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
-        {{-- <div class="modal-dialog modal-xl" style="max-width:90%;"> --}}
-        <div class="modal-dialog modal-xl" style="max-width:90%;">
-            <div class="modal-content">
-                <form wire:submit.prevent="{{ $btn_guardar_actualizar }}">
-                    <div class="modal-header bg-{{ $modal_header_color }}">
-                        <h1 class="modal-title fs-5" id="NuevoEditarModalLabel">
-                            @if ($modal_header_titulo === "nuevo")
-                                <i class="fa-solid fa-file"></i> <i class="fa-solid fa-user-clock"></i> NUEVO REGISTRO DE ASISTENCIA
-                            @elseif($modal_header_titulo === "editar")
-                                <i class="fa-solid fa-pen-to-square"></i> <i class="fa-solid fa-user-clock"></i> EDITAR REGISTRO DE ASISTENCIA
-                            @endif
+
+
+    <!-- Modal buscar personal -->
+    <div wire:ignore.self class="modal fade" id="buscar-personal-component" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="buscar-personal-componentLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content rounded-5">
+                <form action="">
+                    <div class="modal-header bg-{{ $colorHeaderModal }}">
+                        <h1 class="modal-title fs-5" id="buscar-personal-componentLabel">
+                            <i class="fa-solid fa-magnifying-glass"></i> BUSCAR VOLUNTARIOS
                         </h1>
-                        <button type="button" class="btn-close" wire:click="cerrar"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="row">
-                            {{-- <div class="col-xl-3 col-sm-12">
-                                <fieldset class="border p-3 rounded text-center mb-3">
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">FOTO DE PERFIL</legend>
-                                    @include('livewire.partials.personal-datos-foto')
-                                </fieldset>
-                            </div> --}}
-                            <div class="col-xl-12 col-sm-12">
-                                {{-- <fieldset class="border p-3 rounded mb-3" disabled>
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center text-decoration-underline">DATOS INSTITUCIONALES</legend>
-                                    @include('livewire.partials.personal-datos-institucionales-mir')
-                                </fieldset> --}}
-
-                                {{-- @include('livewire.partials.personal-datos-institucionales-mir') --}}
-                                
+                        <div class="table-responsive-xl">
+                            <form>
                                 <div class="row">
-                                    <div class="col-xl-4">
-                                        <fieldset class="border p-3 rounded mb-3">
-                                            {{-- <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center text-decoration-underline">DATOS PERSONALES</legend> --}}
-                                            @include('livewire.partials.voluntarios-datos-personales')
-                                        </fieldset> 
-                                    </div>
-                                    <div class="col-xl-8">
-                                        <fieldset class="border p-3 rounded mb-3">
-                                            {{-- <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center text-decoration-underline">DATOS INSTITUCIONALES</legend> --}}
-                                            @include('livewire.partials.voluntarios-datos-institucionales')
-                                        </fieldset>
+                                    <div class="col-12">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text input-group-text-xs fw-bold" id="basic-addon2">Total: {{ $lista_voluntarios->total() }}</span>
+                                            <input type="text" id="searchsede" class="form-control form-control-sm" placeholder="Buscar personal" wire:model.live="searchpersonas">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        {{-- <div class="row">
-                            <div class="col">
-                                <fieldset class="border p-3 rounded mb-3">
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $modal_header_color }}">DATOS DEL ÚLTIMO CONTRATO</legend>
-                                    @include('livewire.partials.personal-datos-contrato')
-                                </fieldset> 
-                            </div>
-                        </div> --}}
+                            </form>
+                            <table class="table table-striped table-hover table-sm table-xsmall">
+                                <thead class="table-dark text-center">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">DNI</th>
+                                        <th scope="col">Datos</th>
+                                        <th scope="col"><i class="fa-solid fa-gears"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($lista_voluntarios as $voluntario)
+                                        <tr>
+                                            <th>{{ $loop->iteration }}</th>
+                                            <th>{{ $voluntario->dni }}</th>
+                                            <td>{{ $voluntario->datos }}</td>
+                                            <td>
+                                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                    <div class="btn-group" role="group">
+                                                        <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_persona({{ $voluntario->id }})" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
+                                                            <i class="fa-solid fa-circle-plus"></i> Agregar
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        
+                                    @endforelse
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="4">
+                                            {{ $lista_voluntarios->links() }}
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>                       
+                        </div>          
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-sm">
-                            @if ($btn_guardar_actualizar === "guardar")
-                                <i class="fa-solid fa-floppy-disk"></i><br>Guardar
-                            @elseif($btn_guardar_actualizar === "actualizar")
-                                <i class="fa-solid fa-floppy-disk"></i><br>Actualizar
-                            @elseif($btn_guardar_actualizar === "guardar_contrato")
-                                <i class="fa-solid fa-floppy-disk"></i><br>Guardar Contrato
-                            @endif  
-                        </button>
-                        <button type="button" class="btn btn-secondary btn-sm" wire:click="cerrar">
-                            <i class="fa-solid fa-square-xmark"></i><br>Cerrar
+                        <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
+                            <i class="fa-solid fa-door-closed"></i> Cerrar
                         </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-
-    <!-- Modal Foto -->
-    @include('livewire.partials.personal-modal-buscar')
 
     <!-- Modal Foto -->
     {{-- @include('livewire.partials.personal-modal-foto') --}}

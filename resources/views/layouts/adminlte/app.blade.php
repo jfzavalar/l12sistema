@@ -550,6 +550,30 @@
                                 </li>
                             @endcan
 
+                            {{-- VOLUNTARIADO --}}
+                            @can('mpfn.rrhh')
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fa-solid fa-users-rectangle"></i>
+                                        <p>
+                                            VOLUNTARIADO
+                                            <i class="nav-arrow fa-solid fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+
+                                    <ul class="nav nav-treeview">
+                                        {{-- @can('mpfn.rrhh.persona.index') --}}
+                                            <li class="nav-item">
+                                                <a class="nav-link ms-3 {{ request()->routeIs('mpfn.voluntariado.marcaciones.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.voluntariado.marcaciones.index') }}">
+                                                    <i class="nav-icon fa-regular fa-circle"></i>
+                                                    <p>Marcaciones</p>
+                                                </a>
+                                            </li>
+                                        {{-- @endcan --}}
+                                    </ul>
+                                </li>
+                            @endcan
+
                             <hr class="border-white border-2">
 
                             {{-- INTRANET --}}
@@ -690,7 +714,7 @@
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                     }
                 }).then(() => {
-                    window.location.href = "/login";
+                    window.location.href = "/dashboard";
                 });
             }
 

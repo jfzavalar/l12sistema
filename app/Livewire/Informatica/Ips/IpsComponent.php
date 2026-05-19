@@ -85,6 +85,15 @@ class IpsComponent extends Component
             $correoinstitucional,
             $tipo_documento;
 
+    public $codigo_patrimonial,
+        $descripcion,
+        $marca,
+        $modelo,
+        $nro_serie,
+        $color,
+        $estado,
+        $ip;
+
     // Variables de búsqueda
     public $search, $searchi,$searchhistorial, $searchpersonas, $searchsedes,$searchdependencias,$searchdespachos,$searchcargos,
             $searchservicios,$searchincidenciasolicitud,$searchbienes;
@@ -135,7 +144,7 @@ class IpsComponent extends Component
         $lista_activos = Ip::where('ips.activo', 1)
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('grupo', 'like', '%' . $this->search . '%')
+                    $q->where('codigo_patrimonial', 'like', '%' . $this->search . '%')
                     ->orWhere('ip', 'like', '%' . $this->search . '%');
                 });
             })
@@ -144,7 +153,7 @@ class IpsComponent extends Component
             )
             ->when($this->filtrored, fn($q) => $q->where('red', $this->filtrored))
             ->when($this->filtroinformatico, fn($q) => $q->where('updated_user', $this->filtroinformatico))
-            ->orderBy('ip')
+            ->orderByRaw('INET_ATON(ip)')
             ->paginate(20, ['*'], 'ipsPage');
         
         $reportes = Ip::select('red')
@@ -212,7 +221,16 @@ class IpsComponent extends Component
         $this->textoGuardarActualizar = "Guardar";
         $this->colorAgregar = "outline-primary";
 
-        $ibien = Patrimonios_biene::select('usuario_dni')->where('activo',1)->where('codigo_patrimonial',$codigo_patrimonial)->first();
+        $ibien = Patrimonios_biene::where('activo',1)->where('codigo_patrimonial',$codigo_patrimonial)->first();
+
+        $this->codigo_patrimonial = $ibien->codigo_patrimonial;
+        $this->descripcion = $ibien->descripcion;
+        $this->marca = $ibien->marca;
+        $this->modelo = $ibien->modelo;
+        $this->nro_serie = $ibien->nro_serie;
+        $this->color = $ibien->color;
+        $this->estado = $ibien->estado;
+        $this->ip = $ibien->ip;
 
         // ===== DATOS PERSONA =====
         $ipersona = Persona::where('dni', $ibien->usuario_dni)->where('activo','1')->firstOrFail();

@@ -2,11 +2,15 @@
 
 namespace App\Livewire\Voluntariado\Asistencia;
 
+use App\Models\Personales_dependencia;
+use App\Models\Personales_sede;
 use App\Models\Tbl_personale;
 use App\Models\Tbl_sede;
 use App\Models\Tbl_voluntariado;
 use App\Models\Tbl_voluntariado_marcacione;
 use App\Models\Tbl_voluntariado_marcacione as ModelsTbl_voluntariado_marcacione;
+use App\Models\Voluntarios;
+use App\Models\VoluntariosMarcaciones;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\Component;
@@ -18,22 +22,18 @@ class Activos extends Component
 {
     use WithFileUploads;
     use WithPagination;
-
     protected $paginationTheme = "bootstrap";
 
-    // Variable de entorno
-    public $modal_header_titulo = 'nuevo';
-    public $modal_header_color = 'primary-subtle';
-    public $btn_guardar_actualizar = 'guardar';
-    public $btn_guardar_actualizar_color = 'primary';
-    public $fieldset_disable = 'disabled';
+    public $mostrarBtnBuscarDni = "d-none";
 
-    // Variables de Modal
-    public $modal_abierto_personal = false;
-    public $modal_abierto_personal_buscar = false;
-    public $modal_abierto_imagen = false;
-    public $modal_abierto_historial = false;
-    public $modal_abierto_pdf_cargar = false;
+    public $colorHeaderModal, $textoHeaderModal;
+    public $colorNuevoEditar = "primary-subtle", $textoNuevoEditar;
+    public $colorGuardarActualizar = "primary", $textoGuardarActualizar;
+    public $colorAgregar = "primary";
+
+    //Variables PARA OCULTAR Y MOSTRAR TXT_OTROS
+    public $mostrarcontroles = "d-none",$mostrarcontrolgpli="d-none";
+    public $mostrarotrosp = "d-none", $mostrarotrosc = "d-none",$mostrarcargafoto = "d-none";
 
     //Buscar
     public $searchpersonal;
@@ -100,7 +100,7 @@ class Activos extends Component
 
     public function render()
     {
-        $lista_activos = Tbl_voluntariado_marcacione::where('activo', '1')
+        $lista_activos = VoluntariosMarcaciones::where('activo', '1')
             ->when($this->filtro_fecha, function ($query) {
                 $query->whereDate('fecha', $this->filtro_fecha);
             })
@@ -113,26 +113,28 @@ class Activos extends Component
             ->orderBy('id', 'desc')
             ->paginate(20);
 
-        $lista_sedes = Tbl_sede::select('codsedeofi','nomsedeofi')
+        $lista_sedes = Personales_sede::select('id','cod','nombre','nombred')
             ->where('activo','1')
+            // ->where('nombre','like','%' . $this->searchsedes . '%')
             ->distinct()
-            ->orderBy('nomsedeofi')
+            ->orderBy('nombre')
             ->get();
             
-        $lista_dependencias = Tbl_sede::select('coddepofi','nomdepofi')
+        $lista_dependencias = Personales_dependencia::select('id','nombre','sede_id')
             ->where('activo','1')
-            ->where('codsedeofi',$this->codsede_destino)
+            ->where('sede_id',$this->codsede_origen)
+            // ->where('nombre','like','%' . $this->searchdependencias . '%')
             ->distinct()
-            ->orderBy('nomdepofi')
+            ->orderBy('nombre')
             ->get();
 
-        $lista_personal = Tbl_voluntariado::where('activo','1')
+        $lista_voluntarios = Voluntarios::where('activo','1')
             ->where('dni','like','%' .$this->searchbuscarpersonal .'%')
             ->orwhere('datos','like','%' .$this->searchbuscarpersonal .'%')
             ->paginate(10,['*'],'personalPage');
 
         return view('livewire.voluntariado.asistencia.activos', 
-                compact('lista_activos','lista_sedes','lista_dependencias','lista_personal'));
+                compact('lista_activos','lista_sedes','lista_dependencias','lista_voluntarios'));
     }
 
     public function updatedDni($value)
@@ -163,20 +165,6 @@ class Activos extends Component
 
     public function nuevo(){
         $this->reset([]);
-
-        $this->modal_abierto_personal = true;
-
-        $this->modal_header_titulo = 'nuevo';
-        $this->modal_header_color = 'primary-subtle';
-        $this->btn_guardar_actualizar = 'guardar';
-        $this->btn_guardar_actualizar_color = 'primary';
-        $this->fieldset_disable = '';
-
-        $this->codsede_destino = auth()->user()->codsede_destino;
-        $this->coddependencia_destino = auth()->user()->coddependencia_destino;
-
-        $this->fecha = now()->format('Y-m-d');
-        $this->hora = now()->format('H:i:s');
     }
 
     public function guardar()
@@ -271,8 +259,6 @@ class Activos extends Component
                 'observacion',
             ]);
 
-            $this->modal_abierto_personal = false;
-
             $this->dispatch('registroGuardado');
 
             $this->dispatch(
@@ -284,20 +270,12 @@ class Activos extends Component
 
         } catch (\Exception $e) {
             session()->flash('error', 'Error al guardar los datos: ' . $e->getMessage());
-            $this->modal_abierto_personal = false;
         }
     }
 
 
 
     public function editar(Tbl_voluntariado_marcacione $instanciaTbl){
-        $this->modal_abierto_personal = true;
-
-        $this->modal_header_titulo = 'editar';
-        $this->modal_header_color = 'success-subtle';
-        $this->btn_guardar_actualizar = 'actualizar';
-        $this->btn_guardar_actualizar_color = 'success';
-        $this->fieldset_disable = '';
 
         $this->id_voluntario = $instanciaTbl->id;
         $this->dni = $instanciaTbl->dni;
@@ -325,45 +303,25 @@ class Activos extends Component
 
     public function cerrar(){
         
-        $this->modal_abierto_personal = false;
     }
 
 
     // PERSONAL
     // ---------------------------------------------------------
-    public function buscar_personal(){
-        $this->modal_abierto_personal_buscar = true;
+    public function buscar_voluntario(){
+        
     }
 
-    public function agregar_personal(Tbl_voluntariado $ipersonal){
+    public function agregar_voluntario(Tbl_voluntariado $ipersonal){
         $this->id_voluntario = $ipersonal->id;
         $this->dni = $ipersonal->dni;
         $this->datos = $ipersonal->datos;
-        
-        // $this->codsede_origen = $ipersonal->codsede_origen;
-        // $this->sede_origen = $ipersonal->sede_origen;
-        // $this->coddependencia_origen = $ipersonal->coddependencia_origen;
-        // $this->dependencia_origen = $ipersonal->dependencia_origen;
-        
-        // $this->codsede_destino = $ipersonal->codsede_destino;
-        // $this->sede_destino = $ipersonal->sede;
-        // $this->coddependencia_destino = $ipersonal->coddependencia_destino;
-        // $this->dependencia_destino = $ipersonal->dependencia_destino;
-
-        // $this->regimen = $ipersonal->regimen;
-        // $this->cargo = $ipersonal->cargo;
-        // $this->correo_personal = $ipersonal->correo_personal;
-        // $this->correo_institucional = $ipersonal->correo_institucional;
-        // $this->cel_personal = $ipersonal->cel_personal;
-        // $this->cel_institucional = $ipersonal->cel_institucional;
 
         $this->reset('searchbuscarpersonal');
-
-        $this->modal_abierto_personal_buscar = false;
     }
 
-    public function cerrar_personal(){
-        $this->modal_abierto_personal_buscar = false;
+    public function cerrar_voluntario(){
+
     }
 
     public function actualizarHora()

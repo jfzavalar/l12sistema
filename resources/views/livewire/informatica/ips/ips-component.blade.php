@@ -14,7 +14,7 @@
                                 </th>
                                 <th scope="col" class="text-center">
                                     <button type="button" class="btn btn-success btn-xs text-nowrap w-100" wire:click = "filtrarAsignados('')">
-                                        <i class="fa-solid fa-check me-2"></i>COPADO
+                                        <i class="fa-solid fa-check me-2"></i>ASIG
                                     </button>
                                 </th>
                                 <th scope="col" class="text-center">
@@ -207,7 +207,7 @@
 
                             <div class="col-lg-10 col-sm-12">
                                 <div class="input-group mb-3"> 
-                                    <input type="text" id="txtsearchpersonalatenciones2" class="form-control form-control-sm me-1" placeholder="Buscar por IP" wire:model.live="search">
+                                    <input type="text" id="txtsearchpersonalatenciones2" class="form-control form-control-sm me-1" placeholder="Buscar por Código Patrimonial o IP" wire:model.live="search">
                                 </div>
                             </div>
                         </div>
@@ -240,7 +240,7 @@
                                         <td>{{ $item->bien}}</td>
                                         {{-- <td>{{ $item->ubicac_fisica}}</td> --}}
                                         <td class="text-center">
-                                            <span class="badge px-3 py-1 rounded-pill {{ $item->estado == 1 ? 'text-bg-success' : 'text-bg-danger' }}">
+                                            <span class="badge px-3 py-1 rounded-pill {{ $item->estado == 1 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }}">
                                                 {{ $item->estado === '1' ? 'ASIGNADO' : 'LIBRE' }}
                                             </span>
                                         </td>
@@ -248,9 +248,16 @@
                                         <td class="text-end">
                                             <div class="btn-group" role="group">
                                                 @if ( $item->codigo_patrimonial )
-                                                    <button type="button" class="btn btn-outline-dark btn-sm rounded-4 me-1" data-bs-toggle="modal" data-bs-target="#verPersonalModal" wire:click="ver_personal('{{ $item->codigo_patrimonial }}')">
-                                                        <i class="fa-solid fa-user-tie"></i>
+                                                    <button type="button" class="btn btn-outline-warning btn-xs rounded-4 me-1">
+                                                        <i class="fa-solid fa-pen-to-square"></i> Liberar
                                                     </button> 
+                                                    <button type="button" class="btn btn-outline-dark btn-xs rounded-4 me-1" data-bs-toggle="modal" data-bs-target="#verPersonalModal" wire:click="ver_personal('{{ $item->codigo_patrimonial }}')">
+                                                        <i class="fa-solid fa-layer-group"></i> Detalle
+                                                    </button>
+                                                @else
+                                                    <button type="button" class="btn btn-outline-primary btn-xs rounded-4 me-1">
+                                                        <i class="fa-solid fa-pen-to-square"></i> Asignar
+                                                    </button>
                                                 @endif
                                                 {{-- <button type="button" class="btn btn-outline-success btn-sm rounded-4 me-1" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->personalatencion_id }})">
                                                     <i class="fa-solid fa-pen-to-square"></i><br>
@@ -313,12 +320,45 @@
                                         @include('livewire.partials.componentes.personal-datos')
                                     </fieldset>
                                 </div>
-                                {{-- <div class="col-xl-2">
-                                    <textarea id="textoCopiar" class="form-control" rows="10" style="font-size: 12px; white-space: nowrap; overflow-x: auto;" readonly>{{ $this->generarTexto() }}</textarea>
-                                    <button onclick="copiarTexto()" class="btn btn-dark btn-xs mb-1">
-                                        <i class="fa-solid fa-copy"></i> Copiar Datos
-                                    </button>                                 
-                                </div> --}}
+                                <div class="col-xl-12">
+                                        <fieldset class="border p-3 rounded mb-3" {{ $seccionPersonal }} disabled>
+                                            <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">EQUIPO INFORMÁTICO</legend>
+                                            <div class="row g-3">
+                                                <div class="col-xl-2 col-lg-6 col-sm-12">
+                                                    <label for="txt_cod_pat" class="form-label"><strong>Código Patrimonial</strong></label>
+                                                    <input type="text" id="txt_cod_pat" class="form-control form-control-xs text-uppercase" wire:model="codigo_patrimonial">
+                                                </div>
+                                                <div class="col-xl-4 col-lg-6 col-sm-12">
+                                                    <label for="txt_equipo_detalle" class="form-label"><strong>Bien</strong></label>
+                                                    <input type="text" id="txt_equipo_detalle" class="form-control form-control-xs bg-light" wire:model="descripcion" readonly>
+                                                </div>
+                                                <div class="col-xl-1 col-lg-6 col-sm-12">
+                                                    <label for="txt_desc_ubif" class="form-label"><strong>Marca</strong></label>
+                                                    <input type="text" id="txt_desc_ubif" class="form-control form-control-xs text-uppercase bg-light" wire:model="marca" readonly>
+                                                </div>
+                                                <div class="col-xl-1 col-lg-6 col-sm-12">
+                                                    <label for="txt_marca" class="form-label fw-bold">Modelo</label>
+                                                    <input type="text" id="txt_marca" class="form-control form-control-xs text-uppercase" wire:model="modelo" required>
+                                                </div>
+                                                <div class="col-xl-1 col-lg-6 col-sm-12">
+                                                    <label for="txt_modelo" class="form-label fw-bold">N° Serie</label>
+                                                    <input type="text" id="txt_modelo" class="form-control form-control-xs text-uppercase" wire:model="nro_serie" required>
+                                                </div>
+                                                <div class="col-xl-1 col-lg-6 col-sm-12">
+                                                    <label for="txt_serie" class="form-label fw-bold">Color</label>
+                                                    <input type="text" id="txt_serie" class="form-control form-control-xs text-uppercase" wire:model="color" required>
+                                                </div>
+                                                <div class="col-xl-1 col-lg-6 col-sm-12">
+                                                    <label for="txt_serie" class="form-label fw-bold">Estado</label>
+                                                    <input type="text" id="txt_serie" class="form-control form-control-xs text-uppercase" wire:model="estado" required>
+                                                </div>
+                                                <div class="col-xl-1 col-lg-6 col-sm-12">
+                                                    <label for="txt_serie" class="form-label fw-bold">Ip</label>
+                                                    <input type="text" id="txt_serie" class="form-control form-control-xs text-uppercase" wire:model="ip" required>
+                                                </div>
+                                            </div>
+                                        </fieldset>                          
+                                </div>
                             </div>
                         </div>
                     </div>

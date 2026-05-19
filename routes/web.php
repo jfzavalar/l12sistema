@@ -170,7 +170,7 @@ Route::middleware('auth','can:mpfn.patrimonio.traslado.index')->group(function (
 
 // VOLUNTARIADO
 Route::middleware('auth')->group(function () {
-    Route::resource('voluntariado', VoluntariadoController::class)->names('procesos.voluntariado');
+    Route::resource('voluntariado', VoluntariadoController::class)->names('mpfn.voluntariado.marcaciones');
 });
 
 // -------------------------------------------------------------------
