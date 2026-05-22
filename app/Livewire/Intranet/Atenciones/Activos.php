@@ -685,7 +685,7 @@ class Activos extends Component
             // 📧 ENVÍO DE CORREO
             try {
                 if (!in_array($this->detalle_servicio_id, [101, 102])) {
-                    $this->enviar_correo();
+                    // $this->enviar_correo();
                 }
 
                 $mensaje = 'Se guardó y se envió el correo correctamente.';

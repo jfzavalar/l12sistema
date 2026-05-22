@@ -718,6 +718,9 @@
         </div>
     </div>
 
+    {{-- Modal burcar personal --}}
+    @include('livewire.rrhh.personal.partials.buscar-personal-component')
+
     {{-- Modal servicios --}}
     @include('livewire.intranet.atenciones.partials.buscar-servicio-component')
 
@@ -728,77 +731,6 @@
     @include('livewire.patrimonio.bienes.partials.buscar-bienes-component')
     
 
-
-    {{-- Cargar varios documentos y e imágenes --}}
-
-    <!-- Modal Cargar PDF -->
-    {{-- <div class="modal fade @if($modal_abierto_pdf_cargar) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <form wire:submit.prevent="cargarPDF2">
-                    <div class="modal-header bg-warning-subtle">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">
-                            <i class="fa-solid fa-file-pdf"></i> CARGAR PDF
-                        </h1>
-                        <button type="button" class="btn-close" wire:click="cerrar_PDF" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="input-group mt-3 mb-3">
-                            <input 
-                                type="file" 
-                                class="form-control" 
-                                id="input-pdf" 
-                                wire:model="pdfs" 
-                                accept="application/pdf" 
-                                multiple 
-                                required
-                            >
-                            @error('pdfs.*') 
-                                <span class="text-danger small">{{ $message }}</span> 
-                            @enderror
-                            Vista previa opcional
-                        </div>
-                        @if ($pdfs)
-                            <ul class="list-group mt-2">
-                                @foreach ($pdfs as $index => $file)
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <div class="text-truncate" style="max-width: 75%;">
-                                            <i class="fa-solid fa-file-zipper"></i>
-                                            {{ $file->getClientOriginalName() }}
-                                            <span class="badge bg-light text-dark">
-                                                {{ number_format($file->getSize() / 1024, 1) }} KB
-                                            </span>
-                                        </div>
-                                        <button 
-                                            type="button" 
-                                            class="btn btn-outline-danger btn-sm rounded-circle"
-                                            title="Quitar este archivo"
-                                            wire:click="eliminarPDF({{ $index }})"
-                                        >
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        @endif
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-outline-primary btn-sm">
-                            <i class="fa-solid fa-floppy-disk"></i>
-                            <br>Guardar
-                        </button>
-                        <button type="button" class="btn btn-outline-secondary btn-sm" wire:click="cerrar_PDF">
-                            <i class="fa-solid fa-door-closed"></i>
-                            <br>Cerrar
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div> --}}
-    
-
     @include('livewire.intranet.atenciones.partials.pdf-cargar-component')
-    @include('livewire.rrhh.personal.partials.buscar-personal-component')
 
 </div>

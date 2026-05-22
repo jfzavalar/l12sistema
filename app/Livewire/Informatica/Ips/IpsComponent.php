@@ -2,8 +2,9 @@
 
 namespace App\Livewire\Informatica\Ips;
 
-use App\Models\Ip;
+use App\Models\InformaticasIp;
 use App\Models\Patrimonios_biene;
+use App\Models\PatrimoniosBiene;
 use App\Models\Persona;
 use App\Models\Personale;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -92,7 +93,7 @@ class IpsComponent extends Component
         $nro_serie,
         $color,
         $estado,
-        $ip;
+        $bien_ip;
 
     // Variables de búsqueda
     public $search, $searchi,$searchhistorial, $searchpersonas, $searchsedes,$searchdependencias,$searchdespachos,$searchcargos,
@@ -141,7 +142,7 @@ class IpsComponent extends Component
 
     public function render()
     {
-        $lista_activos = Ip::where('ips.activo', 1)
+        $lista_activos = InformaticasIp::where('activo', 1)
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('codigo_patrimonial', 'like', '%' . $this->search . '%')
@@ -156,7 +157,7 @@ class IpsComponent extends Component
             ->orderByRaw('INET_ATON(ip)')
             ->paginate(20, ['*'], 'ipsPage');
         
-        $reportes = Ip::select('red')
+        $reportes = InformaticasIp::select('red')
             ->selectRaw("COUNT(*) as total")
             ->selectRaw("SUM(estado = 1) as asignados")
             ->selectRaw("SUM(estado = 0) as libres")
@@ -166,7 +167,7 @@ class IpsComponent extends Component
             ->orderBy('red')
             ->get();
 
-        $estadisticas = Ip::select('updated_user')
+        $estadisticas = InformaticasIp::select('updated_user')
             ->selectRaw("COUNT(*) as total")
             ->selectRaw("SUM(estado = 1) as asignados")
             ->where('activo', 1)
@@ -175,38 +176,158 @@ class IpsComponent extends Component
             ->orderBy('updated_user')
             ->get();
 
-        $estadisticas2 = Ip::where('activo', '1')
+        $estadisticas2 = InformaticasIp::where('activo', '1')
             ->selectRaw("
                 COUNT(*) as total,
                 SUM(estado = '1') as asignados,
                 SUM(estado = '0') as libres
             ")
             ->first();
+
+        $lista_personas = Persona::join('personales','personas.id','=','personales.persona_id')
+            ->select(
+                'personas.*',
+                'personales.persona_id',
+                'personales.celinstitucional',
+                'personales.correoinstitucional',
+                'personales.regimen',
+                'personales.tipo_regimen',
+                'personales.cargo',
+                'personales.cargo_condicion',
+                'personales.sedeorigen',
+                'personales.dependenciaorigen',
+                'personales.despachoorigen',
+                'personales.sededestino',
+                'personales.dependenciadestino',
+                'personales.despachodestino',
+                'personales.tipo_documento'
+            )
+            ->where('personales.tipo_documento','CONTRATO')
+            ->where('personales.activo', "1")
+            ->where('personas.activo','1')
+            ->when($this->searchpersonas !== '', function ($query) {
+                $query->where(function ($q) {
+                    $q->where('personas.dni', 'like', '%' . $this->searchpersonas . '%')
+                    ->orWhere('personas.datos', 'like', '%' . $this->searchpersonas . '%');
+                });
+            })
+            ->orderBy('personas.datos')
+            ->paginate(10,['*'],'personasPage');
+
+        $lista_bienes = PatrimoniosBiene::where('activo','1')
+            ->where('codigo_patrimonial','like','%' . $this->searchbienes . '%')
+            ->distinct()
+            ->orderBy('descripcion')
+            ->paginate(10,['*'],'bienesPage');
         
-        $lista_redes = Ip::select('red')
+        $lista_redes = InformaticasIp::select('red')
             ->where('activo','1')
             ->distinct()
             ->get();
 
-        $lista_informaticos = Ip::select('updated_user')
+        $lista_informaticos = InformaticasIp::select('updated_user')
             ->where('activo','1')
             ->whereNotNull('updated_user') // 🔥 clave
             ->distinct()
             ->get();
 
         return view('livewire.informatica.ips.ips-component',
-                    compact('lista_activos','reportes','estadisticas','estadisticas2','lista_redes','lista_informaticos'));
+                    compact('lista_activos','reportes','estadisticas','estadisticas2',
+                            'lista_personas','lista_bienes','lista_redes','lista_informaticos'));
+    }
+
+    public function nuevo_asignar_ip(InformaticasIp $iip)
+    {
+        $this->resetValidation();
+        $this->resetErrorBag();
+
+        $this->funcionGuardarActualizar = "guardar_asignar_ip";
+
+        $this->mostrarBtnBuscarDni = "d-none";
+
+        $this->colorHeaderModal = "primary-subtle";
+        $this->textoHeaderModal = "Editar";
+        $this->colorGuardarActualizar = "primary";
+        $this->textoGuardarActualizar = "Actualizar";
+        $this->colorAgregar = "outline-primary";
+
+        $this->bien_ip = $iip->ip;
+    }
+
+    public function guardar_asignar_ip()
+    {
+
+    }
+
+    public function editar_asignar_ip(InformaticasIp $iip)
+    {
+        $this->resetValidation();
+        $this->resetErrorBag();
+
+        $this->funcionGuardarActualizar = "actualizar_asignar_ip";
+
+        $this->mostrarBtnBuscarDni = "d-none";
+
+        $this->colorHeaderModal = "success-subtle";
+        $this->textoHeaderModal = "Editar";
+        $this->colorGuardarActualizar = "success";
+        $this->textoGuardarActualizar = "Actualizar";
+        $this->colorAgregar = "outline-success";
+
+        $this->bien_ip = $iip->ip;
+    }
+
+    public function actualizar_asignar_ip()
+    {
+
     }
 
     public function cerrar()
     {
 
-        // $this->dispatch(
-        //         'alerta-cancelar',
-        //         titulo: 'Cancelar',
-        //         mensaje: 'Se canceló la operación.',
-        //         tipo: 'error'
-        //     );
+        $this->reset();
+    }
+
+    // FUNCIONES AGREGAR
+    public function agregar_persona(Persona $ipersona){
+        $this->persona_id = $ipersona->id;
+        $this->dni = $ipersona->dni;
+        $this->appaterno = $ipersona->appaterno;
+        $this->apmaterno = $ipersona->apmaterno;
+        $this->nombres = $ipersona->nombres;
+
+        $this->datos = $ipersona->datos;
+
+        $this->celpersonal = $ipersona->celpersonal;
+        $this->correopersonal = $ipersona->correopersonal;
+
+        $this->fotoactual = $ipersona->foto;
+
+        $ipersonal = Personale::where([['activo',1],['persona_dni',$this->dni],])->firstOrFail();
+
+        $this->codsedeorigen = $ipersonal->codsededestino;
+        $this->sedeorigen = $ipersonal->sededestino;   
+        $this->coddependenciaorigen = $ipersonal->coddependenciadestino;
+        $this->dependenciaorigen = $ipersonal->dependenciadestino;
+        $this->coddespachoorigen = $ipersonal->coddespachodestino;
+        $this->despachoorigen = $ipersonal->despachodestino;
+
+        $this->codsededestino = $ipersonal->codsededestino;
+        $this->sededestino = $ipersonal->sededestino;   
+        $this->coddependenciadestino = $ipersonal->coddependenciadestino;
+        $this->dependenciadestino = $ipersonal->dependenciadestino;
+        $this->coddespachodestino = $ipersonal->coddespachodestino;
+        $this->despachodestino = $ipersonal->despachodestino;
+
+        $this->celinstitucional = $ipersonal->celinstitucional;
+        $this->correoinstitucional = $ipersonal->correoinstitucional;
+        $this->regimen = $ipersonal->regimen;
+        $this->tipo_regimen = $ipersonal->tipo_regimen;
+        $this->cargo = $ipersonal->cargo;
+        $this->cargo_condicion = $ipersonal->cargo_condicion;
+        $this->tipo_documento = $ipersonal->tipo_documento;
+
+        // $this->reset('searchpersonas');
     }
 
     public function ver_personal($codigo_patrimonial)
@@ -268,5 +389,87 @@ class IpsComponent extends Component
         $this->despachodestino = $ipersonal->despachodestino;
 
         $this->celinstitucional = $ipersonal->celinstitucional;
+    }
+
+    public function agregar_bien(patrimonios_biene $ibien)
+    {
+        $this->reset([
+            'dni','datos','appaterno','apmaterno','nombres','genero','estadocivil',
+            'fechanacimiento','celpersonal','correopersonal','foto',
+            'tipo_regimen','regimen','cargo',
+            'codsedeorigen','sedeorigen',
+            'coddependenciaorigen','dependenciaorigen',
+            'coddespachoorigen','despachoorigen',
+            'codsededestino','sededestino',
+            'coddependenciadestino','dependenciadestino',
+            'coddespachodestino','despachodestino',
+            'celinstitucional','correoinstitucional'
+        ]);
+
+        // Datos del bien
+        $this->bien_id = $ibien->id;
+
+        $this->fill([
+            'cod' => $ibien->codigo_barra,
+            'cod_patrimonial' => $ibien->codigo_patrimonial,
+            'bien' => $ibien->descripcion,
+            'marca' => $ibien->marca,
+            'modelo' => $ibien->modelo,
+            'serie' => $ibien->nro_serie,
+            'medida' => $ibien->medidas,
+            'color' => $ibien->color,
+            'estado' => $ibien->estado,
+            'bien_ip' => $ibien->ip,
+            'datos_bien' => $ibien->descripcion ." | ". $ibien->marca ." | " . $ibien->modelo ." | " . $ibien->nro_serie ." | " . $ibien->medidas ." | " .$ibien->color ." | " . $ibien->estado,
+        ]);
+
+        $dni = $ibien->usuario_dni;
+
+        // Persona
+        if ($persona = Persona::where('activo',1)->where('dni',$dni)->first()) {
+
+            $this->fill([
+                'persona_id' => $persona->id,
+                'dni' => $persona->dni,
+                'appaterno' => $persona->appaterno,
+                'apmaterno' => $persona->apmaterno,
+                'nombres' => $persona->nombres,
+                'datos' => $persona->datos,
+                'celpersonal' => $persona->celpersonal,
+                'correopersonal' => $persona->correopersonal,
+            ]);
+
+            $this->fotoactual = $persona->foto;
+        }
+
+        // Personal
+        if ($personal = Personale::where('activo',1)->where('persona_dni',$dni)->first()) {
+
+            $this->fill([
+                'personal_id' => $personal->id,
+
+                'codsedeorigen' => $personal->codsedeorigen,
+                'sedeorigen' => $personal->sedeorigen,
+                'coddependenciaorigen' => $personal->coddependenciaorigen,
+                'dependenciaorigen' => $personal->dependenciaorigen,
+                'coddespachoorigen' => $personal->coddespachoorigen,
+                'despachoorigen' => $personal->despachoorigen,
+
+                'codsededestino' => $personal->codsededestino,
+                'sededestino' => $personal->sededestino,
+                'coddependenciadestino' => $personal->coddependenciadestino,
+                'dependenciadestino' => $personal->dependenciadestino,
+                'coddespachodestino' => $personal->coddespachodestino,
+                'despachodestino' => $personal->despachodestino,
+
+                'celinstitucional' => $personal->celinstitucional,
+                'correoinstitucional' => $personal->correoinstitucional,
+                'regimen' => $personal->regimen,
+                'tipo_regimen' => $personal->tipo_regimen,
+                'cargo' => $personal->cargo,
+            ]);
+        }
+
+        $this->reset('searchbienes');
     }
 }

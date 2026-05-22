@@ -51,152 +51,6 @@
                     </table>
                 </div>
                 <div class="col">
-                    <div class="row">
-                        {{-- <div class="col-xl-6 col-gl-6 col-sm-12">
-                            <table class="table">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th scope="col">Informatica</th>
-                                        <th scope="col" colspan="3" class="text-center">Tickets</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse ($estadisticas as $item)
-                                        @if ($item->created_user_cargo === "INFORMATICO" || $item->created_user_cargo === "SOPORTE")
-                                            <tr class="align-middle" style="font-size: 12px;">
-                                                <th scope="row">{{ $item->updated_user }}</th>
-                                                <th style="white-space: nowrap;"></th>
-                                                <td>
-                                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                        <div class="input-group input-group-xs">
-                                                            <button class="input-group-text bg-success text-white">
-                                                                <i class="fa-solid fa-check me-2"></i>Asignados
-                                                            </button>
-                                                            <label class="form-control form-control-xs text-end">{{ $item->asignados }}</label>
-                                                        </div>
-                                                        <div class="input-group input-group-xs">
-                                                            <button class="input-group-text bg-danger text-white">
-                                                                <i class="fa-solid fa-triangle-exclamation me-2"></i>Pendientes
-                                                            </button>
-                                                            <label class="form-control form-control-xs text-end">{{ $item->no_atendidos }}</label>
-                                                        </div>
-                                                        <div class="input-group input-group-xs">
-                                                            <button class="input-group-text bg-info text-white">
-                                                                <i class="fa-solid fa-envelope"></i>Lima
-                                                            </button>
-                                                            <label class="form-control form-control-xs text-end">{{ $item->enviado_lima }}</label>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    @empty
-                                        <tr class="align-middle"><td colspan="3">Sin registros.</td></tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div> --}}
-                        {{-- <div class="col-xl-4 col-gl-6 col-sm-12">
-                            <table class="table">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th scope="col">Digitalizadores</th>
-                                        <th scope="col" colspan="3" class="text-center">Tickets</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse ($estadisticas as $item)
-                                        @if ($item->created_user_cargo === "TERCERO")
-                                            <tr class="align-middle" style="font-size: 12px;">
-                                                <th scope="row">{{ $item->created_user }}</th>
-                                                <th style="white-space: nowrap;"></th>
-                                                <td>
-                                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                        <div class="input-group input-group-xs">
-                                                            <button class="input-group-text bg-success text-white">
-                                                                <i class="fa-solid fa-check me-2"></i>Atendidos
-                                                            </button>
-                                                            <label class="form-control form-control-xs text-end">{{ $item->atendidos }}</label>
-                                                        </div>
-                                                        <div class="input-group input-group-xs">
-                                                            <button class="input-group-text bg-info text-white">
-                                                                <i class="fa-solid fa-file-pdf"></i>Folios
-                                                            </button>
-                                                            <label class="form-control form-control-xs">{{ $item->digitalizado }}</label>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    @empty
-                                        <tr class="align-middle"><td colspan="3">Sin registros.</td></tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div> --}}
-
-                        {{-- <div class="col-xl-6 col-gl-6 col-sm-12">
-                            <div class="row">
-                                <div class="col-xl-4 col-lg-4 col-sm-4">
-                                    <div class="alert alert-primary" role="alert">
-                                        <h6 class="card-title">
-                                            Total
-                                        </h6>
-                                        <br>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <h5><i class="fa-solid fa-chart-simple text-primary"></i> {{ $estadisticas2->total }}</h5>
-                                            <button class="btn btn-outline-primary btn-sm" wire:click="filtrarTotal">
-                                                <i class="fa-solid fa-bars"></i> Listar
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl-4 col-lg-4 col-sm-4">
-                                    <div class="alert alert-success" role="alert">
-                                        <h6 class="card-title">
-                                            Asignados
-                                        </h6>
-                                        <br>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <h5><i class="fa-solid fa-check-double"></i> {{ $estadisticas2->asignados }}</h5>
-                                            <button class="btn btn-outline-success btn-sm" wire:click="filtrarAsignados">
-                                                <i class="fa-solid fa-bars"></i> Listar
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl-4 col-lg-4 col-sm-4">
-                                    <div class="alert alert-danger" role="alert">
-                                        <h6 class="card-title">
-                                            Libres
-                                        </h6>
-                                        <br>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <h5><i class="fa-solid fa-check-double"></i> {{ $estadisticas2->libres }}</h5>
-                                            <button class="btn btn-outline-danger btn-sm" wire:click="filtrarLibres">
-                                                <i class="fa-solid fa-bars"></i> Listar
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl-6 col-lg-4 col-sm-4">
-                                    <div class="alert alert-danger" role="alert">
-                                        <h6 class="card-title">
-                                            Pendientes
-                                        </h6>
-                                        <br>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <h5><i class="fa-solid fa-check-double"></i> </h5>
-                                            <button class="btn btn-outline-danger btn-sm" wire:click="filtrarNoatendido">
-                                                <i class="fa-solid fa-bars"></i> Listar
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> --}}
-                    </div>
-
                     <div class="table-responsive-xl">
                         <div class="row g-3">                   
                             <div class="col-lg-2 col-sm-12">
@@ -248,26 +102,22 @@
                                         <td class="text-end">
                                             <div class="btn-group" role="group">
                                                 @if ( $item->codigo_patrimonial )
-                                                    <button type="button" class="btn btn-outline-warning btn-xs rounded-4 me-1">
-                                                        <i class="fa-solid fa-pen-to-square"></i> Liberar
+                                                    <button type="button" class="btn btn-outline-success btn-xs rounded-4 me-1" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar_asignar_ip({{ $item->id }})">
+                                                        <i class="fa-solid fa-pen-to-square me-1"></i>Liberar
                                                     </button> 
-                                                    <button type="button" class="btn btn-outline-dark btn-xs rounded-4 me-1" data-bs-toggle="modal" data-bs-target="#verPersonalModal" wire:click="ver_personal('{{ $item->codigo_patrimonial }}')">
-                                                        <i class="fa-solid fa-layer-group"></i> Detalle
-                                                    </button>
                                                 @else
-                                                    <button type="button" class="btn btn-outline-primary btn-xs rounded-4 me-1">
-                                                        <i class="fa-solid fa-pen-to-square"></i> Asignar
+                                                    <button type="button" class="btn btn-outline-primary btn-xs rounded-4 me-1" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo_asignar_ip({{ $item->id }})">
+                                                        <i class="fa-solid fa-file me-1"></i>Asignar
                                                     </button>
                                                 @endif
-                                                {{-- <button type="button" class="btn btn-outline-success btn-sm rounded-4 me-1" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->personalatencion_id }})">
-                                                    <i class="fa-solid fa-pen-to-square"></i><br>
-                                                </button>
-                                                @can('mpfn.intranet.atenciones.destroy')
-                                                    <button type="button" class="btn btn-outline-danger btn-sm rounded-4 me-1">
-                                                        <i class="fa-solid fa-trash-can"></i><br>
-                                                    </button>
-                                                @endcan --}}
                                             </div>
+                                        </td>
+                                        <td class="text-end">
+                                            @if ( $item->codigo_patrimonial )
+                                                <button type="button" class="btn btn-outline-info btn-xs rounded-4 me-1" data-bs-toggle="modal" data-bs-target="#verPersonalModal" wire:click="ver_personal('{{ $item->codigo_patrimonial }}')">
+                                                    <i class="fa-solid fa-eye"></i>
+                                                </button>
+                                            @endif
                                         </td>
                                     </tr>                           
                                 @empty
@@ -291,6 +141,110 @@
                     </div>
                 </div>
             </div>          
+        </div>
+    </div>
+
+    {{-- Modal Nuevo-Editar --}}
+    <div wire:ignore.self class="modal fade" id="nuevoEditarModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="nuevoEditarModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width:95%;">
+            <div class="modal-content">
+                <div class="modal-header bg-{{ $colorHeaderModal }}">
+                    <h1 class="modal-title fs-5" id="nuevoEditarModalLabel">
+                        <i class="fa-solid fa-file"></i> {{ $textoHeaderModal }}
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" wire:click="cerrar"></button>
+                </div>
+                <form wire:submit.prevent="{{ $funcionGuardarActualizar }}">
+                    <div class="modal-body">
+                        <div class="row">
+                            {{-- <div class="col-xl-1 col-sm-12">
+                                <fieldset class="border p-3 rounded text-center mb-3" {{ $seccionFoto }} disabled>
+                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">PERFIL</legend>
+                                    @include('livewire.partials.componentes.persona-foto')
+                                </fieldset>
+                            </div> --}}
+
+                            <div class="col-xl-12 col-sm-12">
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <fieldset class="border p-3 rounded mb-3" {{ $seccionPersona }}>
+                                            <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS PERSONALES</legend>
+                                            @include('livewire.partials.componentes.persona-datos')
+                                        </fieldset>
+                                        {{-- <input list="personales" class="form-control form-control-sm" placeholder="Seleccionar...">
+                                        <datalist id="personales">
+                                            @foreach ($lista_personas2 as $personal)
+                                                <option value="{{ $personal->dni }}">{{ $personal->datos }}</option>
+                                            @endforeach
+                                        </datalist> --}}
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <fieldset class="border p-3 rounded mb-3" {{ $seccionPersonal }}>
+                                            <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS INSTITUCIONALES</legend>
+                                            @include('livewire.partials.componentes.personal-datos')
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        {{-- REGISTRO DE TICKES --}}
+                        <div class="row">
+                            <fieldset class="border p-3 rounded mb-3" {{ $seccionPersonal }}>
+                                <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">EQUIPO INFORMÁTICO</legend>
+                                <div class="row g-3">
+                                    <div class="col-xl-2 col-lg-6 col-sm-12">
+                                        <label for="txt_cod_pat" class="form-label"><strong>Código Patrimonial</strong></label>
+                                        <div class="input-group">
+                                            <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-bienes-component">
+                                                <i class="fa-solid fa-magnifying-glass"></i>
+                                            </button>
+                                            <input type="text" id="txt_cod_pat" class="form-control form-control-xs text-uppercase" wire:model="codigo_patrimonial">
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-6 col-sm-12">
+                                        <label for="txt_equipo_detalle" class="form-label"><strong>Bien</strong></label>
+                                        <input type="text" id="txt_equipo_detalle" class="form-control form-control-xs" wire:model="descripcion">
+                                    </div>
+                                    <div class="col-xl-1 col-lg-6 col-sm-12">
+                                        <label for="txt_desc_ubif" class="form-label"><strong>Marca</strong></label>
+                                        <input type="text" id="txt_desc_ubif" class="form-control form-control-xs text-uppercase" wire:model="marca">
+                                    </div>
+                                    <div class="col-xl-1 col-lg-6 col-sm-12">
+                                        <label for="txt_marca" class="form-label fw-bold">Modelo</label>
+                                        <input type="text" id="txt_marca" class="form-control form-control-xs text-uppercase" wire:model="modelo">
+                                    </div>
+                                    <div class="col-xl-1 col-lg-6 col-sm-12">
+                                        <label for="txt_modelo" class="form-label fw-bold">N° Serie</label>
+                                        <input type="text" id="txt_modelo" class="form-control form-control-xs text-uppercase" wire:model="nro_serie">
+                                    </div>
+                                    <div class="col-xl-1 col-lg-6 col-sm-12">
+                                        <label for="txt_serie" class="form-label fw-bold">Color</label>
+                                        <input type="text" id="txt_serie" class="form-control form-control-xs text-uppercase" wire:model="color">
+                                    </div>
+                                    <div class="col-xl-1 col-lg-6 col-sm-12">
+                                        <label for="txt_serie" class="form-label fw-bold">Estado</label>
+                                        <input type="text" id="txt_serie" class="form-control form-control-xs text-uppercase" wire:model="estado">
+                                    </div>
+                                    <div class="col-xl-1 col-lg-6 col-sm-12">
+                                        <label for="txt_serie" class="form-label fw-bold">Ip</label>
+                                        <input type="text" id="txt_serie" class="form-control form-control-xs text-uppercase bg-primary-subtle" wire:model="bien_ip" readonly>
+                                    </div>
+                                </div>
+                            </fieldset>     
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-{{ $colorGuardarActualizar }} btn-sm">
+                            <i class="fa-solid fa-floppy-disk"></i> {{ $textoGuardarActualizar }}
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" wire:click="cerrar">
+                            <i class="fa-solid fa-rectangle-xmark"></i> Cerrar
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -321,53 +275,57 @@
                                     </fieldset>
                                 </div>
                                 <div class="col-xl-12">
-                                        <fieldset class="border p-3 rounded mb-3" {{ $seccionPersonal }} disabled>
-                                            <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">EQUIPO INFORMÁTICO</legend>
-                                            <div class="row g-3">
-                                                <div class="col-xl-2 col-lg-6 col-sm-12">
-                                                    <label for="txt_cod_pat" class="form-label"><strong>Código Patrimonial</strong></label>
-                                                    <input type="text" id="txt_cod_pat" class="form-control form-control-xs text-uppercase" wire:model="codigo_patrimonial">
-                                                </div>
-                                                <div class="col-xl-4 col-lg-6 col-sm-12">
-                                                    <label for="txt_equipo_detalle" class="form-label"><strong>Bien</strong></label>
-                                                    <input type="text" id="txt_equipo_detalle" class="form-control form-control-xs bg-light" wire:model="descripcion" readonly>
-                                                </div>
-                                                <div class="col-xl-1 col-lg-6 col-sm-12">
-                                                    <label for="txt_desc_ubif" class="form-label"><strong>Marca</strong></label>
-                                                    <input type="text" id="txt_desc_ubif" class="form-control form-control-xs text-uppercase bg-light" wire:model="marca" readonly>
-                                                </div>
-                                                <div class="col-xl-1 col-lg-6 col-sm-12">
-                                                    <label for="txt_marca" class="form-label fw-bold">Modelo</label>
-                                                    <input type="text" id="txt_marca" class="form-control form-control-xs text-uppercase" wire:model="modelo" required>
-                                                </div>
-                                                <div class="col-xl-1 col-lg-6 col-sm-12">
-                                                    <label for="txt_modelo" class="form-label fw-bold">N° Serie</label>
-                                                    <input type="text" id="txt_modelo" class="form-control form-control-xs text-uppercase" wire:model="nro_serie" required>
-                                                </div>
-                                                <div class="col-xl-1 col-lg-6 col-sm-12">
-                                                    <label for="txt_serie" class="form-label fw-bold">Color</label>
-                                                    <input type="text" id="txt_serie" class="form-control form-control-xs text-uppercase" wire:model="color" required>
-                                                </div>
-                                                <div class="col-xl-1 col-lg-6 col-sm-12">
-                                                    <label for="txt_serie" class="form-label fw-bold">Estado</label>
-                                                    <input type="text" id="txt_serie" class="form-control form-control-xs text-uppercase" wire:model="estado" required>
-                                                </div>
-                                                <div class="col-xl-1 col-lg-6 col-sm-12">
-                                                    <label for="txt_serie" class="form-label fw-bold">Ip</label>
-                                                    <input type="text" id="txt_serie" class="form-control form-control-xs text-uppercase" wire:model="ip" required>
-                                                </div>
+                                    <fieldset class="border p-3 rounded mb-3" {{ $seccionPersonal }} disabled>
+                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">EQUIPO INFORMÁTICO</legend>
+                                        <div class="row g-3">
+                                            <div class="col-xl-2 col-lg-6 col-sm-12">
+                                                <label for="txt_cod_pat" class="form-label"><strong>Código Patrimonial</strong></label>
+                                                <input type="text" id="txt_cod_pat" class="form-control form-control-xs text-uppercase" wire:model="codigo_patrimonial">
                                             </div>
-                                        </fieldset>                          
+                                            <div class="col-xl-4 col-lg-6 col-sm-12">
+                                                <label for="txt_equipo_detalle" class="form-label"><strong>Bien</strong></label>
+                                                <input type="text" id="txt_equipo_detalle" class="form-control form-control-xs bg-light" wire:model="descripcion" readonly>
+                                            </div>
+                                            <div class="col-xl-1 col-lg-6 col-sm-12">
+                                                <label for="txt_desc_ubif" class="form-label"><strong>Marca</strong></label>
+                                                <input type="text" id="txt_desc_ubif" class="form-control form-control-xs text-uppercase bg-light" wire:model="marca" readonly>
+                                            </div>
+                                            <div class="col-xl-1 col-lg-6 col-sm-12">
+                                                <label for="txt_marca" class="form-label fw-bold">Modelo</label>
+                                                <input type="text" id="txt_marca" class="form-control form-control-xs text-uppercase" wire:model="modelo" required>
+                                            </div>
+                                            <div class="col-xl-1 col-lg-6 col-sm-12">
+                                                <label for="txt_modelo" class="form-label fw-bold">N° Serie</label>
+                                                <input type="text" id="txt_modelo" class="form-control form-control-xs text-uppercase" wire:model="nro_serie" required>
+                                            </div>
+                                            <div class="col-xl-1 col-lg-6 col-sm-12">
+                                                <label for="txt_serie" class="form-label fw-bold">Color</label>
+                                                <input type="text" id="txt_serie" class="form-control form-control-xs text-uppercase" wire:model="color" required>
+                                            </div>
+                                            <div class="col-xl-1 col-lg-6 col-sm-12">
+                                                <label for="txt_serie" class="form-label fw-bold">Estado</label>
+                                                <input type="text" id="txt_serie" class="form-control form-control-xs text-uppercase" wire:model="estado" required>
+                                            </div>
+                                            <div class="col-xl-1 col-lg-6 col-sm-12">
+                                                <label for="txt_serie" class="form-label fw-bold">Ip</label>
+                                                <input type="text" id="txt_serie" class="form-control form-control-xs text-uppercase" wire:model="ip" required>
+                                            </div>
+                                        </div>
+                                    </fieldset>                          
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" wire:click="cerrar">
+                        <i class="fa-solid fa-door-open"></i> Cerrar
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+
     {{-- Modal Ips --}}
     <div wire:ignore.self class="modal fade" id="listaIpsModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="listaIpsModalLabel" aria-hidden="true">
         <div class="modal-dialog" style="max-width:95%;">
@@ -471,4 +429,10 @@
             </div>
         </div>
     </div>
+
+    {{-- Modal burcar personal --}}
+    @include('livewire.rrhh.personal.partials.buscar-personal-component')
+
+    {{-- Modal bienes patrimoniales --}}
+    @include('livewire.patrimonio.bienes.partials.buscar-bienes-component')
 </div>

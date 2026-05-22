@@ -703,7 +703,7 @@
             });
         </script>
 
-        <script>
+        {{-- <script>
             let timeout;
             let tiempo = 3600000;
 
@@ -714,7 +714,7 @@
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                     }
                 }).then(() => {
-                    window.location.href = "/dashboard";
+                    window.location.href = "/login";
                 });
             }
 
@@ -728,6 +728,55 @@
             document.onkeypress = resetTimer;
             document.onclick = resetTimer;
             document.onscroll = resetTimer;
+        </script> --}}
+        <script>
+
+            let timeout;
+            let tiempo = 3600000; // 1 hora
+
+            async function logout() {
+
+                try {
+
+                    await fetch('/logout', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        credentials: 'same-origin'
+                    });
+
+                } catch (error) {
+                    console.error('Error al cerrar sesión:', error);
+                }
+
+                // Redireccionar luego del logout
+                window.location.href = "/dashboard";
+            }
+
+            function resetTimer() {
+
+                clearTimeout(timeout);
+
+                timeout = setTimeout(logout, tiempo);
+            }
+
+            // Eventos de actividad
+            [
+                'load',
+                'mousemove',
+                'mousedown',
+                'click',
+                'scroll',
+                'keypress',
+                'touchstart'
+            ].forEach(event => {
+
+                window.addEventListener(event, resetTimer);
+            });
+
         </script>
 
         @yield('js')
