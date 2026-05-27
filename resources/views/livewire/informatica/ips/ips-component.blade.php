@@ -167,7 +167,7 @@
                             <div class="col-xl-12 col-sm-12">
                                 <div class="row">
                                     <div class="col-xl-6">
-                                        <fieldset class="border p-3 rounded mb-3" {{ $seccionPersona }}>
+                                        <fieldset class="border p-3 rounded mb-3">
                                             <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS PERSONALES</legend>
                                             @include('livewire.partials.componentes.persona-datos')
                                         </fieldset>
@@ -179,7 +179,7 @@
                                         </datalist> --}}
                                     </div>
                                     <div class="col-xl-6">
-                                        <fieldset class="border p-3 rounded mb-3" {{ $seccionPersonal }}>
+                                        <fieldset class="border p-3 rounded mb-3">
                                             <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS INSTITUCIONALES</legend>
                                             @include('livewire.partials.componentes.personal-datos')
                                         </fieldset>
@@ -191,7 +191,7 @@
 
                         {{-- REGISTRO DE TICKES --}}
                         <div class="row">
-                            <fieldset class="border p-3 rounded mb-3" {{ $seccionPersonal }}>
+                            <fieldset class="border p-3 rounded mb-3">
                                 <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">EQUIPO INFORMÁTICO</legend>
                                 <div class="row g-3">
                                     <div class="col-xl-2 col-lg-6 col-sm-12">

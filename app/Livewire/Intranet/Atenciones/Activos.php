@@ -5,6 +5,7 @@ namespace App\Livewire\Intranet\Atenciones;
 use App\Exports\TicketsfiltrosExport;
 use App\Mail\NotificacionInformaticaTicket;
 use App\Models\InformaticasFirmasToken;
+use App\Models\InformaticasIp;
 use App\Models\Ip;
 use App\Models\Patrimonios_biene;
 use App\Models\PatrimoniosBiene;
@@ -572,7 +573,7 @@ class Activos extends Component
 
             $registro = null;
 
-            if ( in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA", "SERVIDORES"]) && PatrimoniosBiene::where('ip', $this->bien_ip)->exists())
+            if ( in_array($this->detalle_servicio_id, [101, 102]) && PatrimoniosBiene::where('ip', $this->bien_ip)->exists())
             {
                 $this->dispatch(
                     'alerta-actualizado',
@@ -654,7 +655,7 @@ class Activos extends Component
                         'updated_user' => $usuario,
                     ]);
 
-                    $iip = Ip::where('ip', $this->bien_ip)
+                    $iip = InformaticasIp::where('ip', $this->bien_ip)
                         ->where('activo','1')
                         ->first();
 
