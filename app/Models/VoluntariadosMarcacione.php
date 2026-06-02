@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class VoluntariosMarcaciones extends Model
+class VoluntariadosMarcacione extends Model
 {
-    protected $table = 'voluntarios_marcaciones';
+    protected $table = 'voluntariados_marcaciones';
 
     protected $fillable = [
         //'id',

@@ -4,17 +4,11 @@ namespace App\Livewire\Voluntariado\Asistencia;
 
 use App\Models\Personales_dependencia;
 use App\Models\Personales_sede;
-use App\Models\Tbl_personale;
 use App\Models\Tbl_sede;
-use App\Models\Tbl_voluntariado;
-use App\Models\Tbl_voluntariado_marcacione;
-use App\Models\Tbl_voluntariado_marcacione as ModelsTbl_voluntariado_marcacione;
-use App\Models\Voluntarios;
-use App\Models\VoluntariosMarcaciones;
+use App\Models\Voluntariado;
+use App\Models\VoluntariadosMarcacione;
 use Carbon\Carbon;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\Component;
-
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
@@ -22,6 +16,7 @@ class Activos extends Component
 {
     use WithFileUploads;
     use WithPagination;
+
     protected $paginationTheme = "bootstrap";
 
     public $mostrarBtnBuscarDni = "d-none";
@@ -31,19 +26,12 @@ class Activos extends Component
     public $colorGuardarActualizar = "primary", $textoGuardarActualizar;
     public $colorAgregar = "primary";
 
-    //Variables PARA OCULTAR Y MOSTRAR TXT_OTROS
-    public $mostrarcontroles = "d-none",$mostrarcontrolgpli="d-none";
-    public $mostrarotrosp = "d-none", $mostrarotrosc = "d-none",$mostrarcargafoto = "d-none";
-
-    //Buscar
-    public $searchpersonal;
-    public function updatingSearchpersonal(){
-        $this->resetPage();
-    }
-    public $searchbuscarpersonal;
-    public function updatingSearchbuscarpersonal(){
-        $this->resetPage('personalPage');
-    }
+    // Variables UI
+    public $mostrarcontroles = "d-none",
+        $mostrarcontrolgpli = "d-none",
+        $mostrarotrosp = "d-none",
+        $mostrarotrosc = "d-none",
+        $mostrarcargafoto = "d-none";
 
     // Variables de tabla
     public $id_voluntario,
@@ -73,17 +61,34 @@ class Activos extends Component
         $created_user,
         $updated_user;
 
-    // Variables de tabla
-    public $entrada_salida,$fecha,$hora,
-        $hora_entrada, $hora_salida;
+    // Variables asistencia
+    public $entrada_salida,
+        $fecha,
+        $hora,
+        $hora_entrada,
+        $hora_salida;
 
-    // Variables filtro
+    // Filtro
     public $filtro_fecha;
-    public function updatedFiltroFecha()
+
+    // Buscar
+    public $searchmarcaciones = '';
+    public $searchbuscarvoluntario = '';
+
+    public function updatingSearchmarcaciones()
     {
-        $this->resetPage(); 
+        $this->resetPage('marcacionesPage');
     }
 
+    public function updatingSearchbuscarvoluntario()
+    {
+        $this->resetPage('voluntariosPage');
+    }
+
+    public function updatedFiltroFecha()
+    {
+        $this->resetPage();
+    }
 
     public function mount()
     {
@@ -100,77 +105,88 @@ class Activos extends Component
 
     public function render()
     {
-        $lista_activos = VoluntariosMarcaciones::where('activo', '1')
+        $lista_activos = VoluntariadosMarcacione::where('activo', 1)
             ->when($this->filtro_fecha, function ($query) {
                 $query->whereDate('fecha', $this->filtro_fecha);
             })
-            ->when($this->searchpersonal !== '', function ($query) {
+            ->when($this->searchmarcaciones, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('dni', 'like', '%' . $this->searchpersonal . '%')
-                    ->orWhere('datos', 'like', '%' . $this->searchpersonal . '%');
+                    $q->where('dni', 'like', '%' . $this->searchmarcaciones . '%')
+                        ->orWhere('datos', 'like', '%' . $this->searchmarcaciones . '%');
                 });
             })
             ->orderBy('id', 'desc')
-            ->paginate(20);
+            ->paginate(10, ['*'], 'marcacionesPage');
 
-        $lista_sedes = Personales_sede::select('id','cod','nombre','nombred')
-            ->where('activo','1')
-            // ->where('nombre','like','%' . $this->searchsedes . '%')
-            ->distinct()
-            ->orderBy('nombre')
-            ->get();
-            
-        $lista_dependencias = Personales_dependencia::select('id','nombre','sede_id')
-            ->where('activo','1')
-            ->where('sede_id',$this->codsede_origen)
-            // ->where('nombre','like','%' . $this->searchdependencias . '%')
+        $lista_sedes = Personales_sede::select('id', 'cod', 'nombre', 'nombred')
+            ->where('activo', 1)
             ->distinct()
             ->orderBy('nombre')
             ->get();
 
-        $lista_voluntarios = Voluntarios::where('activo','1')
-            ->where('dni','like','%' .$this->searchbuscarpersonal .'%')
-            ->orwhere('datos','like','%' .$this->searchbuscarpersonal .'%')
-            ->paginate(10,['*'],'personalPage');
+        $lista_dependencias = Personales_dependencia::select('id', 'nombre', 'sede_id')
+            ->where('activo', 1)
+            ->where('sede_id', $this->codsede_origen)
+            ->distinct()
+            ->orderBy('nombre')
+            ->get();
 
-        return view('livewire.voluntariado.asistencia.activos', 
-                compact('lista_activos','lista_sedes','lista_dependencias','lista_voluntarios'));
+        $lista_voluntarios = Voluntariado::where('activo', 1)
+            ->where(function ($query) {
+                $query->where('dni', 'like', '%' . $this->searchbuscarvoluntario . '%')
+                    ->orWhere('datos', 'like', '%' . $this->searchbuscarvoluntario . '%');
+            })
+            ->paginate(10, ['*'], 'voluntariosPage');
+
+        return view(
+            'livewire.voluntariado.asistencia.activos',
+            compact(
+                'lista_activos',
+                'lista_sedes',
+                'lista_dependencias',
+                'lista_voluntarios'
+            )
+        );
     }
 
     public function updatedDni($value)
     {
-        // Buscar solo cuando el DNI tenga 8 dígitos
         if (strlen($value) === 8) {
 
-            $persona = Tbl_voluntariado::where('dni', $value)->first();
+            $persona = Voluntariado::where('dni', $value)->first();
 
             if ($persona) {
                 $this->datos = $persona->datos;
                 $this->cel_personal = $persona->cel_personal;
                 $this->correo_personal = $persona->correo_personal;
-
             } else {
-                // Si no existe, limpiar
                 $this->datos = "";
                 $this->cel_personal = "";
                 $this->correo_personal = "";
             }
         } else {
-            // Si DNI aún no tiene 8 dígitos, limpiar campos
             $this->datos = "";
             $this->cel_personal = "";
             $this->correo_personal = "";
         }
     }
 
-    public function nuevo(){
-        $this->reset([]);
+    public function nuevo()
+    {
+        $this->reset([
+            'dni',
+            'datos',
+            'entrada_salida',
+            'observacion',
+            'hora_entrada',
+            'hora_salida'
+        ]);
     }
 
     public function guardar()
     {
         try {
-            // Validación
+
             $this->validate([
                 'dni' => 'required',
                 'datos' => 'required',
@@ -179,14 +195,14 @@ class Activos extends Component
                 'entrada_salida' => 'required|in:0,1',
             ]);
 
-            // VALIDACIÓN DE DUPLICADO (Entrada o Salida)
-            $existe = Tbl_voluntariado_marcacione::where('dni', $this->dni)
+            $existe = VoluntariadosMarcacione::where('dni', $this->dni)
                 ->whereDate('fecha', now()->format('Y-m-d'))
                 ->where('entrada_salida', $this->entrada_salida)
-                ->where('activo', '1')
+                ->where('activo', 1)
                 ->exists();
 
             if ($existe) {
+
                 $tipo = $this->entrada_salida == 1 ? 'entrada' : 'salida';
 
                 $this->dispatch(
@@ -195,66 +211,86 @@ class Activos extends Component
                     mensaje: "Ya registraste una $tipo el día de hoy.",
                     tipo: 'error'
                 );
+
                 return;
             }
 
-            // Obtener datos de sede
-            $sede = Tbl_sede::where('codsedeofi', $this->codsede_destino)->value('nomsedeofi');
-            $dependencia = Tbl_sede::where('coddepofi', $this->coddependencia_destino)->value('nomdepofi');
+            $sede = Tbl_sede::where('codsedeofi', $this->codsede_destino)
+                ->value('nomsedeofi');
 
+            $dependencia = Tbl_sede::where('coddepofi', $this->coddependencia_destino)
+                ->value('nomdepofi');
+
+            // ENTRADA
             if ($this->entrada_salida == 1) {
 
-                // === REGISTRAR ENTRADA ===
-                Tbl_voluntariado_marcacione::create([
-                    'dni'                    => $this->dni,
-                    'datos'                  => strtoupper($this->datos),
-                    'codsede_destino'        => $this->codsede_destino,
-                    'sede_destino'           => $sede,
+                VoluntariadosMarcacione::create([
+
+                    'dni' => $this->dni,
+                    'datos' => strtoupper($this->datos),
+
+                    'codsede_destino' => $this->codsede_destino,
+                    'sede_destino' => $sede,
+
                     'coddependencia_destino' => $this->coddependencia_destino,
-                    'dependencia_destino'    => $dependencia,
-                    'entrada_salida'         => 1,
-                    'fecha'                  => now()->format('Y-m-d'),
-                    'hora_entrada'           => now()->format('H:i:s'),
-                    'observacion'            => $this->observacion,
-                    'activo'                 => "1",
-                    'created_user'           => auth()->user()->datos,
-                    'updated_user'           => auth()->user()->datos,
+                    'dependencia_destino' => $dependencia,
+
+                    'entrada_salida' => 1,
+
+                    'fecha' => now()->format('Y-m-d'),
+
+                    'hora_entrada' => now()->format('H:i:s'),
+
+                    'observacion' => $this->observacion,
+
+                    'activo' => 1,
+
+                    'created_user' => auth()->user()->datos,
+                    'updated_user' => auth()->user()->datos,
                 ]);
 
             } else {
 
-               // === REGISTRAR SALIDA ===
+                // SALIDA
                 $hoy = now()->format('Y-m-d');
 
-                // Buscar la ENTRADA del día
-                $instanciaTbl = Tbl_voluntariado_marcacione::where('dni', $this->dni)
+                $instanciaTbl = VoluntariadosMarcacione::where('dni', $this->dni)
                     ->whereDate('fecha', $hoy)
                     ->where('entrada_salida', 1)
                     ->where('activo', 1)
-                    ->firstOrFail();
+                    ->first();
 
-                // Calcular el tiempo del día
+                if (!$instanciaTbl) {
+
+                    $this->dispatch(
+                        'alerta-actualizado',
+                        titulo: 'Sin entrada',
+                        mensaje: 'No existe una entrada registrada para hoy.',
+                        tipo: 'warning'
+                    );
+
+                    return;
+                }
+
                 $horaEntrada = Carbon::parse($instanciaTbl->hora_entrada);
-                $horaSalida  = now(); // ← mejor forma
+                $horaSalida = now();
 
                 $segundos = $horaEntrada->diffInSeconds($horaSalida);
+
                 $subtotal = gmdate("H:i:s", $segundos);
 
-                // Actualizar registro
                 $instanciaTbl->update([
+
                     'hora_salida' => $horaSalida->format('H:i:s'),
-                    'subtotal'    => $subtotal,
+                    'subtotal' => $subtotal,
                     'updated_user' => auth()->user()->datos,
+
                 ]);
-                
             }
 
-            // Reset formularios
             $this->reset([
                 'dni',
                 'datos',
-                'sede_destino',
-                'dependencia_destino',
                 'entrada_salida',
                 'observacion',
             ]);
@@ -269,15 +305,18 @@ class Activos extends Component
             );
 
         } catch (\Exception $e) {
-            session()->flash('error', 'Error al guardar los datos: ' . $e->getMessage());
+
+            session()->flash(
+                'error',
+                'Error al guardar los datos: ' . $e->getMessage()
+            );
         }
     }
 
-
-
-    public function editar(Tbl_voluntariado_marcacione $instanciaTbl){
-
+    public function editar(VoluntariadosMarcacione $instanciaTbl)
+    {
         $this->id_voluntario = $instanciaTbl->id;
+
         $this->dni = $instanciaTbl->dni;
         $this->datos = $instanciaTbl->datos;
 
@@ -287,9 +326,10 @@ class Activos extends Component
         $this->coddependencia_destino = $instanciaTbl->coddependencia_destino;
         $this->dependencia_destino = $instanciaTbl->dependencia_destino;
 
-        $this->entrada_salida= $instanciaTbl->entrada_salida;
+        $this->entrada_salida = $instanciaTbl->entrada_salida;
 
-        $this->fecha = $instanciaTbl->fecha_hora;
+        $this->fecha = $instanciaTbl->fecha;
+
         $this->hora_entrada = $instanciaTbl->hora_entrada;
         $this->hora_salida = $instanciaTbl->hora_salida;
 
@@ -301,27 +341,14 @@ class Activos extends Component
         $this->updated_user = $instanciaTbl->updated_user;
     }
 
-    public function cerrar(){
-        
-    }
-
-
-    // PERSONAL
-    // ---------------------------------------------------------
-    public function buscar_voluntario(){
-        
-    }
-
-    public function agregar_voluntario(Tbl_voluntariado $ipersonal){
+    public function agregar_voluntario(Voluntariado $ipersonal)
+    {
         $this->id_voluntario = $ipersonal->id;
+
         $this->dni = $ipersonal->dni;
         $this->datos = $ipersonal->datos;
 
-        $this->reset('searchbuscarpersonal');
-    }
-
-    public function cerrar_voluntario(){
-
+        $this->reset('searchbuscarvoluntario');
     }
 
     public function actualizarHora()

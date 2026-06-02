@@ -68,7 +68,7 @@
                     </div>
                     <div class="col">
                         <div class="input-group mb-3">
-                            <input type="text" id="txtsearcha" class="form-control form-control-sm" wire:model.live="searchpersonal" placeholder="Buscar por DNI o Datos del Personal">
+                            <input type="text" id="txtsearcha" class="form-control form-control-sm" wire:model.live="searchbuscarvoluntario" placeholder="Buscar por DNI o Datos del Personal">
                             {{-- <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" wire:click="nuevo">
                                 <i class="fa-solid fa-file"></i> Nuevo
                             </button> --}}
@@ -183,7 +183,7 @@
                                     <div class="col-12">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text input-group-text-xs fw-bold" id="basic-addon2">Total: {{ $lista_voluntarios->total() }}</span>
-                                            <input type="text" id="searchsede" class="form-control form-control-sm" placeholder="Buscar personal" wire:model.live="searchpersonas">
+                                            <input type="text" id="searchsede" class="form-control form-control-sm" placeholder="Buscar personal" wire:model.live="searchbuscarvoluntario">
                                         </div>
                                     </div>
                                 </div>
@@ -206,7 +206,7 @@
                                             <td>
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                     <div class="btn-group" role="group">
-                                                        <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_persona({{ $voluntario->id }})" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
+                                                        <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_voluntario({{ $voluntario->id }})" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
                                                             <i class="fa-solid fa-circle-plus"></i> Agregar
                                                         </button>
                                                     </div>

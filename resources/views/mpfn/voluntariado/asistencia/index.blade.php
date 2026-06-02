@@ -22,10 +22,28 @@
 @endsection
 
 @section('css')
-    {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
+    
 @stop
 
 
 @section('js')
+    {{-- Actualizar hora en tiempo real --}}
+    <script>
+        function actualizarHora() {
+            const ahora = new Date();
 
+            // Hora local exacta con segundos
+            const horaLocal = ahora.toLocaleTimeString('es-PE', {
+                hour12: false, 
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+
+            document.getElementById('hora_actual').value = horaLocal;
+        }
+
+        setInterval(actualizarHora, 1000);
+        actualizarHora();
+    </script>
 @stop

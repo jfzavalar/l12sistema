@@ -646,26 +646,31 @@ class Activos extends Component
                 ]);
 
                 if ($this->bien_id) {
+
                     $ibien = PatrimoniosBiene::where('id', $this->bien_id)
-                        ->where('activo','1')
+                        ->where('activo', '1')
                         ->first();
 
-                    $ibien->update([
-                        'ip' => $this->bien_ip,
-                        'updated_user' => $usuario,
-                    ]);
+                    if ($ibien) {
+                        $ibien->update([
+                            'ip' => $this->bien_ip,
+                            'updated_user' => $usuario,
+                        ]);
+                    }
 
                     $iip = InformaticasIp::where('ip', $this->bien_ip)
-                        ->where('activo','1')
+                        ->where('activo', '1')
                         ->first();
 
-                    $iip->update([
-                        'codigo' => $this->cod,
-                        'codigo_patrimonial' => $this->cod_patrimonial,
-                        'bien' => $this->datos_bien,
-                        'estado' => '1',
-                        'updated_user' => $usuario,
-                    ]);
+                    if ($iip) {
+                        $iip->update([
+                            'codigo' => $this->cod,
+                            'codigo_patrimonial' => $this->cod_patrimonial,
+                            'bien' => $this->datos_bien,
+                            'estado' => '1',
+                            'updated_user' => $usuario,
+                        ]);
+                    }
 
                 }
 

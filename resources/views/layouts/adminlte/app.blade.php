@@ -551,7 +551,7 @@
                             @endcan
 
                             {{-- VOLUNTARIADO --}}
-                            @can('mpfn.rrhh')
+                            @can('mpfn.voluntariado')
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
                                         <i class="nav-icon fa-solid fa-users-rectangle"></i>
@@ -562,14 +562,14 @@
                                     </a>
 
                                     <ul class="nav nav-treeview">
-                                        {{-- @can('mpfn.rrhh.persona.index') --}}
+                                        @can('mpfn.voluntariado.asistencia.index')
                                             <li class="nav-item">
-                                                <a class="nav-link ms-3 {{ request()->routeIs('mpfn.voluntariado.marcaciones.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.voluntariado.marcaciones.index') }}">
+                                                <a class="nav-link ms-3 {{ request()->routeIs('mpfn.voluntariado.asistencia.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.voluntariado.asistencia.index') }}">
                                                     <i class="nav-icon fa-regular fa-circle"></i>
                                                     <p>Marcaciones</p>
                                                 </a>
                                             </li>
-                                        {{-- @endcan --}}
+                                        @endcan
                                     </ul>
                                 </li>
                             @endcan
