@@ -93,7 +93,7 @@
         <select id="cargo_condicion" class="form-select form-select-xs" wire:model.live="cargo_condicion">
             <option value="">Seleccionar...</option>
             <option value="TITULAR">TITULAR</option>
-            <option value="PROVINCIAL">PROVISIONAL</option>
+            <option value="PROVISIONAL">PROVISIONAL</option>
         </select>
     </div>
 </div>
