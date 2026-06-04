@@ -201,7 +201,6 @@
                             <th scope="col">
                                 <i class="fa-solid fa-user"></i> DNI-PERSONAL
                             </th>
-                            {{-- <th scope="col">DEPENDENCIA ORIGEN</th> --}}
                             <th scope="col">REGIMEN - CARGO</th>
                             <th scope="col" class="table-danger">DEPENDENCIA DESDE DONDE SOLICITA EL SERVICIO</th>
                             <th scope="col" class="bg-success-subtle">DESCRIPCIÓN DEL SERVICIO</th>
@@ -218,13 +217,6 @@
                                     <i class="fa-solid fa-ticket"></i> {{ $loop->iteration }}
                                 </th>
                                 <td><b>{{ $item->dni }}</b> <br> {{ $item->datos }}</td>
-                                {{-- <td>
-                                    <b>SEDE: </b>{{ $item->sedeorigen }}
-                                    <br>
-                                    <b>DEPENDENCIA: </b>{{ $item->dependenciaorigen }}
-                                    <br>
-                                    <b>DESPACHO: </b>{{ $item->despachoorigen }}
-                                </td> --}}
                                 <td>
                                     <b>{{ $item->regimen }}</b>
                                     <br>
@@ -244,18 +236,37 @@
                                     <br>
                                     <b>DESCRIPCIÓN: </b>{{ $item->detalle_servicio }}
                                 </td>
-                                <td>
-                                    {{ $item->reportado_por }}
+                                <td class="text-center align-middle">
+                                    @if ($item->reportado_por === "CEA")
+                                        <b>CEA</b>
+                                    @elseif (($item->reportado_por === "CORREO"))
+                                        <i class="fa-solid fa-envelope"></i>
+                                    @elseif (($item->reportado_por === "DOCUMENTO"))
+                                        <i class="fa-solid fa-file"></i>
+                                    @elseif (($item->reportado_por === "GESTION"))
+                                        <i class="fa-brands fa-black-tie"></i>
+                                    @elseif (($item->reportado_por === "LLAMADA"))
+                                        <i class="fa-solid fa-phone"></i>
+                                    @elseif (($item->reportado_por === "PERSONALMENTE"))
+                                        <i class="fa-solid fa-user"></i>
+                                    @elseif (($item->reportado_por === "SISTEMA"))
+                                        <i class="fa-brands fa-windows"></i>
+                                    @elseif (($item->reportado_por === "WHATSAPP"))
+                                        <i class="fa-brands fa-whatsapp"></i>
+                                    @endif
                                 </td>
-                                <td>
-                                    <span class="badge rounded-pill {{ $item->atendido === 'SI' ? 'text-bg-success' : 'text-bg-danger' }}">
-                                        {{ $item->atendido === 'SI' ? 'Atendido' : 'No atendido' }}
+                                <td class="text-center align-middle">
+                                    {{-- <span class="badge px-2 py-1 rounded-pill {{ $item->atendido === 'SI' ? 'text-bg-success' : 'text-bg-danger' }}">
+                                        {{ $item->atendido === 'SI' ? 'ATENDIDO' : 'NO ATENDIDO' }}
+                                    </span> --}}
+                                    <span class="badge py-1 rounded-pill {{ $item->atendido == 'SI' ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }}">
+                                        {{ $item->atendido === 'SI' ? 'ATENDIDO' : 'NO ATENDIDO' }}
                                     </span>
                                 </td>
-                                <td>
+                                <td class="text-center align-middle small text-nowrap">
                                     {{ $item->atendido_por_datos}}
                                     <br>
-                                    {{ $item->created_at }}
+                                    <b>{{ $item->created_at }}</b>
                                 </td>
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
@@ -271,7 +282,7 @@
                                         @endcan
                                     </div>
                                 </td>
-                                <td class="text-end">
+                                <td class="text-stard">
                                     <div class="btn-group" role="group">
                                         @if (!empty($item->id))
                                             <a type="button" class="btn btn-outline-naranja btn-xs" href="{{ route('pdf.informatica.atencion-acta', ['id' => $item->id]) }}" target="_blank">
@@ -305,7 +316,7 @@
                     <tfoot>
                         <tr>
                             <td colspan="13">
-                                {{ $lista_historial->links() }}
+                                {{ $lista_activos->links() }}
                             </td>
                         </tr>
                     </tfoot>

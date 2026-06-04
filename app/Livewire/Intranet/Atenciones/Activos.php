@@ -67,10 +67,10 @@ class Activos extends Component
         $this->resetPage('atencionesPage');
     }
     public function updatingSearchi(){
-        $this->resetPage('personalesiPage');
+        $this->resetPage('atencionesinactivosPage');
     }
     public function updatingSearchhistorial(){
-        $this->resetPage('historialPage');
+        $this->resetPage('atencioneshistorialPage');
     }
     public function updatingSearchpersonas(){
         $this->resetPage('personasPage');
@@ -670,7 +670,7 @@ class Activos extends Component
                     'ruta_evidencia' => $this->ruta_evidencia,
                     'ruta_documento' => $this->ruta_documento,
                     'informatico_dni' => $this->informatico_dni,
-                    'informatico' => $iinformatico->datos,
+                    'informatico' => $iinformatico->datos ?? null,
                     'activo' => '1',
                     'created_user_cargo' => $usuario_cargo,
                     'created_user' => $usuario_datos,
