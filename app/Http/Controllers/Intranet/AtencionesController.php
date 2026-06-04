@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Intranet;
 use App\Http\Controllers\Controller;
 use App\Models\PatrimoniosBiene;
 use App\Models\Persona;
+use App\Models\PersonalesAtencione;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
@@ -68,34 +69,10 @@ class AtencionesController extends Controller
 
     public function exportarPDF($id)
     {
-        $ipersonal = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
-            ->join('personales_atenciones','personas.id','=','personales_atenciones.persona_id')
-            ->select(
-                'personas.*',
-                'personales.persona_id',
-                'personales.regimen',
-                'personales.tipo_regimen',
-                'personales.cargo',
-                'personales.sedeorigen',
-                'personales.dependenciaorigen',
-                'personales.despachoorigen',
-                'personales.sededestino',
-                'personales.dependenciadestino',
-                'personales.despachodestino',
-                'personales.tipo_documento',
-                'personales_atenciones.servicio',
-                'personales_atenciones.detalle_servicio',
-                'personales_atenciones.estado',
-                'personales_atenciones.obs_usuario',
-                'personales_atenciones.obs_informatico',
-                'personales_atenciones.bien_id',
-                'personales_atenciones.informatico_dni',
-                'personales_atenciones.informatico',
-            )
-            ->where('personas.activo', 1)
-            ->where('personales.activo', 1)
+        $ipersonal = PersonalesAtencione::select('personales_atenciones.*')
+            ->where('personales_atenciones.activo', 1)
             ->where('personales_atenciones.id', $id)
-            ->orderBy('personas.datos')
+            ->orderBy('personales_atenciones.datos')
             ->first();
 
         // 🔴 Validación importante

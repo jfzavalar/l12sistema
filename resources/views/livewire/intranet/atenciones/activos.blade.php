@@ -71,7 +71,7 @@
             </div>
 
             <div class="row mt-2">
-                <div class="col-xl-6 col-gl-6 col-sm-12">
+                <div class="col-xl-6 col-lg-6 col-sm-12">
                     <table class="table">
                         <thead class="table-dark">
                             <tr>
@@ -115,7 +115,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="col-xl-6 col-gl-6 col-sm-12">
+                <div class="col-xl-6 col-lg-6 col-sm-12">
                     <table class="table">
                         <thead class="table-dark">
                             <tr>
@@ -153,75 +153,10 @@
                         </tbody>
                     </table>
                 </div>
-
-                {{-- <div class="col-xl-3 col-gl-6 col-sm-12">
-                    <div class="row">
-                        <div class="col-xl-6 col-lg-4 col-sm-4">
-                            <div class="alert alert-primary" role="alert">
-                                <h6 class="card-title">
-                                    Total
-                                </h6>
-                                <br>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h5><i class="fa-solid fa-chart-simple text-primary"></i> {{ $estadisticas2->total }}</h5>
-                                    <button class="btn btn-outline-primary btn-sm" wire:click="filtrarTotal">
-                                        <i class="fa-solid fa-bars"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-4 col-sm-4">
-                            <div class="alert alert-info" role="alert">
-                                <h6 class="card-title">
-                                    Lima
-                                </h6>
-                                <br>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h5><i class="fa-solid fa-check-double"></i> {{ $estadisticas2->enviado_lima }}</h5>
-                                    <button class="btn btn-outline-info btn-sm" wire:click="filtrarEnviadolima">
-                                        <i class="fa-solid fa-bars"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-4 col-sm-4">
-                            <div class="alert alert-success" role="alert">
-                                <h6 class="card-title">
-                                    Atendido
-                                </h6>
-                                <br>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h5><i class="fa-solid fa-check-double"></i> {{ $estadisticas2->atendidos }}</h5>
-                                    <button class="btn btn-outline-success btn-sm" wire:click="filtrarAtendido">
-                                        <i class="fa-solid fa-bars"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-4 col-sm-4">
-                            <div class="alert alert-danger" role="alert">
-                                <h6 class="card-title">
-                                    Pendientes
-                                </h6>
-                                <br>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h5><i class="fa-solid fa-check-double"></i> {{ $estadisticas2->no_atendidos }}</h5>
-                                    <button class="btn btn-outline-danger btn-sm" wire:click="filtrarNoatendido">
-                                        <i class="fa-solid fa-bars"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
             </div>
 
             <div class="table-responsive-xl">
-                {{-- <div class="input-group mb-3"> --}}
-                    <div class="row g-3">
-                        {{-- <div class="col-lg-2 col-sm-12">
-                            <label class="btn btn-outline-primary btn-sm me-2">Total: {{ $lista_activos->total() }}</label>
-                        </div> --}}                      
+                    <div class="row g-3">                      
                         <div class="col-lg-2 col-sm-12">
                             <div class="input-group">
                                 <span class="input-group-text input-group-text-xs fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
@@ -253,31 +188,27 @@
                                 <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3 me-1" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
                                     <i class="fa-solid fa-file"></i> Nuevo
                                 </button>
-                                {{-- <button type="button" id="btnnuevoext" class="btn btn-info btn-sm rounded-3" data-bs-toggle="modal" data-bs-target="#nuevoEditarModalExt" wire:click="nuevo_externo">
-                                    <i class="fa-solid fa-file"></i> Nuevo Externo
-                                </button> --}}
                                 <button class="btn btn-success btn-sm rounded-3" wire:click="exportarExcel">
                                     <i class="fa-solid fa-file-excel"></i> Exportar a Excel
                                 </button>
                             </div>
                         </div>
                     </div>
-                {{-- </div> --}}
                 <table class="table table-striped table-hover table-sm table-xsmall">
                     <thead class="table-primary text-center align-middle">
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">
-                                <i class="fa-solid fa-user"></i> DNI - PERSONAL
+                                <i class="fa-solid fa-user"></i> DNI-PERSONAL
                             </th>
-                            <th scope="col">DEPENDENCIA ORIGEN</th>
+                            {{-- <th scope="col">DEPENDENCIA ORIGEN</th> --}}
                             <th scope="col">REGIMEN - CARGO</th>
-                            <th scope="col" class="table-danger">ROTACIÓN: UBICACIÓN FÍSICA</th>
+                            <th scope="col" class="table-danger">DEPENDENCIA DESDE DONDE SOLICITA EL SERVICIO</th>
                             <th scope="col" class="bg-success-subtle">DESCRIPCIÓN DEL SERVICIO</th>
                             <th scope="col" class="bg-success-subtle">MEDIO</th>
                             <th scope="col" class="bg-success-subtle">ESTADO</th>
                             <th scope="col" class="bg-success-subtle">ATENDIDO POR</th>
-                            <th scope="col" colspan="2" class="table-darck"><i class="fa-solid fa-gears"></i></th>
+                            <th scope="col" colspan="2" class="table-dark"><i class="fa-solid fa-gears"></i></th>
                         </tr>
                     </thead>
                     <tbody class="align-middle">
@@ -287,13 +218,13 @@
                                     <i class="fa-solid fa-ticket"></i> {{ $loop->iteration }}
                                 </th>
                                 <td><b>{{ $item->dni }}</b> <br> {{ $item->datos }}</td>
-                                <td>
+                                {{-- <td>
                                     <b>SEDE: </b>{{ $item->sedeorigen }}
                                     <br>
                                     <b>DEPENDENCIA: </b>{{ $item->dependenciaorigen }}
                                     <br>
                                     <b>DESPACHO: </b>{{ $item->despachoorigen }}
-                                </td>
+                                </td> --}}
                                 <td>
                                     <b>{{ $item->regimen }}</b>
                                     <br>
@@ -313,17 +244,23 @@
                                     <br>
                                     <b>DESCRIPCIÓN: </b>{{ $item->detalle_servicio }}
                                 </td>
-                                <td>{{ $item->reportado_por }}</td>
+                                <td>
+                                    {{ $item->reportado_por }}
+                                </td>
                                 <td>
                                     <span class="badge rounded-pill {{ $item->atendido === 'SI' ? 'text-bg-success' : 'text-bg-danger' }}">
                                         {{ $item->atendido === 'SI' ? 'Atendido' : 'No atendido' }}
                                     </span>
                                 </td>
-                                <td>{{ $item->atendido_por_datos}}</td>
+                                <td>
+                                    {{ $item->atendido_por_datos}}
+                                    <br>
+                                    {{ $item->created_at }}
+                                </td>
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
-                                        @if ($item->utencioncreado === auth()->user()->datos)
-                                            <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->personalatencion_id }})">
+                                        @if ($item->created_user === auth()->user()->datos || auth()->user()->hasRole('Admin-Super'))
+                                            <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->id }})">
                                                 <i class="fa-solid fa-pen-to-square"></i><br>Editar
                                             </button> 
                                         @endif
@@ -333,23 +270,26 @@
                                             </button>
                                         @endcan
                                     </div>
-                                    <td class="text-end">
-                                        <div class="btn-group" role="group">
-                                            <a type="button" class="btn btn-outline-naranja btn-xs" href="{{ route('pdf.informatica.atencion-acta', $item->personalatencion_id) }}" target="_blank">
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group" role="group">
+                                        @if (!empty($item->id))
+                                            <a type="button" class="btn btn-outline-naranja btn-xs" href="{{ route('pdf.informatica.atencion-acta', ['id' => $item->id]) }}" target="_blank">
                                                 <i class="fa-solid fa-file-pdf"></i><br>Acta
                                             </a>
-                                            @if ($item->utencioncreado === auth()->user()->datos)
-                                                <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#pdf-cargar-component" wire:click="editar_pdf({{ $item->personalatencion_id }})">
-                                                    <i class="fa-solid fa-upload"></i><br>Cargar
-                                                </button>
-                                            @endif
-                                            @if($item->ruta_documento)
-                                                <a type="button" class="btn btn-outline-info btn-xs" href="{{ asset('storage/'.$item->ruta_documento) }}" target="_blank">
-                                                    <i class="fa-solid fa-file-signature"></i><br> Firmado
-                                                </a>
-                                            @endif
-                                        </div>
-                                    </td>
+                                        @endif
+
+                                        @if ($item->created_user === auth()->user()->datos || auth()->user()->hasRole('Admin-Super'))
+                                            <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#pdf-cargar-component" wire:click="editar_pdf({{ $item->id }})">
+                                                <i class="fa-solid fa-upload"></i><br>Cargar
+                                            </button>
+                                        @endif
+                                        @if($item->ruta_documento)
+                                            <a type="button" class="btn btn-outline-info btn-xs" href="{{ asset('storage/'.$item->ruta_documento) }}" target="_blank">
+                                                <i class="fa-solid fa-file-signature"></i><br> Firmado
+                                            </a>
+                                        @endif
+                                    </div>
                                 </td>
                             </tr>                           
                         @empty
@@ -416,7 +356,7 @@
                                 <div class="row">
                                     <div class="col-xl-5">
                                         <fieldset class="border p-3 rounded mb-3" {{ $seccionPersona }}>
-                                            <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS PERSONALES</legend>
+                                            <legend class="float-none px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS PERSONALES</legend>
                                             @include('livewire.partials.componentes.persona-datos')
                                         </fieldset>
                                         {{-- <input list="personales" class="form-control form-control-sm" placeholder="Seleccionar...">
@@ -428,7 +368,7 @@
                                     </div>
                                     <div class="col-xl-5">
                                         <fieldset class="border p-3 rounded mb-3" {{ $seccionPersonal }}>
-                                            <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS INSTITUCIONALES</legend>
+                                            <legend class="float-none px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS INSTITUCIONALES</legend>
                                             @include('livewire.partials.componentes.personal-datos')
                                         </fieldset>
                                     </div>
@@ -447,7 +387,7 @@
                         <div class="row">
                             <div class="col-xl-7">
                                 <fieldset class="border p-3 rounded mb-3">
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DETALLE DE LA INCIDENCIA/SOLICITUD</legend>
+                                    <legend class="float-none px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DETALLE DE LA INCIDENCIA/SOLICITUD</legend>
                                     <div class="row">
                                         <div class="col-xl-2">
                                             <label for="cmb_reportado" class="fw-bold fs-6">REPORTADO POR</label>
@@ -587,7 +527,7 @@
                             </div>
                             <div class="col-xl-5">
                                 <fieldset class="border p-3 rounded mb-3">
-                                    <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">ATENCIÓN</legend>
+                                    <legend class="float-none px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">ATENCIÓN</legend>
                                     <div class="row">
                                         <div class="col-12 col-xl">
                                             <label class="fw-bold fs-6">Enviado a Lima</label>
@@ -602,7 +542,7 @@
                                         @if ($enviado_lima === "SI")
                                             <div class="col-12 col-xl">
                                                 <label for="txtglpi" class="fw-bold fs-6 {{ $mostrarcontrolgpli }}">GLPI</label>
-                                                <input type="text" id="txtglpi" class="form-control form-control-xs text-uppercase {{ $mostrarcontrolgpli }}" wire:model=glpi>
+                                                <input type="text" id="txtglpi" class="form-control form-control-xs text-uppercase {{ $mostrarcontrolgpli }}" wire:model="glpi">
                                             </div>
                                         @endif
                                         <div class="col-12 col-xl">
@@ -649,11 +589,11 @@
                                         
                                             <div class="col-xl-12">
                                                 <label for="txt_informatico" class="fw-bold fs-6 {{ $mostrarcontroles }}">INFORMÁTICO RESPONSABLE</label>
-                                                <select id="txt_informatico" class="form-select form-select-xs {{ $mostrarcontroles }}" wire:model="informatico" required>
+                                                <select id="txt_informatico" class="form-select form-select-xs {{ $mostrarcontroles }}" wire:model="informatico_dni" required>
                                                     <option value="">Seleccionar...</option>
                                                     @foreach ($lista_informaticos as $item)
-                                                        <option value='@json(["dni"=>$item->dni,"datos"=>$item->datos])'>
-                                                            {{ $item->datos }}
+                                                        <option value="{{ $item->dni }}">
+                                                            {{ $item->dni . ' - ' . $item->datos }}
                                                         </option>
                                                     @endforeach
                                                 </select>
@@ -718,19 +658,28 @@
         </div>
     </div>
 
-    {{-- Modal burcar personal --}}
+    {{--MODAL BUSCAR PERSONAL --}}
     @include('livewire.rrhh.personal.partials.buscar-personal-component')
 
-    {{-- Modal servicios --}}
+    {{-- MODALE BUSCAR SEDES-DEPENDENCIAS-DESPACHOS --}}
+
+    @include('livewire.rrhh.personal.partials.buscar-sedes-component')
+    @include('livewire.rrhh.personal.partials.buscar-dependencias-component')
+    @include('livewire.rrhh.personal.partials.buscar-despachos-component')
+
+    {{-- MODAL BUSCAR CARGO --}}
+    @include('livewire.rrhh.personal.partials.buscar-cargos-component')
+
+    {{-- MODAL BUSCAR SERVICIO --}}
     @include('livewire.intranet.atenciones.partials.buscar-servicio-component')
 
-    {{-- Modal Incidencias y Solicitudes Detalle --}}
+    {{-- MODAL BUSCAR INCIDENCIAS / SOLICITUDES --}}
     @include('livewire.intranet.atenciones.partials.buscar-incidencia-solicitud-component')
 
-    {{-- Modal bienes patrimoniales --}}
+    {{-- MODAL BUSCAR BIENES PATRIMONIALES --}}
     @include('livewire.patrimonio.bienes.partials.buscar-bienes-component')
     
-
+    {{-- MODAL CARGAR PDF --}}
     @include('livewire.intranet.atenciones.partials.pdf-cargar-component')
 
 </div>

@@ -35,16 +35,20 @@ class Activos extends Component
 {
     protected $listeners = ['usuarioActivado' => '$refresh'];
 
+
     use WithFileUploads;
     use WithPagination;
     protected $paginationTheme = "bootstrap";
 
-    public $mostrarBtnBuscarDni = "d-none";
+
+    // public $mostrarBtnBuscarDni = "d-none";
+
 
     public $colorHeaderModal, $textoHeaderModal;
     public $colorNuevoEditar, $textoNuevoEditar;
     public $colorGuardarActualizar, $textoGuardarActualizar;
     public $colorAgregar;
+
 
     //Variables PARA OCULTAR Y MOSTRAR TXT_OTROS
     public $mostrarcontroles = "d-none",$mostrarcontrolgpli="d-none";
@@ -229,39 +233,29 @@ class Activos extends Component
     }
 
     
-    public function filtrarTotal($value)
+    public function filtrarTotal($value = null)
     {
         $this->resetFiltros();
-        $this->filtroinformatico = trim($value);
+        $this->filtroinformatico = $value ? trim($value) : null;
     }
-    public function filtrarAtendido($value)
+    public function filtrarAtendido($value = null)
     {
         $this->resetFiltros();
         $this->filtro_atendido = 'SI';
-        $this->filtroinformatico = trim($value);
+        $this->filtroinformatico = $value ? trim($value) : null;
     }
-    public function filtrarNoatendido($value)
+    public function filtrarNoatendido($value = null)
     {
         $this->resetFiltros();
         $this->filtro_atendido = 'NO';
-        $this->filtroinformatico = trim($value);
+        $this->filtroinformatico = $value ? trim($value) : null;
     }
-    public function filtrarEnviadolima($value)
+    public function filtrarEnviadolima($value = null)
     {
         $this->resetFiltros();
         $this->filtro_enviadolima = 'SI';
-        $this->filtroinformatico = trim($value);
+        $this->filtroinformatico = $value ? trim($value) : null;
     }
-    // public function filtrarAtendidou()
-    // {
-    //     $this->resetFiltros();
-    //     $this->filtro_atendidou = 'SI';
-    // }
-    // public function filtrarNoatendidou()
-    // {
-    //     $this->resetFiltros();
-    //     $this->filtro_atendidou = 'NO';
-    // }
     private function resetFiltros()
     {
         $this->search = null;
@@ -275,56 +269,50 @@ class Activos extends Component
     public function render()
     {
         $lista_activos = $this->queryConFiltros()
-            ->select('personas.*',
-                'personales.persona_id',
-                'personales.regimen',
-                'personales.tipo_regimen',
-                'personales.cargo',
-                'personales.sedeorigen',
-                'personales.dependenciaorigen',
-                'personales.despachoorigen',
-                'personales.sededestino',
-                'personales.dependenciadestino',
-                'personales.despachodestino',
-                'personales.tipo_documento',
-                'personales_atenciones.id as personalatencion_id',
-                'personales_atenciones.reportado_por',
-                'personales_atenciones.servicio',
-                'personales_atenciones.detalle_servicio',
-                'personales_atenciones.solicitud_incidencia',
-                'personales_atenciones.atendido',
-                'personales_atenciones.atendido_por_datos',
-                'personales_atenciones.created_user as utencioncreado',
-                'personales_atenciones.ruta_documento',
-                'personales_atenciones.created_user_cargo')
-            ->where('personas.activo', 1)
-            ->where('personales.activo', 1)
+
+            ->select(
+                'personales_atenciones.*'
+            )
+
             ->where('personales_atenciones.activo', 1)
-            ->orderBy('personales_atenciones.id','desc')
-            ->paginate(10, ['*'], 'atencionesPage');
+
+            ->orderBy('personales_atenciones.id', 'desc')
+
+            ->paginate(
+                10,
+                ['*'],
+                'atencionesPage'
+            );
 
         $lista_inactivos = $this->queryConFiltros()
-            ->select('personas.*',
-                'personales.persona_id',
-                'personales.regimen',
-                'personales.tipo_regimen',
-                'personales.cargo',
-                'personales.sedeorigen',
-                'personales.dependenciaorigen',
-                'personales.despachoorigen',
-                'personales.sededestino',
-                'personales.dependenciadestino',
-                'personales.despachodestino',
-                'personales.tipo_documento',
-                'personales_atenciones.reportado_por',
-                'personales_atenciones.servicio',
-                'personales_atenciones.detalle_servicio',
-                'personales_atenciones.solicitud_incidencia',
-                'personales_atenciones.atendido',
-                'personales_atenciones.atendido_por_datos')
-            ->where('personales.activo', 0)
-            ->orderBy('personales_atenciones.id','desc')
-            ->paginate(10, ['personas.*'], 'personalesiPage');
+
+            ->select(
+                'personales_atenciones.*'
+            )
+
+            ->where('personales_atenciones.activo', 0)
+
+            ->orderBy('personales_atenciones.id', 'desc')
+
+            ->paginate(
+                10,
+                ['*'],
+                'atencionesinactivosPage'
+            );
+
+        $lista_historial= $this->queryConFiltros()
+
+            ->select(
+                'personales_atenciones.*'
+            )
+
+            ->orderBy('personales_atenciones.id', 'desc')
+
+            ->paginate(
+                10,
+                ['*'],
+                'atencioneshistorialPage'
+            );
 
         $estadisticas = PersonalesAtencione::select('created_user_cargo','created_user')
             ->selectRaw("COUNT(*) as total")
@@ -375,31 +363,6 @@ class Activos extends Component
             })
             ->first();
 
-        $lista_historial = $this->queryConFiltros()
-            ->select('personas.*',
-                'personales.persona_id',
-                'personales.regimen',
-                'personales.tipo_regimen',
-                'personales.cargo',
-                'personales.sedeorigen',
-                'personales.dependenciaorigen',
-                'personales.despachoorigen',
-                'personales.sededestino',
-                'personales.dependenciadestino',
-                'personales.despachodestino',
-                'personales.tipo_documento',
-                'personales_atenciones.id as personalatencion_id',
-                'personales_atenciones.reportado_por',
-                'personales_atenciones.servicio',
-                'personales_atenciones.detalle_servicio',
-                'personales_atenciones.solicitud_incidencia',
-                'personales_atenciones.atendido',
-                'personales_atenciones.atendido_por_datos',
-                'personales_atenciones.created_user as utencioncreado')
-            ->whereIn('personales_atenciones.activo', [1,0])
-            ->orderBy('personales.id','desc')
-            ->paginate(10, ['personas.*'], 'historialPage');
-
         $lista_personas = Persona::join('personales','personas.id','=','personales.persona_id')
             ->select(
                 'personas.*',
@@ -439,7 +402,7 @@ class Activos extends Component
             
         $lista_dependencias = Personales_dependencia::select('id','nombre')
             ->where('activo','1')
-            ->where('sede_id',$this->codsedeorigen)
+            ->where('sede_id',$this->codsededestino)
             ->where('nombre','like','%' . $this->searchdependencias . '%')
             ->distinct()
             ->orderBy('nombre')
@@ -493,35 +456,77 @@ class Activos extends Component
 
     private function queryConFiltros()
     {
+        return PersonalesAtencione::query()
 
-        return Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
-            ->join('personales_atenciones','personas.id','=','personales_atenciones.persona_id')
-
+            // BUSCADOR
             ->when($this->search, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('personas.dni', 'like', '%' . $this->search . '%')
-                    ->orWhere('personas.datos', 'like', '%' . $this->search . '%');
-                });
-            })
-            ->when($this->filtro_atendido, fn($q) =>
-                $q->where('personales_atenciones.atendido', $this->filtro_atendido)
-            )
-            ->when($this->filtro_enviadolima, fn($q) =>
-                $q->where('personales_atenciones.enviado_lima', $this->filtro_enviadolima)
-            )
-            ->when($this->filtro_atendidou, fn($q) =>
-                $q->where('personales_atenciones.atendido', $this->filtro_atendidou)
-            )
-            ->when($this->filtroinformatico, fn($q) => $q->where('personales_atenciones.updated_user', $this->filtroinformatico))
-            // 🔥 FILTRO AÑO
-            ->when($this->filtro_anio, function ($q) {
-                $q->whereYear('personales_atenciones.created_at', $this->filtro_anio);
-            })
 
-            // 🔥 FILTRO MES
+                $search = trim($this->search);
+
+                $query->where(function ($q) use ($search) {
+
+                    $q->where('personales_atenciones.dni', 'like', '%' . $search . '%')
+                    ->orWhere('personales_atenciones.datos', 'like', '%' . $search . '%');
+
+                });
+
+            })
+            // FILTRO ATENDIDO
+            ->when($this->filtro_atendido, function ($q) {
+
+                $q->where(
+                    'personales_atenciones.atendido',
+                    $this->filtro_atendido
+                );
+
+            })
+            // FILTRO ENVIADO LIMA
+            ->when($this->filtro_enviadolima, function ($q) {
+
+                $q->where(
+                    'personales_atenciones.enviado_lima',
+                    $this->filtro_enviadolima
+                );
+
+            })
+            // FILTRO ATENDIDO USUARIO
+            ->when($this->filtro_atendidou, function ($q) {
+
+                $q->where(
+                    'personales_atenciones.atendido',
+                    $this->filtro_atendidou
+                );
+
+            })
+            // FILTRO INFORMÁTICO
+            ->when($this->filtroinformatico, function ($q) {
+
+                $q->where(
+                    'personales_atenciones.updated_user',
+                    trim($this->filtroinformatico)
+                );
+
+            })
+            // FILTRO AÑO
+            ->when($this->filtro_anio, function ($q) {
+
+                $q->whereYear(
+                    'personales_atenciones.created_at',
+                    $this->filtro_anio
+                );
+
+            })
+            // FILTRO MES
             ->when($this->filtro_mes, function ($q) {
-                $q->whereMonth('personales_atenciones.created_at', $this->filtro_mes);
-            });
+
+                $q->whereMonth(
+                    'personales_atenciones.created_at',
+                    $this->filtro_mes
+                );
+
+            })
+            // ORDEN
+            ->orderByDesc('personales_atenciones.created_at');
     }
 
     protected function rules(){
@@ -553,7 +558,7 @@ class Activos extends Component
 
         $this->funcionGuardarActualizar="guardar";
 
-        $this->mostrarBtnBuscarDni = "d-none";
+        // $this->mostrarBtnBuscarDni = "d-none";
         $this->mostrarcontroles = "d-none";
 
         $this->colorHeaderModal = "primary-subtle";
@@ -587,62 +592,89 @@ class Activos extends Component
 
             DB::transaction(function () use (&$registro) {
 
-                $usuario = auth()->user()->datos;
+                $usuario_id = auth()->user()->id;
+                $usuario_dni = auth()->user()->dni;
+                $usuario_datos = auth()->user()->datos;
+                $usuario_cargo = auth()->user()->cargo;
 
-                // 📄 Guardar documento
+                // GUARDAR DOCUMENTO
                 $rutaDocumento = $this->guardar_acta();
 
-                // 💾 Crear registro
+                // OBTENEMOS LOS DATOS DEL INFORAMTICO SELECCIONADO PARA FIRMAR EL ACTA
+                $iinformatico = User::select('datos')
+                    ->where('dni', $this->informatico_dni)
+                    ->first();
+
+                // CREAR REGISTRO EN TABLA
                 $registro = PersonalesAtencione::create([
+                    // DATOS DE LA PERSONA
                     'persona_id' => $this->persona_id,
                     'dni' => $this->dni,
-                    'personal_id' => $this->personal_id,
+                    'appaterno' => $this->appaterno,
+                    'apmaterno' => $this->apmaterno,
+                    'nombres' => $this->nombres,                   
                     'datos' => $this->datos,
-                    'codsede_origen' => $this->codsedeorigen,
-                    'sede_origen' => $this->sedeorigen,
-                    'coddependencia_origen' => $this->coddependenciaorigen,
-                    'dependencia_origen' => $this->dependenciaorigen,
-                    'coddespacho_origen' => $this->coddespachoorigen,
-                    'despacho_origen' => $this->despachoorigen,
-                    'codsede_destino' => $this->codsededestino,
-                    'sede_destino' => $this->sededestino,
-                    'coddependencia_destino' => $this->coddependenciadestino,
-                    'dependencia_destino' => $this->dependenciadestino,
-                    'coddespacho_destino' => $this->coddespachodestino,
-                    'despacho_destino' => $this->despachodestino,
+                    'celpersonal' => $this->celpersonal,
+                    'celinstitucional' => $this->celinstitucional,
+                    'correopersonal' => $this->correopersonal,
+                    'correoinstitucional' => $this->correoinstitucional,
+                    // DATOS DEL PERSONAL 
+                    'personal_id' => $this->personal_id,
+
+                    'codsedeorigen' => $this->codsedeorigen,
+                    'sedeorigen' => $this->sedeorigen,
+                    'coddependenciaorigen' => $this->coddependenciaorigen,
+                    'dependenciaorigen' => $this->dependenciaorigen,
+                    'coddespachoorigen' => $this->coddespachoorigen,
+                    'despachoorigen' => $this->despachoorigen,
+
+                    'codsededestino' => $this->codsededestino,
+                    'sededestino' => $this->sededestino,
+                    'coddependenciadestino' => $this->coddependenciadestino,
+                    'dependenciadestino' => $this->dependenciadestino,
+                    'coddespachodestino' => $this->coddespachodestino,
+                    'despachodestino' => $this->despachodestino,
+
+                    'regimen' => $this->regimen,
+                    'tipo_regimen' => $this->tipo_regimen,
+                    'cargo' => $this->cargo,
+                    'cargo_condicion' => $this->cargo_condicion,
+
+                    //DATOS DE LA ATENCIÓN
+                    'tipo_documento' => $this->tipo_documento,
                     'reportado_por' => $this->reportado_por,
                     'solicitud_incidencia' => $this->solicitud_incidencia,
-                    'servicio_id' => $this->servicio_id,
                     'servicio' => $this->servicio,
-                    'detalle_servicio_id' => $this->detalle_servicio_id,
                     'detalle_servicio' => $this->detalle_servicio,
                     'bien_id' => $this->bien_id,
                     'cod' => $this->cod,
                     'cod_patrimonial' => $this->cod_patrimonial,
                     'datos_bien' => $this->datos_bien,
-                    'cea' => strtoupper($this->cea),
-                    'sgf' => strtoupper($this->sgf),
-                    'glpi' => strtoupper($this->glpi),
+                    'ip' => $this->bien_ip,
+                    'cea' => $this->cea,
+                    'sgf' => $this->sgf,
+                    'glpi' => $this->glpi,
                     'enviado_lima' => $this->enviado_lima,
-                    'detalle_problema' => strtoupper($this->detalle_problema),
+                    'detalle_problema' => $this->detalle_problema,
                     'ncopias' => $this->ncopias,
-                    'obs_usuario' => strtoupper($this->obs_usuario),
-                    'obs_informatico' => strtoupper($this->obs_informatico),
-                    'estado' => $this->estado_bien,
+                    'obs_usuario' => $this->obs_usuario,
+                    'obs_informatico' => $this->obs_informatico,
+                    'estado' => $this->estado,
                     'atendido' => $this->atendido,
-                    'atendido_por_id' => auth()->user()->id,
-                    'atendido_por_dni' => auth()->user()->dni,
-                    'atendido_por_datos' => $usuario,
+                    'atendido_por_id' => $usuario_id,
+                    'atendido_por_dni' => $usuario_dni,
+                    'atendido_por_datos' => $usuario_datos,
                     'tiempo_atencion' => $this->tiempo_atencion,
-                    'respuesta' => strtoupper($this->respuesta),
+                    'respuesta' => $this->respuesta,
                     'conformidad' => $this->conformidad,
-                    'ruta_evidencia' => $rutaDocumento,
+                    'ruta_evidencia' => $this->ruta_evidencia,
+                    'ruta_documento' => $this->ruta_documento,
                     'informatico_dni' => $this->informatico_dni,
-                    'informatico' => $this->informatico,
-                    'activo' => "1",
-                    'created_user_cargo' => auth()->user()->cargo,
-                    'created_user' => $usuario,
-                    'updated_user' => $usuario,
+                    'informatico' => $iinformatico->datos,
+                    'activo' => '1',
+                    'created_user_cargo' => $usuario_cargo,
+                    'created_user' => $usuario_datos,
+                    'updated_user' => $usuario_datos,
                 ]);
 
                 if ($this->bien_id) {
@@ -654,7 +686,7 @@ class Activos extends Component
                     if ($ibien) {
                         $ibien->update([
                             'ip' => $this->bien_ip,
-                            'updated_user' => $usuario,
+                            'updated_user' => $usuario_datos,
                         ]);
                     }
 
@@ -668,7 +700,7 @@ class Activos extends Component
                             'codigo_patrimonial' => $this->cod_patrimonial,
                             'bien' => $this->datos_bien,
                             'estado' => '1',
-                            'updated_user' => $usuario,
+                            'updated_user' => $usuario_datos,
                         ]);
                     }
 
@@ -676,7 +708,7 @@ class Activos extends Component
 
             });
 
-            // ✅ ID generado
+            // ID GENERADO
             $this->atencion_id = $registro->id;
 
             // 📧 VALIDACIÓN DE CORREO
@@ -699,17 +731,17 @@ class Activos extends Component
 
             } catch (\Throwable $mailError) {
 
-                // 🔥 No rompe el flujo si falla el correo
+                // NO ROMPPE EL FLUJO SI FALLA EL CORREO
                 report($mailError);
 
                 $mensaje = 'Se guardó correctamente, pero falló el envío del correo.';
                 $tipo = 'warning';
             }
 
-            // 🔄 Reset
+            // RESET
             $this->resetExcept(['filtro_anio', 'filtro_mes']);
 
-            // ✅ Mensaje
+            // MENSAJE
             $this->dispatch(
                 'alerta-actualizado',
                 titulo: 'Proceso completado',
@@ -733,7 +765,7 @@ class Activos extends Component
 
         $this->funcionGuardarActualizar = "actualizar";
 
-        $this->mostrarBtnBuscarDni = "d-none";
+        // $this->mostrarBtnBuscarDni = "d-none";
 
         $this->colorHeaderModal = "success-subtle";
         $this->textoHeaderModal = "Editar";
@@ -746,50 +778,61 @@ class Activos extends Component
         $this->seccionPersona = "";
         $this->seccionPersonal = "";
 
-        // ===== DATOS ATENCION =====
-        // $ipersonalatencion = PersonalesAtencione::where('id', $personalatencion_id)->where('activo','1')->firstOrFail();
+        // DATOS DE LA PERSONA
         $this->atencion_id = $ipersonalatencion->id;
+
         $this->persona_id = $ipersonalatencion->persona_id;
         $this->dni = $ipersonalatencion->dni;
+        $this->appaterno = $ipersonalatencion->appaterno;
+        $this->apmaterno = $ipersonalatencion->apmaterno;
+        $this->nombres = $ipersonalatencion->nombres;
+        $this->datos = $ipersonalatencion->datos;
+        $this->celpersonal = $ipersonalatencion->celpersonal;
+        $this->celinstitucional = $ipersonalatencion->celinstitucional;
+        $this->correopersonal = $ipersonalatencion->correopersonal;
+        $this->correoinstitucional = $ipersonalatencion->correoinstitucional;
+
+        // DATOS DEL PERSONAL
+        $this->personal_id = $ipersonalatencion->personal_id;
+
+        $this->codsedeorigen = $ipersonalatencion->codsededestino;
+        $this->sedeorigen = $ipersonalatencion->sededestino;
+        $this->coddependenciaorigen= $ipersonalatencion->coddependenciadestino;
+        $this->dependenciaorigen = $ipersonalatencion->dependenciadestino;
+        $this->coddespachoorigen = $ipersonalatencion->coddespachodestino;
+        $this->despachoorigen = $ipersonalatencion->despachodestino;
+
+        $this->codsededestino = $ipersonalatencion->codsededestino;
+        $this->sededestino = $ipersonalatencion->sededestino;
+        $this->coddependenciadestino= $ipersonalatencion->coddependenciadestino;
+        $this->dependenciadestino = $ipersonalatencion->dependenciadestino;
+        $this->coddespachodestino = $ipersonalatencion->coddespachodestino;
+        $this->despachodestino = $ipersonalatencion->despachodestino;
+
+        $this->regimen = $ipersonalatencion->regimen;
+        $this->tipo_regimen = $ipersonalatencion->tipo_regimen;
+        $this->cargo = $ipersonalatencion->cargo;
+        $this->cargo_condicion = $ipersonalatencion->cargo_condicion;
+
+        // DATOS DE LA ATENCIÓN
         $this->reportado_por = $ipersonalatencion->reportado_por;
         $this->solicitud_incidencia = $ipersonalatencion->solicitud_incidencia;
-        $this->servicio_id = $ipersonalatencion->servicio_id;
         $this->servicio = $ipersonalatencion->servicio;
-        $this->detalle_servicio_id = $ipersonalatencion->detalle_servicio_id;
         $this->detalle_servicio = $ipersonalatencion->detalle_servicio;
-
         $this->bien_id = $ipersonalatencion->bien_id;
         $this->cod = $ipersonalatencion->cod;
         $this->cod_patrimonial = $ipersonalatencion->cod_patrimonial;
+        $this->bien_ip = $ipersonalatencion->ip;
         $this->datos_bien = $ipersonalatencion->datos_bien;
-
-        $this->informatico_dni = $ipersonalatencion->informatico_dni;
-        $this->informatico = json_encode([
-            'dni'   => $ipersonalatencion->informatico_dni,
-            'datos' => $ipersonalatencion->informatico
-        ]);
-
-        if ($this->bien_id) {
-            $ibien = PatrimoniosBiene::where('id', $this->bien_id)
-                ->where('activo','1')
-                ->first();
-
-            $this->bien_ip = $ibien?->ip;
-        }
-
         $this->cea = $ipersonalatencion->cea;
         $this->sgf = $ipersonalatencion->sgf;
         $this->glpi = $ipersonalatencion->glpi;
         $this->enviado_lima = $ipersonalatencion->enviado_lima;
         $this->detalle_problema = $ipersonalatencion->detalle_problema;
-        
         $this->ncopias = $ipersonalatencion->ncopias;
-
         $this->obs_usuario = $ipersonalatencion->obs_usuario;
         $this->obs_informatico = $ipersonalatencion->obs_informatico;
-        
-        $this->estado_bien = $ipersonalatencion->estado;
-
+        $this->estado = $ipersonalatencion->estado;
         $this->atendido = $ipersonalatencion->atendido;
         $this->atendido_por_id = $ipersonalatencion->atendido_por_id;
         $this->atendido_por_dni = $ipersonalatencion->atendido_por_dni;
@@ -797,8 +840,15 @@ class Activos extends Component
         $this->tiempo_atencion = $ipersonalatencion->tiempo_atencion;
         $this->respuesta = $ipersonalatencion->respuesta;
         $this->conformidad = $ipersonalatencion->conformidad;
-
         $this->ruta_evidencia = $ipersonalatencion->ruta_evidencia;
+        $this->ruta_documento = $ipersonalatencion->ruta_documento;
+        $this->informatico_dni = $ipersonalatencion->informatico_dni;
+        $this->informatico = $ipersonalatencion->informatico;
+        $this->activo = $ipersonalatencion->activo;
+        $this->created_user_cargo = $ipersonalatencion->created_user_cargo;
+        $this->created_user = $ipersonalatencion->created_user;
+        $this->updated_user = $ipersonalatencion->updated_user;
+
 
         if (in_array($this->servicio_id, [9, 11, 19]) || in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA", "SERVIDORES"]))
         {
@@ -806,44 +856,6 @@ class Activos extends Component
         } else {
             $this->mostrarcontroles = "d-none";
         }
-
-        // ===== DATOS PERSONA =====
-        $ipersona = Persona::where('dni', $this->dni)->where('activo','1')->firstOrFail();
-        $this->persona_id = $ipersona->id;
-        $this->dni = $ipersona->dni;
-        $this->nombres = $ipersona->nombres;
-        $this->appaterno = $ipersona->appaterno;
-        $this->apmaterno = $ipersona->apmaterno;
-        $this->celpersonal = $ipersona->celpersonal;
-        $this->correopersonal = $ipersona->correopersonal;
-        $this->datos = $ipersona->datos;
-
-        $this->fotoactual = $ipersona->foto;
-
-        // // ===== DATOS PERSONAL =====
-        $ipersonal = Personale::where('persona_dni', $ipersonalatencion->dni)->where('activo','1')->firstOrFail();
-
-        $this->personal_id = $ipersonal->id;
-        $this->regimen = $ipersonal->regimen;
-        $this->tipo_regimen = $ipersonal->tipo_regimen;
-        $this->cargo = $ipersonal->cargo;
-        $this->cargo_condicion = $ipersonal->cargo_condicion;
-        $this->codsedeorigen = $ipersonal->codsedeorigen;
-        $this->sedeorigen = $ipersonal->sedeorigen;
-        $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
-        $this->dependenciaorigen = $ipersonal->dependenciaorigen;
-        $this->coddespachoorigen = $ipersonal->coddespachoorigen;
-        $this->despachoorigen = $ipersonal->despachoorigen;
-
-        $this->codsededestino = $ipersonal->codsededestino;
-        $this->sededestino = $ipersonal->sededestino;
-        $this->coddependenciadestino = $ipersonal->coddependenciadestino;
-        $this->dependenciadestino = $ipersonal->dependenciadestino;
-        $this->coddespachodestino = $ipersonal->coddespachodestino;
-        $this->despachodestino = $ipersonal->despachodestino;
-
-        $this->celinstitucional = $ipersonal->celinstitucional;
-        $this->correoinstitucional = $ipersonal->correoinstitucional;
         
     }
 
@@ -853,61 +865,90 @@ class Activos extends Component
 
             DB::transaction(function () {
 
-                $usuario = auth()->user()->datos;
+                $usuario_id = auth()->user()->id;
+                $usuario_dni = auth()->user()->dni;
+                $usuario_datos = auth()->user()->datos;
+                $usuario_cargo = auth()->user()->cargo;
 
                 // FUNCIÓN PARA CARGAR DOCUMENTO
                 $rutaDocumento = $this->actualizar_acta();
 
-                $ipersonalatencion = PersonalesAtencione::where('id', $this->atencion_id)->where('activo','1')->firstOrFail();
+                // OBTENEMOS LOS DATOS DEL INFORAMTICO SELECCIONADO PARA FIRMAR EL ACTA
+                $iinformatico = User::select('datos')
+                    ->where('dni', $this->informatico_dni)
+                    ->first();
 
-                $data = json_decode($this->informatico, true);
+                $ipersonalatencion = PersonalesAtencione::findOrFail($this->atencion_id);
 
                 $ipersonalatencion->update([
+                    // DATOS DE LA PERSONA
                     'persona_id' => $this->persona_id,
                     'dni' => $this->dni,
-                    'personal_id' => $this->personal_id,
+                    'appaterno' => $this->appaterno,
+                    'apmaterno' => $this->apmaterno,
+                    'nombres' => $this->nombres,                   
                     'datos' => $this->datos,
-                    'codsede_origen' => $this->codsedeorigen,
-                    'sede_origen' => $this->sedeorigen,
-                    'coddependencia_origen' => $this->coddependenciaorigen,
-                    'dependencia_origen' => $this->dependenciaorigen,
-                    'coddespacho_origen' => $this->coddespachoorigen,
-                    'despacho_origen' => $this->despachoorigen,
-                    'codsede_destino' => $this->codsededestino,
-                    'sede_destino' => $this->sededestino,
-                    'coddependencia_destino' => $this->coddependenciadestino,
-                    'dependencia_destino' => $this->dependenciadestino,
-                    'coddespacho_destino' => $this->coddespachodestino,
-                    'despacho_destino' => $this->despachodestino,
+                    'celpersonal' => $this->celpersonal,
+                    'celinstitucional' => $this->celinstitucional,
+                    'correopersonal' => $this->correopersonal,
+                    'correoinstitucional' => $this->correoinstitucional,
+
+                    // DATOS DEL PERSONAL 
+                    'personal_id' => $this->personal_id,
+
+                    'codsedeorigen' => $this->codsedeorigen,
+                    'sedeorigen' => $this->sedeorigen,
+                    'coddependenciaorigen' => $this->coddependenciaorigen,
+                    'dependenciaorigen' => $this->dependenciaorigen,
+                    'coddespachoorigen' => $this->coddespachoorigen,
+                    'despachoorigen' => $this->despachoorigen,
+
+                    'codsededestino' => $this->codsedeorigen,
+                    'sededestino' => $this->sedeorigen,
+                    'coddependenciadestino' => $this->coddependenciaorigen,
+                    'dependenciadestino' => $this->dependenciaorigen,
+                    'coddespachodestino' => $this->coddespachoorigen,
+                    'despachodestino' => $this->despachoorigen,
+
+                    'regimen' => $this->regimen,
+                    'tipo_regimen' => $this->tipo_regimen,
+                    'cargo' => $this->cargo,
+                    'cargo_condicion' => $this->cargo_condicion,
+
+                    //DATOS DE LA ATENCIÓN
+                    'tipo_documento' => $this->tipo_documento,
                     'reportado_por' => $this->reportado_por,
                     'solicitud_incidencia' => $this->solicitud_incidencia,
                     'servicio' => $this->servicio,
                     'detalle_servicio' => $this->detalle_servicio,
+                    'bien_id' => $this->bien_id,
+                    'cod' => $this->cod,
+                    'cod_patrimonial' => $this->cod_patrimonial,
+                    'datos_bien' => $this->datos_bien,
                     'cea' => $this->cea,
                     'sgf' => $this->sgf,
                     'glpi' => $this->glpi,
                     'enviado_lima' => $this->enviado_lima,
                     'detalle_problema' => $this->detalle_problema,
-
+                    'ncopias' => $this->ncopias,
                     'obs_usuario' => $this->obs_usuario,
                     'obs_informatico' => $this->obs_informatico,
-
-                    'estado' => $this->estado_bien,
-
+                    'estado' => $this->estado,
                     'atendido' => $this->atendido,
-                    'atendido_por_id' => auth()->user()->id,
-                    'atendido_por_dni' => auth()->user()->dni,
-                    'atendido_por_datos' => $usuario,
+                    'atendido_por_id' => $usuario_id,
+                    'atendido_por_dni' => $usuario_dni,
+                    'atendido_por_datos' => $usuario_datos,
                     'tiempo_atencion' => $this->tiempo_atencion,
                     'respuesta' => $this->respuesta,
                     'conformidad' => $this->conformidad,
-                    'ruta_evidencia' => $rutaDocumento,
+                    'ruta_evidencia' => $this->ruta_evidencia,
+                    'ruta_documento' => $this->ruta_documento,
                     'informatico_dni' => $this->informatico_dni,
-                    
-                    'informatico' => $data['datos'] ?? null,
-                    'ncopias' => $this->ncopias,
-                    'activo' => "1",
-                    'updated_user' => $usuario,
+                    'informatico' => $this->informatico,
+                    'activo' => '1',
+                    'created_user_cargo' => $usuario_cargo,
+                    'created_user' => $usuario_datos,
+                    'updated_user' => $usuario_datos,
                 ]);
 
                 if ($this->bien_id) {
@@ -917,16 +958,16 @@ class Activos extends Component
 
                     $ibien->update([
                         'ip' => $this->bien_ip,
-                        'updated_user' => $usuario,
+                        'updated_user' => $usuario_datos,
                     ]);
 
-                    $iip = Ip::where('ip', $this->bien_ip)
+                    $iip = InformaticasIp::where('ip', $this->bien_ip)
                         ->where('activo','1')
                         ->first();
 
                     $iip->update([
                         'estado' => '1',
-                        'updated_user' => $usuario,
+                        'updated_user' => $usuario_datos,
                     ]);
 
                 }
@@ -945,22 +986,21 @@ class Activos extends Component
 
             $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
 
-        } 
-        catch (\Throwable $e) {
+        // } catch (\Throwable $e) {
 
-            report($e);
+        //     report($e);
 
-            $this->dispatch(
-                'alerta-actualizado',
-                titulo: 'Error',
-                mensaje: 'Ocurrió un error al actualizar.',
-                tipo: 'error'
-            );
-        };
-        // catch (\Throwable $e) {
-
-        //     dd($e); // 🔥 Esto te dirá TODO
+        //     $this->dispatch(
+        //         'alerta-actualizado',
+        //         titulo: 'Error',
+        //         mensaje: 'Ocurrió un error al actualizar.',
+        //         tipo: 'error'
+        //     );
         // };
+        } catch (\Throwable $e) {
+
+            dd($e); // 🔥 Esto te dirá TODO
+        };
     }
 
     public function cerrar()
@@ -1039,20 +1079,21 @@ class Activos extends Component
 
     // FUNCIONES AGREGAR
     public function agregar_persona(Persona $ipersona){
+        // DATOS DE LA PERSONA
         $this->persona_id = $ipersona->id;
         $this->dni = $ipersona->dni;
         $this->appaterno = $ipersona->appaterno;
         $this->apmaterno = $ipersona->apmaterno;
         $this->nombres = $ipersona->nombres;
-
         $this->datos = $ipersona->datos;
-
         $this->celpersonal = $ipersona->celpersonal;
         $this->correopersonal = $ipersona->correopersonal;
-
         $this->fotoactual = $ipersona->foto;
 
-        $ipersonal = Personale::where([['activo',1],['persona_dni',$this->dni],])->firstOrFail();
+        // DATOS DEL PERSONAL
+        $ipersonal = Personale::where([['persona_dni',$this->dni],['activo',1],])->firstOrFail();
+
+        $this->personal_id = $ipersonal->id;
 
         $this->codsedeorigen = $ipersonal->codsededestino;
         $this->sedeorigen = $ipersonal->sededestino;   
@@ -1075,8 +1116,46 @@ class Activos extends Component
         $this->cargo = $ipersonal->cargo;
         $this->cargo_condicion = $ipersonal->cargo_condicion;
         $this->tipo_documento = $ipersonal->tipo_documento;
+    }
 
-        // $this->reset('searchpersonas');
+    public function agregar_sede(Personales_sede $isede)
+    {
+        $this->codsedeorigen = $isede->id;
+        $this->sedeorigen = $isede->nombre;
+
+        $this->codsededestino = $isede->id;
+        $this->sededestino = $isede->nombre;
+
+        $this->reset(['dependenciaorigen','despachoorigen']);
+
+        $this->reset(['searchdependencias','searchdespachos']);
+    }
+
+    public function agregar_dependencia(Personales_dependencia $idependencia)
+    {
+        $this->coddependenciaorigen = $idependencia->id;
+        $this->dependenciaorigen = $idependencia->nombre;
+
+        $this->coddependenciadestino = $idependencia->id;
+        $this->dependenciadestino = $idependencia->nombre;
+
+        $this->reset('despachoorigen');
+
+        $this->reset('searchdespachos');
+    }
+
+    public function agregar_despacho(Personales_despacho $idespacho)
+    {
+        $this->coddespachoorigen = $idespacho->id;
+        $this->despachoorigen = $idespacho->nombre;
+
+        $this->coddespachodestino = $idespacho->id;
+        $this->despachodestino = $idespacho->nombre;
+    }
+
+    public function agregar_cargo(Personales_cargo $icargo)
+    {
+        $this->cargo = $icargo->nombre;
     }
 
     public function agregar_servicio(PersonalesAtencionesServicio $iservicio)
@@ -1131,21 +1210,41 @@ class Activos extends Component
     public function agregar_bien(patrimonios_biene $ibien)
     {
         $this->reset([
-            'dni','datos','appaterno','apmaterno','nombres','genero','estadocivil',
-            'fechanacimiento','celpersonal','correopersonal','foto',
-            'tipo_regimen','regimen','cargo',
-            'codsedeorigen','sedeorigen',
-            'coddependenciaorigen','dependenciaorigen',
-            'coddespachoorigen','despachoorigen',
-            'codsededestino','sededestino',
-            'coddependenciadestino','dependenciadestino',
-            'coddespachodestino','despachodestino',
-            'celinstitucional','correoinstitucional'
+            // DATOS DE LA PERSONA
+            'persona_id',
+            'dni',
+            'nombres',
+            'appaterno',
+            'apmaterno',
+            'celpersonal',
+            'celinstitucional',
+            'correopersonal',
+            'correoinstitucional',
+            'datos',
+            // DATOS DEL PERSONAL
+            'personal_id',
+            'codsedeorigen',
+            'sedeorigen',
+            'coddependenciaorigen',
+            'dependenciaorigen',
+            'coddespachoorigen',
+            'despachoorigen',
+
+            'codsededestino',
+            'sededestino',
+            'coddependenciadestino',
+            'dependenciadestino',
+            'coddespachodestino',
+            'despachodestino',
+
+            'regimen',
+            'tipo_regimen',
+            'cargo',
+            'cargo_condicion',
         ]);
 
-        // Datos del bien
+        // INSTANCIA DEL BIEN RECEPTADO COMO PARAMETRO
         $this->bien_id = $ibien->id;
-
         $this->fill([
             'cod' => $ibien->codigo_barra,
             'cod_patrimonial' => $ibien->codigo_patrimonial,
@@ -1162,7 +1261,7 @@ class Activos extends Component
 
         $dni = $ibien->usuario_dni;
 
-        // Persona
+        // DATOS DE LA PERSONA
         if ($persona = Persona::where('activo',1)->where('dni',$dni)->first()) {
 
             $this->fill([
@@ -1179,7 +1278,7 @@ class Activos extends Component
             $this->fotoactual = $persona->foto;
         }
 
-        // Personal
+        // DATOS DEL PERSONAL
         if ($personal = Personale::where('activo',1)->where('persona_dni',$dni)->first()) {
 
             $this->fill([
@@ -1204,6 +1303,7 @@ class Activos extends Component
                 'regimen' => $personal->regimen,
                 'tipo_regimen' => $personal->tipo_regimen,
                 'cargo' => $personal->cargo,
+                'cargo_condicion' => $personal->cargo_condicion,
             ]);
         }
 
@@ -1370,8 +1470,8 @@ class Activos extends Component
     - Correo: {$this->correoinstitucional}
     - Celular: {$this->celinstitucional}
     - Cargo: {$this->cargo}
-    - Dependencia/Fiscalía: {$this->dependenciaorigen}
-    - Despacho: {$this->despachoorigen}";
+    - Dependencia/Fiscalía: {$this->dependenciadestino}
+    - Despacho: {$this->despachodestino}";
     }
 
     public function copiarDatos()
