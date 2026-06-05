@@ -197,7 +197,7 @@
                 <table class="table table-striped table-hover table-sm table-xsmall">
                     <thead class="table-primary text-center align-middle">
                         <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">#TICKET</th>
                             <th scope="col">
                                 <i class="fa-solid fa-user"></i> DNI-PERSONAL
                             </th>
@@ -214,7 +214,7 @@
                         @forelse ($lista_activos as $item)
                             <tr>
                                 <th class="text-center">
-                                    <i class="fa-solid fa-ticket"></i> {{ $loop->iteration }}
+                                    <i class="fa-solid fa-ticket"></i> {{ $item->id }}
                                 </th>
                                 <td><b>{{ $item->dni }}</b> <br> {{ $item->datos }}</td>
                                 <td>
@@ -552,8 +552,8 @@
                                         </div>
                                         @if ($enviado_lima === "SI")
                                             <div class="col-12 col-xl">
-                                                <label for="txtglpi" class="fw-bold fs-6 {{ $mostrarcontrolgpli }}">GLPI</label>
-                                                <input type="text" id="txtglpi" class="form-control form-control-xs text-uppercase {{ $mostrarcontrolgpli }}" wire:model="glpi">
+                                                <label for="txtglpi" class="fw-bold fs-6">GLPI</label>
+                                                <input type="text" id="txtglpi" class="form-control form-control-xs text-uppercase text-end" wire:model="glpi">
                                             </div>
                                         @endif
                                         <div class="col-12 col-xl">

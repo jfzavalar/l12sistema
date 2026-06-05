@@ -452,6 +452,14 @@
                                                 </a>
                                             </li>
                                         @endcan
+                                        {{-- @can('mpfn.informatica.requerimientos.index') --}}
+                                        <li class="nav-item">
+                                            <a class="nav-link ms-3 {{ request()->routeIs('mpfn.informatica.requerimientos.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.informatica.requerimientos.index') }}">
+                                                <i class="nav-icon fa-regular fa-circle"></i>
+                                                <p>Requerimientos</p>
+                                            </a>
+                                        </li>
+                                        {{-- @endcan --}}
                                     </ul>
                                 </li>
                             @endcan

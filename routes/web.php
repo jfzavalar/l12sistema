@@ -11,6 +11,7 @@ use App\Http\Controllers\Contabilidad\GastosoperativosController;
 use App\Http\Controllers\Informatica\AnexosController;
 use App\Http\Controllers\Informatica\FirmasdigitalesController;
 use App\Http\Controllers\Informatica\IpsController;
+use App\Http\Controllers\Informatica\RequerimientosController;
 use App\Http\Controllers\Informatica\soporteController;
 use App\Http\Controllers\Informatica\SpijwebController;
 use App\Http\Controllers\Intranet\AtencionesController;
@@ -133,6 +134,11 @@ Route::middleware('auth','can:mpfn.informatica.ips.index')->group(function () {
 Route::middleware('auth','can:procesos.informatica.spijweb.index')->group(function () {
     Route::resource('spijweb', SpijwebController::class)->names('procesos.informatica.spijweb');
     Route::get('pdf/informatica/spijweb-acta/{id}', [SpijwebController::class, 'exportarPDF'])->name('pdf.informatica.spijweb-acta');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::resource('Requerimientosinformatica', RequerimientosController::class)->names('mpfn.informatica.requerimientos');
+    // Route::get('pdf/informatica/firmapc-acta/{id}', [IpsController::class, 'exportarPDF'])->name('pdf.informatica.firmapc-acta');
 });
 
 
