@@ -224,7 +224,7 @@ class Activos extends Component
         }
     }
 
-    public $filtro_anio,$filtro_mes,$filtroinformatico;
+    public $filtro_anio,$filtro_mes,$filtroinformatico,$filtro_sede,$filtro_dependencia,$filtro_servicio,$filtro_incidencia;
 
     public function mount()
     {
@@ -256,13 +256,19 @@ class Activos extends Component
         $this->filtro_enviadolima = 'SI';
         $this->filtroinformatico = $value ? trim($value) : null;
     }
-    private function resetFiltros()
+    public function resetFiltros()
     {
         $this->search = null;
         $this->filtro_atendido = null;
         $this->filtro_enviadolima = null; 
         $this->filtro_atendidou = null;
         $this->filtroinformatico = null;
+
+        $this->filtro_sede = null;
+        $this->filtro_dependencia = null;
+        $this->filtro_servicio = null;
+        $this->filtro_incidencia = null;
+
         $this->resetPage('atencionesPage');
     }
 
@@ -278,10 +284,7 @@ class Activos extends Component
 
             ->orderBy('personales_atenciones.id', 'desc')
 
-            ->paginate(
-                10,
-                ['*'],
-                'atencionesPage'
+            ->paginate(10,['*'],'atencionesPage'
             );
 
         $lista_inactivos = $this->queryConFiltros()
@@ -294,10 +297,7 @@ class Activos extends Component
 
             ->orderBy('personales_atenciones.id', 'desc')
 
-            ->paginate(
-                10,
-                ['*'],
-                'atencionesinactivosPage'
+            ->paginate(10,['*'],'atencionesinactivosPage'
             );
 
         $lista_historial= $this->queryConFiltros()
@@ -447,11 +447,35 @@ class Activos extends Component
             ->orderBy('datos')
             ->get();
 
+        $lista_sedes_filtro = Personales_sede::select('id','nombre','nombred')
+            ->where('activo','1')
+            ->orderBy('nombre')
+            ->get();
+            
+        $lista_dependencias_filtro = Personales_dependencia::select('id','nombre')
+            ->where('activo','1')
+            ->where('sede','=',$this->filtro_sede)
+            ->orderBy('nombre')
+            ->get();
+
+        $lista_servicios_filtro = PersonalesAtencionesServicio::select('id','tipo','servicio')
+            ->where('activo','1')
+            ->orderBy('servicio')
+            ->get();
+
+        $lista_incidencias_solicitudes_filtro = PersonalesAtencionesIncidenciasSolicitudes::select('id','servicio','incidencia_solicitud')
+            ->where('activo','1')
+            ->where('servicio',$this->filtro_servicio)
+            ->orderBy('incidencia_solicitud')
+            ->get();
+
         return view('livewire.intranet.atenciones.activos',
                 compact('lista_activos','lista_inactivos','estadisticas','estadisticas2','lista_historial',
                             'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos',
                             'lista_servicios','lista_incidencias_solicitudes','lista_bienes',
-                            'lista_informaticos'));
+                            'lista_informaticos',
+                            'lista_sedes_filtro','lista_dependencias_filtro',
+                            'lista_servicios_filtro','lista_incidencias_solicitudes_filtro'));
     }
 
     private function queryConFiltros()
@@ -522,6 +546,42 @@ class Activos extends Component
                 $q->whereMonth(
                     'personales_atenciones.created_at',
                     $this->filtro_mes
+                );
+
+            })
+            // FILTRO SEDE
+            ->when($this->filtro_sede, function ($q) {
+
+                $q->where(
+                    'sededestino',
+                    $this->filtro_sede
+                );
+
+            })
+            // FILTRO DEPENDENCIA
+            ->when($this->filtro_dependencia, function ($q) {
+
+                $q->where(
+                    'dependenciadestino',
+                    $this->filtro_dependencia
+                );
+
+            })
+            // FILTRO SERVICIO
+            ->when($this->filtro_servicio, function ($q) {
+
+                $q->where(
+                    'servicio',
+                    $this->filtro_servicio
+                );
+
+            })
+            // FILTRO SERVICIO
+            ->when($this->filtro_incidencia, function ($q) {
+
+                $q->where(
+                    'detalle_servicio',
+                    $this->filtro_incidencia
                 );
 
             })
@@ -1490,8 +1550,14 @@ class Activos extends Component
                 $this->filtro_atendido, 
                 $this->filtro_enviadolima, 
                 $this->filtro_atendidou,
+
                 $this->filtro_anio,
                 $this->filtro_mes,
+
+                $this->filtro_sede,
+                $this->filtro_dependencia,
+                $this->filtro_servicio,
+                $this->filtro_incidencia,
             ),
             'reporte_tickes.xlsx'
         );

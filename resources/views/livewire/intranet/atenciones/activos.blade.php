@@ -23,7 +23,7 @@
                         </h6>
                         <div class="d-flex justify-content-between align-items-center">
                             <h5>{{ $estadisticas2->total }}</h5>
-                            <button class="btn btn-outline-primary btn-sm" wire:click="filtrarTotal">
+                            <button class="btn btn-outline-primary btn-sm" wire:click="filtrarTotal" >
                                 <i class="fa-solid fa-bars"></i>
                             </button>
                         </div>
@@ -157,19 +157,22 @@
 
             <div class="table-responsive-xl">
                     <div class="row g-3">                      
-                        <div class="col-lg-2 col-sm-12">
+                        <div class="col-lg-1 col-sm-12">
                             <div class="input-group">
-                                <span class="input-group-text input-group-text-xs fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
-                                <select id="cmbfiltro_anio" wire:model="filtro_anio" class="form-select form-select-sm me-2">
+                                <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#filtroModal">
+                                    <i class="fa-solid fa-filter"></i> Filtrar por:
+                                </button>
+                                {{-- <span class="input-group-text input-group-text-xs fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span> --}}
+                                {{-- <select id="cmbfiltro_anio" wire:model="filtro_anio" class="form-select form-select-sm me-2">
                                     <option value="">-- Año --</option>
                                     @foreach(range(date('Y'), date('Y') - 5) as $anio)
                                         <option value="{{ $anio }}">{{ $anio }}</option>
                                     @endforeach
-                                </select>
+                                </select> --}}
                             </div>
                         </div>
 
-                        <div class="col-lg-2 col-sm-12">
+                        {{-- <div class="col-lg-2 col-sm-12">
                             <select id="cmbfiltro_mes" wire:model.live="filtro_mes" class="form-select form-select-sm me-2">
                                 <option value="">-- Mes --</option>
                                 @foreach([
@@ -180,9 +183,9 @@
                                     <option value="{{ $num }}">{{ $mes }}</option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div> --}}
 
-                        <div class="col-lg-8 col-sm-12">
+                        <div class="col-lg-11 col-sm-12">
                             <div class="input-group mb-3"> 
                                 <input type="text" id="txtsearchpersonalatenciones2" class="form-control form-control-sm me-1" placeholder="Buscar por DNI o Datos del Personal" wire:model.live="search">
                                 <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3 me-1" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
@@ -665,6 +668,117 @@
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FILTRO - REPORTES -->
+    <div wire:ignore.self class="modal fade" id="filtroModal" tabindex="-1" aria-labelledby="filtroModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width:95%;">
+            <div class="modal-content">
+                <div class="modal-header bg-info-subtle">
+                    <h1 class="modal-title fs-5" id="filtroModalLabel">
+                        <i class="fa-solid fa-filter"></i> FILTROS - REPORTE : Total: {{ $lista_activos->total() }}
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">                      
+                        <div class="col-lg-1 col-sm-12">
+                            <label for="txt_sede" class="fw-bold fs-6">Año</label>
+                            <div class="input-group">
+                                {{-- <span class="input-group-text input-group-text-xs fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span> --}}
+                                <select id="cmbfiltro_anio" wire:model.live="filtro_anio" class="form-select form-select-sm me-2">
+                                    <option value="">-- Año --</option>
+                                    @foreach(range(date('Y'), date('Y') - 5) as $anio)
+                                        <option value="{{ $anio }}">{{ $anio }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-1 col-sm-12">
+                            <label for="txt_sede" class="fw-bold fs-6">Mes</label>
+                            <select id="cmbfiltro_mes" wire:model.live="filtro_mes" class="form-select form-select-sm">
+                                <option value="">-- Mes --</option>
+                                @foreach([
+                                    1=>'Enero',2=>'Febrero',3=>'Marzo',4=>'Abril',
+                                    5=>'Mayo',6=>'Junio',7=>'Julio',8=>'Agosto',
+                                    9=>'Septiembre',10=>'Octubre',11=>'Noviembre',12=>'Diciembre'
+                                ] as $num => $mes)
+                                    <option value="{{ $num }}">{{ $mes }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-xl-2 col-lg-6 col-sm-12">
+                            <label for="txt_sede" class="fw-bold fs-6">Sede</label>
+                            <div class="input-group">
+                                {{-- <input type="text" id="txt_sede" class="form-control form-control-xs bg-light" wire:model="filtrosedeorigen" readonly required> --}}
+                                <select id=" cmb_filtrosede" class="form-select form-select-sm" wire:model.live="filtro_sede">
+                                    <option value="">Seleccionar...</option>
+                                    @foreach ($lista_sedes_filtro as $sede)
+                                        <option value="{{ $sede->nombre }}">{{ $sede->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @error('sedeorigen')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-sm-12">
+                            <label for="txt_dependencia" class="fw-bold fs-6">Dependencia</label>
+                            <div class="input-group position-relative">
+                                {{-- <input type="text" id="txt_dependencia" class="form-control form-control-xs bg-light" wire:model="filtrodependenciaorigen" readonly required> --}}
+                                <select id=" cmb_filtrodependencia" class="form-select form-select-sm" wire:model.live="filtro_dependencia">
+                                    <option value="">Seleccionar...</option>
+                                    @foreach ($lista_dependencias_filtro as $dependencia)
+                                        <option value="{{ $dependencia->nombre }}">{{ $dependencia->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @error('dependenciaorigen')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                        <div class="col-xl-2 col-lg-6 col-sm-12">
+                            <label for="txt_sede" class="fw-bold fs-6">Servicio</label>
+                            <div class="input-group">
+                                {{-- <input type="text" id="txt_sede" class="form-control form-control-xs bg-light" wire:model="filtrosedeorigen" readonly required> --}}
+                                <select id=" cmb_filtrosede" class="form-select form-select-sm" wire:model.live="filtro_servicio">
+                                    <option value="">Seleccionar...</option>
+                                    @foreach ($lista_servicios_filtro as $servicio)
+                                        <option value="{{ $servicio->servicio }}">{{ $servicio->servicio }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @error('sedeorigen')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-sm-12">
+                            <label for="txt_dependencia" class="fw-bold fs-6">Incidencia/Solicitud</label>
+                            <div class="input-group position-relative">
+                                {{-- <input type="text" id="txt_dependencia" class="form-control form-control-xs bg-light" wire:model="filtrodependenciaorigen" readonly required> --}}
+                                <select id=" cmb_filtrodependencia" class="form-select form-select-sm" wire:model.live="filtro_incidencia">
+                                    <option value="">Seleccionar...</option>
+                                    @foreach ($lista_incidencias_solicitudes_filtro as $incidencia)
+                                        <option value="{{ $incidencia->incidencia_solicitud }}">{{ $incidencia->incidencia_solicitud }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @error('dependenciaorigen')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-naranja btn-sm" wire:click="resetFiltros">
+                        <i class="fa-solid fa-eraser"></i> Limpiar
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-rectangle-xmark"></i> Cerrar
+                    </button>
+                </div>
             </div>
         </div>
     </div>

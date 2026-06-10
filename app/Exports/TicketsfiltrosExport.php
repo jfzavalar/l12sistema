@@ -14,9 +14,27 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 class TicketsfiltrosExport implements FromCollection, WithHeadings, ShouldAutoSize, WithStyles
 {
-    protected $search, $filtro_atendido, $filtro_enviadolima, $filtro_atendidou, $filtro_anio, $filtro_mes;
+    protected $search, 
+                $filtro_atendido, 
+                $filtro_enviadolima, 
+                $filtro_atendidou, 
+                $filtro_anio, 
+                $filtro_mes,
+                $filtro_sede,
+                $filtro_dependencia,
+                $filtro_servicio,
+                $filtro_incidencia;
 
-    public function __construct($search, $filtro_atendido, $filtro_enviadolima, $filtro_atendidou, $filtro_anio, $filtro_mes)
+    public function __construct($search, 
+                                $filtro_atendido, 
+                                $filtro_enviadolima, 
+                                $filtro_atendidou, 
+                                $filtro_anio, 
+                                $filtro_mes,
+                                $filtro_sede,
+                                $filtro_dependencia,
+                                $filtro_servicio,
+                                $filtro_incidencia)
     {
         $this->search = $search;
         $this->filtro_atendido = $filtro_atendido;
@@ -24,69 +42,104 @@ class TicketsfiltrosExport implements FromCollection, WithHeadings, ShouldAutoSi
         $this->filtro_atendidou = $filtro_atendidou;
         $this->filtro_anio = $filtro_anio;
         $this->filtro_mes = $filtro_mes;
+
+        $this->filtro_sede = $filtro_sede;
+        $this->filtro_dependencia = $filtro_dependencia;
+        $this->filtro_servicio = $filtro_servicio;
+        $this->filtro_incidencia = $filtro_incidencia;
     }
 
     public function collection()
     {
-        return Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
-            ->join('personales_atenciones','personas.id', '=', 'personales_atenciones.persona_id')
-            ->select(
-                'personas.id',
-                'personas.dni',
-                'personas.datos',
-                'personas.celpersonal',
-                'personas.correopersonal',
-
-                'personales.celinstitucional',
-                'personales.correoinstitucional',
-                'personales.regimen',
-                'personales.tipo_regimen',
-                'personales.cargo',
-                'personales.cargo_condicion',
-                'personales.sedeorigen as sede',
-                'personales.dependenciaorigen as dependencia',
-                'personales.despachoorigen as despacho',
-                'personales.sededestino as sedeu',
-                'personales.dependenciadestino as dependenciau',
-                'personales.despachodestino as despachou',
-
-                'personales.tipo_documento as condicion',
-
-                'personales_atenciones.reportado_por',
-                'personales_atenciones.servicio',
-                'personales_atenciones.detalle_servicio',
-                'personales_atenciones.solicitud_incidencia',
-                'personales_atenciones.atendido',
-                'personales_atenciones.atendido_por_datos',
+        return PersonalesAtencione::select(
+                'personales_atenciones.*'
             )
-            ->where('personales.activo', 1)
 
-            ->when($this->search, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('personas.dni', 'like', '%' . $this->search . '%')
-                    ->orWhere('personas.datos', 'like', '%' . $this->search . '%');
-                });
+            ->where('personales_atenciones.activo', 1)
+
+            // FILTRO ATENDIDO
+            ->when($this->filtro_atendido, function ($q) {
+
+                $q->where(
+                    'personales_atenciones.atendido',
+                    $this->filtro_atendido
+                );
+
             })
+            // FILTRO ENVIADO LIMA
+            ->when($this->filtro_enviadolima, function ($q) {
 
-            ->when($this->filtro_atendido, fn($q) =>
-                $q->where('atendido', $this->filtro_atendido)
-            )
-            ->when($this->filtro_enviadolima, fn($q) =>
-                $q->where('enviado_lima', $this->filtro_enviadolima)
-            )
-            ->when($this->filtro_atendidou, fn($q) =>
-                $q->where('atendido', $this->filtro_atendidou)
-            )
+                $q->where(
+                    'personales_atenciones.enviado_lima',
+                    $this->filtro_enviadolima
+                );
 
-            // 🔥 FILTRO AÑO
+            })
+            // FILTRO ATENDIDO USUARIO
+            ->when($this->filtro_atendidou, function ($q) {
+
+                $q->where(
+                    'personales_atenciones.atendido',
+                    $this->filtro_atendidou
+                );
+
+            })
+            // FILTRO AÑO
             ->when($this->filtro_anio, function ($q) {
-                $q->whereYear('personales_atenciones.created_at', $this->filtro_anio);
+
+                $q->whereYear(
+                    'personales_atenciones.created_at',
+                    $this->filtro_anio
+                );
+
+            })
+            // FILTRO MES
+            ->when($this->filtro_mes, function ($q) {
+
+                $q->whereMonth(
+                    'personales_atenciones.created_at',
+                    $this->filtro_mes
+                );
+
+            })
+            // FILTRO SEDE
+            ->when($this->filtro_sede, function ($q) {
+
+                $q->where(
+                    'sededestino',
+                    $this->filtro_sede
+                );
+
+            })
+            // FILTRO DEPENDENCIA
+            ->when($this->filtro_dependencia, function ($q) {
+
+                $q->where(
+                    'dependenciadestino',
+                    $this->filtro_dependencia
+                );
+
+            })
+            // FILTRO SERVICIO
+            ->when($this->filtro_servicio, function ($q) {
+
+                $q->where(
+                    'servicio',
+                    $this->filtro_servicio
+                );
+
+            })
+            // FILTRO SERVICIO
+            ->when($this->filtro_incidencia, function ($q) {
+
+                $q->where(
+                    'detalle_servicio',
+                    $this->filtro_incidencia
+                );
+
             })
 
-            // 🔥 FILTRO MES
-            ->when($this->filtro_mes, function ($q) {
-                $q->whereMonth('personales_atenciones.created_at', $this->filtro_mes);
-            })
+            ->orderBy('personales_atenciones.id', 'desc')
 
             ->get();
     }
@@ -94,34 +147,69 @@ class TicketsfiltrosExport implements FromCollection, WithHeadings, ShouldAutoSi
     public function headings(): array
     {
         return [
-            'ID',
-            'DNI',
-            'DATOS',
-            'CEL_PERSONAL',
-            'CORREO_PERSONAL',
-
-            'CEL_INSTITUCIONAL',
-            'CORREO_INSTITUCIONAL',
-            'REGIMEN',
-            'TIPO_REGIMEN',
-            'CARGO',
-            'CONDICION',
-
-            'SEDE',
-            'DEPENDENCIA',
-            'DESPACHO',
-            'SEDE_ROTACION',
-            'DEPENDENCIA_ROTACION',
-            'DESPACHO_ROTACION',
-
-            'CONDICION',
-
-            'REPORTADO_POR',
-            'SERVICIO',
-            'DETALLE',
-            'SOLICITUD-INCIDENCIA',
-            'ATENDIDO',
-            'ATENDIDO_POR',
+            'id',
+            'persona_id',
+            'dni',
+            'nombres',
+            'appaterno',
+            'apmaterno',
+            'celpersonal',
+            'celinstitucional',
+            'correopersonal',
+            'correoinstitucional',
+            'datos',
+            'personal_id',
+            'codsedeorigen',
+            'sedeorigen',
+            'coddependenciaorigen',
+            'dependenciaorigen',
+            'coddespachoorigen',
+            'despachoorigen',
+            'codsededestino',
+            'sededestino',
+            'coddependenciadestino',
+            'dependenciadestino',
+            'coddespachodestino',
+            'despachodestino',
+            'regimen',
+            'tipo_regimen',
+            'cargo',
+            'cargo_condicion',
+            'reportado_por',
+            'solicitud_incidencia',
+            'servicio',
+            'detalle_servicio',
+            'bien_id',
+            'cod',
+            'cod_patrimonial',
+            'datos_bien',
+            'ip',
+            'cea',
+            'sgf',
+            'glpi',
+            'enviado_lima',
+            'detalle_problema',
+            'ncopias',
+            'obs_usuario',
+            'obs_informatico',
+            'estado',
+            'atendido',
+            'atendido_por_id',
+            'atendido_por_dni',
+            'atendido_por_datos',
+            'tiempo_atencion',
+            'respuesta',
+            'conformidad',
+            'ruta_evidencia',
+            'ruta_documento',
+            'informatico_dni',
+            'informatico',
+            'activo',
+            'created_user_cargo',
+            'created_user',
+            'updated_user',
+            'created_at',
+            'updated_at',
         ];
     }
 
