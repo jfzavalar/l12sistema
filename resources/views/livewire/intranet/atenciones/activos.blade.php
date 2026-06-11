@@ -352,7 +352,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-{{ $colorHeaderModal }}">
                     <h1 class="modal-title fs-5" id="nuevoEditarModalLabel">
-                        <i class="fa-solid fa-file"></i> {{ $textoHeaderModal }}
+                        <i class="fa-solid fa-file"></i> {{ $textoHeaderModal }} - {{ $bien_id }}
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" wire:click="cerrar"></button>
                 </div>

@@ -610,7 +610,13 @@
                                             <li class="nav-item">
                                                 <a class="nav-link ms-3 {{ request()->routeIs('mpfn.intranet.atenciones.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.intranet.atenciones.index') }}">
                                                     <i class="nav-icon fa-regular fa-circle"></i>
-                                                    <p>Tickets</p>
+                                                    <p>INF-Tickets</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link ms-3 {{ request()->routeIs('mpfn.intranet.atencionesincidencias.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.intranet.atencionesincidencias.index') }}">
+                                                    <i class="nav-icon fa-regular fa-circle"></i>
+                                                    <p>INF-Incidencias</p>
                                                 </a>
                                             </li>
                                         @endcan

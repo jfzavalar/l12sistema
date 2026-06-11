@@ -193,6 +193,7 @@ class Activos extends Component
             $estado,
             $clase,
             $familia,
+            $bien_ip_anterior,
             $bien_ip,
             $datos_bien;
 
@@ -660,7 +661,7 @@ class Activos extends Component
                 // GUARDAR DOCUMENTO
                 $rutaDocumento = $this->guardar_acta();
 
-                // OBTENEMOS LOS DATOS DEL INFORAMTICO SELECCIONADO PARA FIRMAR EL ACTA
+                // OBTENEMOS LOS DATOS DEL INFORMATICO SELECCIONADO PARA FIRMAR EL ACTA
                 $iinformatico = User::select('datos')
                     ->where('dni', $this->informatico_dni)
                     ->first();
@@ -882,6 +883,7 @@ class Activos extends Component
         $this->bien_id = $ipersonalatencion->bien_id;
         $this->cod = $ipersonalatencion->cod;
         $this->cod_patrimonial = $ipersonalatencion->cod_patrimonial;
+        $this->bien_ip_anterior = $ipersonalatencion->ip;
         $this->bien_ip = $ipersonalatencion->ip;
         $this->datos_bien = $ipersonalatencion->datos_bien;
         $this->cea = $ipersonalatencion->cea;
@@ -920,8 +922,30 @@ class Activos extends Component
     }
 
     public function actualizar(){
-        
+
+        $this->validate();
+
         try {
+
+            if ($this->bien_ip != $this->bien_ip_anterior) {
+
+                $existe = InformaticasIp::where('ip', $this->bien_ip)
+                ->where('activo', '1')
+                ->where('estado', '1')
+                ->exists();
+
+                if ($existe) {
+
+                    $this->dispatch(
+                        'alerta-actualizado',
+                        titulo: 'Duplicado',
+                        mensaje: 'La IP ya está registrada.',
+                        tipo: 'warning'
+                    );
+
+                    return;
+                }
+            }
 
             DB::transaction(function () {
 
@@ -929,6 +953,38 @@ class Activos extends Component
                 $usuario_dni = auth()->user()->dni;
                 $usuario_datos = auth()->user()->datos;
                 $usuario_cargo = auth()->user()->cargo;
+
+                //RETABLECER LOS VALORES DE LOS CAMPOS DE LA TABLA PATRIMONIO E IP
+                
+                if ($this->bien_ip != $this->bien_ip_anterior) {
+
+                    $ibien = PatrimoniosBiene::where('id', $this->bien_id)
+                        ->where('activo', '1')
+                        ->first();
+
+                    if ($ibien) {
+                        $ibien->update([
+                            'ip' => null,
+                            'updated_user' => $usuario_datos,
+                        ]);
+                    }
+
+                    $iip = InformaticasIp::where('ip', $this->bien_ip_anterior)
+                        ->where('activo', '1')
+                        ->first();
+
+                    if ($iip) {
+                        $iip->update([
+                            'codigo' => null,
+                            'codigo_patrimonial' => null,
+                            'bien' => null,
+                            'estado' => '0',
+                            'updated_user' => $usuario_datos,
+                        ]);
+                    }
+
+                }
+        
 
                 // FUNCIÓN PARA CARGAR DOCUMENTO
                 $rutaDocumento = $this->actualizar_acta();
@@ -985,6 +1041,7 @@ class Activos extends Component
                     'cod' => $this->cod,
                     'cod_patrimonial' => $this->cod_patrimonial,
                     'datos_bien' => $this->datos_bien,
+                    'ip' => $this->bien_ip,
                     'cea' => $this->cea,
                     'sgf' => $this->sgf,
                     'glpi' => $this->glpi,
@@ -1004,31 +1061,39 @@ class Activos extends Component
                     'ruta_evidencia' => $this->ruta_evidencia,
                     'ruta_documento' => $this->ruta_documento,
                     'informatico_dni' => $this->informatico_dni,
-                    'informatico' => $this->informatico,
+                    'informatico' => $iinformatico->datos ?? null,
                     'activo' => '1',
                     'created_user_cargo' => $usuario_cargo,
                     'created_user' => $usuario_datos,
                     'updated_user' => $usuario_datos,
                 ]);
 
-                if ($this->bien_id) {
+                if ($this->bien_ip != $this->bien_ip_anterior) {
+
                     $ibien = PatrimoniosBiene::where('id', $this->bien_id)
-                        ->where('activo','1')
+                        ->where('activo', '1')
                         ->first();
 
-                    $ibien->update([
-                        'ip' => $this->bien_ip,
-                        'updated_user' => $usuario_datos,
-                    ]);
+                    if ($ibien) {
+                        $ibien->update([
+                            'ip' => $this->bien_ip,
+                            'updated_user' => $usuario_datos,
+                        ]);
+                    }
 
                     $iip = InformaticasIp::where('ip', $this->bien_ip)
-                        ->where('activo','1')
+                        ->where('activo', '1')
                         ->first();
 
-                    $iip->update([
-                        'estado' => '1',
-                        'updated_user' => $usuario_datos,
-                    ]);
+                    if ($iip) {
+                        $iip->update([
+                            'codigo' => $this->cod,
+                            'codigo_patrimonial' => $this->cod_patrimonial,
+                            'bien' => $this->datos_bien,
+                            'estado' => '1',
+                            'updated_user' => $usuario_datos,
+                        ]);
+                    }
 
                 }
 
@@ -1046,20 +1111,16 @@ class Activos extends Component
 
             $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
 
-        // } catch (\Throwable $e) {
-
-        //     report($e);
-
-        //     $this->dispatch(
-        //         'alerta-actualizado',
-        //         titulo: 'Error',
-        //         mensaje: 'Ocurrió un error al actualizar.',
-        //         tipo: 'error'
-        //     );
-        // };
         } catch (\Throwable $e) {
 
-            dd($e); // 🔥 Esto te dirá TODO
+            report($e);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'Ocurrió un error al actualizar.',
+                tipo: 'error'
+            );
         };
     }
 
