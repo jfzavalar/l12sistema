@@ -97,7 +97,7 @@
                     <td><b>MODELO: </b>{{ $ibien->modelo }}</td>
                 </tr>
                 <tr>
-                    <td><b>SERIE: </b>{{ $ibien->serie }}</td>
+                    <td><b>SERIE: </b>{{ $ibien->nro_serie }}</td>
                     <td><b>MEDIDAS: </b>{{ $ibien->medidas }}</td>
                     <td><b>COLOR: </b>{{ $ibien->color }}</td>
                     <td><b>ESTADO: </b>{{ $ibien->estado }}</td>
