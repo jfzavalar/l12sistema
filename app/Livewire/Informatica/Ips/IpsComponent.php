@@ -351,7 +351,7 @@ class IpsComponent extends Component
         $this->nro_serie = $ibien->nro_serie;
         $this->color = $ibien->color;
         $this->estado = $ibien->estado;
-        $this->ip = $ibien->ip;
+        $this->bien_ip = $ibien->ip;
 
         // ===== DATOS PERSONA =====
         $ipersona = Persona::where('dni', $ibien->usuario_dni)->where('activo','1')->firstOrFail();

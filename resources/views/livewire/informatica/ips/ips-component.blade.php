@@ -115,7 +115,7 @@
                                         <td class="text-end">
                                             @if ( $item->codigo_patrimonial )
                                                 <button type="button" class="btn btn-outline-info btn-xs rounded-4 me-1" data-bs-toggle="modal" data-bs-target="#verPersonalModal" wire:click="ver_personal('{{ $item->codigo_patrimonial }}')">
-                                                    <i class="fa-solid fa-eye"></i>
+                                                    <i class="fa-solid fa-user-check"></i>Usuario
                                                 </button>
                                             @endif
                                         </td>
@@ -308,7 +308,7 @@
                                             </div>
                                             <div class="col-xl-1 col-lg-6 col-sm-12">
                                                 <label for="txt_serie" class="form-label fw-bold">Ip</label>
-                                                <input type="text" id="txt_serie" class="form-control form-control-xs text-uppercase" wire:model="ip" required>
+                                                <input type="text" id="txt_serie" class="form-control form-control-xs text-uppercase" wire:model="bien_ip" required>
                                             </div>
                                         </div>
                                     </fieldset>                          

@@ -91,8 +91,8 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><b>COD: </b>{{ $ibien->cod }}</td>
-                    <td><b>COD PATRIMONIO: </b>{{ $ibien->cod_patrimonial }}</td>
+                    <td><b>COD: </b>{{ $ibien->codigo_barra }}</td>
+                    <td><b>COD PATRIMONIO: </b>{{ $ibien->codigo_patrimonial }}</td>
                     <td><b>MARCA: </b>{{ $ibien->marca }}</td>
                     <td><b>MODELO: </b>{{ $ibien->modelo }}</td>
                 </tr>
