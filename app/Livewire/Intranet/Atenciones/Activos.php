@@ -659,7 +659,7 @@ class Activos extends Component
                 $usuario_cargo = auth()->user()->cargo;
 
                 // GUARDAR DOCUMENTO
-                $rutaDocumento = $this->guardar_acta();
+                $ruta_evidencia = $this->guardar_acta();
 
                 // OBTENEMOS LOS DATOS DEL INFORMATICO SELECCIONADO PARA FIRMAR EL ACTA
                 $iinformatico = User::select('datos')
@@ -729,7 +729,7 @@ class Activos extends Component
                     'respuesta' => $this->respuesta,
                     'conformidad' => $this->conformidad,
                     'ruta_evidencia' => $this->ruta_evidencia,
-                    'ruta_documento' => $this->ruta_documento,
+                    // 'ruta_documento' => $this->ruta_documento,
                     'informatico_dni' => $this->informatico_dni,
                     'informatico' => $iinformatico->datos ?? null,
                     'activo' => '1',
@@ -984,17 +984,20 @@ class Activos extends Component
                     }
 
                 }
+
+                $ipersonalatencion = PersonalesAtencione::findOrFail($this->atencion_id);
         
 
                 // FUNCIÓN PARA CARGAR DOCUMENTO
-                $rutaDocumento = $this->actualizar_acta();
+                $ruta_evidencia = $this->pdf_acta
+                    ? $this->guardar_acta()
+                    : $ipersonalatencion->ruta_evidencia;
+                
 
                 // OBTENEMOS LOS DATOS DEL INFORAMTICO SELECCIONADO PARA FIRMAR EL ACTA
                 $iinformatico = User::select('datos')
                     ->where('dni', $this->informatico_dni)
                     ->first();
-
-                $ipersonalatencion = PersonalesAtencione::findOrFail($this->atencion_id);
 
                 $ipersonalatencion->update([
                     // DATOS DE LA PERSONA
@@ -1058,7 +1061,7 @@ class Activos extends Component
                     'tiempo_atencion' => $this->tiempo_atencion,
                     'respuesta' => $this->respuesta,
                     'conformidad' => $this->conformidad,
-                    'ruta_evidencia' => $this->ruta_evidencia,
+                    'ruta_evidencia' => $ruta_evidencia,
                     'ruta_documento' => $this->ruta_documento,
                     'informatico_dni' => $this->informatico_dni,
                     'informatico' => $iinformatico->datos ?? null,
@@ -1111,16 +1114,22 @@ class Activos extends Component
 
             $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
 
+        // } catch (\Throwable $e) {
+
+        //     report($e);
+
+        //     $this->dispatch(
+        //         'alerta-actualizado',
+        //         titulo: 'Error',
+        //         mensaje: 'Ocurrió un error al actualizar.',
+        //         tipo: 'error'
+        //     );
+        // };
+
         } catch (\Throwable $e) {
 
-            report($e);
+            dd($e); // 🔥 Déjalo mientras pruebas
 
-            $this->dispatch(
-                'alerta-actualizado',
-                titulo: 'Error',
-                mensaje: 'Ocurrió un error al actualizar.',
-                tipo: 'error'
-            );
         };
     }
 
@@ -1444,35 +1453,43 @@ class Activos extends Component
             return null;
         }
 
-        if ($this->bandera_documento === "EVIDENCIA") {
-            $fileName =
-            now()->timestamp.'_'
-            .$this->dni.'_'
-            // .$this->cod_patrimonial.'_'
-            ."EVIDENCIA"
-            .'.pdf';
+        if ($this->bandera_documento === 'EVIDENCIA') {
+
+            $directorio = 'archivos/informatica/atenciones/evidencias';
+
+            // Si ya existe una ruta, reutilizar el nombre
+            if (!empty($this->ruta_evidencia)) {
+                $fileName = basename($this->ruta_evidencia);
+
+                // Opcional: eliminar el archivo anterior antes de guardar
+                Storage::disk('public')->delete($this->ruta_evidencia);
+            } else {
+                $fileName = now()->timestamp . '_' . $this->dni . '_EVIDENCIA.pdf';
+            }
 
             return $this->pdf_acta->storeAs(
-                'archivos/informatica/atenciones/evidencias',
-                $fileName,
-                'public'
-            );
-        } else {
-            $fileName =
-            now()->timestamp.'_'
-            .$this->dni.'_'
-            // .$this->cod_patrimonial.'_'
-            ."ACTA"
-            .'.pdf';
-
-            return $this->pdf_acta->storeAs(
-                'archivos/informatica/atenciones/actas',
+                $directorio,
                 $fileName,
                 'public'
             );
         }
-        
-    }
+
+        $directorio = 'archivos/informatica/atenciones/actas';
+
+        if (!empty($this->ruta_documento)) {
+            $fileName = basename($this->ruta_documento);
+
+            Storage::disk('public')->delete($this->ruta_documento);
+        } else {
+            $fileName = now()->timestamp . '_' . $this->dni . '_ACTA.pdf';
+        }
+
+        return $this->pdf_acta->storeAs(
+            $directorio,
+            $fileName,
+            'public'
+        );
+}
 
     private function editar_acta($personal_id)
     {

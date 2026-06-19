@@ -305,6 +305,15 @@
                                         @endif
                                     </div>
                                 </td>
+                                <td class="text-stard">
+                                    <div class="btn-group" role="group">
+                                        @if($item->ruta_evidencia)
+                                            <a type="button" class="btn btn-outline-dark btn-xs" href="{{ asset('storage/'.$item->ruta_evidencia) }}" target="_blank">
+                                                <i class="fa-solid fa-eye"></i><br> Evidencia
+                                            </a>
+                                        @endif
+                                    </div>
+                                </td>
                             </tr>                           
                         @empty
                             <tr>
