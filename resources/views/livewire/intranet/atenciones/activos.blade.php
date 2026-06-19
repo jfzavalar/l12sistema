@@ -452,7 +452,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @if (in_array($this->servicio_id, [9, 11, 19]) || in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA", "SERVIDORES"]))
+                                    @if (in_array($this->servicio_id, [9, 11, 19]) || in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA-MULTIFUNCIONAL", "SERVIDORES"]))
                                         <div class="row">
                                             <div class="col-xl-2">
                                                 <label for="txtcod" class="fw-bold fs-6 {{ $mostrarcontroles }}">COD</label>
@@ -513,7 +513,7 @@
                                             </div>
                                         @endif
                                     </div>
-                                    @if (!in_array($this->servicio_id, [9, 11, 19]) || !in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA", "SERVIDORES"]))
+                                    @if (!in_array($this->servicio_id, [9, 11, 19]) || !in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA-MULTIFUNCIONAL", "SERVIDORES"]))
                                         <div class="row">                                       
                                             <div class="col-12 col-xl">
                                                 <label for="txtcea" class="fw-bold fs-6">CEA</label>
@@ -525,7 +525,7 @@
                                             </div>
                                         </div>
                                     @endif
-                                    @if (in_array($this->servicio_id, [9, 11, 19]) || in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA", "SERVIDORES"]))
+                                    @if (in_array($this->servicio_id, [9, 11, 19]) || in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA-MULTIFUNCIONAL", "SERVIDORES"]))
                                         <div class="row">
                                             <div class="col-xl-6">
                                                 <label for="txt_obs_usuario" class="fw-bold fs-6">USUARIO - OBSERVACION</label>
@@ -590,7 +590,7 @@
                                             <label for="txt_sol_res" class="fw-bold fs-6">SOLUCIÓN / RESPUESTA</label>
                                             <input type="text" id="txt_sol_res" class="form-control form-control-xs" wire:model="respuesta">
                                         </div>
-                                        @if (in_array($this->servicio_id, [9, 11, 19]) || in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA", "SERVIDORES"]))
+                                        @if (in_array($this->servicio_id, [9, 11, 19]) || in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA-MULTIFUNCIONAL", "SERVIDORES"]))
                                             <div class="col-12 col-xl">
                                                 <label for="cmb_estado" class="fw-bold fs-6 {{ $mostrarcontroles }}">ESTADO DEL EQUIPO</label>
                                                 <select id="cmb_estado" class="form-select form-select-xs {{ $mostrarcontroles }}" wire:model="estado_bien" required>

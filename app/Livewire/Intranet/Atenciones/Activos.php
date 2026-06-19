@@ -912,7 +912,7 @@ class Activos extends Component
         $this->updated_user = $ipersonalatencion->updated_user;
 
 
-        if (in_array($this->servicio_id, [9, 11, 19]) || in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA", "SERVIDORES"]))
+        if (in_array($this->servicio_id, [9, 11, 19]) || in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA-MULTIFUNCIONAL", "SERVIDORES"]))
         {
             $this->mostrarcontroles = "";
         } else {

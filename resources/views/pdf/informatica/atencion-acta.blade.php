@@ -59,11 +59,11 @@
             </tr>
             <tr>
                 <td><b>DEPENDENCIA:</b></td>
-                <td colspan="3">{{ $ipersonal->dependenciaorigen }}...</td>
+                <td colspan="3">{{ $ipersonal->dependenciaorigen }}</td>
             </tr>
             <tr>
                 <td><b>DESPACHO:</b></td>
-                <td colspan="3">{{ $ipersonal->despachoorigen }}...</td>
+                <td colspan="3">{{ $ipersonal->despachoorigen }}</td>
             </tr>
         </thead>
     </table>
@@ -126,6 +126,21 @@
                 <td><b>ESTADO: </b>{{ $ipersonal->estado }}</td>
             </tr>
         </tbody>
+    </table>
+
+    <br>
+
+    <table class="tabla">
+        <thead>
+            <tr>
+                <td><b>DETALLE DEL PROBLEMA:</b></td>
+                <td colspan="3">{{ $ipersonal->detalle_problema }}</td>
+            </tr>
+            <tr>
+                <td><b>SOLUCIÓN / RESPUESTA:</b></td>
+                <td colspan="3"> {{ $ipersonal->respuesta }}</td>
+            </tr>
+        </thead>
     </table>
 
     <br>

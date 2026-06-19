@@ -93,7 +93,7 @@ class AtencionesController extends Controller
                     'nro_serie',
                     'medidas',
                     'color',
-                    'estado'
+                    'estado',
                 )
                 ->where('id', $ipersonal->bien_id)
                 ->first();
