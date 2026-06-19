@@ -19,11 +19,11 @@
                 <div class="col-xl-3 col-lg-4 col-sm-4">
                     <div class="alert alert-primary" role="alert">
                         <h6 class="card-title">
-                            <i class="fa-solid fa-chart-simple text-primary"></i> Total : 
+                            <i class="fa-solid fa-chart-simple"> Total: </i> 
                         </h6>
                         <div class="d-flex justify-content-between align-items-center">
                             <h5>{{ $estadisticas2->total }}</h5>
-                            <button class="btn btn-outline-primary btn-sm" wire:click="filtrarTotal" >
+                            <button class="btn btn-outline-primary btn-xs" wire:click="filtrarTotal" >
                                 <i class="fa-solid fa-bars"></i>
                             </button>
                         </div>
@@ -32,11 +32,11 @@
                 <div class="col-xl-3 col-lg-4 col-sm-4">
                     <div class="alert alert-info" role="alert">
                         <h6 class="card-title">
-                            <i class="fa-solid fa-check-double"></i> Lima : 
+                            <i class="fa-solid fa-check-double"> Lima : </i>  
                         </h6>
                         <div class="d-flex justify-content-between align-items-center">
                             <h5>{{ $estadisticas2->enviado_lima }}</h5>
-                            <button class="btn btn-outline-info btn-sm" wire:click="filtrarEnviadolima">
+                            <button class="btn btn-outline-info btn-xs" wire:click="filtrarEnviadolima">
                                 <i class="fa-solid fa-bars"></i>
                             </button>
                         </div>
@@ -45,11 +45,11 @@
                 <div class="col-xl-3 col-lg-4 col-sm-4">
                     <div class="alert alert-success" role="alert">
                         <h6 class="card-title">
-                            <i class="fa-solid fa-check-double"></i> Atendido :
+                            <i class="fa-solid fa-check-double"> Atendido : </i>
                         </h6>
                         <div class="d-flex justify-content-between align-items-center">
                             <h5>{{ $estadisticas2->atendidos }}</h5>
-                            <button class="btn btn-outline-success btn-sm" wire:click="filtrarAtendido">
+                            <button class="btn btn-outline-success btn-xs" wire:click="filtrarAtendido">
                                 <i class="fa-solid fa-bars"></i>
                             </button>
                         </div>
@@ -58,11 +58,11 @@
                 <div class="col-xl-3 col-lg-4 col-sm-4">
                     <div class="alert alert-danger" role="alert">
                         <h6 class="card-title">
-                            <i class="fa-solid fa-check-double"></i> Pendientes : 
+                            <i class="fa-solid fa-check-double"> Pendientes : </i>
                         </h6>
                         <div class="d-flex justify-content-between align-items-center">
                             <h5> {{ $estadisticas2->no_atendidos }}</h5>
-                            <button class="btn btn-outline-danger btn-sm" wire:click="filtrarNoatendido">
+                            <button class="btn btn-outline-danger btn-xs" wire:click="filtrarNoatendido">
                                 <i class="fa-solid fa-bars"></i>
                             </button>
                         </div>
@@ -70,9 +70,9 @@
                 </div>
             </div>
 
-            <div class="row mt-2">
+            <div class="row">
                 <div class="col-xl-6 col-lg-6 col-sm-12">
-                    <table class="table">
+                    <table class="table table-sm">
                         <thead class="table-dark">
                             <tr>
                                 <th scope="col">Informatica</th>
@@ -101,7 +101,7 @@
                                                 </div>
                                                 <div class="input-group input-group-xs">
                                                     <button class="input-group-text bg-info text-white" wire:click="filtrarEnviadolima('{{ $item->created_user}}')">
-                                                        <i class="fa-solid fa-envelope"></i>Lima
+                                                        <i class="fa-solid fa-envelope me-1"></i>Lima
                                                     </button>
                                                     <label class="form-control form-control-xs text-end">{{ $item->enviado_lima }}</label>
                                                 </div>
@@ -116,7 +116,7 @@
                     </table>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-sm-12">
-                    <table class="table">
+                    <table class="table table-sm">
                         <thead class="table-dark">
                             <tr>
                                 <th scope="col">Digitalizadores</th>
@@ -139,7 +139,7 @@
                                                 </div>
                                                 <div class="input-group input-group-xs">
                                                     <button class="input-group-text bg-info text-white">
-                                                        <i class="fa-solid fa-file-pdf"></i>Folios
+                                                        <i class="fa-solid fa-file-pdf me-1"></i>Folios
                                                     </button>
                                                     <label class="form-control form-control-xs text-end">{{ $item->digitalizado }}</label>
                                                 </div>
@@ -162,28 +162,8 @@
                                 <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#filtroModal">
                                     <i class="fa-solid fa-filter"></i> Filtrar por:
                                 </button>
-                                {{-- <span class="input-group-text input-group-text-xs fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span> --}}
-                                {{-- <select id="cmbfiltro_anio" wire:model="filtro_anio" class="form-select form-select-sm me-2">
-                                    <option value="">-- Año --</option>
-                                    @foreach(range(date('Y'), date('Y') - 5) as $anio)
-                                        <option value="{{ $anio }}">{{ $anio }}</option>
-                                    @endforeach
-                                </select> --}}
                             </div>
                         </div>
-
-                        {{-- <div class="col-lg-2 col-sm-12">
-                            <select id="cmbfiltro_mes" wire:model.live="filtro_mes" class="form-select form-select-sm me-2">
-                                <option value="">-- Mes --</option>
-                                @foreach([
-                                    1=>'Enero',2=>'Febrero',3=>'Marzo',4=>'Abril',
-                                    5=>'Mayo',6=>'Junio',7=>'Julio',8=>'Agosto',
-                                    9=>'Septiembre',10=>'Octubre',11=>'Noviembre',12=>'Diciembre'
-                                ] as $num => $mes)
-                                    <option value="{{ $num }}">{{ $mes }}</option>
-                                @endforeach
-                            </select>
-                        </div> --}}
 
                         <div class="col-lg-11 col-sm-12">
                             <div class="input-group mb-3"> 
@@ -210,7 +190,7 @@
                             <th scope="col" class="bg-success-subtle">MEDIO</th>
                             <th scope="col" class="bg-success-subtle">ESTADO</th>
                             <th scope="col" class="bg-success-subtle">ATENDIDO POR</th>
-                            <th scope="col" colspan="2" class="table-dark"><i class="fa-solid fa-gears"></i></th>
+                            <th scope="col" colspan="3" class="table-dark"><i class="fa-solid fa-gears"></i></th>
                         </tr>
                     </thead>
                     <tbody class="align-middle">
@@ -259,9 +239,6 @@
                                     @endif
                                 </td>
                                 <td class="text-center align-middle">
-                                    {{-- <span class="badge px-2 py-1 rounded-pill {{ $item->atendido === 'SI' ? 'text-bg-success' : 'text-bg-danger' }}">
-                                        {{ $item->atendido === 'SI' ? 'ATENDIDO' : 'NO ATENDIDO' }}
-                                    </span> --}}
                                     <span class="badge py-1 rounded-pill {{ $item->atendido == 'SI' ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }}">
                                         {{ $item->atendido === 'SI' ? 'ATENDIDO' : 'NO ATENDIDO' }}
                                     </span>
@@ -300,7 +277,7 @@
                                         @endif
                                         @if($item->ruta_documento)
                                             <a type="button" class="btn btn-outline-info btn-xs" href="{{ asset('storage/'.$item->ruta_documento) }}" target="_blank">
-                                                <i class="fa-solid fa-file-signature"></i><br> Firmado
+                                                <i class="fa-solid fa-eye"></i> <i class="fa-solid fa-file-signature"></i><br> Firmado
                                             </a>
                                         @endif
                                     </div>
@@ -309,7 +286,7 @@
                                     <div class="btn-group" role="group">
                                         @if($item->ruta_evidencia)
                                             <a type="button" class="btn btn-outline-dark btn-xs" href="{{ asset('storage/'.$item->ruta_evidencia) }}" target="_blank">
-                                                <i class="fa-solid fa-eye"></i><br> Evidencia
+                                                <i class="fa-solid fa-eye"></i> <i class="fa-solid fa-receipt"></i><br> Evidencia
                                             </a>
                                         @endif
                                     </div>

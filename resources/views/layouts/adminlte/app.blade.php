@@ -128,7 +128,7 @@
             .btn-xs {
             --bs-btn-padding-y: .25rem !important;
             --bs-btn-padding-x: .5rem !important;
-            --bs-btn-font-size: .70rem !important;
+            --bs-btn-font-size: .65rem !important;
             }
 
             .btn-naranja {
@@ -207,8 +207,8 @@
             /* ===== Extra Span (xs) ===== */
             .input-group-text-xs.input-group-text {
                 padding: .25rem .5rem;  /* arriba/abajo - izquierda/derecha */
-                font-size: .75rem;      /* tamaño de letra */
-                font-weight: bold;      /* negrita */
+                font-size: .60rem;      /* tamaño de letra */
+                
             }
 
             /* Tamaño extra pequeño para tablas */
