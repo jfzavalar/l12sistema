@@ -773,13 +773,13 @@ class Activos extends Component
             $this->atencion_id = $registro->id;
 
             // 📧 VALIDACIÓN DE CORREO
-            if (empty($this->correoinstitucional)) {
-                throw new \Exception("El correo institucional está vacío");
-            }
+            // if (empty($this->correoinstitucional)) {
+            //     throw new \Exception("El correo institucional está vacío");
+            // }
 
-            if (!filter_var($this->correoinstitucional, FILTER_VALIDATE_EMAIL)) {
-                throw new \Exception("El correo institucional no es válido");
-            }
+            // if (!filter_var($this->correoinstitucional, FILTER_VALIDATE_EMAIL)) {
+            //     throw new \Exception("El correo institucional no es válido");
+            // }
 
             // 📧 ENVÍO DE CORREO
             try {
