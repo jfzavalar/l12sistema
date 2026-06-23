@@ -3,35 +3,44 @@
         <div class="card-body">
             <div class="table-responsive-xl">
                 <div class="row">
-                    {{-- <div class="col-xl-2">
-                        <div class="input-group input-group-sm mb-2">
-                            <span class="input-group-text" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
+                    {{-- <div class="col-lg-1 col-sm-12">
+                        <div class="input-group">
+                            <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#filtroModal">
+                                <i class="fa-solid fa-filter"></i> Más Filtros:
+                            </button>
                         </div>
                     </div> --}}
-                    <div class="col-xl-12">
+
+                    <div class="col-xl-9">
                         <div class="input-group input-group-sm mb-2">
                             <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
                             <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar por DNI o Apellidos y Nombres">
-                            @can('mpfn.rrhh.personal.create')
-                                <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
-                                    <i class="fa-solid fa-file"></i> Nuevo
-                                </button>
-                            @endcan
-                            @can('mpfn.rrhh.personal.edit')
-                                <button type="button" id="btnnuevo" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#licenciasModal">
-                                    <i class="fa-solid fa-ban"></i> Licencias
-                                </button>
-                                <button type="button" id="btnnuevo" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#inactivosModal">
-                                    <i class="fa-solid fa-ban"></i> Renuncias
-                                </button>
-                            @endcan
                         </div>
                     </div>
+                    <div class="col-xl-3 text-end">
+                        @can('mpfn.rrhh.personal.create')
+                            <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
+                                <i class="fa-solid fa-file"></i> Nuevo
+                            </button>
+                        @endcan
+                        @can('mpfn.rrhh.personal.edit')
+                            <button type="button" id="btnnuevo" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#licenciasModal">
+                                <i class="fa-solid fa-ban"></i> Licencias
+                            </button>
+                            <button type="button" id="btnnuevo" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#inactivosModal">
+                                <i class="fa-solid fa-ban"></i> Renuncias
+                            </button>
+                        @endcan
+                        <button class="btn btn-success btn-sm" wire:click="exportarExcel">
+                            <i class="fa fa-file-pdf"></i> Excel
+                        </button>
+                    </div>
                 </div>
+
                 <div class="row">
                     <div class="col-xl-2">
                         <div class="input-group input-group-sm mb-2">
-                            <span class="input-group-text fw-bold" id="basic-addon1">Filtrar por sede:</span>
+                            <span class="input-group-text fw-bold bg-danger-subtle text-danger" id="basic-addon1">Filtrar por sede:</span>
                             <select id="cmbfiltrotipodocumento" class="form-select form-select-sm" wire:model.live="filtrosede">
                                 <option value="">TOTAL </option>
                                 @foreach ($lista_sedes as $item)
@@ -41,9 +50,9 @@
                             {{-- <span class="input-group-text" id="basic-addon2">{{ $lista_activos->total() }}</span> --}}
                         </div>
                     </div>
-                    <div class="col-xl-4">
+                    <div class="col-xl-6">
                         <div class="input-group input-group-sm mb-2">
-                            <span class="input-group-text fw-bold" id="basic-addon1">Por dependencia:</span>
+                            <span class="input-group-text fw-bold bg-danger-subtle text-danger" id="basic-addon1">Por dependencia:</span>
                             <select id="cmbfiltrotipodocumento2" class="form-select form-select-sm" wire:model.live="filtrodependencia">
                                 <option value="">TOTAL </option>
                                 @foreach ($lista_dependencias as $item)
@@ -53,17 +62,6 @@
                             {{-- <span class="input-group-text" id="basic-addon2">{{ $lista_activos->total() }}</span> --}}
                         </div>
                     </div>
-                    {{-- <div class="col-xl-2">
-                        <div class="input-group input-group-sm mb-2">
-                            <span class="input-group-text fw-bold" id="basic-addon1">Por Condición:</span>
-                            <select id="cmbfiltrotipodocumento3" class="form-select form-select-sm" wire:model.live="filtrotipodocumento">
-                                <option value="">TOTAL </option>
-                                <option value="CONTRATO">CONTRATO </option>
-                                <option value="LICENCIA">LICENCIA </option>
-                                <option value="RENUNCIA">RENUNCIA </option>
-                            </select>
-                        </div>
-                    </div> --}}
                     <div class="col-xl-2">
                         <div class="input-group input-group-sm mb-2">
                             <span class="input-group-text fw-bold" id="basic-addon1">Por régimen:</span>
@@ -88,12 +86,8 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-xl-2 text-end">
-                        <button class="btn btn-success btn-sm" wire:click="exportarExcel">
-                            <i class="fa fa-file-pdf"></i> Exportar a Excel
-                        </button>
-                    </div>
                 </div>
+                
                 <table class="table table-striped table-hover table-sm table-xsmall">
                     <thead class="table-primary text-center align-middle">
                         <tr>
@@ -138,8 +132,8 @@
                                     <br>
                                     <b>DESPACHO:</b> {{ $item->despachodestino }}
                                     <br>
-                                    <b>De:</b>
-                                    <b>Hasta:</b>
+                                    {{-- <b>De:</b>
+                                    <b>Hasta:</b> --}}
                                 </td>
                                 <td class="text-nowrap">
                                     <b>Email personal:</b> {{ $item->correopersonal }}:
@@ -288,48 +282,6 @@
                                             </button>
                                         @endcan
                                     </div>
-                                {{-- <td class="text-end">
-                                    <div class="btn-group" role="group">
-                                        @can('mpfn.rrhh.personal.create')
-                                            <div class="dropdown">
-                                                <button class="btn btn-outline-primary btn-xs dropdown-toggle" 
-                                                        type="button" 
-                                                        data-bs-toggle="dropdown" 
-                                                        aria-expanded="false">
-                                                    <i class="fa-solid fa-list"></i></i> <i class="fa-solid fa-people-arrows"></i><br>Rotación
-                                                </button>
-
-                                                <ul class="dropdown-menu">
-
-                                                        <li>
-                                                            <button class="dropdown-item text-dark"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#transferencia-personal-component"
-                                                                    wire:click="nuevo_transferir_personal({{ $item->id }})">
-                                                                <i class="fa-solid fa-file"></i> Nuevo
-                                                            </button>
-                                                        </li>
-
-                                                        <li>
-                                                            <button class="dropdown-item text-dark"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#transferencia-personal-component"
-                                                                    wire:click="editar_transferir_personal({{ $item->id }})">
-                                                                <i class="fa-solid fa-file"></i> Editar
-                                                            </button>
-                                                        </li>
-                                                </ul>
-                                            </div>
-                                        @endcan
-                                        <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#historialrotacionesModal" wire:click="historial_rotaciones('{{ $item->dni }}')">
-                                            <i class="fa-solid fa-timeline"></i><br>Historial
-                                        </button>
-                                        @can('mpfn.rrhh.personal.destroy')
-                                            <button type="button" class="btn btn-outline-danger btn-xs" wire:click="desactivar({{ $item->id }})">
-                                                <i class="fa-solid fa-trash-can"></i><br>Eliminar
-                                            </button>
-                                        @endcan
-                                    </div>--}}
                                 </td> 
                             </tr>
                         @empty
@@ -410,6 +362,80 @@
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FILTRO - REPORTES -->
+    <div wire:ignore.self class="modal fade" id="filtroModal" tabindex="-1" aria-labelledby="filtroModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width:95%;">
+            <div class="modal-content">
+                <div class="modal-header bg-info-subtle">
+                    <h1 class="modal-title fs-5" id="filtroModalLabel">
+                        <i class="fa-solid fa-filter"></i> FILTROS - REPORTE : Total: {{ $lista_activos->total() }}
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xl-2">
+                            <div class="input-group input-group-sm mb-2">
+                                <span class="input-group-text fw-bold" id="basic-addon1">Filtrar por sede:</span>
+                                <select id="cmbfiltrotipodocumento" class="form-select form-select-sm" wire:model.live="filtrosede">
+                                    <option value="">TOTAL </option>
+                                    @foreach ($lista_sedes as $item)
+                                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                                    @endforeach
+                                </select>
+                                {{-- <span class="input-group-text" id="basic-addon2">{{ $lista_activos->total() }}</span> --}}
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="input-group input-group-sm mb-2">
+                                <span class="input-group-text fw-bold" id="basic-addon1">Por dependencia:</span>
+                                <select id="cmbfiltrotipodocumento2" class="form-select form-select-sm" wire:model.live="filtrodependencia">
+                                    <option value="">TOTAL </option>
+                                    @foreach ($lista_dependencias as $item)
+                                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                                    @endforeach
+                                </select>
+                                {{-- <span class="input-group-text" id="basic-addon2">{{ $lista_activos->total() }}</span> --}}
+                            </div>
+                        </div>
+                        <div class="col-xl-2">
+                            <div class="input-group input-group-sm mb-2">
+                                <span class="input-group-text fw-bold" id="basic-addon1">Por régimen:</span>
+                                <select id="cmbfiltrotipodocumento4" class="form-select form-select-sm" wire:model.live="filtroregimen">
+                                    <option value="">TOTAL </option>
+                                    <option value="CAS">CAS </option>
+                                    <option value="D.L.276">D.L.276</option>
+                                    <option value="D.L.728">D.L.728 </option>
+                                </select>
+                                {{-- <span class="input-group-text" id="basic-addon2">{{ $lista_activos->total() }}</span> --}}
+                            </div>
+                        </div>
+                        <div class="col-xl-2">
+                            <div class="input-group input-group-sm mb-2">
+                                <span class="input-group-text fw-bold" id="basic-addon1">Por cargo:</span>
+                                <select id="cmbfiltrotipodocumento3" class="form-select form-select-sm" wire:model.live="filtrocargo">
+                                    <option value="">TOTAL </option>
+                                    <option value="CONTRATO">CONTRATO </option>
+                                    @foreach ($lista_cargos2 as $item)
+                                        <option value="{{ $item->nombre }}">{{ $item->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-naranja btn-sm" wire:click="resetFiltros">
+                        <i class="fa-solid fa-eraser"></i> Limpiar
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-rectangle-xmark"></i> Cerrar
+                    </button>
+                </div>
             </div>
         </div>
     </div>

@@ -200,8 +200,8 @@ class PersonalComponent extends Component
                     ->orWhere('personas.datos', 'like', '%' . $this->search . '%');
                 });
             })
-            ->when($this->filtrosede, fn($q) => $q->where('personales.codsedeorigen', $this->filtrosede))
-            ->when($this->filtrodependencia, fn($q) => $q->where('personales.coddependenciaorigen', $this->filtrodependencia))
+            ->when($this->filtrosede, fn($q) => $q->where('personales.codsededestino', $this->filtrosede))
+            ->when($this->filtrodependencia, fn($q) => $q->where('personales.coddependenciadestino', $this->filtrodependencia))
             ->when($this->filtroregimen, fn($q) => $q->where('personales.regimen', 'like', '%' . $this->filtroregimen . '%'))
             ->when($this->filtrocargo, fn($q) => $q->where('personales.cargo', '=', $this->filtrocargo))
             ->orderBy('personales.id', 'desc')
