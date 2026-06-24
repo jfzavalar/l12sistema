@@ -126,7 +126,9 @@
                     <table class="table table-sm">
                         <thead class="table-dark">
                             <tr>
-                                <th scope="col">Informatica</th>
+                                <th scope="col">
+                                    <i class="fa-solid fa-user"></i> Informatica
+                                </th>
                                 <th scope="col" colspan="3" class="text-center">Tickets</th>
                             </tr>
                         </thead>
@@ -170,7 +172,9 @@
                     <table class="table table-sm">
                         <thead class="table-dark">
                             <tr>
-                                <th scope="col">Digitalizadores</th>
+                                <th scope="col">
+                                    <i class="fa-solid fa-user"></i> Digitalizadores
+                                </th>
                                 <th scope="col" colspan="3" class="text-center">Tickets</th>
                             </tr>
                         </thead>
@@ -211,19 +215,20 @@
                         <div class="col-lg-1 col-sm-12">
                             <div class="input-group">
                                 <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#filtroModal">
-                                    <i class="fa-solid fa-filter"></i> Filtrar por:
+                                    <i class="fa-solid fa-filter"></i> Más filtros:
                                 </button>
                             </div>
                         </div>
 
                         <div class="col-lg-11 col-sm-12">
-                            <div class="input-group mb-3"> 
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
                                 <input type="text" id="txtsearchpersonalatenciones2" class="form-control form-control-sm me-1" placeholder="Buscar por DNI o Datos del Personal" wire:model.live="search">
                                 <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3 me-1" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
                                     <i class="fa-solid fa-file"></i> Nuevo
                                 </button>
                                 <button class="btn btn-success btn-sm rounded-3" wire:click="exportarExcel">
-                                    <i class="fa-solid fa-file-excel"></i> Exportar a Excel
+                                    <i class="fa-solid fa-file-excel"></i> Excel
                                 </button>
                             </div>
                         </div>
