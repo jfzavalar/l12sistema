@@ -13,13 +13,64 @@
         </div>
     @endif
 
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-1 mb-2 border-bottom">
+        <h1 class="h2">
+            <i class="fa-solid fa-users-between-lines"></i> TICKETS ATENCIONES: {{ strtoupper(now()->locale('es')->translatedFormat('F Y')) }}
+        </h1>
+        <div class="row">
+            <div class="col-auto">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarTotal">
+                    <span class="alert alert-primary d-block mb-0">
+                        <span class="fw-bold">
+                            <i class="fa-solid fa-chart-simple"></i>
+                            TOTAL: {{ $estadisticas2->total }}
+                        </span>
+                    </span>
+                </button>
+            </div>
+            <div class="col-auto">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarEnviadolima">
+                    <span class="alert alert-info d-block mb-0">
+                        <span class="fw-bold">
+                            <i class="fa-solid fa-check-double"></i>
+                            LIMA: {{ $estadisticas2->enviado_lima }}
+                        </span>
+                    </span>
+                </button>
+            </div>
+
+            <div class="col-auto">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarAtendido">
+                    <span class="alert alert-success d-block mb-0">
+                        <span class="fw-bold">
+                            <i class="fa-solid fa-check-double"></i>
+                            ATENDIDO: {{ $estadisticas2->atendidos }}
+                        </span>
+                    </span>
+                </button>
+            </div>
+            <div class="col-auto">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarNoatendido">
+                    <span class="alert alert-danger d-block mb-0">
+                        <span class="fw-bold">
+                            <i class="fa-solid fa-check-double"></i>
+                            PENDIENTES: {{ $estadisticas2->no_atendidos }}
+                        </span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    
+
     <div class="card">
         <div class="card-body">
-            <div class="row">
+            {{-- <div class="row">
                 <div class="col-xl-3 col-lg-4 col-sm-4">
                     <div class="alert alert-primary" role="alert">
                         <h6 class="card-title">
-                            <i class="fa-solid fa-chart-simple"> Total: </i> 
+                            <i class="fa-solid fa-chart-simple me-1"></i>TOTAL:&nbsp;
                         </h6>
                         <div class="d-flex justify-content-between align-items-center">
                             <h5>{{ $estadisticas2->total }}</h5>
@@ -32,7 +83,7 @@
                 <div class="col-xl-3 col-lg-4 col-sm-4">
                     <div class="alert alert-info" role="alert">
                         <h6 class="card-title">
-                            <i class="fa-solid fa-check-double"> Lima : </i>  
+                            <i class="fa-solid fa-check-double me-1"></i>LIMA:&nbsp;  
                         </h6>
                         <div class="d-flex justify-content-between align-items-center">
                             <h5>{{ $estadisticas2->enviado_lima }}</h5>
@@ -45,7 +96,7 @@
                 <div class="col-xl-3 col-lg-4 col-sm-4">
                     <div class="alert alert-success" role="alert">
                         <h6 class="card-title">
-                            <i class="fa-solid fa-check-double"> Atendido : </i>
+                            <i class="fa-solid fa-check-double me-1"></i>ATENDIDOS:&nbsp;
                         </h6>
                         <div class="d-flex justify-content-between align-items-center">
                             <h5>{{ $estadisticas2->atendidos }}</h5>
@@ -58,7 +109,7 @@
                 <div class="col-xl-3 col-lg-4 col-sm-4">
                     <div class="alert alert-danger" role="alert">
                         <h6 class="card-title">
-                            <i class="fa-solid fa-check-double"> Pendientes : </i>
+                            <i class="fa-solid fa-check-double me-1"></i>PENDIENTES:&nbsp;
                         </h6>
                         <div class="d-flex justify-content-between align-items-center">
                             <h5> {{ $estadisticas2->no_atendidos }}</h5>
@@ -68,7 +119,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             <div class="row">
                 <div class="col-xl-6 col-lg-6 col-sm-12">
