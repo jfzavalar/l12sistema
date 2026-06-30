@@ -728,7 +728,7 @@ class Activos extends Component
                     'tiempo_atencion' => $this->tiempo_atencion,
                     'respuesta' => $this->respuesta,
                     'conformidad' => $this->conformidad,
-                    'ruta_evidencia' => $this->ruta_evidencia,
+                    'ruta_evidencia' => $ruta_evidencia,
                     // 'ruta_documento' => $this->ruta_documento,
                     'informatico_dni' => $this->informatico_dni,
                     'informatico' => $iinformatico->datos ?? null,
@@ -1489,7 +1489,7 @@ class Activos extends Component
             $fileName,
             'public'
         );
-}
+    }
 
     private function editar_acta($personal_id)
     {
