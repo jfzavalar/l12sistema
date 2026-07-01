@@ -315,7 +315,7 @@ class Activos extends Component
                 'atencioneshistorialPage'
             );
 
-        $estadisticas = PersonalesAtencione::select('created_user_cargo','created_user')
+        $estadisticas = PersonalesAtencione::select('atendido_por_dni','created_user_cargo','created_user')
             ->selectRaw("COUNT(*) as total")
             ->selectRaw("SUM(CASE WHEN atendido = 'SI' THEN 1 ELSE 0 END) as atendidos")
             ->selectRaw("SUM(CASE WHEN atendido = 'NO' THEN 1 ELSE 0 END) as no_atendidos")
@@ -331,7 +331,7 @@ class Activos extends Component
                 $q->whereMonth('created_at', $this->filtro_mes);
             })
             ->orderBy('created_user')
-            ->groupBy('created_user_cargo','created_user')
+            ->groupBy('atendido_por_dni','created_user_cargo','created_user')
             ->get();
 
         $estadisticas2 = PersonalesAtencione::where('activo', '1')
@@ -623,7 +623,7 @@ class Activos extends Component
         $this->mostrarcontroles = "d-none";
 
         $this->colorHeaderModal = "primary-subtle";
-        $this->textoHeaderModal = "Nuevo";
+        $this->textoHeaderModal = "NUEVO";
         $this->colorGuardarActualizar = "primary";
         $this->textoGuardarActualizar = "Guardar";
         $this->colorAgregar = "outline-primary";

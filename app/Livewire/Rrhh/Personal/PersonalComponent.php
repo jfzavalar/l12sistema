@@ -528,6 +528,7 @@ class PersonalComponent extends Component
                     'dependenciaorigen' => $this->dependenciaorigen,
                     'coddespachoorigen' => $this->coddespachoorigen,
                     'despachoorigen' => $this->despachoorigen,
+                    
                     'codsededestino' => $this->codsedeorigen,
                     'sededestino' => $this->sedeorigen,
                     'coddependenciadestino' => $this->coddependenciaorigen,
@@ -1564,6 +1565,7 @@ class PersonalComponent extends Component
         $this->tipo_regimen = $ipersonal->tipo_regimen;
         $this->cargo = $ipersonal->cargo;
         $this->cargo_condicion = $ipersonal->cargo_condicion;
+
         $this->codsedeorigen = $ipersonal->codsedeorigen;
         $this->sedeorigen = $ipersonal->sedeorigen;
         $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;

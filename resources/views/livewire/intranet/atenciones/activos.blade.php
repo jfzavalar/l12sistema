@@ -156,7 +156,10 @@
                                                     <button class="input-group-text bg-info text-white" wire:click="filtrarEnviadolima('{{ $item->created_user}}')">
                                                         <i class="fa-solid fa-envelope me-1"></i>Lima
                                                     </button>
-                                                    <label class="form-control form-control-xs text-end">{{ $item->enviado_lima }}</label>
+                                                    <label class="form-control form-control-xs text-end me-2">{{ $item->enviado_lima }}</label>
+                                                    <a type="button" class="btn btn-dark" href="{{ route('pdf.informatica.atencion-por-usuario-acta', ['dni' => $item->atendido_por_dni,'anio' => $filtro_anio, 'mes' => $filtro_mes]) }}" target="_blank">
+                                                        <i class="fa-solid fa-print me-1"></i>Reporte
+                                                    </a>
                                                 </div>
                                             </div>
                                         </td>
@@ -197,6 +200,9 @@
                                                         <i class="fa-solid fa-file-pdf me-1"></i>Folios
                                                     </button>
                                                     <label class="form-control form-control-xs text-end">{{ $item->digitalizado }}</label>
+                                                    <a type="button" class="btn btn-dark" href="{{ route('pdf.informatica.atencion-por-usuario-acta', ['dni' => $item->atendido_por_dni,'anio' => $filtro_anio, 'mes' => $filtro_mes]) }}" target="_blank">
+                                                        <i class="fa-solid fa-print me-1"></i>Reporte
+                                                    </a>
                                                 </div>
                                             </div>
                                         </td>
@@ -215,7 +221,7 @@
                         <div class="col-lg-1 col-sm-12">
                             <div class="input-group">
                                 <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#filtroModal">
-                                    <i class="fa-solid fa-filter"></i> Más filtros:
+                                    <i class="fa-solid fa-filter"></i> Filtrar por:
                                 </button>
                             </div>
                         </div>
@@ -226,9 +232,6 @@
                                 <input type="text" id="txtsearchpersonalatenciones2" class="form-control form-control-sm me-1" placeholder="Buscar por DNI o Datos del Personal" wire:model.live="search">
                                 <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3 me-1" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
                                     <i class="fa-solid fa-file"></i> Nuevo
-                                </button>
-                                <button class="btn btn-success btn-sm rounded-3" wire:click="exportarExcel">
-                                    <i class="fa-solid fa-file-excel"></i> Excel
                                 </button>
                             </div>
                         </div>
@@ -394,7 +397,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-{{ $colorHeaderModal }}">
                     <h1 class="modal-title fs-5" id="nuevoEditarModalLabel">
-                        <i class="fa-solid fa-file"></i> {{ $textoHeaderModal }} - {{ $bien_id }}
+                        <i class="fa-solid fa-file"></i> {{ $textoHeaderModal }}
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" wire:click="cerrar"></button>
                 </div>
@@ -528,10 +531,12 @@
                                     @endif
                                     <div class="row">
                                         <div class="col-12 col-xl">
-                                            <label for="txtobservacion" class="fw-bold fs-6">DETALLE DEL PROBLEMA</label>
-                                            <div class="input-group input-group">
-                                                <input type="text" id="txtobservacion" class="form-control form-control-xs text-uppercase" wire:model="detalle_problema">
-                                            </div>
+                                            <label for="txtcea" class="fw-bold fs-6">CEA</label>
+                                            <input type="text" id="txtcea" class="form-control form-control-xs text-uppercase" wire:model="cea">
+                                        </div>
+                                        <div class="col-12 col-xl">
+                                            <label for="txtsgf" class="fw-bold fs-6">N° CARPETA FISCAL</label>
+                                            <input type="text" id="txtsgf" class="form-control form-control-xs text-uppercase" wire:model="sgf">
                                         </div>
                                         <div class="col-12 col-xl">
                                             <label for="txtobservacion" class="fw-bold fs-6">CARGAR EVIDENCIA</label>
@@ -555,7 +560,17 @@
                                             </div>
                                         @endif
                                     </div>
-                                    @if (!in_array($this->servicio_id, [9, 11, 19]) || !in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA-MULTIFUNCIONAL", "SERVIDORES"]))
+
+                                    <div class="row">
+                                        <div class="col-12 col-xl">
+                                            <label for="txtobservacion" class="fw-bold fs-6">DETALLE DEL PROBLEMA</label>
+                                            <div class="input-group input-group">
+                                                <input type="text" id="txtobservacion" class="form-control form-control-xs text-uppercase" wire:model="detalle_problema">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- @if (!in_array($this->servicio_id, [9, 11, 19]) || !in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA-MULTIFUNCIONAL", "SERVIDORES"]))
                                         <div class="row">                                       
                                             <div class="col-12 col-xl">
                                                 <label for="txtcea" class="fw-bold fs-6">CEA</label>
@@ -566,7 +581,7 @@
                                                 <input type="text" id="txtsgf" class="form-control form-control-xs text-uppercase" wire:model="sgf">
                                             </div>
                                         </div>
-                                    @endif
+                                    @endif --}}
                                     @if (in_array($this->servicio_id, [9, 11, 19]) || in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA-MULTIFUNCIONAL", "SERVIDORES"]))
                                         <div class="row">
                                             <div class="col-xl-6">
@@ -579,6 +594,7 @@
                                             </div>
                                         </div>
                                     @endif
+
                                 </fieldset>
                             </div>
                             <div class="col-xl-5">
@@ -816,6 +832,9 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-naranja btn-sm" wire:click="resetFiltros">
                         <i class="fa-solid fa-eraser"></i> Limpiar
+                    </button>
+                    <button class="btn btn-success btn-sm" wire:click="exportarExcel">
+                        <i class="fa-solid fa-file-excel"></i> Exportar a Excel
                     </button>
                     <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
                         <i class="fa-solid fa-rectangle-xmark"></i> Cerrar
