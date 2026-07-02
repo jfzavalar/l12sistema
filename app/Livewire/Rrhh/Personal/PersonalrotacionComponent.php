@@ -185,6 +185,7 @@ class PersonalrotacionComponent extends Component
                 'personales_rotaciones.fecha_finu',
                 'personales_rotaciones.motivo_ubicacion',
                 'personales_rotaciones.estado')
+            ->where('personales.activo', '1')
             ->where('personales_rotaciones.activo', '1')
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
