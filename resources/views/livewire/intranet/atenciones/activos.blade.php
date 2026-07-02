@@ -199,9 +199,9 @@
                                                     <button class="input-group-text bg-info text-white">
                                                         <i class="fa-solid fa-file-pdf me-1"></i>Folios
                                                     </button>
-                                                    <label class="form-control form-control-xs text-end">{{ $item->digitalizado }}</label>
+                                                    <label class="form-control form-control-xs text-end me-2">{{ $item->digitalizado }}</label>
                                                     <a type="button" class="btn btn-dark" href="{{ route('pdf.informatica.atencion-por-usuario-acta', ['dni' => $item->atendido_por_dni,'anio' => $filtro_anio, 'mes' => $filtro_mes]) }}" target="_blank">
-                                                        <i class="fa-solid fa-print"></i>Reporte
+                                                        <i class="fa-solid fa-print me-1"></i>Reporte
                                                     </a>
                                                 </div>
                                             </div>
