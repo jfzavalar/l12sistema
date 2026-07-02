@@ -193,7 +193,7 @@
                                                     <button class="input-group-text bg-success text-white" wire:click="filtrarAtendido('{{ $item->created_user}}')">
                                                         <i class="fa-solid fa-check me-2"></i>Atendidos
                                                     </button>
-                                                    <label class="form-control form-control-xs text-end">{{ $item->atendidos }}</label>
+                                                    <label class="form-control form-control-xs text-end me-1">{{ $item->atendidos }}</label>
                                                 </div>
                                                 <div class="input-group input-group-xs">
                                                     <button class="input-group-text bg-info text-white">
@@ -201,7 +201,7 @@
                                                     </button>
                                                     <label class="form-control form-control-xs text-end">{{ $item->digitalizado }}</label>
                                                     <a type="button" class="btn btn-dark" href="{{ route('pdf.informatica.atencion-por-usuario-acta', ['dni' => $item->atendido_por_dni,'anio' => $filtro_anio, 'mes' => $filtro_mes]) }}" target="_blank">
-                                                        <i class="fa-solid fa-print me-1"></i>Reporte
+                                                        <i class="fa-solid fa-print"></i>Reporte
                                                     </a>
                                                 </div>
                                             </div>

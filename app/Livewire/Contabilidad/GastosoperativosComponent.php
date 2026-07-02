@@ -27,6 +27,12 @@ class GastosoperativosComponent extends Component
         $this->resetPage('personalesPage');
     }
 
+    //Variables
+    public $observacioncambioestado;
+
+    // Variables de Modal
+    public $modal_abierto_alerta_cambio_estado = false;
+
     Public $filtrosede, $filtrodependencia;
     public $filtrotipodocumento;
     public $filtroregimen;
@@ -197,6 +203,17 @@ class GastosoperativosComponent extends Component
     {
         $registro = ContabilidadesGastosoperativo::find($gastosoperativos_id);
 
+        // Si el mes está en 0, abrir el modal
+        if ($registro->$mes == '1') {
+            $this->modal_abierto_alerta_cambio_estado = true;
+
+            // Guarda los datos para usarlos al confirmar
+            $this->gastosoperativos_id = $gastosoperativos_id;
+            $this->mes = $mes;
+
+            return;
+        }
+
         if (!$registro) return;
 
         $mesesPermitidos = [
@@ -209,6 +226,11 @@ class GastosoperativosComponent extends Component
         // 🔄 Toggle (0 ↔ 1)
         $registro->$mes = $registro->$mes == '1' ? '0' : '1';
         $registro->save();
+    }
+
+    public function cerrar_alerta_cambio_estado()
+    {
+        $this->modal_abierto_alerta_cambio_estado = false;
     }
 
 }

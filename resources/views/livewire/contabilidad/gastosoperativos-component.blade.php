@@ -103,7 +103,7 @@
                                 </th>
                                 @foreach(['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'] as $mes)
                                     <td class="text-center">
-                                        <button 
+                                        <button type="button"
                                             wire:click="entregado({{ $item->gastosoperativos_id }}, '{{ $mes }}')"
                                             class="btn {{ $item->$mes == '1' ? 'btn-success' : 'btn-danger' }} btn-sm rounded-circle">
                                             {{ $item->$mes == '1' ? 'E' : 'P' }}
@@ -132,4 +132,42 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal de Alerta al Cambio de estado-->
+    <div class="modal fade @if($modal_abierto_alerta_cambio_estado) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
+        <div class="modal-dialog modal-ms">
+            <div class="modal-content">
+                {{-- <form wire:submit.prevent="{{ $btn_guardar_actualizar }}"> --}}
+                <form>
+                    <div class="modal-header bg-warning-subtle">
+                        <h1 class="modal-title fs-5" id="NuevoEditarModalLabel">
+                            <i class="fa-solid fa-bell"></i> ALERTA
+                        </h1>
+                        <button type="button" class="btn-close" wire:click="cerrar_alerta_cambio_estado"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <label for="cmb_reportado" class="fw-bold fs-6">Observación de cambio</label>
+                                <input type="text" id="txtobservacioncambio" class="form-control form-control-sm" wire:model="observacioncambioestado" required autofocus>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            {{-- @if ($btn_guardar_actualizar === "guardar") --}}
+                                <i class="fa-solid fa-floppy-disk me-1"></i>Guardar Observación
+                            {{-- @else --}}
+                                {{-- <i class="fa-solid fa-floppy-disk"></i><br>Actualizar --}}
+                            {{-- @endif     --}}
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-sm" wire:click="cerrar_alerta_cambio_estado">
+                            <i class="fa-solid fa-square-xmark me-1"></i>Cerrar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 </div>

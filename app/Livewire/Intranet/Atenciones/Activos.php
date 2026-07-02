@@ -726,7 +726,7 @@ class Activos extends Component
                     'atendido_por_dni' => $usuario_dni,
                     'atendido_por_datos' => $usuario_datos,
                     'tiempo_atencion' => $this->tiempo_atencion,
-                    'respuesta' => $this->respuesta,
+                    'respuesta' => $this->respuesta . ' - ' . $this->ncopias . ' ' . 'COPIAS',
                     'conformidad' => $this->conformidad,
                     'ruta_evidencia' => $ruta_evidencia,
                     // 'ruta_documento' => $this->ruta_documento,

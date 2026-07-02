@@ -37,7 +37,7 @@
                                 </td>
                             </tr>
                         @empty
-                             <tr>
+                            <tr>
                                 <td colspan="10" class="text-center">
                                     <div class="alert alert-danger" role="alert">
                                         No se encontraron resultados!
@@ -102,4 +102,5 @@
             </div>
         </div>
     </div>
+    
 </div>
