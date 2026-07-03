@@ -149,7 +149,7 @@ Route::middleware('auth','can:mpfn.intranet.atenciones.index')->group(function (
     Route::resource('atenciones', AtencionesController::class)->names('mpfn.intranet.atenciones');
     Route::get('pdf/informatica/atencion-acta/{id}', [AtencionesController::class, 'exportarPDF'])->name('pdf.informatica.atencion-acta');
     Route::get('pdf/informatica/atencion-por-usuario-acta/{dni}/{anio}/{mes}', [AtencionesController::class, 'exportarPDFporUsuario'])->name('pdf.informatica.atencion-por-usuario-acta');
-    Route::resource('INF-Incidencias', AtencionesincidenciasController::class)->names('mpfn.intranet.atencionesincidencias');
+    Route::resource('INF-Servicios', AtencionesincidenciasController::class)->names('mpfn.intranet.atencionesserviciosdetalles');
 });
 
 Route::middleware('auth','can:mpfn.intranet.expimportantes.index')->group(function () {

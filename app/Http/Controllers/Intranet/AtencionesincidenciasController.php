@@ -12,7 +12,7 @@ class AtencionesincidenciasController extends Controller
      */
     public function index()
     {
-        return view('mpfn.intranet.atencionesincidencias.index');
+        return view('mpfn.intranet.atencionesserviciosdetalles.index');
     }
 
     /**

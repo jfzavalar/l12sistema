@@ -138,7 +138,7 @@
         <div class="modal-dialog modal-ms">
             <div class="modal-content">
                 {{-- <form wire:submit.prevent="{{ $btn_guardar_actualizar }}"> --}}
-                <form>
+                <form wire:submit.prevent="actualizar_entregado">
                     <div class="modal-header bg-warning-subtle">
                         <h1 class="modal-title fs-5" id="NuevoEditarModalLabel">
                             <i class="fa-solid fa-bell"></i> ALERTA
@@ -148,18 +148,14 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-xl-12">
-                                <label for="cmb_reportado" class="fw-bold fs-6">Observación de cambio</label>
-                                <input type="text" id="txtobservacioncambio" class="form-control form-control-sm" wire:model="observacioncambioestado" required autofocus>
+                                <label for="cmb_reportado" class="fw-bold fs-6">OBSERVACIONES:</label>
+                                <textarea id="txtupdated_motivo" class="form-control" rows="10" style="font-size: 12px; white-space: nowrap; overflow-x: auto;" wire:model="updated_motivo"></textarea>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary btn-sm">
-                            {{-- @if ($btn_guardar_actualizar === "guardar") --}}
-                                <i class="fa-solid fa-floppy-disk me-1"></i>Guardar Observación
-                            {{-- @else --}}
-                                {{-- <i class="fa-solid fa-floppy-disk"></i><br>Actualizar --}}
-                            {{-- @endif     --}}
+                            <i class="fa-solid fa-floppy-disk me-1"></i>Guardar Observación
                         </button>
                         <button type="button" class="btn btn-secondary btn-sm" wire:click="cerrar_alerta_cambio_estado">
                             <i class="fa-solid fa-square-xmark me-1"></i>Cerrar

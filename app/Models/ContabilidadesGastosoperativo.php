@@ -25,6 +25,7 @@ class ContabilidadesGastosoperativo extends Model
         'octubre',
         'noviembre',
         'diciembre',
+        'updated_motivo',
         'activo',
         'created_user',
         'updated_user',
