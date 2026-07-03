@@ -52,6 +52,7 @@ class ServiciosdetallesComponent extends Component
     public $modal_abierto_servicio = false,
             $modal_abierto_servicio_detalle = false;
 
+    public $funcionGuardarActualizarServicio="guardar_servicio";
     public $colorHeaderModal, $textoHeaderModal;
     public $colorBotonGuardarActualizar, $textoBotonGuardarActualizar;
 
@@ -94,6 +95,8 @@ class ServiciosdetallesComponent extends Component
 
     public function nuevo_servicio()
     {
+        $this->funcionGuardarActualizarServicio="guardar_servicio";
+    
         $this->colorHeaderModal = "primary-subtle";
         $this->textoHeaderModal = "NUEVO SERVICIO";
 
@@ -109,8 +112,49 @@ class ServiciosdetallesComponent extends Component
         $this->modal_abierto_servicio = true;
     }
 
+    public function guardar_servicio()
+    {
+        $this->validate([
+            'servicio' => 'required|string|max:255',
+        ]);
+
+        $usuario = auth()->user()->datos;
+
+        try 
+        {
+            PersonalesAtencionesServicio::create([
+                'servicio' => mb_strtoupper($this->servicio, 'UTF-8'),
+                'activo' => '1',
+                'created_user' => $usuario,
+                'updated_user' => $usuario,
+            ]);
+
+            $this->reset('servicio');
+
+            $mensaje = 'Se guardó correctamente.';
+            $tipo = 'success';
+
+            // MENSAJE
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Proceso completado',
+                mensaje: $mensaje,
+                tipo: $tipo
+            );
+
+            $this->modal_abierto_servicio = false;
+        } 
+        catch (\Throwable $e) {
+
+            dd($e); // 🔥 Déjalo mientras pruebas
+
+        };
+    }
+
     public function editar_servicio(PersonalesAtencionesServicio $iservicio)
     {
+        $this->funcionGuardarActualizarServicio="actualizar_servicio";
+    
         $this->colorHeaderModal = "success-subtle";
         $this->textoHeaderModal = "EDITAR SERVICIO";
 
@@ -121,6 +165,47 @@ class ServiciosdetallesComponent extends Component
 
         $this->servicio_id = $iservicio->id;
         $this->servicio = $iservicio->servicio;
+    }
+
+    public function actualizar_servicio()
+    {
+        $this->validate([
+            'servicio' => 'required|string|max:255',
+        ]);
+
+        $usuario = auth()->user()->datos;
+
+        $servicio = PersonalesAtencionesServicio::where('id',$this->servicio_id)->where('activo',1)->first();
+
+        try 
+        {
+            $servicio->update([
+                'servicio' => mb_strtoupper($this->servicio, 'UTF-8'),
+                'activo' => '1',
+                'created_user' => $usuario,
+                'updated_user' => $usuario,
+            ]);
+
+            $this->reset('servicio');
+
+            $mensaje = 'Se actualizó correctamente.';
+            $tipo = 'success';
+
+            // MENSAJE
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Proceso completado',
+                mensaje: $mensaje,
+                tipo: $tipo
+            );
+
+            $this->modal_abierto_servicio = false;
+        } 
+        catch (\Throwable $e) {
+
+            dd($e); // 🔥 Déjalo mientras pruebas
+
+        };
     }
 
     public function cerrar_nuevo_servicio()
@@ -134,6 +219,8 @@ class ServiciosdetallesComponent extends Component
 
     public function nuevo_servicio_detalle()
     {
+        $this->funcionGuardarActualizarServicio="guardar_servicio_detalle";
+
         $this->colorHeaderModal = "primary-subtle";
         $this->textoHeaderModal = "NUEVO INCIDENCIA / SOLICITUD";
 
@@ -156,8 +243,64 @@ class ServiciosdetallesComponent extends Component
 
     }
 
+    public function guardar_servicio_detalle()
+    {
+        $this->validate([
+            'incidencia_solicitud_servicio' => 'required|string|max:255',
+            'incidencia_solicitud_tipo_desc' => 'required|string|max:255',
+            'incidencia_solicitud' => 'required|string|max:255',
+            'incidencia_solicitud_respuesta' => 'required|string|max:255',
+        ]);
+
+        $usuario = auth()->user()->datos;
+
+        try 
+        {
+            PersonalesAtencionesIncidenciasSolicitudes::create([
+                'servicio_id' => $this->servicio_id,
+                'tipo' => '1',
+                'tipo_desc' => mb_strtoupper($this->incidencia_solicitud_tipo_desc,'UTF-8'),
+                'servicio' => $this->incidencia_solicitud_servicio,
+                'incidencia_solicitud' => mb_strtoupper($this->incidencia_solicitud,'UTF-8'),
+                'respuesta' => mb_strtoupper($this->incidencia_solicitud_respuesta,'UTF-8'),
+                'activo' => '1',
+                'created_user' => $usuario,
+                'updated_user' => $usuario,
+            ]);
+
+            $this->reset('incidencia_solicitud_id',
+                    // 'incidencia_solicitud_servicio_id',
+                    'incidencia_solicitud_tipo',
+                    'incidencia_solicitud_tipo_desc',
+                    // 'incidencia_solicitud_servicio',
+                    'incidencia_solicitud',
+                    'incidencia_solicitud_respuesta',
+                    'incidencia_solicitud_activo');
+
+            $mensaje = 'Se guardó correctamente la Incidencia / Solicitud';
+            $tipo = 'success';
+
+            // MENSAJE
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Proceso completado',
+                mensaje: $mensaje,
+                tipo: $tipo
+            );
+
+            $this->modal_abierto_servicio_detalle = false;
+        } 
+        catch (\Throwable $e) {
+
+            dd($e); // 🔥 Déjalo mientras pruebas
+
+        };
+    }
+
     public function editar_servicio_detalle(PersonalesAtencionesIncidenciasSolicitudes $iserviciodetalle)
     {
+        $this->funcionGuardarActualizarServicio="actualizar_servicio_detalle";
+
         $this->colorHeaderModal = "success-subtle";
         $this->textoHeaderModal = "EDITAR INCIDENCIA / SOLICITUD";
 
@@ -178,6 +321,62 @@ class ServiciosdetallesComponent extends Component
         $this->incidencia_solicitud = $iserviciodetalle->incidencia_solicitud;
         $this->incidencia_solicitud_respuesta = $iserviciodetalle->respuesta;
         $this->incidencia_solicitud_activo = $iserviciodetalle->activo;
+    }
+
+    public function actualizar_servicio_detalle()
+    {
+        $this->validate([
+            'incidencia_solicitud_servicio' => 'required|string|max:255',
+            'incidencia_solicitud_tipo_desc' => 'required|string|max:255',
+            'incidencia_solicitud' => 'required|string|max:255',
+            'incidencia_solicitud_respuesta' => 'required|string|max:255',
+        ]);
+
+        $usuario = auth()->user()->datos;
+
+        $serviciodetalle = PersonalesAtencionesIncidenciasSolicitudes::where('id',$this->incidencia_solicitud_id)->where('activo',1)->first();
+
+        try 
+        {
+            $serviciodetalle->update([
+                'servicio_id' => $this->servicio_id,
+                'tipo' => '1',
+                'tipo_desc' => mb_strtoupper($this->incidencia_solicitud_tipo_desc,'UTF-8'),
+                'servicio' => $this->incidencia_solicitud_servicio,
+                'incidencia_solicitud' => mb_strtoupper($this->incidencia_solicitud,'UTF-8'),
+                'respuesta' => mb_strtoupper($this->incidencia_solicitud_respuesta,'UTF-8'),
+                'activo' => '1',
+                'created_user' => $usuario,
+                'updated_user' => $usuario,
+            ]);
+
+            $this->reset('incidencia_solicitud_id',
+                    // 'incidencia_solicitud_servicio_id',
+                    'incidencia_solicitud_tipo',
+                    'incidencia_solicitud_tipo_desc',
+                    // 'incidencia_solicitud_servicio',
+                    'incidencia_solicitud',
+                    'incidencia_solicitud_respuesta',
+                    'incidencia_solicitud_activo');
+
+            $mensaje = 'Se actualizó correctamente la Incidencia / Solicitud';
+            $tipo = 'success';
+
+            // MENSAJE
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Proceso completado',
+                mensaje: $mensaje,
+                tipo: $tipo
+            );
+
+            $this->modal_abierto_servicio_detalle = false;
+        } 
+        catch (\Throwable $e) {
+
+            dd($e); // 🔥 Déjalo mientras pruebas
+
+        };
     }
 
     public function listar_servicios_detalle(PersonalesAtencionesServicio $iservicio)

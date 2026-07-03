@@ -132,7 +132,7 @@
     <div class="modal fade @if($modal_abierto_servicio) show d-block @endif" id="NuevoEditarServicioModal" tabindex="-1">
         <div class="modal-dialog modal-ms">
             <div class="modal-content">
-                <form wire:submit.prevent="actualizar_entregado">
+                <form wire:submit.prevent="{{ $funcionGuardarActualizarServicio }}">
                     <div class="modal-header bg-{{ $colorHeaderModal }}">
                         <h1 class="modal-title fs-5" id="NuevoEditarModalLabel">
                             <i class="fa-solid fa-file"></i> {{ $textoHeaderModal }}
@@ -164,7 +164,7 @@
     <div class="modal fade @if($modal_abierto_servicio_detalle) show d-block @endif" id="NuevoEditarServiciodDetalleModal" tabindex="-1">
         <div class="modal-dialog modal-ms">
             <div class="modal-content">
-                <form wire:submit.prevent="actualizar_entregado">
+                <form wire:submit.prevent="{{ $funcionGuardarActualizarServicio }}">
                     <div class="modal-header bg-{{ $colorHeaderModal }}">
                         <h1 class="modal-title fs-5" id="NuevoEditarModalLabel">
                             <i class="fa-solid fa-file"></i> {{ $textoHeaderModal }}
