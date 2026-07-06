@@ -1151,6 +1151,8 @@ class Activos extends Component
     public function editar_pdf($atencion_id)
     {
         $this->atencion_id = $atencion_id;
+
+        $this->pdf_acta = null; // 🔥 CLAVE
         
         $this->bandera_documento = "ACTA";
     }
@@ -1196,6 +1198,8 @@ class Activos extends Component
         } catch (\Throwable $e) {
 
             report($e);
+
+            $this->pdf_acta = null;
 
             $this->dispatch(
                 'alerta-actualizado',

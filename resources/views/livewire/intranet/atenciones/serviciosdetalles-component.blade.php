@@ -7,7 +7,7 @@
                     <div class="col-xl-4">
                         <div class="input-group input-group-sm mb-2">
                             <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_servicios->total() }}</span>
-                            <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="searchservicios" placeholder="Buscar por SERVICIO">
+                            <input type="text" id="txtsearcservicio" class="form-control form-control-sm" wire:model.live="searchservicios" placeholder="Buscar por SERVICIO">
                             {{-- @can('mpfn.rrhh.personal.create') --}}
                                 <button type="button" id="btnnuevoservicio" class="btn btn-primary btn-sm" wire:click="nuevo_servicio">
                                     <i class="fa-solid fa-file"></i> Nuevo
@@ -65,7 +65,7 @@
                     <div class="col-xl-8">
                         <div class="input-group input-group-sm mb-2">
                             <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_servicios_detalles->total() }}</span>
-                            <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="searchserviciosdetalles" placeholder="Buscar por INCIDENCIA / SOLICITUD">
+                            <input type="text" id="txtsearchdetalle" class="form-control form-control-sm" wire:model.live="searchserviciosdetalles" placeholder="Buscar por INCIDENCIA / SOLICITUD">
                             @if ($servicio_id)
                                 <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" wire:click="nuevo_servicio_detalle">
                                     <i class="fa-solid fa-file"></i> Nuevo
@@ -142,8 +142,8 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-xl-12">
-                                <label for="cmb_reportado" class="fw-bold fs-6">SERVICIO:</label>
-                                <input type="text" class="form-control form-control-sm" wire:model="servicio">
+                                <label for="txtservicio" class="fw-bold fs-6">SERVICIO:</label>
+                                <input id="txtservicio" type="text" class="form-control form-control-sm" wire:model="servicio">
                             </div>
                         </div>
                     </div>
@@ -174,24 +174,24 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-xl-12">
-                                <label for="cmb_reportado" class="fw-bold fs-6">SERVICIO</label>
-                                <input type="text" class="form-control form-control-sm" wire:model="incidencia_solicitud_servicio" readonly>
+                                <label for="txtdetalle" class="fw-bold fs-6">SERVICIO</label>
+                                <input id="txtdetalle" type="text" class="form-control form-control-sm" wire:model="incidencia_solicitud_servicio" readonly>
                             </div>
                             <div class="col-xl-12">
-                                <label for="cmb_reportado" class="fw-bold fs-6">TIPO</label>
-                                <select id="cmdtipo" class="form-select form-select-sm" wire:model="incidencia_solicitud_tipo_desc">
+                                <label for="cmbtipo" class="fw-bold fs-6">TIPO</label>
+                                <select id="cmbtipo" class="form-select form-select-sm" wire:model="incidencia_solicitud_tipo_desc">
                                     <option value="">Selecciona...</option>
                                     <option value="INCIDENCIA">INCIDENCIA</option>
                                     <option value="SOLICITUD">SOLICITUD</option>
                                 </select>
                             </div>
                             <div class="col-xl-12">
-                                <label for="cmb_reportado" class="fw-bold fs-6">INCIDENCIA / SOLICITUD</label>
-                                <input type="text" class="form-control form-control-sm" wire:model="incidencia_solicitud">
+                                <label for="cmbincsol" class="fw-bold fs-6">INCIDENCIA / SOLICITUD</label>
+                                <input id="cmbincsol" type="text" class="form-control form-control-sm" wire:model="incidencia_solicitud">
                             </div>
                             <div class="col-xl-12">
-                                <label for="cmb_reportado" class="fw-bold fs-6">RESPUESTA</label>
-                                <input type="text" class="form-control form-control-sm" wire:model="incidencia_solicitud_respuesta">
+                                <label for="txtrespuesta" class="fw-bold fs-6">RESPUESTA</label>
+                                <input id="txtrespuesta" type="text" class="form-control form-control-sm" wire:model="incidencia_solicitud_respuesta">
                             </div>
                         </div>
                     </div>
