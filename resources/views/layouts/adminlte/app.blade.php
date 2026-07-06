@@ -620,7 +620,7 @@
                                                 </a>
                                             </li> --}}
                                         @endcan
-                                        @can('mpfn.intranet.atenciones.index')
+                                        @can('mpfn.intranet.atencionesincidencias.index')
                                             <li class="nav-item">
                                                 <a class="nav-link ms-3 {{ request()->routeIs('mpfn.intranet.atencionesserviciosdetalles.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.intranet.atencionesserviciosdetalles.index') }}">
                                                     <i class="nav-icon fa-regular fa-circle"></i>
