@@ -144,19 +144,19 @@
                                                     <button class="input-group-text bg-success text-white" wire:click="filtrarAtendido('{{ $item->created_user}}')">
                                                         <i class="fa-solid fa-check me-2"></i>Atendidos
                                                     </button>
-                                                    <label class="form-control form-control-xs text-end">{{ $item->atendidos }}</label>
+                                                    <div class="form-control form-control-xs text-end">{{ $item->atendidos }}</div>
                                                 </div>
                                                 <div class="input-group input-group-xs">
                                                     <button class="input-group-text bg-danger text-white" wire:click="filtrarNoatendido('{{ $item->created_user}}')">
                                                         <i class="fa-solid fa-triangle-exclamation me-2"></i>Pendientes
                                                     </button>
-                                                    <label class="form-control form-control-xs text-end">{{ $item->no_atendidos }}</label>
+                                                    <div class="form-control form-control-xs text-end">{{ $item->no_atendidos }}</div>
                                                 </div>
                                                 <div class="input-group input-group-xs">
                                                     <button class="input-group-text bg-info text-white" wire:click="filtrarEnviadolima('{{ $item->created_user}}')">
                                                         <i class="fa-solid fa-envelope me-1"></i>Lima
                                                     </button>
-                                                    <label class="form-control form-control-xs text-end me-2">{{ $item->enviado_lima }}</label>
+                                                    <div class="form-control form-control-xs text-end me-2">{{ $item->enviado_lima }}</div>
                                                     <a type="button" class="btn btn-dark" href="{{ route('pdf.informatica.atencion-por-usuario-acta', ['dni' => $item->atendido_por_dni,'anio' => $filtro_anio, 'mes' => $filtro_mes]) }}" target="_blank">
                                                         <i class="fa-solid fa-print me-1"></i>Reporte
                                                     </a>
@@ -193,13 +193,13 @@
                                                     <button class="input-group-text bg-success text-white" wire:click="filtrarAtendido('{{ $item->created_user}}')">
                                                         <i class="fa-solid fa-check me-2"></i>Atendidos
                                                     </button>
-                                                    <label class="form-control form-control-xs text-end me-1">{{ $item->atendidos }}</label>
+                                                    <div class="form-control form-control-xs text-end me-1">{{ $item->atendidos }}</div>
                                                 </div>
                                                 <div class="input-group input-group-xs">
                                                     <button class="input-group-text bg-info text-white">
                                                         <i class="fa-solid fa-file-pdf me-1"></i>Folios
                                                     </button>
-                                                    <label class="form-control form-control-xs text-end me-2">{{ $item->digitalizado }}</label>
+                                                    <div class="form-control form-control-xs text-end me-2">{{ $item->digitalizado }}</div>
                                                     <a type="button" class="btn btn-dark" href="{{ route('pdf.informatica.atencion-por-usuario-acta', ['dni' => $item->atendido_por_dni,'anio' => $filtro_anio, 'mes' => $filtro_mes]) }}" target="_blank">
                                                         <i class="fa-solid fa-print me-1"></i>Reporte
                                                     </a>
@@ -229,7 +229,7 @@
                         <div class="col-lg-11 col-sm-12">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
-                                <input type="text" id="txtsearchpersonalatenciones2" class="form-control form-control-sm me-1" placeholder="Buscar por DNI o Datos del Personal" wire:model.live="search">
+                                <input type="text" name="txtsearchpersonalatenciones2" id="txtsearchpersonalatenciones2" class="form-control form-control-sm me-1" placeholder="Buscar por DNI o Datos del Personal" wire:model.live="search">
                                 <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3 me-1" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
                                     <i class="fa-solid fa-file"></i> Nuevo
                                 </button>
@@ -602,7 +602,7 @@
                                     <legend class="float-none px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">ATENCIÓN</legend>
                                     <div class="row">
                                         <div class="col-12 col-xl">
-                                            <label class="fw-bold fs-6">Enviado a Lima</label>
+                                            <label for="enviadoSi" class="fw-bold fs-6">Enviado a Lima</label>
                                             <div class="d-flex gap-2">
                                                 <input type="radio" id="enviadoSi" name="enviadoLima" class="btn-check" value="SI" autocomplete="off" wire:model.live="enviado_lima" required>
                                                 <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="enviadoSi">Si</label>
@@ -618,7 +618,7 @@
                                             </div>
                                         @endif
                                         <div class="col-12 col-xl">
-                                            <label class="fw-bold fs-6">ATENDIDO</label>
+                                            <label for="atendidoSi" class="fw-bold fs-6">ATENDIDO</label>
                                             <div class="d-flex gap-2">
                                                 <input type="radio" id="atendidoSi" name="atendido" class="btn-check" value="SI" autocomplete="off" wire:model.live="atendido" required>
                                                 <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="atendidoSi">Sí</label>
@@ -743,7 +743,7 @@
                 <div class="modal-body">
                     <div class="row g-3">                      
                         <div class="col-lg-1 col-sm-12">
-                            <label for="txt_sede" class="fw-bold fs-6">Año</label>
+                            <label for="cmbfiltro_anio" class="fw-bold fs-6">Año</label>
                             <div class="input-group">
                                 {{-- <span class="input-group-text input-group-text-xs fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span> --}}
                                 <select id="cmbfiltro_anio" wire:model.live="filtro_anio" class="form-select form-select-sm me-2">
@@ -768,10 +768,10 @@
                             </select>
                         </div>
                         <div class="col-xl-2 col-lg-6 col-sm-12">
-                            <label for="txt_sede" class="fw-bold fs-6">Sede</label>
+                            <label for="cmb_filtrosede" class="fw-bold fs-6">Sede</label>
                             <div class="input-group">
                                 {{-- <input type="text" id="txt_sede" class="form-control form-control-xs bg-light" wire:model="filtrosedeorigen" readonly required> --}}
-                                <select id=" cmb_filtrosede" class="form-select form-select-sm" wire:model.live="filtro_sede">
+                                <select id="cmb_filtrosede" class="form-select form-select-sm" wire:model.live="filtro_sede">
                                     <option value="">Seleccionar...</option>
                                     @foreach ($lista_sedes_filtro as $sede)
                                         <option value="{{ $sede->nombre }}">{{ $sede->nombre }}</option>
@@ -783,10 +783,10 @@
                             @enderror
                         </div>
                         <div class="col-xl-3 col-lg-6 col-sm-12">
-                            <label for="txt_dependencia" class="fw-bold fs-6">Dependencia</label>
+                            <label for="cmb_filtrodependencia" class="fw-bold fs-6">Dependencia</label>
                             <div class="input-group position-relative">
                                 {{-- <input type="text" id="txt_dependencia" class="form-control form-control-xs bg-light" wire:model="filtrodependenciaorigen" readonly required> --}}
-                                <select id=" cmb_filtrodependencia" class="form-select form-select-sm" wire:model.live="filtro_dependencia">
+                                <select id="cmb_filtrodependencia" class="form-select form-select-sm" wire:model.live="filtro_dependencia">
                                     <option value="">Seleccionar...</option>
                                     @foreach ($lista_dependencias_filtro as $dependencia)
                                         <option value="{{ $dependencia->nombre }}">{{ $dependencia->nombre }}</option>
@@ -798,10 +798,10 @@
                             @enderror
                         </div>
                         <div class="col-xl-2 col-lg-6 col-sm-12">
-                            <label for="txt_sede" class="fw-bold fs-6">Servicio</label>
+                            <label for="cmb_filtroservicio" class="fw-bold fs-6">Servicio</label>
                             <div class="input-group">
                                 {{-- <input type="text" id="txt_sede" class="form-control form-control-xs bg-light" wire:model="filtrosedeorigen" readonly required> --}}
-                                <select id=" cmb_filtrosede" class="form-select form-select-sm" wire:model.live="filtro_servicio">
+                                <select id="cmb_filtroservicio" class="form-select form-select-sm" wire:model.live="filtro_servicio">
                                     <option value="">Seleccionar...</option>
                                     @foreach ($lista_servicios_filtro as $servicio)
                                         <option value="{{ $servicio->servicio }}">{{ $servicio->servicio }}</option>
@@ -813,10 +813,10 @@
                             @enderror
                         </div>
                         <div class="col-xl-3 col-lg-6 col-sm-12">
-                            <label for="txt_dependencia" class="fw-bold fs-6">Incidencia/Solicitud</label>
+                            <label for="cmb_filtroincidencia" class="fw-bold fs-6">Incidencia/Solicitud</label>
                             <div class="input-group position-relative">
                                 {{-- <input type="text" id="txt_dependencia" class="form-control form-control-xs bg-light" wire:model="filtrodependenciaorigen" readonly required> --}}
-                                <select id=" cmb_filtrodependencia" class="form-select form-select-sm" wire:model.live="filtro_incidencia">
+                                <select id="cmb_filtroincidencia" class="form-select form-select-sm" wire:model.live="filtro_incidencia">
                                     <option value="">Seleccionar...</option>
                                     @foreach ($lista_incidencias_solicitudes_filtro as $incidencia)
                                         <option value="{{ $incidencia->incidencia_solicitud }}">{{ $incidencia->incidencia_solicitud }}</option>

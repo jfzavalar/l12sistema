@@ -8,7 +8,7 @@
                 <button type="button" class="btn-close" wire:click="cerrar_incidencia_solicitud" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal"></button>
             </div>
             <div class="modal-body">
-                <input type="text" class="form-control form-control-sm mb-2" placeholder="Buscar por detalle incidencia o solicitud" wire:model.live="searchincidenciasolicitud">
+                <input id="txtBuscarDetalle" type="text" class="form-control form-control-sm mb-2" placeholder="Buscar por detalle incidencia o solicitud" wire:model.live="searchincidenciasolicitud">
                 <div class="table-responsive small">
                     <table class="table table-striped table-hover table-sm table-xsmall">
                         <thead class="table-dark text-center align-middle">
