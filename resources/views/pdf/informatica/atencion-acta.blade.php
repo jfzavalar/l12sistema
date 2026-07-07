@@ -10,10 +10,11 @@
                 <th style="text-align: left;">
                     <br><img src="{{ public_path('img/mpfn_encabezado.png') }}"  width="150">
                 </th>
-                <th style="text-align: right;">
+                <th style="text-align: right; font-size: 10px;">
                     <br>"OFICINA DE REDES Y COMUNICACIONES"
                     <br>OFICINA CENTRAL DE TECNOLOGÍAS DE LA INFORMACIÓN
                     <br>MINISTERIO PÚBLICO - FISCALÍA DE LA NACIÓN
+                    <br>{{ $ipersonal->updated_at }}
                 </th>
             </tr>
         </thead>
@@ -26,7 +27,10 @@
     <table width="100%">
         <thead>
             <tr>
-                <th style="background-color: black; color: white; text-align: center;">FORMATO DE SOPORTE INFORMÁTICA 2026</th>
+                <th style="background-color: black; color: white; text-align: center;">
+                    FORMATO DE SOPORTE INFORMÁTICA 2026
+                    <br>ACTA: N° {{ $ipersonal->id }}
+                </th>
             </tr>
         </thead>
     </table>

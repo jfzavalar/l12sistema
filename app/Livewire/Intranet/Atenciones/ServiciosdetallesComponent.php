@@ -43,6 +43,7 @@ class ServiciosdetallesComponent extends Component
 
     public function updatingSearchservicios(){
         $this->resetPage('serviciosPage');
+        $this->resetPage('serviciosdetallesPage');
     }
     public function updatingSearchserviciosdetalles(){
         $this->resetPage('serviciosdetallesPage');

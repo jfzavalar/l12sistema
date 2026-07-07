@@ -800,7 +800,7 @@ class Activos extends Component
             }
 
             // RESET
-            $this->resetExcept(['filtro_anio', 'filtro_mes']);
+            // $this->resetExcept(['filtro_anio', 'filtro_mes']);
 
             // MENSAJE
             $this->dispatch(
@@ -1103,7 +1103,7 @@ class Activos extends Component
             });
 
             // Restablecer todas las variables
-            $this->resetExcept(['filtro_anio', 'filtro_mes']);
+            // $this->resetExcept(['filtro_anio', 'filtro_mes']);
 
             $this->dispatch(
                 'alerta-actualizado',
@@ -1135,7 +1135,8 @@ class Activos extends Component
 
     public function cerrar()
     {
-        $this->resetExcept(['filtro_anio', 'filtro_mes']);
+        // Restablecer todas las variables
+        // $this->resetExcept(['filtro_anio', 'filtro_mes']);
 
         $this->dispatch(
                 'alerta-cancelar',
