@@ -145,4 +145,44 @@ class AtencionesController extends Controller
 
         return $pdf->stream('reportePDF.pdf');
     }
+
+    public function exportarPDFporUsuario2($dni,$anio,$mes)
+    {
+        $iusuario = User::firstWhere([
+                        'activo' => 1,
+                        'dni' => $dni,
+                    ]);
+
+        $iatenciones_por_usuario = PersonalesAtencione::select('personales_atenciones.*')
+            ->where('personales_atenciones.activo', 1)
+            ->where('servicio','DIGITALIZACION - CARPETAS')
+            ->where('personales_atenciones.atendido_por_dni', $dni)
+            ->whereYear('personales_atenciones.created_at', $anio)
+            ->whereMonth('personales_atenciones.created_at', $mes)
+            ->orderBy('personales_atenciones.created_at')
+            ->get();
+
+        $totalCopias = $iatenciones_por_usuario->sum('ncopias');
+
+        $nombreMes = mb_strtoupper(
+            \Carbon\Carbon::createFromDate($anio, (int) $mes, 1)
+                ->locale('es')
+                ->translatedFormat('F'),
+            'UTF-8'
+        );
+
+        // 🔹 UNA sola carga de vista
+        $pdf = Pdf::loadView(
+            'pdf.informatica.atencion-por-usuario-acta2',
+            [
+                'iatenciones_por_usuario' => $iatenciones_por_usuario,
+                'itotalcopias' => $totalCopias,
+                'iusuario' => $iusuario,
+                'anio' => $anio,
+                'nombreMes' => $nombreMes
+            ]
+        );
+
+        return $pdf->stream('reportePDF.pdf');
+    }
 }
