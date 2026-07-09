@@ -41,9 +41,6 @@ class Activos extends Component
     protected $paginationTheme = "bootstrap";
 
 
-    // public $mostrarBtnBuscarDni = "d-none";
-
-
     public $colorHeaderModal, $textoHeaderModal;
     public $colorNuevoEditar, $textoNuevoEditar;
     public $colorGuardarActualizar, $textoGuardarActualizar;
@@ -609,7 +606,6 @@ class Activos extends Component
         $this->resetValidation();   // ← limpia los errores
         $this->resetErrorBag();     // ← opcional extra seguridad
 
-        // Restablecer todas las variables
         // Restablecer todas las variables
         $this->resetExcept(['filtro_anio', 'filtro_mes']);
 
