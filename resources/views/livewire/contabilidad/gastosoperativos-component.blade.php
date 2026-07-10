@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="col-xl-2">
                         <div class="input-group input-group-sm mb-2">
-                            <span class="input-group-text fw-bold" id="basic-addon2">Fitrar:</span>
+                            <span class="input-group-text fw-bold" id="basic-addon2">Filtrar por:</span>
                             <select id="cmbfitroanio" class="form-select form-select-sm" wire:model.live="filtroanio">
                                 @foreach($anios as $anio)
                                     <option value="{{ $anio }}">{{ $anio }}</option>
@@ -17,8 +17,11 @@
                         <div class="input-group input-group-sm mb-2">
                             <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
                             <input type="text" id="txtsearchusuario" class="form-control form-control-sm me-1" wire:model.live="search" placeholder="Buscar por DNI o Nombres y Apellidos">
-                            <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3 me-1" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
+                            {{-- <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3 me-1" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
                                 <i class="fa-solid fa-file"></i> Nuevo
+                            </button> --}}
+                            <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3 me-1" wire:click="generarListaDeEntregaDeGastosOperativos">
+                                <i class="fa-solid fa-list"></i> General Año Fiscal
                             </button>
                             {{-- @can('mpfn.rrhh.personal.create')
                                 <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="generarGastosOperativos">

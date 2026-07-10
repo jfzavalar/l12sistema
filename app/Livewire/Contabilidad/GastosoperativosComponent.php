@@ -129,6 +129,13 @@ class GastosoperativosComponent extends Component
     // VARIABLES MODAL DE MOTIVO DE CAMBIO
     public $modal_abierto_alerta_cambio_estado = false;
 
+    public $filtroanio;
+    
+    public function mount()
+    {
+        $this->filtroanio = now()->year;
+    }
+
     public function render()
     {
         $lista_activos = ContabilidadesGastosoperativosEntrega::where('activo','1')
@@ -143,6 +150,22 @@ class GastosoperativosComponent extends Component
             })
             ->orderBy('datos')
             ->paginate(30, ['*'], 'gastosoperativosentregaPage');
+
+        $aniosBD = DB::table('contabilidades_gastosoperativos_entregas')
+            ->select('anio') // cambia 'fecha' por tu campo real
+            ->distinct()
+            ->pluck('anio')
+            ->toArray();
+
+        // Año actual
+        $anioActual = Carbon::now()->year;
+
+        // Unir y evitar duplicados
+        $anios = collect($aniosBD)
+            ->push($anioActual)
+            ->unique()
+            ->sortDesc()
+            ->values();
 
         $lista_personas = Persona::join('personales','personas.id','=','personales.persona_id')
             ->select(
@@ -209,19 +232,9 @@ class GastosoperativosComponent extends Component
             ->pluck('anio')
             ->toArray();
 
-        // Año actual
-        $anioActual = Carbon::now()->year;
-
-        // Unir y evitar duplicados
-        $anios = collect($aniosBD)
-            ->push($anioActual)
-            ->unique()
-            ->sortDesc()
-            ->values();
-
         return view('livewire.contabilidad.gastosoperativos-component',
-                        compact('lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos',
-                            'lista_activos','anios'));
+                        compact('lista_activos','anios',
+                            'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos',));
     }
 
     private function queryConFiltros($tipoDocumento = null)
@@ -365,6 +378,101 @@ class GastosoperativosComponent extends Component
     {
 
     }
+
+    //GENERAR AÑO FISCAL
+    public function generarListaDeEntregaDeGastosOperativos($soloNuevo = false, $personaId = null)
+    {
+        $usuario = auth()->user()->datos; // Mejor que usar propiedad pública    
+        
+        $anioActual = Carbon::now()->year;
+
+        $query = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
+            ->select(
+                'personas.id as persona_id',
+                'personas.dni',
+                'personas.appaterno',
+                'personas.apmaterno',
+                'personas.nombres',
+                'personas.datos',
+                'personas.celpersonal',
+                'personales.celinstitucional',
+                'personas.correopersonal',
+                'personales.correoinstitucional',
+
+                'personales.id as personal_id',
+                'personales.regimen',
+                'personales.tipo_regimen',
+                'personales.cargo',
+                'personales.cargo_condicion',
+                // 'personales.sedeorigen',
+                // 'personales.dependenciaorigen',
+                // 'personales.despachoorigen',
+                'personales.sededestino',
+                'personales.dependenciadestino',
+                'personales.despachodestino',
+                'personales.tipo_documento'
+            )
+            ->where('personales.activo', 1)
+            ->where('personales.cargo', 'like', 'FISCAL%');
+
+        // 👉 Si solo quieres el nuevo fiscal
+        if ($soloNuevo && $personaId) {
+            $query->where('personas.id', $personaId);
+        }
+
+        $personas = $query->get();
+
+        foreach ($personas as $persona) {
+
+            // 🔒 Evitar duplicados por persona + año
+            $existe = ContabilidadesGastosoperativosEntrega::where('persona_id', $persona->persona_id)
+                ->where('anio', $anioActual)
+                ->exists();
+
+            if (!$existe) {
+                ContabilidadesGastosoperativosEntrega::create([
+                    'persona_id' => $persona->persona_id,
+                    'dni' => $persona->dni,
+                    'appaterno' => $persona->appaterno,
+                    'apmaterno' => $persona->apmaterno,
+                    'nombres' => $persona->nombres,
+                    'datos' => $persona->datos,
+                    'celpersonal' => $persona->celpersonal,
+                    'celinstitucional' => $persona->celinstitucional,
+                    'correopersonal' => $persona->correopersonal,
+                    'correoinstitucional' => $persona->correoinstitucional,
+
+                    'personal_id' => $persona->personal_id,
+                    'regimen' => $persona->regimen,
+                    'tipo_regimen' => $persona->tipo_documento,
+                    'cargo' => $persona->cargo,
+                    'cargo_condicion' => $persona->cargo_condicion,
+                    'sede' => $persona->sededestino,
+                    'dependencia' => $persona->dependenciadestino,
+                    'despacho' => $persona->despachodestino,
+
+                    'anio' => Carbon::now()->year,
+                    'enero' => 0,
+                    'febrero' => 0,
+                    'marzo' => 0,
+                    'abril' => 0,
+                    'mayo' => 0,
+                    'junio' => 0,
+                    'julio' => 0,
+                    'agosto' => 0,
+                    'septiembre' => 0,
+                    'octubre' => 0,
+                    'noviembre' => 0,
+                    'diciembre' => 0,
+                    'activo' => 1,
+                    'created_user' => $usuario,
+                    'updated_user' => $usuario,
+                ]);
+            }
+        }
+    }
+
+    // ACTUALIZAR LOS ESTADOS DE ENTREGADO
 
     public function editar_entregado(ContabilidadesGastosoperativosEntrega $registro, $mes)
     {
