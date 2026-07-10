@@ -171,13 +171,13 @@
 
 
                         {{-- REGISTRO DE TICKES --}}
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-xl-12">
                                     <fieldset class="border p-3 rounded mb-3">
                                         <legend class="float-none px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DETALLE DE LA INCIDENCIA/SOLICITUD</legend>
                                     </fieldset>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     
                     <div class="modal-footer">

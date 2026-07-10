@@ -241,12 +241,14 @@
                         <tr>
                             <th scope="col">#TICKET</th>
                             <th scope="col">
-                                <i class="fa-solid fa-user"></i> DNI-PERSONAL
+                                <i class="fa-solid fa-user"></i> SOLICITANTE
                             </th>
-                            <th scope="col">REGIMEN - CARGO</th>
-                            <th scope="col" class="table-danger">DEPENDENCIA DESDE DONDE SOLICITA EL SERVICIO</th>
-                            <th scope="col" class="bg-success-subtle">DESCRIPCIÓN DEL SERVICIO</th>
+                            {{-- <th scope="col">REGIMEN - CARGO</th> --}}
+                            {{-- <th scope="col" class="table-danger">TIPO</th> --}}
                             <th scope="col" class="bg-success-subtle">MEDIO</th>
+                            <th scope="col" class="bg-success-subtle">TIPO</th>
+                            <th scope="col" class="bg-success-subtle">DESCRIPCIÓN DEL SERVICIO</th>
+                            <th scope="col" class="bg-success-subtle">SOLUCIÓN</th>                     
                             <th scope="col" class="bg-success-subtle">ESTADO</th>
                             <th scope="col" class="bg-success-subtle">ATENDIDO POR</th>
                             <th scope="col" colspan="3" class="table-dark"><i class="fa-solid fa-gears"></i></th>
@@ -259,25 +261,18 @@
                                     <i class="fa-solid fa-ticket"></i> {{ $item->id }}
                                 </th>
                                 <td><b>{{ $item->dni }}</b> <br> {{ $item->datos }}</td>
-                                <td>
+                                {{-- <td>
                                     <b>{{ $item->regimen }}</b>
                                     <br>
                                     {{ $item->cargo }}
-                                </td>
-                                <td>
+                                </td> --}}
+                                {{-- <td>
                                     <b>SEDE: </b>{{ $item->sededestino }}
                                     <br>
                                     <b>DEPENDENCIA: </b>{{ $item->dependenciadestino }}
                                     <br>
                                     <b>DESPACHO: </b>{{ $item->despachodestino }}
-                                </td>
-                                <td>
-                                    <b>TIPO: </b>{{ $item->solicitud_incidencia }}
-                                    <br>
-                                    <b>SERVICIO: </b> {{ $item->servicio }}
-                                    <br>
-                                    <b>DESCRIPCIÓN: </b>{{ $item->detalle_servicio }}
-                                </td>
+                                </td> --}}
                                 <td class="text-center align-middle">
                                     @if ($item->reportado_por === "CEA")
                                         <b>CEA</b>
@@ -296,6 +291,21 @@
                                     @elseif (($item->reportado_por === "WHATSAPP"))
                                         <i class="fa-brands fa-whatsapp"></i>
                                     @endif
+                                </td>
+                                <td class="text-center align-middle">
+                                    <span class="badge py-1 rounded-pill {{ $item->solicitud_incidencia == 'INCIDENCIA' ? 'bg-primary-subtle text-primary' : 'bg-dark-subtle text-dark' }}">
+                                        {{ $item->solicitud_incidencia }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <b>TIPO: </b>{{ $item->solicitud_incidencia }}
+                                    <br>
+                                    <b>SERVICIO: </b> {{ $item->servicio }}
+                                    <br>
+                                    <b>DESCRIPCIÓN: </b>{{ $item->detalle_servicio }}
+                                </td>
+                                <td>
+                                    {{ $item->respuesta }}
                                 </td>
                                 <td class="text-center align-middle">
                                     <span class="badge py-1 rounded-pill {{ $item->atendido == 'SI' ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }}">

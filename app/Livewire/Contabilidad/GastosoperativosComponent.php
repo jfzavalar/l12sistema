@@ -38,7 +38,7 @@ class GastosoperativosComponent extends Component
     public $search, $searchi,$searchhistorial, $searchpersonas, $searchsedes,$searchdependencias,$searchdespachos,$searchcargos;
 
     public function updatingSearch(){
-        $this->resetPage('atencionesPage');
+        $this->resetPage('gastosoperativosentregaPage');
     }
     public function updatingSearchi(){
         $this->resetPage('atencionesinactivosPage');
@@ -132,8 +132,17 @@ class GastosoperativosComponent extends Component
     public function render()
     {
         $lista_activos = ContabilidadesGastosoperativosEntrega::where('activo','1')
+            // BUSCADOR
+            ->when($this->search, function ($query) {
+                $search = trim($this->search);
+                $query->where(function ($q) use ($search) {
+                    $q->where('dni', 'like', '%' . $search . '%')
+                    ->orWhere('datos', 'like', '%' . $search . '%');
+                });
+
+            })
             ->orderBy('datos')
-            ->paginate(30, ['*'], 'personalesPage');
+            ->paginate(30, ['*'], 'gastosoperativosentregaPage');
 
         $lista_personas = Persona::join('personales','personas.id','=','personales.persona_id')
             ->select(
@@ -363,7 +372,7 @@ class GastosoperativosComponent extends Component
 
         $this->contabilidades_gastosoperativos_entrega_id = $registro->id;
         $this->mes = $mes;
-        
+
         // Obtener observación según el mes
         $columnaObservacion = 'm' . $mes;
 
