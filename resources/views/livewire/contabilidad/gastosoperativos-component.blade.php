@@ -1,4 +1,53 @@
 <div>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-1 mb-2 border-bottom">
+        <h1 class="h2">
+            <i class="fa-solid fa-users-between-lines"></i> GASTOS OPERATIVOS: CONTROL DE ENTREGA
+        </h1>
+        {{-- <div class="row">
+            <div class="col-auto">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarTotal">
+                    <span class="alert alert-primary d-block mb-0">
+                        <span class="fw-bold">
+                            <i class="fa-solid fa-chart-simple"></i>
+                            TOTAL: {{ $estadisticas2->total }}
+                        </span>
+                    </span>
+                </button>
+            </div>
+            <div class="col-auto">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarEnviadolima">
+                    <span class="alert alert-info d-block mb-0">
+                        <span class="fw-bold">
+                            <i class="fa-solid fa-check-double"></i>
+                            LIMA: {{ $estadisticas2->enviado_lima }}
+                        </span>
+                    </span>
+                </button>
+            </div>
+
+            <div class="col-auto">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarAtendido">
+                    <span class="alert alert-success d-block mb-0">
+                        <span class="fw-bold">
+                            <i class="fa-solid fa-check-double"></i>
+                            ATENDIDO: {{ $estadisticas2->atendidos }}
+                        </span>
+                    </span>
+                </button>
+            </div>
+            <div class="col-auto">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarNoatendido">
+                    <span class="alert alert-danger d-block mb-0">
+                        <span class="fw-bold">
+                            <i class="fa-solid fa-check-double"></i>
+                            PENDIENTES: {{ $estadisticas2->no_atendidos }}
+                        </span>
+                    </span>
+                </button>
+            </div>
+        </div> --}}
+    </div>
+
     <div class="card">
         <div class="card-body">
             <div class="table-responsive-xl">
@@ -21,7 +70,7 @@
                                 <i class="fa-solid fa-file"></i> Nuevo
                             </button> --}}
                             <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3 me-1" wire:click="generarListaDeEntregaDeGastosOperativos">
-                                <i class="fa-solid fa-list"></i> General Año Fiscal
+                                <i class="fa-solid fa-list"></i> Generar Año Fiscal
                             </button>
                             {{-- @can('mpfn.rrhh.personal.create')
                                 <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="generarGastosOperativos">

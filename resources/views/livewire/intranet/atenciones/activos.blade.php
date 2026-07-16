@@ -260,7 +260,11 @@
                                 <th class="text-center">
                                     <i class="fa-solid fa-ticket"></i> {{ $item->id }}
                                 </th>
-                                <td><b>{{ $item->dni }}</b> <br> {{ $item->datos }}</td>
+                                <td>
+                                    <b>{{ $item->dni }}</b>
+                                    <br> {{ $item->datos }}
+                                    <br>{{ $item->created_at }}
+                                </td>
                                 {{-- <td>
                                     <b>{{ $item->regimen }}</b>
                                     <br>
@@ -402,7 +406,8 @@
 
 
     {{-- Modal Nuevo-Editar --}}
-    <div wire:ignore.self class="modal fade" id="nuevoEditarModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="nuevoEditarModalLabel" aria-hidden="true">
+    {{-- <div wire:ignore.self class="modal fade" id="nuevoEditarModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="nuevoEditarModalLabel" aria-hidden="true"> --}}
+    <div wire:ignore.self class="modal fade" id="nuevoEditarModal" tabindex="-1" aria-labelledby="nuevoEditarModalLabel" aria-hidden="true">
         <div class="modal-dialog" style="max-width:95%;">
             <div class="modal-content">
                 <div class="modal-header bg-{{ $colorHeaderModal }}">

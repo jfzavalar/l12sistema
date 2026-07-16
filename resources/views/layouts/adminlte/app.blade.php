@@ -444,9 +444,9 @@
                                                 </a>
                                             </li>
                                         @endcan --}}
-                                        @can('procesos.informatica.spijweb.index')
+                                        @can('mpfn.informatica.spijweb.index')
                                             <li class="nav-item">
-                                                <a class="nav-link ms-3 {{ request()->routeIs('procesos.informatica.spijweb.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.spijweb.index') }}">
+                                                <a class="nav-link ms-3 {{ request()->routeIs('mpfn.informatica.spijweb.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.informatica.spijweb.index') }}">
                                                     <i class="nav-icon fa-regular fa-circle"></i>
                                                     <p>Spijweb</p>
                                                 </a>
@@ -751,10 +751,12 @@
             document.onclick = resetTimer;
             document.onscroll = resetTimer;
         </script> --}}
+
+        {{-- CERRAR SESIÓN INACTIVA --}}
         <script>
 
             let timeout;
-            let tiempo = 3600000; // 1 hora
+            let tiempo = 300000; // 1 hora 3600000
 
             async function logout() {
 
@@ -775,7 +777,7 @@
                 }
 
                 // Redireccionar luego del logout
-                window.location.href = "/dashboard";
+                window.location.href = "/";
             }
 
             function resetTimer() {

@@ -132,8 +132,8 @@ Route::middleware('auth','can:mpfn.informatica.ips.index')->group(function () {
     Route::resource('ips', IpsController::class)->names('mpfn.informatica.ips');
     // Route::get('pdf/informatica/firmapc-acta/{id}', [IpsController::class, 'exportarPDF'])->name('pdf.informatica.firmapc-acta');
 });
-Route::middleware('auth','can:procesos.informatica.spijweb.index')->group(function () {
-    Route::resource('spijweb', SpijwebController::class)->names('procesos.informatica.spijweb');
+Route::middleware('auth','can:mpfn.informatica.spijweb.index')->group(function () {
+    Route::resource('spijweb', SpijwebController::class)->names('mpfn.informatica.spijweb');
     Route::get('pdf/informatica/spijweb-acta/{id}', [SpijwebController::class, 'exportarPDF'])->name('pdf.informatica.spijweb-acta');
 });
 
