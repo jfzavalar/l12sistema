@@ -140,37 +140,23 @@
       <!-- Wrap the rest of the page in another container to center all the content. -->
       <div class="container marketing">
         <!-- Three columns of text below the carousel -->
-        {{-- <div class="row">
+        <div class="row">
           <div class="col-lg-4">
-            <svg
-              aria-label="Placeholder"
-              class="bd-placeholder-img rounded-circle"
-              height="140"
-              preserveAspectRatio="xMidYMid slice"
-              role="img"
-              width="140"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+            <svg aria-label="Placeholder" class="bd-placeholder-img rounded-circle" height="140" preserveAspectRatio="xMidYMid slice" role="img" width="140" xmlns="http://www.w3.org/2000/svg">
               <title>Placeholder</title>
-              <rect
-                width="100%"
-                height="100%"
-                fill="var(--bs-secondary-color)"
-              ></rect>
+              <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
             </svg>
-            <h2 class="fw-normal">Intranet FN</h2>
+            <h2 class="fw-normal">INFORMATICA</h2>
+            <p>DFJunín - Incidencias / Solicitudes</p>
             <p>
-              Fiscalía de la Nación
-            </p>
-            <p>
-              <a class="btn btn-primary" href="http://intranet.mpfn.gob.pe">
-                <i class="fa-solid fa-user"></i> Acceder &raquo;
+              <a class="btn btn-primary" href="{{ route('paginas.informatica-atenciones.index') }}">
+                  <i class="fa-solid fa-user"></i> Registrar &raquo;
               </a>
             </p>
           </div>
 
           
-          <div class="col-lg-4">
+          {{-- <div class="col-lg-4">
             <svg
               aria-label="Placeholder"
               class="bd-placeholder-img rounded-circle"

@@ -18,6 +18,7 @@ use App\Http\Controllers\Intranet\AtencionesController;
 use App\Http\Controllers\Intranet\AtencionesincidenciasController;
 use App\Http\Controllers\Intranet\ConfiguracionController;
 use App\Http\Controllers\Intranet\ExpimportantesController;
+use App\Http\Controllers\Paginas\InformaticaAtencionesController;
 use App\Http\Controllers\Patrimonio\BienesasignacionController;
 use App\Http\Controllers\Patrimonio\BienesasignacionsobranteController;
 use App\Http\Controllers\Patrimonio\BienesController;
@@ -42,6 +43,7 @@ Route::get('/', function () {
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
+
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
@@ -162,6 +164,14 @@ Route::middleware('auth','can:mpfn.intranet.expimportantes.index')->group(functi
 Route::middleware('auth','can:procesos.intranet.index')->group(function () {
     Route::resource('configuracion', ConfiguracionController::class)->names('mpfn.intranet.configuracion');
 });
+
+// PAGINAS
+
+Route::resource('informatica-atenciones',InformaticaAtencionesController::class)->names('paginas.informatica-atenciones');
+
+
+
+
 
 // PATRIMONIO
 

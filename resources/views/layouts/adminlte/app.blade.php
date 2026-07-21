@@ -756,7 +756,7 @@
         <script>
 
             let timeout;
-            let tiempo = 3600000; // 1 hora 3600000
+            let tiempo = 28800000; // ( horas 8 * 60 * 60 * 1000)
 
             async function logout() {
 

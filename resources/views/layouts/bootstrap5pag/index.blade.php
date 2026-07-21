@@ -103,6 +103,211 @@
         display: block !important;
       }
     </style>
+
+    <style>
+            /* 🔵 Estilo general de los botones de paginación */
+            .pagination .page-link {
+                border-radius: 50px !important; /* Bordes tipo pill */
+                padding: 0.25rem 0.6rem;        /* Botones más compactos */
+                font-size: 1rem;              /* Texto más pequeño */
+                line-height: 1;                 /* Ajusta la altura del texto */
+                color: #5e72e4;                 /* Color principal Argon */
+            }
+
+            /* 🟣 Hover y enfoque */
+            .pagination .page-link:hover,
+            .pagination .page-link:focus {
+                background-color: #5e72e4;
+                color: #fff;
+                box-shadow: 0 0 6px rgba(94, 114, 228, 0.3);
+            }
+
+            /* 🟢 Estado activo */
+            .pagination .page-item.active .page-link {
+                background-color: #5e72e4 !important;
+                border-color: #5e72e4 !important;
+                color: #fff !important;
+                box-shadow: 0 0 6px rgba(94, 114, 228, 0.4);
+            }
+
+            /* 🔘 Redondeo de bordes en los extremos (opcional, por si prefieres estilo clásico) */
+            .pagination .page-item:first-child .page-link {
+                border-top-left-radius: 50px;
+                border-bottom-left-radius: 50px;
+            }
+            .pagination .page-item:last-child .page-link {
+                border-top-right-radius: 50px;
+                border-bottom-right-radius: 50px;
+            }
+
+            
+            /* ------------------------------------- */
+            .bd-placeholder-img {
+                font-size: 1.125rem;
+                text-anchor: middle;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                user-select: none;
+            }
+            @media (min-width: 768px) {
+                .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+                }
+            }
+            .b-example-divider {
+                width: 100%;
+                height: 3rem;
+                background-color: #0000001a;
+                border: solid rgba(0, 0, 0, 0.15);
+                border-width: 1px 0;
+                box-shadow:
+                inset 0 0.5em 1.5em #0000001a,
+                inset 0 0.125em 0.5em #00000026;
+            }
+            .b-example-vr {
+                flex-shrink: 0;
+                width: 1.5rem;
+                height: 100vh;
+            }
+            .bi {
+                vertical-align: -0.125em;
+                fill: currentColor;
+            }
+            .nav-scroller {
+                position: relative;
+                z-index: 2;
+                height: 2.75rem;
+                overflow-y: hidden;
+            }
+            .nav-scroller .nav {
+                display: flex;
+                flex-wrap: nowrap;
+                padding-bottom: 1rem;
+                margin-top: -1px;
+                overflow-x: auto;
+                text-align: center;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+            .btn-bd-primary {
+                --bd-violet-bg: #712cf9;
+                --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+                --bs-btn-font-weight: 600;
+                --bs-btn-color: var(--bs-white);
+                --bs-btn-bg: var(--bd-violet-bg);
+                --bs-btn-border-color: var(--bd-violet-bg);
+                --bs-btn-hover-color: var(--bs-white);
+                --bs-btn-hover-bg: #6528e0;
+                --bs-btn-hover-border-color: #6528e0;
+                --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+                --bs-btn-active-color: var(--bs-btn-hover-color);
+                --bs-btn-active-bg: #5a23c8;
+                --bs-btn-active-border-color: #5a23c8;
+            }
+            .bd-mode-toggle {
+                z-index: 1500;
+            }
+            .bd-mode-toggle .bi {
+                width: 1em;
+                height: 1em;
+            }
+            .bd-mode-toggle .dropdown-menu .active .bi {
+                display: block !important;
+            }
+
+            /* ------------------------------------- */
+            .btn-xs {
+            --bs-btn-padding-y: .25rem !important;
+            --bs-btn-padding-x: .5rem !important;
+            --bs-btn-font-size: .65rem !important;
+            }
+
+            .btn-naranja {
+            background-color: #ff8800;
+            color: white;
+            }
+            .btn-naranja:hover {
+                background-color: #e67600; /* naranja más oscuro */
+                color: white;
+            }
+
+            .btn-azul-oscuro {
+                background-color: #003366;
+                color: white;
+            }
+
+            .btn-verde-lima {
+                background-color: #00cc66;
+                color: white;
+            }
+
+            .btn-outline-naranja {
+                color: #ff8800;
+                border: 1px solid #ff8800;
+                background-color: transparent;
+            }
+            .btn-outline-naranja:hover {
+                background-color: #ff8800;
+                color: white;
+            }
+
+            .btn-outline-azul-oscuro {
+                color: #003366;
+                border: 1px solid #003366;
+                background-color: transparent;
+            }
+
+            .btn-outline-azul-oscuro:hover {
+                background-color: #003366;
+                color: white;
+            }
+
+            .btn-outline-verde-lima {
+                color: #00cc66;
+                border: 1px solid #00cc66;
+                background-color: transparent;
+            }
+
+            .btn-outline-verde-lima:hover {
+                background-color: #00cc66;
+                color: white;
+            }
+
+            /* ------------------------------------- */
+
+            .form-control-xs.form-control {
+            padding: .25rem .5rem;   /* arriba/abajo - izquierda/derecha */
+            font-size: .75rem;       /* tamaño de letra */
+            }
+
+            .form-select-xs.form-select {
+            padding: .25rem .5rem;   /* arriba/abajo - izquierda/derecha */
+            font-size: .75rem;       /* tamaño de letra */
+            }
+
+            /* ===== Extra Small (xs) ===== */
+            .input-group-xs > .form-control,
+            .input-group-xs > .form-select,
+            .input-group-xs > .input-group-text,
+            .input-group-xs > .btn {
+                padding: 0.15rem 0.3rem !important;  /* más pequeño que .sm */
+                font-size: 0.7rem !important;        /* letra más chica */
+                border-radius: 0.2rem !important;    /* esquinas compactas */
+            }
+
+            /* ===== Extra Span (xs) ===== */
+            .input-group-text-xs.input-group-text {
+                padding: .25rem .5rem;  /* arriba/abajo - izquierda/derecha */
+                font-size: .60rem;      /* tamaño de letra */
+                
+            }
+
+            /* Tamaño extra pequeño para tablas */
+            .table-xsmall {
+                font-size: 0.70rem !important;   /* más chico que el normal */
+            }
+        </style>
+        @livewireStyles
   </head>
   <body>
     {{-- <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
@@ -249,7 +454,7 @@
                           <a href="{{ url('/dashboard') }}" class="btn btn-primary">Dashboard</a>
                       @else
                           <a href="{{ route('login') }}" class="btn btn-primary">
-                              <i class="fa-brands fa-ubuntu"></i> Iniciar Sesión
+                              <i class="fa-solid fa-user"></i> Iniciar Sesión
                           </a>
 
                           {{-- @if (Route::has('register'))
@@ -266,7 +471,8 @@
       </nav>
     </header>
 
-
+    @livewireScripts
+    
     @yield('content')
     
     <script src="{{ asset('superadmin/bootstrap/assets/dist/js/bootstrap.bundle.min.js') }}" class="astro-vvvwv3sm"></script>
