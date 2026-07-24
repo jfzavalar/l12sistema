@@ -15,7 +15,7 @@
 
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-1 mb-2 border-bottom">
         <h1 class="h2">
-            <i class="fa-solid fa-users-between-lines"></i> TICKETS ATENCIONES: {{ strtoupper(now()->locale('es')->translatedFormat('F Y')) }}
+            <i class="fa-solid fa-ticket"></i> TICKETS: {{ strtoupper(now()->locale('es')->translatedFormat('F Y')) }}
         </h1>
         <div class="row">
             <div class="col-auto">
@@ -44,7 +44,7 @@
                     <span class="alert alert-success d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-check-double"></i>
-                            ATENDIDO: {{ $estadisticas2->atendidos }}
+                            ATENDIDOS: {{ $estadisticas2->atendidos }}
                         </span>
                     </span>
                 </button>

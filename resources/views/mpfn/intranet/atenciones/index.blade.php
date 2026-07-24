@@ -1,7 +1,7 @@
 {{-- @extends('layouts.bootstrap5.index') --}}
 @extends('layouts.adminlte.app')
 
-@section('title', 'Dashboard')
+@section('title', 'INF-Tickets')
 
 @section('content')
     {{-- <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
