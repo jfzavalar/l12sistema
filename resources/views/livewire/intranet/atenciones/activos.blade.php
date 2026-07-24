@@ -290,7 +290,7 @@
                                         @endif
 
                                         @if ($item->created_user === auth()->user()->datos || auth()->user()->hasRole('Admin-Super'))
-                                            <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#pdf-cargar-component" wire:click="editar_pdf({{ $item->id }})">
+                                            <button type="button" class="btn btn-outline-warning btn-xs" wire:click="editar_pdf({{ $item->id }})">
                                                 <i class="fa-solid fa-upload"></i><br>Cargar
                                             </button>
                                         @endif
@@ -847,7 +847,7 @@
                                                 <td>
                                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                         <div class="btn-group" role="group">
-                                                            <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_persona({{ $persona->id }})" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
+                                                            <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_persona({{ $persona->id }})">
                                                                 <i class="fa-solid fa-circle-plus"></i> Agregar
                                                             </button>
                                                         </div>
@@ -919,7 +919,7 @@
                                                 <td>
                                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                         <div class="btn-group" role="group">
-                                                            <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_sede({{ $sede->id }})" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
+                                                            <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_sede({{ $sede->id }})">
                                                                 <i class="fa-solid fa-circle-plus"></i> Agregar
                                                             </button>
                                                         </div>
@@ -985,7 +985,7 @@
                                                 <td>
                                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                         <div class="btn-group" role="group">
-                                                            <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_dependencia({{ $dependencia->id }})" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
+                                                            <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_dependencia({{ $dependencia->id }})">
                                                                 <i class="fa-solid fa-circle-plus"></i> Agregar
                                                             </button>
                                                         </div>
@@ -1053,7 +1053,7 @@
                                                 <td>
                                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                         <div class="btn-group" role="group">
-                                                            <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_despacho({{ $despacho->id }})" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
+                                                            <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_despacho({{ $despacho->id }})">
                                                                 <i class="fa-solid fa-circle-plus"></i> Agregar
                                                             </button>
                                                         </div>
@@ -1122,7 +1122,7 @@
                                                 <td>
                                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                         <div class="btn-group" role="group">
-                                                            <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_cargo({{ $cargo->id }})" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
+                                                            <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_cargo({{ $cargo->id }})">
                                                                 <i class="fa-solid fa-circle-plus"></i> Agregar
                                                             </button>
                                                         </div>
@@ -1182,7 +1182,7 @@
                                             <td>
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                     <div class="btn-group" role="group">
-                                                        <button type="button" class="btn btn-outline-success btn-xs" wire:click="agregar_servicio({{ $item->id }})" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
+                                                        <button type="button" class="btn btn-outline-success btn-xs" wire:click="agregar_servicio({{ $item->id }})">
                                                             <i class="fa-solid fa-share-from-square"></i> Agregar
                                                         </button>
                                                     </div>
@@ -1243,7 +1243,7 @@
                                             <td>
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                     <div class="btn-group" role="group">
-                                                        <button type="button" class="btn btn-outline-success btn-xs" wire:click="agregar_incidencia_solicitud({{ $item2->id }})" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
+                                                        <button type="button" class="btn btn-outline-success btn-xs" wire:click="agregar_incidencia_solicitud({{ $item2->id }})">
                                                             <i class="fa-solid fa-share-from-square"></i> Agregar
                                                         </button>
                                                     </div>
@@ -1327,7 +1327,7 @@
                                                 <td>
                                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                         <div class="btn-group" role="group">
-                                                            <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_bien({{ $bien->id }})" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal">
+                                                            <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_bien({{ $bien->id }})">
                                                                 <i class="fa-solid fa-circle-plus"></i> Agregar
                                                             </button>
                                                         </div>
