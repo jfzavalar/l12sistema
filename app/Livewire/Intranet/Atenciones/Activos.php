@@ -40,7 +40,20 @@ class Activos extends Component
     use WithPagination;
     protected $paginationTheme = "bootstrap";
 
+    // VVARIABLES PARA MODALES
+    public $modalNuevoEditarAbrir = false, $modalReportesFiltros = false;
 
+    public $modalPersonalBuscar = false;
+    public $modalPersonalSedeBuscar = false;
+    public $modalPersonalDependenciaBuscar = false;
+    public $modalPersonalDespachoBuscar = false;
+    public $modalPersonalCargoBuscar = false;
+    public $modalInformaticaServicioBuscar = false;
+    public $modalInformaticaServicioDetalleBuscar = false;
+    public $modalPatrimonioBienesBuscar = false;
+    public $modalPDFCargar = false;
+
+    // VARIABLES PARA ADMINISTRAR MODALES
     public $colorHeaderModal, $textoHeaderModal;
     public $colorNuevoEditar, $textoNuevoEditar;
     public $colorGuardarActualizar, $textoGuardarActualizar;
@@ -57,9 +70,19 @@ class Activos extends Component
     // Variable de función Guardar o Actualizar
     public $funcionGuardarActualizar;
 
-    // Variables de búsqueda
-    public $search, $searchi,$searchhistorial, $searchpersonas, $searchsedes,$searchdependencias,$searchdespachos,$searchcargos,
-            $searchservicios,$searchincidenciasolicitud,$searchbienes;
+    // VARIABLES INPUTS DE BUSQUEDA
+    public $search, 
+            $searchi,
+            $searchhistorial, 
+            $searchpersonas, 
+            $searchsedes,
+            $searchdependencias,
+            $searchdespachos,
+            $searchcargos,
+            $searchservicios,
+            $searchincidenciasolicitud,
+            $searchbienes;
+
     public function updatingSearch(){
         $this->resetPage('atencionesPage');
     }
@@ -625,6 +648,9 @@ class Activos extends Component
         $this->colorAgregar = "outline-primary";
 
         $this->tipo_documento = "CONTRATO";
+
+        // ABRIR MODAL NUEVO - EDITAR
+        $this->modalNuevoEditarAbrir = true;
     }
 
     public function guardar()
@@ -795,8 +821,8 @@ class Activos extends Component
                 $tipo = 'warning';
             }
 
-            // RESET
-            // $this->resetExcept(['filtro_anio', 'filtro_mes']);
+            // CERRAR MODAL NUEVO - EDITAR
+            $this->modalNuevoEditarAbrir = false;
 
             // MENSAJE
             $this->dispatch(
@@ -806,6 +832,7 @@ class Activos extends Component
                 tipo: $tipo
             );
 
+            // ALERTA DE GUARDADO
             $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
 
         } catch (\Throwable $e) {
@@ -914,6 +941,9 @@ class Activos extends Component
         } else {
             $this->mostrarcontroles = "d-none";
         }
+
+        // ABRIR MODAL NUEVO - EDITAR
+        $this->modalNuevoEditarAbrir = true;
         
     }
 
@@ -1098,9 +1128,10 @@ class Activos extends Component
 
             });
 
-            // Restablecer todas las variables
-            // $this->resetExcept(['filtro_anio', 'filtro_mes']);
-
+            // CERRAR MODAL NUEVO - EDITAR
+            $this->modalNuevoEditarAbrir = false;
+            
+            // ALERTA DE ACTUALIZACIÓN
             $this->dispatch(
                 'alerta-actualizado',
                 titulo: 'Datos actualizados',
@@ -1131,8 +1162,7 @@ class Activos extends Component
 
     public function cerrar()
     {
-        // Restablecer todas las variables
-        // $this->resetExcept(['filtro_anio', 'filtro_mes']);
+        $this->modalNuevoEditarAbrir = false;
 
         $this->dispatch(
                 'alerta-cancelar',
@@ -1140,7 +1170,78 @@ class Activos extends Component
                 mensaje: 'Se canceló la operación.',
                 tipo: 'error'
             );
-    }    
+    }
+
+    // MODALES REPORTES CON FILTROS
+    // ============================================================================================================================
+    public function reportesFiltros()
+    {
+        $this->modalReportesFiltros = true;
+    }
+
+    // MODALES BUSCAR
+    // ============================================================================================================================
+    public function personalBuscar()
+    {
+        $this->modalPersonalBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchPersonal');
+    }
+    public function sedeBuscar()
+    {
+        $this->modalPersonalSedeBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchSede');
+    }
+    public function dependenciaBuscar()
+    {
+        $this->modalPersonalDependenciaBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchDependencia');
+    }
+    public function despachoBuscar()
+    {
+        $this->modalPersonalDespachoBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchDespacho');
+    }
+    public function cargoBuscar()
+    {
+        $this->modalPersonalCargoBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchCargo');
+    }
+    public function servicioBuscar()
+    {
+        $this->modalInformaticaServicioBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchServicio');
+    }
+    public function servicioDetalleBuscar()
+    {
+        $this->modalInformaticaServicioDetalleBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchServicioDetalle');
+    }
+    public function bienesBuscar()
+    {
+        $this->modalPatrimonioBienesBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchBienes');
+    }
+    public function cerrarBuscar()
+    {
+        $this->modalReportesFiltros = false;
+
+        $this->modalPersonalBuscar = false;
+        $this->modalPersonalSedeBuscar = false;
+        $this->modalPersonalDependenciaBuscar = false;
+        $this->modalPersonalDespachoBuscar = false;
+        $this->modalPersonalCargoBuscar = false;
+        $this->modalInformaticaServicioBuscar = false;
+        $this->modalInformaticaServicioDetalleBuscar = false;
+        $this->modalPatrimonioBienesBuscar = false;
+    } 
 
     // FUNCIONES PARA CARGAR PDF
 
@@ -1209,6 +1310,7 @@ class Activos extends Component
 
 
     // FUNCIONES AGREGAR
+    // ============================================================================================================================
     public function agregar_persona(Persona $ipersona){
         // DATOS DE LA PERSONA
         $this->persona_id = $ipersona->id;
@@ -1247,6 +1349,21 @@ class Activos extends Component
         $this->cargo = $ipersonal->cargo;
         $this->cargo_condicion = $ipersonal->cargo_condicion;
         $this->tipo_documento = $ipersonal->tipo_documento;
+
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+            'searchservicios',
+            'searchincidenciasolicitud',
+            'searchbienes',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPersonalBuscar = false;
     }
 
     public function agregar_sede(Personales_sede $isede)
@@ -1257,9 +1374,26 @@ class Activos extends Component
         $this->codsededestino = $isede->id;
         $this->sededestino = $isede->nombre;
 
-        $this->reset(['dependenciaorigen','despachoorigen']);
+        // RESTABLECER DEPENDENCIA Y DESPACHO
+        $this->reset([
+            'dependenciaorigen',
+            'despachoorigen',
+        ]);
 
-        $this->reset(['searchdependencias','searchdespachos']);
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+            'searchservicios',
+            'searchincidenciasolicitud',
+            'searchbienes',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPersonalSedeBuscar = false;
     }
 
     public function agregar_dependencia(Personales_dependencia $idependencia)
@@ -1270,9 +1404,20 @@ class Activos extends Component
         $this->coddependenciadestino = $idependencia->id;
         $this->dependenciadestino = $idependencia->nombre;
 
-        $this->reset('despachoorigen');
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+            'searchservicios',
+            'searchincidenciasolicitud',
+            'searchbienes',
+        ]);
 
-        $this->reset('searchdespachos');
+        // CERRAR MODAL
+        $this->modalPersonalDependenciaBuscar = false;
     }
 
     public function agregar_despacho(Personales_despacho $idespacho)
@@ -1282,11 +1427,43 @@ class Activos extends Component
 
         $this->coddespachodestino = $idespacho->id;
         $this->despachodestino = $idespacho->nombre;
+
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+            'searchservicios',
+            'searchincidenciasolicitud',
+            'searchbienes',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPersonalDespachoBuscar = false;
     }
 
     public function agregar_cargo(Personales_cargo $icargo)
     {
         $this->cargo = $icargo->nombre;
+
+        // RETABLECER SERVICIO DETALLE
+        
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+            'searchservicios',
+            'searchincidenciasolicitud',
+            'searchbienes',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPersonalCargoBuscar = false;
     }
 
     public function agregar_servicio(PersonalesAtencionesServicio $iservicio)
@@ -1301,15 +1478,38 @@ class Activos extends Component
         } else {
             $this->mostrarcontroles = "d-none";
         }
+
+        // RESTABLECER VARIABLES
+        $this->reset([
+            'detalle_servicio',
+
+            'cod',
+            'cod_patrimonial',
+            'datos_bien',
+            'bien_ip',
+
+            'obs_usuario',
+            'obs_informatico',
+
+            'obs_informatico',
+            'informatico_dni',
+        ]);
         
-        $this->reset('searchservicios','searchbienes',
-                        'bien_id','cod','cod_patrimonial','datos_bien');
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+            'searchservicios',
+            'searchincidenciasolicitud',
+            'searchbienes',
+        ]);
 
-    }
+        // CERRAR MODAL
+        $this->modalInformaticaServicioBuscar = false;
 
-    public function cerrar_servicio()
-    {
-        $this->reset('searchservicios');
     }
 
     public function agregar_incidencia_solicitud(PersonalesAtencionesIncidenciasSolicitudes $iincidenciasolicitud)
@@ -1331,11 +1531,34 @@ class Activos extends Component
         $this->formato3 = $iincidenciasolicitud->formato3;
         $this->formato4 = $iincidenciasolicitud->formato4;
 
-    }
+        // RESTABLECER VARIABLES
+        $this->reset([
+            'cod',
+            'cod_patrimonial',
+            'datos_bien',
+            'bien_ip',
 
-    public function cerrar_incidencia_solicitud()
-    {
-        $this->reset('searchincidenciasolicitud');
+            'obs_usuario',
+            'obs_informatico',
+
+            'obs_informatico',
+            'informatico_dni',
+        ]);
+
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+            'searchservicios',
+            'searchincidenciasolicitud',
+            'searchbienes',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalInformaticaServicioDetalleBuscar = false;
     }
 
     public function agregar_bien(patrimonios_biene $ibien)
@@ -1438,15 +1661,25 @@ class Activos extends Component
             ]);
         }
 
-        $this->reset('searchbienes');
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+            'searchservicios',
+            'searchincidenciasolicitud',
+            'searchbienes',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPatrimonioBienesBuscar = false;
     }
 
-    public function cerrar_bien()
-    {
-
-    }
 
     // --------------------------------------------------
+    // ============================================================================================================================
 
     private function guardar_acta()
     {

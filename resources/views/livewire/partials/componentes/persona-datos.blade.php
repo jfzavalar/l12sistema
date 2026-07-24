@@ -4,7 +4,7 @@
             <div class="col-xl-3 col-lg-6 col-sm-12">
                 <label for="txt_dni" class="fw-bold fs-6">DNI</label>
                 <div class="input-group">
-                    <button type="button" class="btn btn-dark btn-xs"data-bs-toggle="modal" data-bs-target="#buscar-personal-component">
+                    <button type="button" class="btn btn-dark btn-xs" wire:click="personalBuscar">
                         <i class="fa-solid fa-magnifying-glass"></i> Buscar
                     </button>
                     <input type="text" id="txt_dni" maxlength="8" pattern="[0-9]*" placeholder="DNI" wire:model.lazy="dni" oninput="this.value = this.value.replace(/\D/g,'').slice(0,8)" class="form-control form-control-xs @error('dni') is-invalid border-danger shadow-sm @enderror bg-light" readonly>

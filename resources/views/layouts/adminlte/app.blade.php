@@ -654,8 +654,73 @@
 
         @livewireScripts
 
-        <!-- SweetAlert2 -->
+        <!-- SWEETALERT2 -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        {{-- ASIGNAR FOCUS A LAS INPUTS --}}
+        <script>
+        document.addEventListener('livewire:init', () => {
+
+            Livewire.on('focus-input', (event) => {
+
+                requestAnimationFrame(() => {
+                    setTimeout(() => {
+                        document.getElementById(event.id)?.focus();
+                    }, 50);
+                });
+
+            });
+
+        });
+        </script>
+
+        {{-- MODALES DE ALERTA ACTUALIZAR--}}
+
+        <script>
+            document.addEventListener('livewire:initialized', () => {
+
+                Livewire.on('alerta-actualizado', (data) => {
+
+                    Swal.fire({
+                        title: data.titulo,
+                        text: data.mensaje,
+                        icon: data.tipo,
+                        confirmButtonColor: '#3085d6',
+
+                        timer: 1500,              // 1.5 segundos
+                        showConfirmButton: false  // oculta botón OK
+                    });
+
+                });
+
+            });
+        </script>
+
+        {{-- MODALES DE ALERTA CANCELAR --}}
+        {{-- ============================================================================================================================ --}}
+
+        <script>
+            document.addEventListener('livewire:initialized', () => {
+
+                Livewire.on('alerta-cancelar', (data) => {
+
+                    Swal.fire({
+                        title: data.titulo,
+                        text: data.mensaje,
+                        icon: data.tipo,
+                        confirmButtonColor: '#3085d6',
+
+                        timer: 1500,              // 1.5 segundos
+                        showConfirmButton: false  // oculta botón OK
+                    });
+
+                });
+
+            });
+        </script>
+
+        {{-- CERRAR MODAL CON JAVA SCRIPT --}}
+        {{-- ============================================================================================================================ --}}
 
         <script>
             document.addEventListener('DOMContentLoaded', function () {
@@ -685,74 +750,9 @@
             });
         </script>
 
-        <script>
-            document.addEventListener('livewire:initialized', () => {
-
-                Livewire.on('alerta-actualizado', (data) => {
-
-                    Swal.fire({
-                        title: data.titulo,
-                        text: data.mensaje,
-                        icon: data.tipo,
-                        confirmButtonColor: '#3085d6',
-
-                        timer: 1500,              // 1.5 segundos
-                        showConfirmButton: false  // oculta botón OK
-                    });
-
-                });
-
-            });
-        </script>
-
-        <script>
-            document.addEventListener('livewire:initialized', () => {
-
-                Livewire.on('alerta-cancelar', (data) => {
-
-                    Swal.fire({
-                        title: data.titulo,
-                        text: data.mensaje,
-                        icon: data.tipo,
-                        confirmButtonColor: '#3085d6',
-
-                        timer: 1500,              // 1.5 segundos
-                        showConfirmButton: false  // oculta botón OK
-                    });
-
-                });
-
-            });
-        </script>
-
-        {{-- <script>
-            let timeout;
-            let tiempo = 3600000;
-
-            function logout() {
-                fetch('/logout', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    }
-                }).then(() => {
-                    window.location.href = "/login";
-                });
-            }
-
-            function resetTimer() {
-                clearTimeout(timeout);
-                timeout = setTimeout(logout, tiempo);
-            }
-
-            window.onload = resetTimer;
-            document.onmousemove = resetTimer;
-            document.onkeypress = resetTimer;
-            document.onclick = resetTimer;
-            document.onscroll = resetTimer;
-        </script> --}}
 
         {{-- CERRAR SESIÓN INACTIVA --}}
+        {{-- ============================================================================================================================ --}}
         <script>
 
             let timeout;

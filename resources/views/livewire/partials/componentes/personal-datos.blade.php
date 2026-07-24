@@ -2,7 +2,7 @@
     <div class="col-xl-3 col-lg-6 col-sm-12">
         <label for="txt_sede" class="fw-bold fs-6">Sede</label>
         <div class="input-group">
-            <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-sedes-component">
+            <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" wire:click="sedeBuscar">
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
             <input type="text" id="txt_sede" class="form-control form-control-xs bg-light" wire:model="sedeorigen" readonly required>
@@ -15,7 +15,7 @@
     <div class="col-xl-6 col-lg-6 col-sm-12">
         <label for="txt_dependencia" class="fw-bold fs-6">Dependencia</label>
         <div class="input-group position-relative">
-            <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-dependencias-component">
+            <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" wire:click="dependenciaBuscar">
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
             <input type="text" id="txt_dependencia" class="form-control form-control-xs bg-light" wire:model="dependenciaorigen" readonly required>
@@ -28,7 +28,7 @@
     <div class="col-xl-3 col-lg-6 col-sm-12">
         <label for="txt_despacho" class="fw-bold fs-6">Despacho</label>
         <div class="input-group position-relative">
-            <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-despachos-component">
+            <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" wire:click="despachoBuscar">
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
             <input type="text" id="txt_despacho" class="form-control form-control-xs bg-light" wire:model="despachoorigen" readonly required>
@@ -69,7 +69,7 @@
     <div class="col-xl-4 col-lg-6 col-sm-12">
         <label for="txt_cargo" class="fw-bold fs-6">Cargo</label>
         <div class="input-group">
-            <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-cargos-component">
+            <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" wire:click="cargoBuscar">
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
             <input type="text" id="txt_cargo" class="form-control form-control-xs bg-light" wire:model="cargo" readonly required>
