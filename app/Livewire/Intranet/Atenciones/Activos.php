@@ -52,6 +52,7 @@ class Activos extends Component
     public $modalInformaticaServicioDetalleBuscar = false;
     public $modalPatrimonioBienesBuscar = false;
     public $modalPDFCargar = false;
+    public $modalPDFEvidenciaCargar = false;
 
     // VARIABLES PARA ADMINISTRAR MODALES
     public $colorHeaderModal, $textoHeaderModal;
@@ -245,7 +246,13 @@ class Activos extends Component
         }
     }
 
-    public $filtro_anio,$filtro_mes,$filtroinformatico,$filtro_sede,$filtro_dependencia,$filtro_servicio,$filtro_incidencia;
+    public $filtro_anio,
+            $filtro_mes,
+            $filtroinformatico,
+            $filtro_sede,
+            $filtro_dependencia,
+            $filtro_servicio,
+            $filtro_incidencia;
 
     public function mount()
     {
@@ -300,11 +307,8 @@ class Activos extends Component
             ->select(
                 'personales_atenciones.*'
             )
-
             ->where('personales_atenciones.activo', 1)
-
             ->orderBy('personales_atenciones.id', 'desc')
-
             ->paginate(10,['*'],'atencionesPage'
             );
 
@@ -313,11 +317,8 @@ class Activos extends Component
             ->select(
                 'personales_atenciones.*'
             )
-
             ->where('personales_atenciones.activo', 0)
-
             ->orderBy('personales_atenciones.id', 'desc')
-
             ->paginate(10,['*'],'atencionesinactivosPage'
             );
 
@@ -326,9 +327,7 @@ class Activos extends Component
             ->select(
                 'personales_atenciones.*'
             )
-
             ->orderBy('personales_atenciones.id', 'desc')
-
             ->paginate(
                 10,
                 ['*'],
@@ -649,6 +648,9 @@ class Activos extends Component
 
         $this->tipo_documento = "CONTRATO";
 
+        // CAMBIAR EL VALOR DE LA BANDERA PARA PODER CARGAR EVIDENCIAS PDF
+        $this->bandera_documento = "EVIDENCIA";
+
         // ABRIR MODAL NUEVO - EDITAR
         $this->modalNuevoEditarAbrir = true;
     }
@@ -862,6 +864,9 @@ class Activos extends Component
         $this->seccionPersona = "";
         $this->seccionPersonal = "";
 
+        // CAMBIAR EL VALOR DE LA BANDERA PARA PODER CARGAR EVIDENCIAS PDF
+        $this->bandera_documento = "EVIDENCIA";
+
         // DATOS DE LA PERSONA
         $this->atencion_id = $ipersonalatencion->id;
 
@@ -1020,7 +1025,7 @@ class Activos extends Component
                     : $ipersonalatencion->ruta_evidencia;
                 
 
-                // OBTENEMOS LOS DATOS DEL INFORAMTICO SELECCIONADO PARA FIRMAR EL ACTA
+                // OBTENEMOS LOS DATOS DEL INFORMATICO SELECCIONADO PARA FIRMAR EL ACTA
                 $iinformatico = User::select('datos')
                     ->where('dni', $this->informatico_dni)
                     ->first();
@@ -1130,6 +1135,8 @@ class Activos extends Component
 
             // CERRAR MODAL NUEVO - EDITAR
             $this->modalNuevoEditarAbrir = false;
+            $this->modalPDFCargar = false;
+            $this->modalPDFEvidenciaCargar = false;
             
             // ALERTA DE ACTUALIZACIÓN
             $this->dispatch(
@@ -1163,6 +1170,8 @@ class Activos extends Component
     public function cerrar()
     {
         $this->modalNuevoEditarAbrir = false;
+        $this->modalPDFCargar = false;
+        $this->modalPDFEvidenciaCargar = false;
 
         $this->dispatch(
                 'alerta-cancelar',
@@ -1172,15 +1181,19 @@ class Activos extends Component
             );
     }
 
+    // ============================================================================================================================
     // MODALES REPORTES CON FILTROS
     // ============================================================================================================================
+
     public function reportesFiltros()
     {
         $this->modalReportesFiltros = true;
     }
 
+    // ============================================================================================================================
     // MODALES BUSCAR
     // ============================================================================================================================
+
     public function personalBuscar()
     {
         $this->modalPersonalBuscar = true;
@@ -1243,8 +1256,9 @@ class Activos extends Component
         $this->modalPatrimonioBienesBuscar = false;
     } 
 
+    // ============================================================================================================================
     // FUNCIONES PARA CARGAR PDF
-
+    // ============================================================================================================================
 
     public function editar_pdf($atencion_id)
     {
@@ -1252,7 +1266,12 @@ class Activos extends Component
 
         $this->pdf_acta = null; // 🔥 CLAVE
         
+        
+        // CAMBIAR EL VALOR DE LA BANDERA PARA PODER CARGAR ACTA PDF
         $this->bandera_documento = "ACTA";
+
+        // ABRIR MODAL
+        $this->modalPDFCargar = true;
     }
 
     public function actualizar_pdf()
@@ -1286,6 +1305,9 @@ class Activos extends Component
 
             $this->reset('pdf_acta');
 
+            // CERRAR EL MODAL
+            $this->modalPDFCargar = false;
+
             $this->dispatch(
                 'alerta-actualizado',
                 titulo: 'Documento cargado',
@@ -1293,7 +1315,8 @@ class Activos extends Component
                 tipo: 'success'
             );
 
-        } catch (\Throwable $e) {
+        }
+        catch (\Throwable $e) {
 
             report($e);
 
@@ -1678,7 +1701,8 @@ class Activos extends Component
     }
 
 
-    // --------------------------------------------------
+    // ============================================================================================================================
+    // CAGAR PDF
     // ============================================================================================================================
 
     private function guardar_acta()
@@ -1763,8 +1787,9 @@ class Activos extends Component
         );
     }
 
-    // -----------------------------------------------------------------------------------------------
-    // Modal enviar Correo
+
+    // FUNCIÓN PARA MODAL ENVIAR CORREO
+    // ============================================================================================================================
     public function enviar_correo()
     {
         $instanciaTbl = PersonalesAtencione::findOrFail($this->atencion_id);
@@ -1831,8 +1856,10 @@ class Activos extends Component
         session()->flash('success', "Correo enviado correctamente");
     }
 
-    // -----------------------------------------------------------------------------------------------
-    // Copiar datos
+    // ============================================================================================================================
+    // COPIAR DATOS
+    // ============================================================================================================================
+
     public function generarTexto()
     {
         return "DATOS:
@@ -1853,7 +1880,10 @@ class Activos extends Component
         $this->dispatch('copiar-portapapeles', texto: $texto);
     }
 
-    // Exportar a Excel
+    // ============================================================================================================================
+    // EXPORTAR EXCEL
+    // ============================================================================================================================
+
     public function exportarExcel()
     {
         return Excel::download(

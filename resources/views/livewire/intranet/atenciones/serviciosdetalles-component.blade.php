@@ -161,7 +161,7 @@
     </div>
 
     <!-- MODAL NUEVO EDITAR SERVICIO DETALLE-->
-    <div class="modal fade @if($modal_abierto_servicio_detalle) show d-block @endif" id="NuevoEditarServiciodDetalleModal" tabindex="-1">
+    <div class="modal fade @if($modal_abierto_servicio_detalle) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
         <div class="modal-dialog modal-ms">
             <div class="modal-content">
                 <form wire:submit.prevent="{{ $funcionGuardarActualizarServicio }}">

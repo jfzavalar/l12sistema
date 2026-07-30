@@ -75,7 +75,10 @@
                                 <th scope="col">
                                     <i class="fa-solid fa-user"></i> Informatica
                                 </th>
-                                <th scope="col" colspan="3" class="text-center">Tickets</th>
+                                <th scope="col" colspan="2" class="text-center">Tickets</th>
+                                <th class="text-center">
+                                    <i class="fa-solid fa-clipboard-list"></i>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -103,11 +106,16 @@
                                                         <i class="fa-solid fa-envelope me-1"></i>Lima
                                                     </button>
                                                     <div class="form-control form-control-xs text-end me-2">{{ $item->enviado_lima }}</div>
-                                                    <a type="button" class="btn btn-dark" href="{{ route('pdf.informatica.atencion-por-usuario-acta', ['dni' => $item->atendido_por_dni,'anio' => $filtro_anio, 'mes' => $filtro_mes]) }}" target="_blank">
+                                                    {{-- <a type="button" class="btn btn-dark" href="{{ route('pdf.informatica.atencion-por-usuario-acta', ['dni' => $item->atendido_por_dni,'anio' => $filtro_anio, 'mes' => $filtro_mes]) }}" target="_blank">
                                                         <i class="fa-solid fa-print me-1"></i>Reporte
-                                                    </a>
+                                                    </a> --}}
                                                 </div>
                                             </div>
+                                        </td>
+                                        <td class="text-end">
+                                            <a type="button" class="btn btn-dark btn-xs" href="{{ route('pdf.informatica.atencion-por-usuario-acta', ['dni' => $item->atendido_por_dni,'anio' => $filtro_anio, 'mes' => $filtro_mes]) }}" target="_blank">
+                                                <i class="fa-solid fa-print me-1"></i>Reporte
+                                            </a>
                                         </td>
                                     </tr>
                                 @endif
@@ -124,7 +132,10 @@
                                 <th scope="col">
                                     <i class="fa-solid fa-user"></i> Digitalizadores
                                 </th>
-                                <th scope="col" colspan="3" class="text-center">Tickets</th>
+                                <th scope="col" colspan="2" class="text-center">Tickets</th>
+                                <th class="text-center">
+                                    <i class="fa-solid fa-clipboard-list"></i>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -141,16 +152,27 @@
                                                     </button>
                                                     <div class="form-control form-control-xs text-end me-1">{{ $item->atendidos }}</div>
                                                 </div>
+                                                {{-- <div class="input-group input-group-xs">
+                                                    <button class="input-group-text bg-warning text-white" wire:click="filtrarAtendido('{{ $item->created_user}}')">
+                                                        <i class="fa-solid fa-file-circle-plus me-1"></i>Digitalización
+                                                    </button>
+                                                    <div class="form-control form-control-xs text-end me-1">{{ $item->atendidos }}</div>
+                                                </div> --}}
                                                 <div class="input-group input-group-xs">
                                                     <button class="input-group-text bg-info text-white">
                                                         <i class="fa-solid fa-file-pdf me-1"></i>Folios
                                                     </button>
-                                                    <div class="form-control form-control-xs text-end me-2">{{ $item->digitalizado }}</div>
-                                                    <a type="button" class="btn btn-dark" href="{{ route('pdf.informatica.atencion-por-usuario-acta2', ['dni' => $item->atendido_por_dni,'anio' => $filtro_anio, 'mes' => $filtro_mes]) }}" target="_blank">
+                                                    <div class="form-control form-control-xs text-end">{{ $item->digitalizado }}</div>
+                                                    {{-- <a type="button" class="btn btn-dark" href="{{ route('pdf.informatica.atencion-por-usuario-acta2', ['dni' => $item->atendido_por_dni,'anio' => $filtro_anio, 'mes' => $filtro_mes]) }}" target="_blank">
                                                         <i class="fa-solid fa-print me-1"></i>Reporte
-                                                    </a>
+                                                    </a> --}}
                                                 </div>
                                             </div>
+                                        </td>
+                                        <td class="text-end">
+                                            <a type="button" class="btn btn-dark btn-xs" href="{{ route('pdf.informatica.atencion-por-usuario-acta2', ['dni' => $item->atendido_por_dni,'anio' => $filtro_anio, 'mes' => $filtro_mes]) }}" target="_blank">
+                                                <i class="fa-solid fa-print me-1"></i>Reporte
+                                            </a>
                                         </td>
                                     </tr>
                                 @endif
@@ -807,351 +829,13 @@
         </div>
 
         {{--MODAL BUSCAR PERSONAL --}}
-        <div class="modal fade @if($modalPersonalBuscar) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content rounded-5">
-                    <form action="">
-                        <div class="modal-header bg-{{ $colorHeaderModal }}">
-                            <h1 class="modal-title fs-5" id="buscar-personal-componentLabel">
-                                <i class="fa-solid fa-magnifying-glass"></i> BUSCAR PERSONAL
-                            </h1>
-                            <button type="button" class="btn-close" wire:click="cerrarBuscar"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="table-responsive-xl">
-                                <form>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="input-group mb-2">
-                                                <span class="input-group-text input-group-text-xs fw-bold" id="basic-addon2">Total: {{ $lista_personas->total() }}</span>
-                                                <input type="text" id="txtSearchPersonal" class="form-control form-control-sm" placeholder="Buscar personal ..." wire:model.live="searchpersonas">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                                <table class="table table-striped table-hover table-sm table-xsmall">
-                                    <thead class="table-dark text-center">
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">DNI</th>
-                                            <th scope="col">Datos</th>
-                                            <th scope="col"><i class="fa-solid fa-gears"></i></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse ($lista_personas as $persona)
-                                            <tr>
-                                                <th>{{ $loop->iteration }}</th>
-                                                <th>{{ $persona->dni }}</th>
-                                                <td>{{ $persona->datos }}</td>
-                                                <td>
-                                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                        <div class="btn-group" role="group">
-                                                            <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_persona({{ $persona->id }})">
-                                                                <i class="fa-solid fa-circle-plus"></i> Agregar
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            
-                                        @endforelse
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td colspan="4">
-                                                {{ $lista_personas->links() }}
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                </table>                       
-                            </div>          
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" wire:click="cerrarBuscar">
-                                <i class="fa-solid fa-door-closed"></i> Cerrar
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        @include('livewire.partials.modales.buscar-personal-datos')
 
         {{-- MODALE BUSCAR SEDES-DEPENDENCIAS-DESPACHOS --}}
-
-        <div class="modal fade @if($modalPersonalSedeBuscar) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <form action="">
-                        <div class="modal-header bg-{{ $colorHeaderModal }}">
-                            <h1 class="modal-title fs-5" id="buscar-sedes-componentLabel">
-                                <i class="fa-brands fa-searchengin"></i> BUSCAR SEDE
-                            </h1>
-                            <button type="button" class="btn-close" aria-label="Close" wire:click="cerrarBuscar"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="table-responsive-xl">
-                                <form>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="input-group mb-2">
-                                                <input type="text" id="txtSearchSede" class="form-control form-control-sm" placeholder="Buscar sede" wire:model.live="searchsedes">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                                <table class="table table-striped table-hover table-sm table-xsmall">
-                                    <thead class="table-dark text-center">
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">SEDE</th>
-                                            <th scope="col">DETALLE</th>
-                                            <th scope="col"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse ($lista_sedes as $sede)
-                                            <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $sede->nombre }}</td>
-                                                <td>{{ $sede->nombred }}</td>
-                                                <td>
-                                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                        <div class="btn-group" role="group">
-                                                            <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_sede({{ $sede->id }})">
-                                                                <i class="fa-solid fa-circle-plus"></i> Agregar
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            
-                                        @endforelse
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td colspan="4">{{ $lista_sedes->links() }}</td>
-                                        </tr>
-                                    </tfoot>
-                                </table>                      
-                            </div>          
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" wire:click="cerrarBuscar">
-                                <i class="fa-solid fa-door-closed"></i> Cerrar
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade @if($modalPersonalDependenciaBuscar) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <form action="">
-                        <div class="modal-header bg-{{ $colorHeaderModal }}">
-                            <h1 class="modal-title fs-5" id="buscar-dependencias-componentLabel">
-                                <i class="fa-brands fa-searchengin"></i> BUSCAR DEPENDENCIA
-                            </h1>
-                            <button type="button" class="btn-close" aria-label="Close" wire:click="cerrarBuscar"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="table-responsive-xl">
-                                <form>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="input-group mb-2">
-                                                <input type="text" id="txtSearchDependencia" class="form-control form-control-sm" placeholder="Buscar dependencia" wire:model.live="searchdependencias">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                                <table class="table table-striped table-hover table-sm table-xsmall">
-                                    <thead class="table-dark text-center">
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">DEPENDENCIA</th>
-                                            <th scope="col"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse ($lista_dependencias as $dependencia)
-                                            <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $dependencia->nombre }}</td>
-                                                <td>
-                                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                        <div class="btn-group" role="group">
-                                                            <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_dependencia({{ $dependencia->id }})">
-                                                                <i class="fa-solid fa-circle-plus"></i> Agregar
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            
-                                        @endforelse
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td colspan="3">
-                                                {{ $lista_dependencias->links() }}
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                </table>                       
-                            </div>          
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" wire:click="cerrarBuscar">
-                                <i class="fa-solid fa-door-closed"></i> Cerrar
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        @include('livewire.partials.modales.buscar-personal-sede-dependencia-despacho')
         
-        <div class="modal fade @if($modalPersonalDespachoBuscar) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <form action="">
-                        <div class="modal-header bg-{{ $colorHeaderModal }}">
-                            <h1 class="modal-title fs-5" id="buscar-despachos-componentLabel">
-                                <i class="fa-brands fa-searchengin"></i> BUSCAR DESPACHOS
-                            </h1>
-                            <button type="button" class="btn-close" aria-label="Close" wire:click="cerrarBuscar"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="table-responsive-xl">
-                                <form>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="input-group mb-2">
-                                                <input type="text" id="txtSearchDespacho" class="form-control form-control-sm" placeholder="Buscar despachos" wire:model.live="searchdespachos">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                                <table class="table table-striped table-hover table-sm table-xsmall">
-                                    <thead class="table-dark text-center">
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">DESPACHO</th>
-                                            <th scope="col"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse ($lista_despachos as $despacho)
-                                            <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $despacho->nombre }}</td>
-                                                <td>
-                                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                        <div class="btn-group" role="group">
-                                                            <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_despacho({{ $despacho->id }})">
-                                                                <i class="fa-solid fa-circle-plus"></i> Agregar
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            
-                                        @endforelse
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td colspan="3">
-                                                {{ $lista_despachos->links() }}
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                </table>                        
-                            </div>          
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" wire:click="cerrarBuscar">
-                                <i class="fa-solid fa-door-closed"></i> Cerrar
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
         {{-- MODAL BUSCAR CARGO --}}
-        <div class="modal fade @if($modalPersonalCargoBuscar) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <form action="">
-                        <div class="modal-header bg-{{ $colorHeaderModal }}">
-                            <h1 class="modal-title fs-5" id="buscar-cargos-componentLabel">
-                                <i class="fa-brands fa-searchengin"></i> BUSCAR CARGOS
-                            </h1>
-                            <button type="button" class="btn-close" aria-label="Close" wire:click="cerrarBuscar"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="table-responsive-xl">
-                                <form>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="input-group mb-2">
-                                                <input type="text" id="txtSearchCargo" class="form-control form-control-sm" placeholder="Buscar cargos" wire:model.live="searchcargos">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                                <table class="table table-striped table-hover table-sm table-xsmall">
-                                    <thead class="table-dark text-center">
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">CARGOS</th>
-                                            <th scope="col"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse ($lista_cargos as $cargo)
-                                            <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $cargo->nombre }}</td>
-                                                <td>
-                                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                        <div class="btn-group" role="group">
-                                                            <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_cargo({{ $cargo->id }})">
-                                                                <i class="fa-solid fa-circle-plus"></i> Agregar
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            
-                                        @endforelse
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td colspan="3">
-                                                {{ $lista_cargos->links() }}
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                </table>                       
-                            </div>          
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" wire:click="cerrarBuscar">
-                                <i class="fa-solid fa-door-closed"></i> Cerrar
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        @include('livewire.partials.modales.buscar-personal-cargo')
 
         {{-- MODAL BUSCAR SERVICIO --}}
         <div class="modal fade @if($modalInformaticaServicioBuscar) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
@@ -1274,119 +958,11 @@
         </div>
 
         {{-- MODAL BUSCAR BIENES PATRIMONIALES --}}
-        <div class="modal fade @if($modalPatrimonioBienesBuscar) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content rounded-5">
-                    <form action="">
-                        <div class="modal-header bg-{{ $colorHeaderModal }}">
-                            <h1 class="modal-title fs-5" id="buscar-bienes-componentLabel">
-                                <i class="fa-solid fa-magnifying-glass"></i> BUSCAR BIENES
-                            </h1>
-                            <button type="button" class="btn-close" wire:click="cerrarBuscar"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="table-responsive">
-                                <form>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="input-group mb-2">
-                                                <input type="text" id="txtSearchBienes" class="form-control form-control-sm" placeholder="Buscar por código patrimonial" wire:model.live="searchbienes">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                                <table class="table table-striped table-hover table-sm table-xsmall">
-                                    <thead class="table-dark text-center">
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">COD</th>
-                                            <th scope="col">COD PATRIMONIAL</th>
-                                            <th scope="col">BIEN</th>
-                                            @can('mpfn.informatica')
-                                                <th scope="col">ESTADO</th>
-                                            @endcan
-                                            <th scope="col"></th>
-                                            <th scope="col"><i class="fa-solid fa-gears"></i></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse ($lista_bienes as $bien)
-                                            <tr>
-                                                <th>{{ $loop->iteration }}</th>
-                                                <th>{{ $bien->cod_barra }}</th>
-                                                <td>{{ $bien->codigo_patrimonial }}</td>
-                                                <td>{{ $bien->descripcion }}</td>
-                                                @can('mpfn.informatica')
-                                                    <td>
-                                                        <span class="badge rounded-pill {{ $bien->asignacion === 'ASIGNADO' ? 'text-bg-success' : 'text-bg-danger' }}">
-                                                            {{ $bien->asignacion === 'ASIGNADO' ? 'ASIGNADO' : 'LIBRE' }}
-                                                        </span>
-                                                    </td>
-                                                @endcan
-                                                <td></td>
-                                                <td>
-                                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                        <div class="btn-group" role="group">
-                                                            <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_bien({{ $bien->id }})">
-                                                                <i class="fa-solid fa-circle-plus"></i> Agregar
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            
-                                        @endforelse
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td colspan="6">
-                                                {{ $lista_bienes->links() }}
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                </table>                       
-                            </div>          
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" wire:click="cerrarBuscar">
-                                <i class="fa-solid fa-door-closed"></i> Cerrar
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        @include('livewire.partials.modales.buscar-patrimonio-bienes')
         
         {{-- MODAL CARGAR PDF --}}
-        <div class="modal fade @if($modalPDFCargar) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <form wire:submit.prevent="actualizar_pdf">
-                        <div class="modal-header bg-warning-subtle">
-                            <h1 class="modal-title fs-5" id="pdf-cargar-componentLabel">
-                                <i class="fa-brands fa-searchengin"></i> CARGAR PDF
-                            </h1>
-                            <button type="button" class="btn-close" wire:click="cerrar"></button>
-                        </div>
-                        <div class="modal-body">
-                            <fieldset class="border p-3 rounded mb-3">
-                                <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">CARGA ACTA</legend>
-                                <input type="file" class="form-control form-control-xs" id="filecontrato" aria-describedby="inputGroupFileAddon04" aria-label="Upload" accept="application/pdf" wire:model="pdf_acta">
-                            </fieldset>      
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary btn-sm">
-                                <i class="fa-solid fa-floppy-disk"></i> Guardar
-                            </button>
-                            <button type="button" class="btn btn-secondary btn-sm" wire:click = "cerrar">
-                                <i class="fa-solid fa-door-closed"></i> Cerrar
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        @include('livewire.partials.modales.cargar-pdf-acta')
+        @include('livewire.partials.modales.cargar-pdf-evidencia')
     </div>
 
 </div>

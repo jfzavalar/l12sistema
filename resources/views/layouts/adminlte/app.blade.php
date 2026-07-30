@@ -126,8 +126,8 @@
 
             /* ------------------------------------- */
             .btn-xs {
-            --bs-btn-padding-y: .25rem !important;
-            --bs-btn-padding-x: .5rem !important;
+            --bs-btn-padding-y: .15rem !important;
+            --bs-btn-padding-x: .3rem !important;
             --bs-btn-font-size: .65rem !important;
             }
 
