@@ -14,7 +14,7 @@
     <div class="row g-3">
 
         <!-- CARD 1 -->
-        <div class="col-md-4">
+        {{-- <div class="col-md-4">
             <div class="card shadow-sm border-0 rounded-4 p-3 border-start border-4 border-primary h-100">
 
                 <div class="d-flex justify-content-between align-items-start">
@@ -62,7 +62,7 @@
                 </div>
 
             </div>
-        </div>
+        </div> --}}
 
         <!-- CARD 2 -->
         {{-- <div class="col-md-6">

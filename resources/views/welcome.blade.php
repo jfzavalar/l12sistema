@@ -141,7 +141,7 @@
       <div class="container marketing">
         <!-- Three columns of text below the carousel -->
         <div class="row">
-          <div class="col-lg-4">
+          {{-- <div class="col-lg-4">
             <svg aria-label="Placeholder" class="bd-placeholder-img rounded-circle" height="140" preserveAspectRatio="xMidYMid slice" role="img" width="140" xmlns="http://www.w3.org/2000/svg">
               <title>Placeholder</title>
               <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
@@ -153,7 +153,7 @@
                   <i class="fa-solid fa-user"></i> Registrar &raquo;
               </a>
             </p>
-          </div>
+          </div> --}}
 
           
           {{-- <div class="col-lg-4">
