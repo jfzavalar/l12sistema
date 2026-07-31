@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('gastos_operativos_entregahistorial', function (Blueprint $table) {
+        Schema::create('informaticas_bienes_anexos_asignaciones', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
         });
@@ -22,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('gastos_operativos_entregahistorial');
+        Schema::dropIfExists('informaticas_bienes_anexos_asignaciones');
     }
 };

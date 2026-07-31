@@ -33,14 +33,14 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class Activos extends Component
 {
-    protected $listeners = ['usuarioActivado' => '$refresh'];
+    // protected $listeners = ['usuarioActivado' => '$refresh'];
 
 
     use WithFileUploads;
     use WithPagination;
     protected $paginationTheme = "bootstrap";
 
-    // VVARIABLES PARA MODALES
+    // VARIABLES PARA MODALES
     public $modalNuevoEditarAbrir = false, $modalReportesFiltros = false;
 
     public $modalPersonalBuscar = false;
@@ -61,14 +61,14 @@ class Activos extends Component
     public $colorAgregar;
 
 
-    //Variables PARA OCULTAR Y MOSTRAR TXT_OTROS
+    //VARIABLES PARA OCULTAR Y MOSTRAR TXT_OTROS
     public $mostrarcontroles = "d-none",$mostrarcontrolgpli="d-none";
     public $mostrarotrosp = "d-none", $mostrarotrosc = "d-none",$mostrarcargafoto = "d-none";
 
-    //Variables bloquear de secciones
+    //VARIABLES PARA BLOQUEAR SECCIONES
     public $seccionFoto, $seccionPersona, $seccionPersonal;
 
-    // Variable de función Guardar o Actualizar
+    // VARIABLES DE FUNCION GUARDAR O ACTUALIZAR
     public $funcionGuardarActualizar;
 
     // VARIABLES INPUTS DE BUSQUEDA
@@ -835,9 +835,10 @@ class Activos extends Component
             );
 
             // ALERTA DE GUARDADO
-            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
+            // $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
 
-        } catch (\Throwable $e) {
+        } 
+        catch (\Throwable $e) {
 
             dd($e); // 🔥 Déjalo mientras pruebas
 

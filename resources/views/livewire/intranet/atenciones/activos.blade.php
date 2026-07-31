@@ -28,17 +28,7 @@
                     </span>
                 </button>
             </div>
-            <div class="col-auto">
-                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarEnviadolima">
-                    <span class="alert alert-info d-block mb-0">
-                        <span class="fw-bold">
-                            <i class="fa-solid fa-check-double"></i>
-                            LIMA: {{ $estadisticas2->enviado_lima }}
-                        </span>
-                    </span>
-                </button>
-            </div>
-
+            
             <div class="col-auto">
                 <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarAtendido">
                     <span class="alert alert-success d-block mb-0">
@@ -49,12 +39,24 @@
                     </span>
                 </button>
             </div>
+
             <div class="col-auto">
                 <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarNoatendido">
                     <span class="alert alert-danger d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-check-double"></i>
                             PENDIENTES: {{ $estadisticas2->no_atendidos }}
+                        </span>
+                    </span>
+                </button>
+            </div>
+
+            <div class="col-auto">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarEnviadolima">
+                    <span class="alert alert-info d-block mb-0">
+                        <span class="fw-bold">
+                            <i class="fa-solid fa-check-double"></i>
+                            LIMA: {{ $estadisticas2->enviado_lima }}
                         </span>
                     </span>
                 </button>
@@ -828,15 +830,6 @@
             </div>
         </div>
 
-        {{--MODAL BUSCAR PERSONAL --}}
-        @include('livewire.partials.modales.buscar-personal-datos')
-
-        {{-- MODALE BUSCAR SEDES-DEPENDENCIAS-DESPACHOS --}}
-        @include('livewire.partials.modales.buscar-personal-sede-dependencia-despacho')
-        
-        {{-- MODAL BUSCAR CARGO --}}
-        @include('livewire.partials.modales.buscar-personal-cargo')
-
         {{-- MODAL BUSCAR SERVICIO --}}
         <div class="modal fade @if($modalInformaticaServicioBuscar) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
             <div class="modal-dialog">
@@ -956,6 +949,15 @@
                 </div>
             </div>
         </div>
+
+        {{--MODAL BUSCAR PERSONAL --}}
+        @include('livewire.partials.modales.buscar-personal-datos')
+
+        {{-- MODALE BUSCAR SEDES-DEPENDENCIAS-DESPACHOS --}}
+        @include('livewire.partials.modales.buscar-personal-sede-dependencia-despacho')
+        
+        {{-- MODAL BUSCAR CARGO --}}
+        @include('livewire.partials.modales.buscar-personal-cargo')
 
         {{-- MODAL BUSCAR BIENES PATRIMONIALES --}}
         @include('livewire.partials.modales.buscar-patrimonio-bienes')
