@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Informatica;
 
 use App\Http\Controllers\Controller;
+use App\Models\InformaticasBienesAnexosAsignaciones;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class AnexosController extends Controller
@@ -61,5 +63,20 @@ class AnexosController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function exportarPDF($id)
+    {
+        $instanciaTbl = InformaticasBienesAnexosAsignaciones::findOrFail($id);
+
+        $pdf = Pdf::loadView('pdf.informatica.anexotelefonico-acta', compact('instanciaTbl'));
+
+        //Mostrar PDF
+        return $pdf->stream('anexo_'.$instanciaTbl->dni.'.pdf');
+        
+        //Descargar PDF
+        // return response()->streamDownload(function () use ($pdf) {
+        //     echo $pdf->stream();
+        // }, 'spijweb_'.$userspijweb->dni.'.pdf');
     }
 }

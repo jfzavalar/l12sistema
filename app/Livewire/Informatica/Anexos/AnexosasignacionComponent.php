@@ -64,7 +64,10 @@ class AnexosasignacionComponent extends Component
     public $mostrarotrosp = "d-none", $mostrarotrosc = "d-none",$mostrarcargafoto = "d-none";
 
     //VARIABLES PARA BLOQUEAR SECCIONES
-    public $seccionFoto, $seccionPersona, $seccionPersonal;
+    public $seccionFoto = "",
+            $seccionPersona = "",
+            $seccionPersonal    = "",
+            $seccionDetalle = "";
 
      // VARIABLES DE FUNCION GUARDAR O ACTUALIZAR
     public $funcionGuardarActualizar;
@@ -160,7 +163,8 @@ class AnexosasignacionComponent extends Component
             $correoinstitucional,
             $tipo_documento;
 
-    public $anexo_id,
+    public $anexoasignado_id,
+            $anexo_id,
             $serie,
             $tipo = "1",
             $modelo = "J189",
@@ -170,7 +174,11 @@ class AnexosasignacionComponent extends Component
             $auriculares = "NO",
             $baseauriculares = "NO",
             $asignacionlibrecustodia = "Asignado",
+            $asignacionlibrecustodiadesde,
+            $asignacionlibrecustodiahasta,
             $observacion,
+            $ruta_evidencia,
+            $ruta_documento,
             $estado = "BUENO",
             $informatico_dni,
             $informatico,
@@ -202,11 +210,30 @@ class AnexosasignacionComponent extends Component
         }
     }
 
+    public function updatedObservacion($value)
+    {
+        if ($value === "Asignado") {
+            $this->observacion = "SE REALIZA UNA NUEVA ASIGNACIÓN";
+        } if ($value === "Devuelto") {
+            $this->observacion = "DEVULEVE EL TELEFONO A INFORMATICA";
+        } else {
+            $this->observacion = "DEJA EN CUSTODIA";
+        }       
+    }
+
+
+    // ============================================================================================================================
+    // RENDERIZADO DE PÁGINA
+    // ============================================================================================================================
+
     public function render()
     {
         $lista_activos = InformaticasBienesAnexosAsignaciones::where('activo',1)
             ->orderBy('id')
             ->paginate(10,['*'],'atencionesPage');
+
+        $lista_historial = InformaticasBienesAnexosAsignaciones::orderBy('id','desc')
+            ->paginate(10,['*'],'atencionesHistorialPage');
 
         $lista_personas = Persona::join('personales','personas.id','=','personales.persona_id')
             ->select(
@@ -296,7 +323,7 @@ class AnexosasignacionComponent extends Component
     // FUNCIONES CRUD
     // ============================================================================================================================
 
-    public function nuevo()
+    public function nuevo(InformaticasBienesAnexosAsignaciones $instanciaTabla = null, $vAsignacionlibrecustodia = null)
     {
         $this->resetValidation();   // ← limpia los errores
         $this->resetErrorBag();     // ← opcional extra seguridad
@@ -316,10 +343,89 @@ class AnexosasignacionComponent extends Component
         $this->textoGuardarActualizar = "Guardar";
         $this->colorAgregar = "outline-primary";
 
-        $this->tipo_documento = "CONTRATO";
+        if ($instanciaTabla) {
+            
+            if ($vAsignacionlibrecustodia === 'DEVOLUCION') {
+                // BLOQUEAMOS LAS SECCIONES
+                $this->seccionFoto = "disabled";
+                $this->seccionPersona = "disabled";
+                $this->seccionPersonal    = "disabled";
+                $this->seccionDetalle = "disabled";
 
-        // CAMBIAR EL VALOR DE LA BANDERA PARA PODER CARGAR EVIDENCIAS PDF
-        $this->bandera_documento = "EVIDENCIA";
+                // DATOS DE LA PERSONA
+                $this->persona_id = $instanciaTabla->persona_id;
+                $this->dni = $instanciaTabla->dni;
+                $this->appaterno = $instanciaTabla->appaterno;
+                $this->apmaterno = $instanciaTabla->apmaterno;
+                $this->nombres = $instanciaTabla->nombres;
+                $this->datos = $instanciaTabla->datos;
+                $this->celpersonal = $instanciaTabla->celpersonal;
+                $this->celinstitucional = $instanciaTabla->celinstitucional;
+                $this->correopersonal = $instanciaTabla->correopersonal;
+                $this->correoinstitucional = $instanciaTabla->correoinstitucional;
+
+                // DATOS DEL PERSONAL
+                $this->personal_id = $instanciaTabla->personal_id;
+
+                $this->codsedeorigen = $instanciaTabla->codsededestino;
+                $this->sedeorigen = $instanciaTabla->sededestino;
+                $this->coddependenciaorigen= $instanciaTabla->coddependenciadestino;
+                $this->dependenciaorigen = $instanciaTabla->dependenciadestino;
+                $this->coddespachoorigen = $instanciaTabla->coddespachodestino;
+                $this->despachoorigen = $instanciaTabla->despachodestino;
+
+                $this->codsededestino = $instanciaTabla->codsededestino;
+                $this->sededestino = $instanciaTabla->sededestino;
+                $this->coddependenciadestino= $instanciaTabla->coddependenciadestino;
+                $this->dependenciadestino = $instanciaTabla->dependenciadestino;
+                $this->coddespachodestino = $instanciaTabla->coddespachodestino;
+                $this->despachodestino = $instanciaTabla->despachodestino;
+
+                $this->regimen = $instanciaTabla->regimen;
+                $this->tipo_regimen = $instanciaTabla->tipo_regimen;
+                $this->cargo = $instanciaTabla->cargo;
+                $this->cargo_condicion = $instanciaTabla->cargo_condicion;
+            } elseif($vAsignacionlibrecustodia === 'CUSTODIA'){
+                $this->asignacionlibrecustodiadesde = now()->toDateString();
+                
+                $this->seccionFoto = "";
+                $this->seccionPersona = "";
+                $this->seccionPersonal    = "";
+                $this->seccionDetalle = "disabled";
+            } else{
+                $this->seccionFoto = "";
+                $this->seccionPersona = "";
+                $this->seccionPersonal    = "";
+                $this->seccionDetalle = "disabled";
+            }
+
+            // DATOS DEL REGISTRO
+            $this->anexoasignado_id = $instanciaTabla->id;
+            $this->anexo_id = $instanciaTabla->anexo_id;
+            $this->serie = $instanciaTabla->serie;
+            $this->tipo = $instanciaTabla->tipo;
+            $this->modelo = $instanciaTabla->modelo;
+            $this->anexo = $instanciaTabla->anexo;
+            $this->marca = $instanciaTabla->marca;
+            $this->transformador = $instanciaTabla->transformador;
+            $this->auriculares = $instanciaTabla->auriculares;
+            $this->baseauriculares = $instanciaTabla->baseauriculares;
+            $this->asignacionlibrecustodia = $vAsignacionlibrecustodia;
+            if ($vAsignacionlibrecustodia === 'ASIGNACION') {
+            $this->observacion = 'NUEVA ASIGNACION';
+            } elseif ($vAsignacionlibrecustodia === 'DEVOLUCION') {
+                $this->observacion = 'SE REALIZA LA DEVOLUCION DEL ANEXO TELEFONICO';
+            } else {
+                $this->observacion = 'DEJA EN CUSTODIA ' . $instanciaTabla->datos . ' ' . 'POR: ';
+            }
+            $this->estado = $instanciaTabla->estado;
+            $this->informatico_dni = $instanciaTabla->informatico_dni;
+            $this->informatico = $instanciaTabla->informatico;
+            $this->activo = $instanciaTabla->activo;
+            $this->created_user_cargo = $instanciaTabla->created_user_cargo;
+            $this->created_user = $instanciaTabla->created_user;
+            $this->updated_user = $instanciaTabla->updated_user;
+        }     
 
         // ABRIR MODAL NUEVO - EDITAR
         $this->modalNuevoEditarAbrir = true;
@@ -332,7 +438,7 @@ class AnexosasignacionComponent extends Component
             $registro = null;
             $registro2 = null;
 
-            DB::transaction(function () use (&$registro) {
+            DB::transaction(function () use (&$registro, &$registro2) {
 
                 $usuario_id = auth()->user()->id;
                 $usuario_dni = auth()->user()->dni;
@@ -344,8 +450,40 @@ class AnexosasignacionComponent extends Component
                     ->where('dni', $this->informatico_dni)
                     ->first();
 
+                // SOLO CREAR SI EL ANEXO NO EXISTE
+                $registro = InformaticasBienesAnexos::firstOrCreate(
+                    [
+                        'anexo' => $this->anexo, // Campo que identifica si ya existe
+                    ],
+                    [
+                        'serie' => $this->serie,
+                        'tipo' => $this->tipo,
+                        'modelo' => $this->modelo,
+                        'marca' => $this->marca,
+                        'transformador' => $this->transformador,
+                        'auriculares' => $this->auriculares,
+                        'baseauriculares' => $this->baseauriculares,
+                        'asignacionlibrecustodia' => $this->asignacionlibrecustodia,
+                        'observacion' => $this->observacion,
+                        'estado' => $this->estado,
+                        'activo' => '1',
+                        'created_user_cargo' => $usuario_cargo,
+                        'created_user' => $usuario_datos,
+                        'updated_user' => $usuario_datos,
+                    ]
+                );
+
+                // ACTUALIZAR EL REGISTRO ANTERIOR EN CASO SEA UNA ASIGANCION, DEVOLUCION O CUSTODIA
+                if (!empty($this->anexoasignado_id)){
+                    $iInformaticaBienesAnexoAsignado = InformaticasBienesAnexosAsignaciones::findOrFail($this->anexoasignado_id);
+
+                    $iInformaticaBienesAnexoAsignado->update([
+                        'activo' => "0",
+                    ]);
+                }
+
                 // CREAR REGISTRO EN TABLA
-                $registro = InformaticasBienesAnexosAsignaciones::create([
+                $registro2 = InformaticasBienesAnexosAsignaciones::create([
                     // DATOS DE LA PERSONA
                     'persona_id' => $this->persona_id,
                     'dni' => $this->dni,
@@ -381,16 +519,18 @@ class AnexosasignacionComponent extends Component
                     'cargo_condicion' => $this->cargo_condicion,
 
                     // DATOS DEl ANEXO
-                    'anexo_id' => $this->anexo_id,
+                    'anexo_id' => $registro->id,
                     'serie' => $this->serie,
                     'tipo' => $this->tipo,
                     'modelo' => $this->modelo,
                     'anexo' => $this->anexo,
                     'marca' => $this->marca,
-                    'trasformador' => $this->transformador,
+                    'transformador' => $this->transformador,
                     'auriculares' => $this->auriculares,
                     'baseauriculares' => $this->baseauriculares,
                     'asignacionlibrecustodia' => $this->asignacionlibrecustodia,
+                    'asignacionlibrecustodiadesde' => $this->asignacionlibrecustodiadesde,
+                    'asignacionlibrecustodiahasta' => $this->asignacionlibrecustodiahasta,
                     'observacion' => $this->observacion,
                     'estado' => $this->estado,
 
@@ -402,28 +542,20 @@ class AnexosasignacionComponent extends Component
                     'updated_user' => $usuario_datos,
                 ]);
 
-                // SOLO CREAR SI EL ANEXO NO EXISTE
-                InformaticasBienesAnexos::firstOrCreate(
-                    [
-                        'anexo' => $this->anexo, // Campo que identifica si ya existe
-                    ],
-                    [
-                        'serie' => $this->serie,
-                        'tipo' => $this->tipo,
-                        'modelo' => $this->modelo,
-                        'marca' => $this->marca,
-                        'transformador' => $this->transformador,
-                        'auriculares' => $this->auriculares,
-                        'baseauriculares' => $this->baseauriculares,
-                        'asignacionlibrecustodia' => $this->asignacionlibrecustodia,
-                        'observacion' => $this->observacion,
-                        'estado' => $this->estado,
-                        'activo' => '1',
-                        'created_user_cargo' => $usuario_cargo,
-                        'created_user' => $usuario_datos,
-                        'updated_user' => $usuario_datos,
-                    ]
-                );
+                // ACTUALIZAMOS ACTIVO DE LA TABLA INFORMATICASBIENESANEXOS
+                
+                $iInformaticaBienesAnexo = InformaticasBienesAnexos::findOrFail($registro2->anexo_id);
+
+                if ($this->asignacionlibrecustodia === "DEVOLUCION") {
+                    $iInformaticaBienesAnexo->update([
+                        'activo' => "0",
+                    ]);
+                } else {
+                    $iInformaticaBienesAnexo->update([
+                        'activo' => "1",
+                    ]);
+                }
+                
             });
 
             // CERRAR MODAL NUEVO - EDITAR
@@ -434,7 +566,7 @@ class AnexosasignacionComponent extends Component
                 'alerta-actualizado',
                 titulo: 'Proceso completado',
                 mensaje: 'Se guardaron los datos correctamente.',
-                tipo: 'succes',
+                tipo: 'success',
             );
         }
 
@@ -463,9 +595,6 @@ class AnexosasignacionComponent extends Component
         $this->seccionFoto = "";
         $this->seccionPersona = "";
         $this->seccionPersonal = "";
-
-        // CAMBIAR EL VALOR DE LA BANDERA PARA PODER CARGAR EVIDENCIAS PDF
-        $this->bandera_documento = "EVIDENCIA";
 
         // DATOS DE LA PERSONA
         // $this->atencion_id = $ipersonalatencion->id;
@@ -503,8 +632,21 @@ class AnexosasignacionComponent extends Component
         $this->cargo = $instanciaTabla->cargo;
         $this->cargo_condicion = $instanciaTabla->cargo_condicion;
 
-        // DATOS DE LA ATENCIÓN
+        // DATOS DEL REGISTRO
 
+        $this->anexoasignado_id = $instanciaTabla->id;
+        $this->anexo_id = $instanciaTabla->anexo_id;
+        $this->serie = $instanciaTabla->serie;
+        $this->tipo = $instanciaTabla->tipo;
+        $this->modelo = $instanciaTabla->modelo;
+        $this->anexo = $instanciaTabla->anexo;
+        $this->marca = $instanciaTabla->marca;
+        $this->transformador = $instanciaTabla->trasformador;
+        $this->auriculares = $instanciaTabla->auriculares;
+        $this->baseauriculares = $instanciaTabla->baseauriculares;
+        $this->asignacionlibrecustodia = $instanciaTabla->asignacionlibrecustodia;
+        $this->observacion = $instanciaTabla->observacion;
+        $this->estado = $instanciaTabla->estado;
         $this->informatico_dni = $instanciaTabla->informatico_dni;
         $this->informatico = $instanciaTabla->informatico;
         $this->activo = $instanciaTabla->activo;
@@ -529,6 +671,114 @@ class AnexosasignacionComponent extends Component
                 mensaje: 'Se canceló la operación.',
                 tipo: 'error'
             );
+    }
+
+    // ============================================================================================================================
+    // MODALES CARGAR PDF
+    // ============================================================================================================================
+
+    public function editar_pdf($anexoAsignadoId)
+    {
+        $this->anexoasignado_id = $anexoAsignadoId;
+
+        $this->pdf_acta = null; // 🔥 CLAVE
+
+        // ABRIR MODAL CARGAR PDF
+        $this->modalPDFCargar = true;
+    }
+    
+    public function actualizar_pdf()
+    {
+        // ===== DATOS DE LA INSTANCIA =====
+        $iAnexoAsignado = InformaticasBienesAnexosAsignaciones::where('id', $this->anexoasignado_id)->firstOrFail();
+
+        $this->anexo = $iAnexoAsignado->token_codigo;
+        $this->asignacionlibrecustodia = $iAnexoAsignado->asignacionlibrecustodia;
+        
+        // ===== VALIDAR SOLOR PDF =====
+        $this->validate([
+            'pdf_acta' => 'required|file|mimes:pdf|max:5120'
+        ]);
+
+
+        // ===== CARGAR PDF =====
+        try {
+
+            DB::transaction(function () use ($iAnexoAsignado) {
+
+                $usuario_id = auth()->user()->id;
+                $usuario_dni = auth()->user()->dni;
+                $usuario_datos = auth()->user()->datos;
+                $usuario_cargo = auth()->user()->cargo;
+
+                // UTILIZAR UNA FUNCIÓN PRIVADA PARA VERIFICAR SI EXISTE YA UN ARCHIVO Y ASIGNARLE EL MISMO NOMBRE
+                $rutaDocumento = $this->validarActa();
+
+                // ACTUALIZAR
+                $iAnexoAsignado->update([
+                    'ruta_documento' => $rutaDocumento,
+                    'updated_user' => $usuario_datos,
+                ]);
+
+            });
+
+            $this->reset('pdf_acta');
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Documento cargado',
+                mensaje: 'El PDF se cargó correctamente.',
+                tipo: 'success'
+            );
+
+            // CERRAR MODAL CARGAR PDF
+            $this->modalPDFCargar = true;
+
+        } catch (\Throwable $e) {
+
+            report($e);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'Ocurrió un error al cargar el PDF.',
+                tipo: 'error'
+            );
+        }
+    }
+
+    public function editarEvidencia()
+    {
+        
+    }
+
+    public function actualizarEvidencia()
+    {
+        
+    }
+
+    private function validarActa()
+    {
+        $iAnexoAsignado = InformaticasBienesAnexosAsignaciones::findOrFail($this->anexoasignado_id);
+
+        if (empty($iAnexoAsignado->ruta_documento)) {
+
+            $nombreArchivo = 'acta_' . $iAnexoAsignado->id . '_' .
+                            $iAnexoAsignado->anexo . '_' .
+                            $iAnexoAsignado->dni . '.pdf';
+
+            return $this->pdf_acta->storeAs(
+                'informatica/anexos/actas',
+                $nombreArchivo,
+                'public'
+            );
+        }
+
+        return $this->pdf_acta->storeAs(
+            dirname($iAnexoAsignado->ruta_documento),
+            basename($iAnexoAsignado->ruta_documento),
+            'public'
+        );
     }
 
     // ============================================================================================================================

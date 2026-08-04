@@ -1271,7 +1271,7 @@ class Activos extends Component
         // CAMBIAR EL VALOR DE LA BANDERA PARA PODER CARGAR ACTA PDF
         $this->bandera_documento = "ACTA";
 
-        // ABRIR MODAL
+        // ABRIR MODAL CARGAR PDF
         $this->modalPDFCargar = true;
     }
 

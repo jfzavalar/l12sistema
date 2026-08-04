@@ -84,7 +84,7 @@
                             <th scope="col" class="table-success"></th>
                             <th scope="col" class="table-dark">INFORMÁTICO</th>
                             <th scope="col" class="table-success">REGISTRADO POR</th>
-                            <th scope="col" class="table-dark"><i class="fa-solid fa-gears"></i></th>
+                            <th scope="col" class="table-dark" colspan="3" ><i class="fa-solid fa-gears"></i></th>
                         </tr>
                     </thead>
                     <tbody class="align-middle">
@@ -121,15 +121,49 @@
                                 <td>{{ $item->estado }}</td>
                                 <td>
                                     <span class="badge py-1 bg-success-subtle text-success fs-7">
-                                        {{ $item->asignacionlibrecustodia}}
+                                        {{ $item->asignacionlibrecustodia }}
                                     </span>
                                 </td>
                                 <td>{{ $item->informatico }}</td>
                                 <td>{{ $item->created_user }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar({{ $item->id }})">
-                                        <i class="fa-solid fa-pen-to-square"></i><br>Editar
-                                    </button> 
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar({{ $item->id }})">
+                                            <i class="fa-solid fa-pen-to-square"></i><br>Editar
+                                        </button>
+                                        @if ( $item->asignacionlibrecustodia !== "ASIGNACION")
+                                            <button type="button" class="btn btn-outline-primary btn-xs" wire:click="nuevo({{ $item->id }},'ASIGNACION')">
+                                                <i class="fa-solid fa-right-to-bracket"></i><br>Asignar
+                                            </button>
+                                        @else
+                                            <button type="button" class="btn btn-outline-danger btn-xs" wire:click="nuevo({{ $item->id }},'DEVOLUCION')">
+                                                <i class="fa-solid fa-right-from-bracket"></i><br>Devolver
+                                            </button>
+                                            <button type="button" class="btn btn-outline-dark btn-xs" wire:click="nuevo({{ $item->id }},'CUSTODIA')">
+                                                <i class="fa-solid fa-user-shield"></i><br>Custodia
+                                            </button>
+                                        @endif
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a type="button" class="btn btn-outline-naranja btn-xs" href="{{ route('pdf.informatica.anexotelefonico-acta', ['id' => $item->id]) }}" target="_blank">
+                                            <i class="fa-solid fa-file-pdf"></i><br>Acta
+                                        </a>
+                                        <button type="button" class="btn btn-outline-warning btn-xs" wire:click="editar_pdf({{ $item->id }})">
+                                            <i class="fa-solid fa-upload"></i><br>Cargar
+                                        </button>
+                                        @if($item->ruta_documento)
+                                            <a type="button" class="btn btn-outline-dark btn-xs" href="{{ asset('storage/'.$item->ruta_documento) }}" target="_blank">
+                                                <i class="fa-solid fa-eye"></i> <i class="fa-solid fa-file-signature"></i><br> Firmado
+                                            </a>
+                                        @endif
+                                    </div>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-outline-info btn-xs" wire:click="historial_tokens('{{ $item->token_id }}')">
+                                        <i class="fa-solid fa-timeline"></i><br>Historial
+                                    </button>  
                                 </td>
                             </tr>
                         @empty
@@ -191,11 +225,11 @@
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <fieldset class="border p-3 rounded mb-3">
+                                    <fieldset class="border p-3 rounded mb-3" {{ $seccionDetalle }}>
                                         <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DETALLES DEL ANEXO</legend>
                                         {{-- @include('livewire.rrhh.contratos.partials.datos-contrato-component') --}}
                                         <div class="row">
-                                            <div class="col-xl-8">
+                                            <div class="col-xl-9">
                                                 <div class="row">
                                                     <div class="col-xl-3">
                                                         <label for="txtanexo" class="fw-bold fs-6">ANEXO:</label>
@@ -282,45 +316,57 @@
                                                     <div class="col-xl-6">
                                                         <label for="txtcustodia" class="fw-bold fs-6">ASIGNACIÓN</label>
                                                         <div class="d-flex gap-2">
-                                                            <input type="radio" id="asignado4" name="custodia" class="btn-check" value="Asignado" autocomplete="off" wire:model="asignacionlibrecustodia">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="asignado4">ASIGNADO</label>
+                                                            <input type="radio" id="asignacion" name="custodia" class="btn-check" value="ASIGNACION" autocomplete="off" wire:model="asignacionlibrecustodia">
+                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="asignacion">ASIGNACIÓN</label>
 
-                                                            <input type="radio" id="libre4" name="custodia" class="btn-check" value="Libre" autocomplete="off" wire:model="asignacionlibrecustodia">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="libre4">LIBRE</label>
+                                                            <input type="radio" id="devolucion" name="custodia" class="btn-check" value="DEVOLUCION" autocomplete="off" wire:model="asignacionlibrecustodia">
+                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="devolucion">DEVOLUCION</label>
 
-                                                            <input type="radio" id="custodia4" name="custodia" class="btn-check" value="Custodia" autocomplete="off" wire:model="asignacionlibrecustodia">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="custodia4">CUSTODIA</label>
+                                                            <input type="radio" id="custodia" name="custodia" class="btn-check" value="CUSTODIA" autocomplete="off" wire:model="asignacionlibrecustodia">
+                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="custodia">CUSTODIA</label>
                                                         </div>
                                                     </div> 
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-xl-6">
-                                                        <label for="txtobservacion" class="fw-bold fs-6">OBSERVACIÓN:</label>
-                                                        <input type="text" id="txtobservacion" class="form-control form-control-sm" wire:model="observacionanexo">
-                                                    </div>
-                                                    <div class="col-xl-6">
-                                                        <label for="txt_informatico" class="fw-bold fs-6">INFORMÁTICO RESPONSABLE</label>
-                                                        <select id="txt_informatico" class="form-select form-select-sm" wire:model="informatico_dni" required>
-                                                            <option value="">Seleccionar...</option>
-                                                            @foreach ($lista_informaticos as $item)
-                                                                <option value="{{ $item->dni }}">
-                                                                    {{ $item->dni . ' - ' . $item->datos }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
                                             </div>
-                                            <div class="col-xl-4">
+                                            <div class="col-xl-3">
                                                 <div class="text-center">
                                                     @if ($tipo === "1")
-                                                        <img src="{{ asset('storage/imagenes/anexos/tipo1.png') }}" width="350">
+                                                        <img src="{{ asset('storage/imagenes/anexos/tipo1.png') }}" width="250">
                                                     @elseif ($tipo === "2")
-                                                        <img src="{{ asset('storage/imagenes/anexos/tipo2.png') }}" width="350">
+                                                        <img src="{{ asset('storage/imagenes/anexos/tipo2.png') }}" width="250">
                                                     @elseif ($tipo === "3")
-                                                        <img src="{{ asset('storage/imagenes/anexos/tipo3.png') }}" width="350">
+                                                        <img src="{{ asset('storage/imagenes/anexos/tipo3.png') }}" width="250">
                                                     @endif
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset class="border p-3 rounded mb-3">
+                                        <div class="row">
+                                            <div class="col-12 col-xl">
+                                                <label for="txtobservacion" class="fw-bold fs-6">OBSERVACIÓN:</label>
+                                                <input type="text" id="txtobservacion" class="form-control form-control-sm" wire:model="observacion">
+                                            </div>
+                                            @if ($asignacionlibrecustodia === "CUSTODIA")
+                                                <div class="col-12 col-xl">
+                                                    <label for="txtobservacion" class="fw-bold fs-6">DESDE:</label>
+                                                    <input type="date" id="txtobservacion" class="form-control form-control-sm" wire:model="asignacionlibrecustodiadesde">
+                                                </div>
+                                                <div class="col-12 col-xl">
+                                                    <label for="txtobservacion" class="fw-bold fs-6">HASTA:</label>
+                                                    <input type="date" id="txtobservacion" class="form-control form-control-sm">
+                                                </div>
+                                            @endif
+                                            <div class="col-12 col-xl">
+                                                <label for="txt_informatico" class="fw-bold fs-6">INFORMÁTICO RESPONSABLE</label>
+                                                <select id="txt_informatico" class="form-select form-select-sm" wire:model="informatico_dni" required>
+                                                    <option value="">Seleccionar...</option>
+                                                    @foreach ($lista_informaticos as $item)
+                                                        <option value="{{ $item->dni }}">
+                                                            {{ $item->dni . ' - ' . $item->datos }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
                                     </fieldset>

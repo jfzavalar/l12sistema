@@ -116,7 +116,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::resource('anexos', AnexosController::class)->names('mpfn.informatica.anexos');
-    // Route::get('pdf/informatica/soporte-acta/{id}', [soporteController::class, 'exportarPDF'])->name('pdf.informatica.soporte-acta');
+    Route::get('pdf/informatica/anexotelefonico-acta/{id}', [AnexosController::class, 'exportarPDF'])->name('pdf.informatica.anexotelefonico-acta');
 });
 
 Route::middleware('auth','can:mpfn.informatica.soporte.index')->group(function () {
