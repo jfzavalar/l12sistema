@@ -486,7 +486,7 @@ class SpijwebComponent extends Component
         $this->colorHeaderModal = "primary-subtle";
         $this->textoHeaderModal = "ENVIAR FORMATOS";
         $this->colorGuardarActualizar = "primary";
-        $this->textoGuardarActualizar = "Guardar";
+        $this->textoGuardarActualizar = "Guardar y enviar";
         $this->colorAgregar = "outline-primary";
 
         // ASIGNAMOS LOS VALORES DEL REGISTRO
@@ -531,7 +531,7 @@ class SpijwebComponent extends Component
         $this->modalNuevoEditarAbrir = true;
     }
 
-    public function enviar_usuario1(InformaticasSpijwebsEntrega $iSpijEntrega)
+    public function enviar_usuario1(InformaticasSpijwebsEntrega $instanciaTabla)
     {
         $this->resetValidation();   // ← limpia los errores
         $this->resetErrorBag();     // ← opcional extra seguridad
@@ -548,8 +548,46 @@ class SpijwebComponent extends Component
         $this->colorHeaderModal = "primary-subtle";
         $this->textoHeaderModal = "ENVIAR USUARIO";
         $this->colorGuardarActualizar = "primary";
-        $this->textoGuardarActualizar = "Guardar";
+        $this->textoGuardarActualizar = "Guardar y enviar";
         $this->colorAgregar = "outline-primary";
+
+        // ASIGNAMOS LOS VALORES DEL REGISTRO
+        // DATOS DE LA PERSONA
+
+        $this->persona_id = $instanciaTabla->persona_id;
+        $this->dni = $instanciaTabla->dni;
+        $this->appaterno = $instanciaTabla->appaterno;
+        $this->apmaterno = $instanciaTabla->apmaterno;
+        $this->nombres = $instanciaTabla->nombres;
+        $this->datos = $instanciaTabla->datos;
+        $this->celpersonal = $instanciaTabla->celpersonal;
+        $this->celinstitucional = $instanciaTabla->celinstitucional;
+        $this->correopersonal = $instanciaTabla->correopersonal;
+        $this->correoinstitucional = $instanciaTabla->correoinstitucional;
+
+        // DATOS DEL PERSONAL
+        $this->personal_id = $instanciaTabla->personal_id;
+
+        $this->codsedeorigen = $instanciaTabla->codsededestino;
+        $this->sedeorigen = $instanciaTabla->sededestino;
+        $this->coddependenciaorigen= $instanciaTabla->coddependenciadestino;
+        $this->dependenciaorigen = $instanciaTabla->dependenciadestino;
+        $this->coddespachoorigen = $instanciaTabla->coddespachodestino;
+        $this->despachoorigen = $instanciaTabla->despachodestino;
+
+        $this->codsededestino = $instanciaTabla->codsededestino;
+        $this->sededestino = $instanciaTabla->sededestino;
+        $this->coddependenciadestino= $instanciaTabla->coddependenciadestino;
+        $this->dependenciadestino = $instanciaTabla->dependenciadestino;
+        $this->coddespachodestino = $instanciaTabla->coddespachodestino;
+        $this->despachodestino = $instanciaTabla->despachodestino;
+
+        $this->regimen = $instanciaTabla->regimen;
+        $this->tipo_regimen = $instanciaTabla->tipo_regimen;
+        $this->cargo = $instanciaTabla->cargo;
+        $this->cargo_condicion = $instanciaTabla->cargo_condicion;
+
+        // DATOS DEL REGISTRO
 
         // ABRIR MODAL NUEVO - EDITAR
         $this->modalNuevoEditarAbrir = true;

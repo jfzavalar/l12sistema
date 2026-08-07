@@ -142,12 +142,12 @@
                                     <br><b>Cel. institucional:</b> {{ $item->celinstitucional }}
                                 </td>
                                 <td class="text-center">
-                                    <button type="button" class="btn btn-outline-{{ $item->enviarformatos === 'NO' ? 'danger' : 'info' }} btn-xs wire:click="enviar_formatos1({{ $item->id }})">
+                                    <button type="button" class="btn btn-outline-{{ $item->enviarformatos === 'NO' ? 'danger' : 'info' }} btn-xs" wire:click="enviar_formatos1({{ $item->id }})">
                                         <i class="fa-solid fa-envelope"></i><br>Enviar
                                     </button>
                                 </td>
                                 <td class="text-center">
-                                    <button type="button" class="btn btn-outline-{{ $item->enviarformatos === 'NO' ? 'danger' : 'info' }} btn-xs wire:click="enviar_formatos1({{ $item->id }})">
+                                    <button type="button" class="btn btn-outline-{{ $item->enviarformatos === 'NO' ? 'danger' : 'info' }} btn-xs" wire:click="enviar_usuario1({{ $item->id }})">
                                         <i class="fa-solid fa-envelope"></i><br>Enviar
                                     </button>
                                 </td>
