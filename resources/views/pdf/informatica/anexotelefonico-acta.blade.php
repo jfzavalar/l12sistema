@@ -28,8 +28,8 @@
         <thead>
             <tr>
                 <th style="background-color: black; color: white; text-align: center;">
-                    CONSTANCIA DE ASIGNACIÓN, REASIGNACIÓN O DEVOLUCIÓN 
-                    <br>DE EQUIPO TELEFÓNICO - ACTA: N° {{ $instanciaTbl->id }}
+                    ACTA: N° {{ $instanciaTbl->id }}
+                    <br>CONSTANCIA DE {{ $instanciaTbl->asignacionlibrecustodia }} - ANEXO: {{ $instanciaTbl->anexo }}
                 </th>
             </tr>
         </thead>
@@ -76,9 +76,21 @@
             <tr>
                 <td><b>DESPACHO:</b></td>
                 <td colspan="3">
-                    {{ $instanciaTbl->despachodestino . " - PIS0: " }}
+                    {{ $instanciaTbl->despachodestino}}
                 </td>
             </tr>
+            {{-- <tr>
+                <td><b>PISO - OFICINA:</b></td>
+                <td colspan="3">
+                    
+                </td>
+            </tr>
+            <tr>
+                <td><b>DIRECCIÓN:</b></td>
+                <td colspan="3">
+                    
+                </td>
+            </tr> --}}
         </thead>
     </table>
 
@@ -108,12 +120,12 @@
         </thead>
         <tbody>
             <tr>
-                <td style="text-align: center;"></td>
+                <td style="text-align: center;">1</td>
                 <td style="text-align: center;">{{ $instanciaTbl->anexo }}</td>
                 <td style="text-align: center;">{{ $instanciaTbl->serie }}</td>
                 <td style="text-align: center;">{{ $instanciaTbl->marca }}</td>
                 <td style="text-align: center;">{{ $instanciaTbl->modelo }}</td>
-                <td style="text-align: center;">{{ $instanciaTbl->anexo }}</td>
+                <td style="text-align: center;">{{ $instanciaTbl->estado }}</td>
                 <td style="text-align: center;">{{ $instanciaTbl->asignacionlibrecustodia }}</td>
             </tr>
         </tbody>
@@ -151,25 +163,47 @@
 </div>
 
 <div class="footer">
-    <table class="tabla-firma">
-        <tbody>
-            <tr>
-                <td class="borde-superior">
-                    ENTREGUÉ CONFORME
-                    <br>{{ $instanciaTbl->informatico }}
-                    <br>{{ $instanciaTbl->informatico_dni }}
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="borde-superior">
-                    RECIBÍ CONFORME
-                    <br>{{ $instanciaTbl->datos }}
-                    <br>{{ $instanciaTbl->dni }}
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    @if ($instanciaTbl->asignacionlibrecustodia === "DEVOLUCION")
+        <table class="tabla-firma">
+            <tbody>
+                <tr>
+                    <td class="borde-superior">
+                        ENTREGUÉ CONFORME
+                        <br>{{ $instanciaTbl->datos }}
+                        <br>{{ $instanciaTbl->dni }}
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="borde-superior">
+                        RECIBÍ CONFORME
+                        <br>{{ $instanciaTbl->informatico }}
+                        <br>{{ $instanciaTbl->informatico_dni }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    @else
+        <table class="tabla-firma">
+            <tbody>
+                <tr>
+                    <td class="borde-superior">
+                        ENTREGUÉ CONFORME
+                        <br>{{ $instanciaTbl->informatico }}
+                        <br>{{ $instanciaTbl->informatico_dni }}
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="borde-superior">
+                        RECIBÍ CONFORME
+                        <br>{{ $instanciaTbl->datos }}
+                        <br>{{ $instanciaTbl->dni }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    @endif
 
     <p></p>
     <hr>

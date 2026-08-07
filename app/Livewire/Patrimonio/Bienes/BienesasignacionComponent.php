@@ -273,7 +273,7 @@ class BienesasignacionComponent extends Component
                 'personales.despachodestino',
                 'personales.tipo_documento'
             )
-            ->where('personales.tipo_documento','CONTRATO')
+            // ->where('personales.tipo_documento','CONTRATO')
             ->where('personales.activo', "1")
             ->where('personas.activo','1')
             ->when($this->searchpersonas !== '', function ($query) {

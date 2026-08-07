@@ -4,22 +4,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class InformaticasBienesAnexosAsignaciones extends Model
+class InformaticasSpijwebsEntrega extends Model
 {
-    protected $table = 'informaticas_bienes_anexos_asignaciones';
+    protected $table = 'informaticas_spijwebs_entregas';
 
     protected $fillable = [
         'persona_id',
         'dni',
-        'nombres',
         'appaterno',
         'apmaterno',
+        'nombres',
+        'datos',
         'celpersonal',
         'celinstitucional',
         'correopersonal',
         'correoinstitucional',
-        'datos',
-
+        
         'personal_id',
         'codsedeorigen',
         'sedeorigen',
@@ -37,29 +37,17 @@ class InformaticasBienesAnexosAsignaciones extends Model
         'tipo_regimen',
         'cargo',
         'cargo_condicion',
-        
-        'anexo_id',
-        'serie',
-        'tipo',
-        'modelo',
-        'anexo',
-        'marca',
-        'transformador',
-        'auriculares',
-        'baseauriculares',
-        'motivo',
-        'asignacionlibrecustodia',
-        'asignacionlibrecustodiadesde',
-        'asignacionlibrecustodiahasta',
-        'custodia',
-        'observacion',
-        'ruta_evidencia',
-        'ruta_documento',
-        'estado',
+
+        'anio',
+        'enviarformatos',
+        'enviarusuario',
+        'febrero',
+        'enviarformatos',
+        'enviarusuario',
+
         'informatico_dni',
         'informatico',
         'activo',
-        'created_user_cargo',
         'created_user',
         'updated_user',
     ];

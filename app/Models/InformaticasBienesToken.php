@@ -14,6 +14,7 @@ class InformaticasBienesToken extends Model
         'modelo',
         'operativo',
         'asignado',
+        'custodia'.
         'activo',
         'created_user',
         'updated_user',

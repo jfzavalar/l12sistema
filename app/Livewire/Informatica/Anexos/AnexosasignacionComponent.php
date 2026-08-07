@@ -52,6 +52,7 @@ class AnexosasignacionComponent extends Component
     public $modalPatrimonioBienesBuscar = false;
     public $modalPDFCargar = false;
     public $modalPDFEvidenciaCargar = false;
+    public $modalHistorial = false;
 
     // VARIABLES PARA ADMINISTRAR MODALES
     public $colorHeaderModal, $textoHeaderModal;
@@ -173,9 +174,11 @@ class AnexosasignacionComponent extends Component
             $transformador = "SI",
             $auriculares = "NO",
             $baseauriculares = "NO",
-            $asignacionlibrecustodia = "Asignado",
+            $motivo,
+            $asignacionlibrecustodia = "ASIGNACION",
             $asignacionlibrecustodiadesde,
             $asignacionlibrecustodiahasta,
+            $custodia = "NO",
             $observacion,
             $ruta_evidencia,
             $ruta_documento,
@@ -210,17 +213,6 @@ class AnexosasignacionComponent extends Component
         }
     }
 
-    public function updatedObservacion($value)
-    {
-        if ($value === "Asignado") {
-            $this->observacion = "SE REALIZA UNA NUEVA ASIGNACIÓN";
-        } if ($value === "Devuelto") {
-            $this->observacion = "DEVULEVE EL TELEFONO A INFORMATICA";
-        } else {
-            $this->observacion = "DEJA EN CUSTODIA";
-        }       
-    }
-
 
     // ============================================================================================================================
     // RENDERIZADO DE PÁGINA
@@ -229,11 +221,38 @@ class AnexosasignacionComponent extends Component
     public function render()
     {
         $lista_activos = InformaticasBienesAnexosAsignaciones::where('activo',1)
-            ->orderBy('id')
+            ->orderBy('id','desc')
             ->paginate(10,['*'],'atencionesPage');
 
-        $lista_historial = InformaticasBienesAnexosAsignaciones::orderBy('id','desc')
+        $lista_historial = InformaticasBienesAnexosAsignaciones::where('anexo_id',$this->anexo_id)
+            ->orderBy('id','desc')
             ->paginate(10,['*'],'atencionesHistorialPage');
+        
+        $estadisticas = InformaticasBienesAnexosAsignaciones::where('activo', 1)
+            ->selectRaw("
+                COUNT(*) as total,
+
+                SUM(CASE
+                    WHEN asignacionlibrecustodia = 'ASIGNACION'
+                    THEN 1 ELSE 0
+                END) as asignados,
+
+                SUM(CASE
+                    WHEN asignacionlibrecustodia = 'REASIGNACION'
+                    THEN 1 ELSE 0
+                END) as reasignados,
+
+                SUM(CASE
+                    WHEN asignacionlibrecustodia = 'DEVOLUCION'
+                    THEN 1 ELSE 0
+                END) as libres,
+
+                SUM(CASE
+                    WHEN asignacionlibrecustodia = 'CUSTODIA'
+                    THEN 1 ELSE 0
+                END) as custodia
+            ")
+            ->first();
 
         $lista_personas = Persona::join('personales','personas.id','=','personales.persona_id')
             ->select(
@@ -301,7 +320,7 @@ class AnexosasignacionComponent extends Component
             ->get();
 
         return view('livewire.informatica.anexos.anexosasignacion-component',
-                    compact('lista_activos',
+                    compact('lista_activos','lista_historial','estadisticas',
                             'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos','lista_informaticos'));
     }
 
@@ -385,9 +404,35 @@ class AnexosasignacionComponent extends Component
                 $this->tipo_regimen = $instanciaTabla->tipo_regimen;
                 $this->cargo = $instanciaTabla->cargo;
                 $this->cargo_condicion = $instanciaTabla->cargo_condicion;
-            } elseif($vAsignacionlibrecustodia === 'CUSTODIA'){
-                $this->asignacionlibrecustodiadesde = now()->toDateString();
-                
+
+                // DATOS DEL REGISTRO
+                $this->anexoasignado_id = $instanciaTabla->id;
+                $this->anexo_id = $instanciaTabla->anexo_id;
+                $this->serie = $instanciaTabla->serie;
+                $this->tipo = $instanciaTabla->tipo;
+                $this->modelo = $instanciaTabla->modelo;
+                $this->anexo = $instanciaTabla->anexo;
+                $this->marca = $instanciaTabla->marca;
+                $this->transformador = $instanciaTabla->transformador;
+                $this->auriculares = $instanciaTabla->auriculares;
+                $this->baseauriculares = $instanciaTabla->baseauriculares;
+                $this->estado = $instanciaTabla->estado;
+                $this->asignacionlibrecustodia = $vAsignacionlibrecustodia;
+            } elseif ($vAsignacionlibrecustodia === 'REASIGNACION'){
+                // DATOS DEL REGISTRO
+                $this->anexoasignado_id = $instanciaTabla->id;
+                $this->anexo_id = $instanciaTabla->anexo_id;
+                $this->serie = $instanciaTabla->serie;
+                $this->tipo = $instanciaTabla->tipo;
+                $this->modelo = $instanciaTabla->modelo;
+                $this->anexo = $instanciaTabla->anexo;
+                $this->marca = $instanciaTabla->marca;
+                $this->transformador = $instanciaTabla->transformador;
+                $this->auriculares = $instanciaTabla->auriculares;
+                $this->baseauriculares = $instanciaTabla->baseauriculares;
+                $this->estado = $instanciaTabla->estado;
+                $this->asignacionlibrecustodia = $vAsignacionlibrecustodia;
+
                 $this->seccionFoto = "";
                 $this->seccionPersona = "";
                 $this->seccionPersonal    = "";
@@ -396,32 +441,12 @@ class AnexosasignacionComponent extends Component
                 $this->seccionFoto = "";
                 $this->seccionPersona = "";
                 $this->seccionPersonal    = "";
-                $this->seccionDetalle = "disabled";
+                $this->seccionDetalle = "";
             }
 
-            // DATOS DEL REGISTRO
-            $this->anexoasignado_id = $instanciaTabla->id;
-            $this->anexo_id = $instanciaTabla->anexo_id;
-            $this->serie = $instanciaTabla->serie;
-            $this->tipo = $instanciaTabla->tipo;
-            $this->modelo = $instanciaTabla->modelo;
-            $this->anexo = $instanciaTabla->anexo;
-            $this->marca = $instanciaTabla->marca;
-            $this->transformador = $instanciaTabla->transformador;
-            $this->auriculares = $instanciaTabla->auriculares;
-            $this->baseauriculares = $instanciaTabla->baseauriculares;
-            $this->asignacionlibrecustodia = $vAsignacionlibrecustodia;
-            if ($vAsignacionlibrecustodia === 'ASIGNACION') {
-            $this->observacion = 'NUEVA ASIGNACION';
-            } elseif ($vAsignacionlibrecustodia === 'DEVOLUCION') {
-                $this->observacion = 'SE REALIZA LA DEVOLUCION DEL ANEXO TELEFONICO';
-            } else {
-                $this->observacion = 'DEJA EN CUSTODIA ' . $instanciaTabla->datos . ' ' . 'POR: ';
-            }
-            $this->estado = $instanciaTabla->estado;
-            $this->informatico_dni = $instanciaTabla->informatico_dni;
-            $this->informatico = $instanciaTabla->informatico;
-            $this->activo = $instanciaTabla->activo;
+            // $this->estado = $instanciaTabla->estado;
+
+            // $this->activo = $instanciaTabla->activo;
             $this->created_user_cargo = $instanciaTabla->created_user_cargo;
             $this->created_user = $instanciaTabla->created_user;
             $this->updated_user = $instanciaTabla->updated_user;
@@ -437,6 +462,29 @@ class AnexosasignacionComponent extends Component
         {
             $registro = null;
             $registro2 = null;
+
+            // BUSCAR SI EL ANEXO YA EXISTE
+            $registro = InformaticasBienesAnexos::where('anexo', $this->anexo)->first();
+
+            // VALIDAR SI EL ANEXO YA ESTÁ ASIGNADO
+            if ( $registro && $this->asignacionlibrecustodia === 'ASIGNACION') {
+
+                $existeAsignacion = InformaticasBienesAnexosAsignaciones::where('anexo_id', $registro->id)
+                    ->where('activo', 1)
+                    ->exists();
+
+                if ($existeAsignacion) {
+
+                    $this->dispatch(
+                        'alerta-actualizado',
+                        titulo: 'No se pudo guardar',
+                        mensaje: 'El anexo ya se encuentra asignado.',
+                        tipo: 'warning',
+                    );
+
+                    return;
+                }
+            }
 
             DB::transaction(function () use (&$registro, &$registro2) {
 
@@ -528,6 +576,7 @@ class AnexosasignacionComponent extends Component
                     'transformador' => $this->transformador,
                     'auriculares' => $this->auriculares,
                     'baseauriculares' => $this->baseauriculares,
+                    'motivo' => $this->motivo,
                     'asignacionlibrecustodia' => $this->asignacionlibrecustodia,
                     'asignacionlibrecustodiadesde' => $this->asignacionlibrecustodiadesde,
                     'asignacionlibrecustodiahasta' => $this->asignacionlibrecustodiahasta,
@@ -644,6 +693,7 @@ class AnexosasignacionComponent extends Component
         $this->transformador = $instanciaTabla->trasformador;
         $this->auriculares = $instanciaTabla->auriculares;
         $this->baseauriculares = $instanciaTabla->baseauriculares;
+        $this->motivo = $instanciaTabla->motivo;
         $this->asignacionlibrecustodia = $instanciaTabla->asignacionlibrecustodia;
         $this->observacion = $instanciaTabla->observacion;
         $this->estado = $instanciaTabla->estado;
@@ -671,6 +721,25 @@ class AnexosasignacionComponent extends Component
                 mensaje: 'Se canceló la operación.',
                 tipo: 'error'
             );
+    }
+
+    public function historial( $anexoAsignadoId)
+    {
+        $this->anexo_id = $anexoAsignadoId;
+
+        $this->colorHeaderModal = "info-subtle";
+        $this->textoHeaderModal = "NUEVO";
+        $this->colorGuardarActualizar = "info";
+        $this->textoGuardarActualizar = "Guardar";
+        $this->colorAgregar = "outline-info";
+
+         // ABRIR MODAL HISTORIAL
+        $this->modalHistorial = true;
+    }
+
+    public function historial_cerrar()
+    {
+        $this->modalHistorial = false;
     }
 
     // ============================================================================================================================
@@ -732,7 +801,7 @@ class AnexosasignacionComponent extends Component
             );
 
             // CERRAR MODAL CARGAR PDF
-            $this->modalPDFCargar = true;
+            $this->modalPDFCargar = false;
 
         } catch (\Throwable $e) {
 

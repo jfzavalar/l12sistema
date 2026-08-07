@@ -58,6 +58,5 @@ class ContabilidadesGastosoperativosEntrega extends Model
         'activo',
         'created_user',
         'updated_user',
-
     ];
 }

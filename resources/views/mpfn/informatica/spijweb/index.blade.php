@@ -10,7 +10,7 @@
         </h1>
     </div> --}}
 
-    <livewire:informatica.spijweb.activos />
+    <livewire:informatica.spijweb.spijwebcomponent />
 @endsection
 
 @section('css')
