@@ -142,12 +142,12 @@
                                     <br><b>Cel. institucional:</b> {{ $item->celinstitucional }}
                                 </td>
                                 <td class="text-center">
-                                    <button type="button" class="btn btn-outline-{{ $item->enviarformatos === 'NO' ? 'danger' : 'info' }} btn-xs" wire:click="enviar_formatos1({{ $item->id }})">
+                                    <button type="button" class="btn btn-outline-{{ $item->enviarformatos === 'NO' ? 'danger' : 'info' }} btn-xs" wire:click="enviar_acta1({{ $item->id }})">
                                         <i class="fa-solid fa-envelope"></i><br>Enviar
                                     </button>
                                 </td>
                                 <td class="text-center">
-                                    <button type="button" class="btn btn-outline-{{ $item->enviarformatos === 'NO' ? 'danger' : 'info' }} btn-xs" wire:click="enviar_usuario1({{ $item->id }})">
+                                    <button type="button" class="btn btn-outline-{{ $item->enviarusuario === 'NO' ? 'danger' : 'info' }} btn-xs" wire:click="enviar_usuario1({{ $item->id }})">
                                         <i class="fa-solid fa-envelope"></i><br>Enviar
                                     </button>
                                 </td>
@@ -238,23 +238,24 @@
                                         <div class="row">
                                             <div class="col-xl-2">
                                                 <label for="txtusuario" class="fw-bold fs-6">Usuario</label>
-                                                <input type="textusuario" id="txt" class="form-control form-control-sm">
+                                                <input type="textusuario" id="txt" class="form-control form-control-sm" wire:model="usuario">
                                             </div>
                                             <div class="col-xl-2">
                                                 <label for="txtpassword" class="fw-bold fs-6">Contraseña</label>
-                                                <input type="textpassword" id="txt" class="form-control form-control-sm">
+                                                <input type="textpassword" id="txt" class="form-control form-control-sm" wire:model="password">
                                             </div>
                                             <div class="col-xl-8">
                                                 <label for="txtenviar" class="fw-bold fs-6">Enviar a:</label>
                                                 <div class="d-flex gap-2">
-                                                        <input type="radio" id="email_personal" name="enviar" class="btn-check" value="{{ $correopersonal }}" autocomplete="off" wire:model.live="enviar">
-                                                        <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-sm flex-fill" for="email_personal">Email personal: {{ $correopersonal }}</label>
+                                                    <input type="radio" id="email_personal" name="enviar" class="btn-check" value="{{ $correopersonal }}" autocomplete="off" wire:model.live="enviar_a">
+                                                    <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-sm flex-fill" for="email_personal">Email personal: {{ $correopersonal }}</label>
 
-                                                        <input type="radio" id="email_institucional" name="enviar" class="btn-check" value="{{ $correoinstitucional }}" autocomplete="off" wire:model.live="enviar">
-                                                        <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-sm flex-fill" for="email_institucional">Email institucional: {{ $correoinstitucional }}</label>
-                                                    </div>
+                                                    <input type="radio" id="email_institucional" name="enviar" class="btn-check" value="{{ $correoinstitucional }}" autocomplete="off" wire:model.live="enviar_a">
+                                                    <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-sm flex-fill" for="email_institucional">Email institucional: {{ $correoinstitucional }}</label>
+                                                </div>
                                             </div>
-                                        </div>                                        
+                                        </div>
+                                        {{ $enviar_a }}                                    
                                     </fieldset>
                                 </div>
                             </div>

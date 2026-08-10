@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Informatica\Spijweb;
 
+use App\Mail\NotificacionInformaticaSpijweb;
 use App\Models\ContabilidadesGastosoperativosEntrega;
 use App\Models\InformaticasSpijwebsEntrega;
 use App\Models\Persona;
@@ -13,6 +14,7 @@ use App\Models\Personales_sede;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -21,6 +23,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Calculation\Financial\CashFlow\Constant\Periodic\InterestAndPrincipal;
 use Psy\CodeCleaner\FunctionReturnInWriteContextPass;
 
 class SpijwebComponent extends Component
@@ -126,12 +129,7 @@ class SpijwebComponent extends Component
             $fechanacimiento,
             $celpersonal,
             $correopersonal,
-            $foto,$fotoactual,$inputFileKey,
-            $activo,
-            $created_user,
-            $updated_user,
-            $created_at,
-            $updated_at;
+            $foto,$fotoactual,$inputFileKey;
 
     public $personal_id,
             $regimen,
@@ -157,23 +155,25 @@ class SpijwebComponent extends Component
             $correoinstitucional,
             $tipo_documento;
 
-    public $contabilidades_gastosoperativos_entrega_id,
+    public $spijwebasignado_id,
             $anio,
-            $enero,
-            $febrero,
-            $marzo,
-            $abril,
-            $mayo,
-            $junio,
-            $julio,
-            $agosto,
-            $septiembre,
-            $octubre,
-            $noviembre,
-            $diciembre;
+            $enviarformatos,
+            $enviarusuario,
+            $usuario,
+            $password,
+            $ruta_evidencia,
+            $ruta_documento,
 
-    public $mes,
-            $mes_observacion;
+            $informatico_dni,
+            $informatico,
+            $activo,
+            $created_user,
+            $updated_user;
+
+    public $pdf_acta, $pdf_evidencia;
+
+    public $enviar_a;
+
 
 
     // VARIABLES MODAL DE MOTIVO DE CAMBIO
@@ -199,7 +199,7 @@ class SpijwebComponent extends Component
                 });
             })
             ->orderBy('datos')
-            ->paginate(10,['*'],'spijwebPage');
+            ->paginate(30,['*'],'spijwebPage');
 
         $estadisticas = InformaticasSpijwebsEntrega::where('activo', 1)
             ->selectRaw("
@@ -469,7 +469,7 @@ class SpijwebComponent extends Component
             );
     }
 
-    public function enviar_formatos1(InformaticasSpijwebsEntrega $instanciaTabla)
+    public function enviar_acta1(InformaticasSpijwebsEntrega $instanciaTabla)
     {
         $this->resetValidation();   // ← limpia los errores
         $this->resetErrorBag();     // ← opcional extra seguridad
@@ -481,7 +481,7 @@ class SpijwebComponent extends Component
         $this->fotoactual = null;
         $this->inputFileKey = rand();
 
-        $this->funcionGuardarActualizar="guardar";
+        $this->funcionGuardarActualizar="enviar_acta2";
 
         $this->colorHeaderModal = "primary-subtle";
         $this->textoHeaderModal = "ENVIAR FORMATOS";
@@ -526,9 +526,77 @@ class SpijwebComponent extends Component
         $this->cargo_condicion = $instanciaTabla->cargo_condicion;
 
         // DATOS DEL REGISTRO
+        $this->spijwebasignado_id = $instanciaTabla->id;
+        $this->usuario = $instanciaTabla->dni;
 
         // ABRIR MODAL NUEVO - EDITAR
         $this->modalNuevoEditarAbrir = true;
+    }
+
+    public function enviar_acta2()
+    {
+        try {
+
+            $registro = InformaticasSpijwebsEntrega::findOrFail(
+                $this->spijwebasignado_id
+            );
+
+            // Correo seleccionado para el envío
+            $correo = trim($this->enviar_a);
+
+            if (empty($correo)) {
+
+                $this->dispatch(
+                    'alerta-actualizado',
+                    titulo: 'No se pudo enviar',
+                    mensaje: 'Debe ingresar o seleccionar un correo electrónico.',
+                    tipo: 'warning'
+                );
+
+                return;
+            }
+
+            // Enviar correo con el PDF adjunto
+            Mail::to($correo)->send(
+                new NotificacionInformaticaSpijweb($registro)
+            );
+
+            // El correo fue enviado correctamente
+            $registro->update([
+                'enviarformatos' => 'SI',
+            ]);
+
+            // Cerrar modal
+            $this->modalNuevoEditarAbrir = false;
+
+            // Limpiar variables
+            $this->resetExcept([
+                'filtro_anio',
+                'filtro_mes'
+            ]);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Formato enviado',
+                mensaje: 'El PDF fue enviado correctamente al correo ' . $correo,
+                tipo: 'success'
+            );
+
+        } catch (\Throwable $e) {
+
+            \Log::error('Error al enviar formato PDF', [
+                'id' => $this->spijwebasignado_id,
+                'correo' => $this->enviar_a,
+                'error' => $e->getMessage(),
+            ]);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'No se pudo enviar el formato: ' . $e->getMessage(),
+                tipo: 'error'
+            );
+        }
     }
 
     public function enviar_usuario1(InformaticasSpijwebsEntrega $instanciaTabla)
@@ -545,11 +613,11 @@ class SpijwebComponent extends Component
 
         $this->funcionGuardarActualizar="guardar";
 
-        $this->colorHeaderModal = "primary-subtle";
+        $this->colorHeaderModal = "success-subtle";
         $this->textoHeaderModal = "ENVIAR USUARIO";
-        $this->colorGuardarActualizar = "primary";
+        $this->colorGuardarActualizar = "success";
         $this->textoGuardarActualizar = "Guardar y enviar";
-        $this->colorAgregar = "outline-primary";
+        $this->colorAgregar = "outline-success";
 
         // ASIGNAMOS LOS VALORES DEL REGISTRO
         // DATOS DE LA PERSONA
@@ -588,10 +656,13 @@ class SpijwebComponent extends Component
         $this->cargo_condicion = $instanciaTabla->cargo_condicion;
 
         // DATOS DEL REGISTRO
+        $this->spijwebasignado_id = $instanciaTabla->id;
+        $this->usuario = $instanciaTabla->dni;
 
         // ABRIR MODAL NUEVO - EDITAR
         $this->modalNuevoEditarAbrir = true;
     }
+
     // ============================================================================================================================
     // GENERAL AÑO FISCAL
     // ============================================================================================================================
@@ -700,73 +771,117 @@ class SpijwebComponent extends Component
         }
     }
 
-    // ACTUALIZAR LOS ESTADOS DE ENTREGADO
 
-    public function editar_entregado(InformaticasSpijwebsEntrega $registro, $mes)
+    // ============================================================================================================================
+    // MODALES CARGAR PDF
+    // ============================================================================================================================
+
+    public function editar_pdf($spijwebAsignadoId)
     {
-        $this->modal_abierto_alerta_cambio_estado = true;
+        $this->spijwebasignado_id = $spijwebAsignadoId;
 
-        $this->contabilidades_gastosoperativos_entrega_id = $registro->id;
-        $this->mes = $mes;
+        $this->pdf_acta = null; // 🔥 CLAVE
 
-        // Obtener observación según el mes
-        $columnaObservacion = 'm' . $mes;
-
-        $this->mes_observacion = $registro->{$columnaObservacion};
+        // ABRIR MODAL CARGAR PDF
+        $this->modalPDFCargar = true;
     }
-
-    public function actualizar_entregado()
+    
+    public function actualizar_pdf()
     {
-        $registro = InformaticasSpijwebsEntrega::find(
-            $this->contabilidades_gastosoperativos_entrega_id
-        );
+        // ===== DATOS DE LA INSTANCIA =====
+        $iSpijwebAsignado = InformaticasSpijwebsEntrega::where('id', $this->spijwebasignado_id)->firstOrFail();
+        
+        // ===== VALIDAR SOLOR PDF =====
+        $this->validate([
+            'pdf_acta' => 'required|file|mimes:pdf|max:5120'
+        ]);
 
-        if (!$registro) {
-            return;
-        }
 
+        // ===== CARGAR PDF =====
         try {
 
-            $mesesPermitidos = [
-                'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
-                'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre',
-            ];
+            DB::transaction(function () use ($iSpijwebAsignado) {
 
-            $columnaObservacion = 'm' . $this->mes;
+                $usuario_id = auth()->user()->id;
+                $usuario_dni = auth()->user()->dni;
+                $usuario_datos = auth()->user()->datos;
+                $usuario_cargo = auth()->user()->cargo;
 
-            if (!in_array($this->mes, $mesesPermitidos)) {
-                return;
-            }
+                // UTILIZAR UNA FUNCIÓN PRIVADA PARA VERIFICAR SI EXISTE YA UN ARCHIVO Y ASIGNARLE EL MISMO NOMBRE
+                $rutaDocumento = $this->validarActa();
 
-            $registro->update([
-                $this->mes => $registro->{$this->mes} == 1 ? 0 : 1,
-                $columnaObservacion => $this->mes_observacion,
-            ]);
+                // ACTUALIZAR
+                $iSpijwebAsignado->update([
+                    'ruta_documento' => $rutaDocumento,
+                    'updated_user' => $usuario_datos,
+                ]);
 
-            $this->modal_abierto_alerta_cambio_estado = false;
+            });
+
+            $this->reset('pdf_acta');
 
             $this->dispatch(
                 'alerta-actualizado',
-                titulo: 'Proceso completado',
-                mensaje: 'Se actualizó correctamente.',
+                titulo: 'Documento cargado',
+                mensaje: 'El PDF se cargó correctamente.',
                 tipo: 'success'
             );
 
-            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
+            // CERRAR MODAL CARGAR PDF
+            $this->modalPDFCargar = false;
 
         } catch (\Throwable $e) {
-            dd($e);
+
+            report($e);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'Ocurrió un error al cargar el PDF.',
+                tipo: 'error'
+            );
         }
     }
 
-
-    public function cerrar_alerta_cambio_estado()
+    public function editarEvidencia()
     {
-        $this->modal_abierto_alerta_cambio_estado = false;
+        
+    }
+
+    public function actualizarEvidencia()
+    {
+        
+    }
+
+    private function validarActa()
+    {
+        $iSpijwebAsignado = InformaticasSpijwebsEntrega::findOrFail($this->spijwebasignado_id);
+
+        if (empty($iAnexoAsignado->ruta_documento)) {
+
+            $nombreArchivo = 'acta_' . $iSpijwebAsignado->id . '_' .
+                            $iSpijwebAsignado->dni . '.pdf';
+
+            return $this->pdf_acta->storeAs(
+                'informatica/spijweb/actas',
+                $nombreArchivo,
+                'public'
+            );
+        }
+
+        return $this->pdf_acta->storeAs(
+            dirname($iAnexoAsignado->ruta_documento),
+            basename($iAnexoAsignado->ruta_documento),
+            'public'
+        );
     }
 
 
+
+    // ============================================================================================================================
     // FUNCIONES AGREGAR
+    // ============================================================================================================================
+
     public function agregar_persona(Persona $ipersona){
         // DATOS DE LA PERSONA
         $this->persona_id = $ipersona->id;

@@ -31,7 +31,7 @@
                             <img src="{{ public_path('img/mpfn_encabezado.png') }}"  width="200">
                         </th>
                         <th style="text-align: right;">
-                            <h6 class="cursiva">"Año de la recuperación y consolidación de la economía peruana"</h6>
+                            <h6 class="cursiva">"Año de la Esperanza y el Fortalecimiento de la Democracia"</h6>
                             <h6>GERENCIA DE LA OFICINA DE REDES Y COMUNICACIONES</h6>
                             <p></p>
                         </th>
@@ -45,12 +45,12 @@
         <div class="content">
 
             <h3>CARTA DE RIESGO PARA USUARIOS FINALES
-                <br>"SPIJ WEB - 2025"
+                <br>"SPIJ WEB - {{ now()->year }}"
             </h3>
 
             <div>
                 <p><strong>IDENTIFICACIÓN:</strong></p>
-                <p class="justificar">Yo  {{ $datos }} ,identificado con DNI N° {{ $dni }}, que ejerzo el cargo de {{ $cargo }}, en el Área de {{ $dependencia }}.</p>
+                <p class="justificar">Yo  {{ $registro->datos }} ,identificado con DNI N° {{ $registro->dni }}, que ejerzo el cargo de {{ $registro->cargo }}, en el Dependencia de {{ $registro->dependenciadestino }} .</p>
                 <p class="justificar">
                     DECLARO que me encuentro debidamente informado que al tener las licencias, compuesta por un código
                     de Usuario y Contraseña que me permite acceder al “SPIJ WEB”, Sistema Peruano de Información Jurídica
@@ -84,6 +84,10 @@
                     <li>Afectar negativamente los convenios interinstitucionales</li>
                 </ul>
 
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
                 <p><strong>DECLARACIÓN:</strong></p>
                 <p class="justificar">
                     Comprendo las implicancias que pueden generar en caso de que se concrete el incumplimiento de algunas
@@ -102,8 +106,8 @@
                 <p></p>
 
                 <p><strong>Firma:</strong></p>
-                <p><strong>Nombres y Apellidos:</strong> {{ $datos }}</p>
-                <p><strong>DNI:</strong> {{ $dni }}</p>
+                <p><strong>Nombres y Apellidos:</strong> {{ $registro->datos }}</p>
+                <p><strong>DNI:</strong> {{ $registro->dni }}</p>
                 <p><strong>Lima:</strong> {{ \Carbon\Carbon::now()->format('d/m/Y') }}</p>
             </div>
 

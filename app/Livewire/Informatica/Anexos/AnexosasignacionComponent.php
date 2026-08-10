@@ -898,8 +898,10 @@ class AnexosasignacionComponent extends Component
         $this->modalPatrimonioBienesBuscar = false;
     } 
 
+    // ============================================================================================================================
     // FUNCIONES AGREGAR
     // ============================================================================================================================
+    
     public function agregar_persona(Persona $ipersona){
         // DATOS DE LA PERSONA
         $this->persona_id = $ipersona->id;

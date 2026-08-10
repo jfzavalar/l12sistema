@@ -41,9 +41,8 @@ class InformaticasSpijwebsEntrega extends Model
         'anio',
         'enviarformatos',
         'enviarusuario',
-        'febrero',
-        'enviarformatos',
-        'enviarusuario',
+        'ruta_evidencia',
+        'ruta_documento',
 
         'informatico_dni',
         'informatico',

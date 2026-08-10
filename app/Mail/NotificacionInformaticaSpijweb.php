@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -13,32 +14,34 @@ class NotificacionInformaticaSpijweb extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $dni,$datos,$cargo,$sede,$dependencia,$usuariospijweb,$passwordspijweb;
+    public $registro;
 
-    public function __construct($dni,$datos,$cargo,$sede,$dependencia,$usuariospijweb,$passwordspijweb)
+    public function __construct($registro)
     {
-        $this->dni = $dni;
-        $this->datos = $datos;
-        $this->cargo = $cargo;
-        $this->sede = $sede;
-        $this->dependencia = $dependencia;
-        $this->usuariospijweb = $usuariospijweb;
-        $this->passwordspijweb = $passwordspijweb;
+        $this->registro = $registro;
     }
-
 
     public function build()
     {
+        // Generar el PDF usando la vista spijweb-acta
+        $pdf = Pdf::loadView(
+            'pdf.informatica.spijweb-acta',
+            [
+                'registro' => $this->registro,
+            ]
+        );
+
         return $this->subject('DFJunin: Notificación Informática')
-                    ->view('emails.email_spijweb_userpass')
-                    ->with([
-                        'dni' => $this->dni,
-                        'datos' => $this->datos,
-                        'cargo' => $this->cargo,
-                        'sede' => $this->sede,
-                        'dependencia' => $this->dependencia,
-                        'usuariospijweb' => $this->usuariospijweb,
-                        'passwpordspijweb' => $this->passwordspijweb,
-                    ]);
+            ->view('emails.informatica.spijweb')
+            ->with([
+                'registro' => $this->registro,
+            ])
+            ->attachData(
+                $pdf->output(),
+                'Spigweb-' . $this->registro->dni . '.pdf',
+                [
+                    'mime' => 'application/pdf',
+                ]
+            );
     }
 }
