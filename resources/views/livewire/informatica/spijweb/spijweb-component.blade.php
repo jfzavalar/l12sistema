@@ -238,11 +238,11 @@
                                         <div class="row">
                                             <div class="col-xl-2">
                                                 <label for="txtusuario" class="fw-bold fs-6">Usuario</label>
-                                                <input type="textusuario" id="txt" class="form-control form-control-sm" wire:model="usuario">
+                                                <input type="textusuario" id="txt" class="form-control form-control-sm" wire:model="usuario" required>
                                             </div>
                                             <div class="col-xl-2">
                                                 <label for="txtpassword" class="fw-bold fs-6">Contraseña</label>
-                                                <input type="textpassword" id="txt" class="form-control form-control-sm" wire:model="password">
+                                                <input type="textpassword" id="txt" class="form-control form-control-sm" wire:model="password" required>
                                             </div>
                                             <div class="col-xl-8">
                                                 <label for="txtenviar" class="fw-bold fs-6">Enviar a:</label>
@@ -254,8 +254,7 @@
                                                     <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-sm flex-fill" for="email_institucional">Email institucional: {{ $correoinstitucional }}</label>
                                                 </div>
                                             </div>
-                                        </div>
-                                        {{ $enviar_a }}                                    
+                                        </div>                                 
                                     </fieldset>
                                 </div>
                             </div>

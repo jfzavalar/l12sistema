@@ -3,6 +3,7 @@
 namespace App\Livewire\Informatica\Spijweb;
 
 use App\Mail\NotificacionInformaticaSpijweb;
+use App\Mail\NotificacionInformaticaSpijwebUserPass;
 use App\Models\ContabilidadesGastosoperativosEntrega;
 use App\Models\InformaticasSpijwebsEntrega;
 use App\Models\Persona;
@@ -527,7 +528,8 @@ class SpijwebComponent extends Component
 
         // DATOS DEL REGISTRO
         $this->spijwebasignado_id = $instanciaTabla->id;
-        $this->usuario = $instanciaTabla->dni;
+        $this->usuario = $instanciaTabla->usuario;
+        $this->password = $instanciaTabla->password;
 
         // ABRIR MODAL NUEVO - EDITAR
         $this->modalNuevoEditarAbrir = true;
@@ -556,12 +558,44 @@ class SpijwebComponent extends Component
                 return;
             }
 
-            // Enviar correo con el PDF adjunto
+            /*
+            |--------------------------------------------------------------------------
+            | ACTUALIZAR USUARIO Y PASSWORD
+            |--------------------------------------------------------------------------
+            */
+
+            $registro->update([
+                'usuario' => $this->usuario,
+                'password' => $this->password,
+            ]);
+
+            /*
+            |--------------------------------------------------------------------------
+            | REFRESCAR EL REGISTRO
+            |--------------------------------------------------------------------------
+            |
+            | De esta manera $registro contiene los datos recién actualizados.
+            |
+            */
+
+            $registro->refresh();
+
+            /*
+            |--------------------------------------------------------------------------
+            | ENVIAR CORREO
+            |--------------------------------------------------------------------------
+            */
+
             Mail::to($correo)->send(
                 new NotificacionInformaticaSpijweb($registro)
             );
 
-            // El correo fue enviado correctamente
+            /*
+            |--------------------------------------------------------------------------
+            | MARCAR COMO ENVIADO
+            |--------------------------------------------------------------------------
+            */
+
             $registro->update([
                 'enviarformatos' => 'SI',
             ]);
@@ -578,7 +612,7 @@ class SpijwebComponent extends Component
             $this->dispatch(
                 'alerta-actualizado',
                 titulo: 'Formato enviado',
-                mensaje: 'El PDF fue enviado correctamente al correo ' . $correo,
+                mensaje: 'El usuario y contraseña fueron actualizados y el PDF fue enviado correctamente al correo ' . $correo,
                 tipo: 'success'
             );
 
@@ -611,7 +645,7 @@ class SpijwebComponent extends Component
         $this->fotoactual = null;
         $this->inputFileKey = rand();
 
-        $this->funcionGuardarActualizar="guardar";
+        $this->funcionGuardarActualizar="enviar_usuario2";
 
         $this->colorHeaderModal = "success-subtle";
         $this->textoHeaderModal = "ENVIAR USUARIO";
@@ -657,10 +691,77 @@ class SpijwebComponent extends Component
 
         // DATOS DEL REGISTRO
         $this->spijwebasignado_id = $instanciaTabla->id;
-        $this->usuario = $instanciaTabla->dni;
+        $this->usuario = $instanciaTabla->usuario;
+        $this->password = $instanciaTabla->password;
 
         // ABRIR MODAL NUEVO - EDITAR
         $this->modalNuevoEditarAbrir = true;
+    }
+
+    public function enviar_usuario2()
+    {
+        try {
+
+            $registro = InformaticasSpijwebsEntrega::findOrFail(
+                $this->spijwebasignado_id
+            );
+
+            // Correo seleccionado para el envío
+            $correo = trim($this->enviar_a);
+
+            if (empty($correo)) {
+
+                $this->dispatch(
+                    'alerta-actualizado',
+                    titulo: 'No se pudo enviar',
+                    mensaje: 'Debe ingresar o seleccionar un correo electrónico.',
+                    tipo: 'warning'
+                );
+
+                return;
+            }
+
+            // Enviar correo con el PDF adjunto
+            Mail::to($correo)->send(
+                new NotificacionInformaticaSpijwebUserPass($registro)
+            );
+
+            // El correo fue enviado correctamente
+            $registro->update([
+                'enviarusuario' => 'SI',
+            ]);
+
+            // Cerrar modal
+            $this->modalNuevoEditarAbrir = false;
+
+            // Limpiar variables
+            $this->resetExcept([
+                'filtro_anio',
+                'filtro_mes'
+            ]);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Credenciales',
+                mensaje: 'Usuario y Password fue enviado correctamente al correo ' . $correo,
+                tipo: 'success'
+            );
+
+        } catch (\Throwable $e) {
+
+            \Log::error('Error al enviar formato PDF', [
+                'id' => $this->spijwebasignado_id,
+                'correo' => $this->enviar_a,
+                'error' => $e->getMessage(),
+            ]);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'No se pudo enviar el formato: ' . $e->getMessage(),
+                tipo: 'error'
+            );
+        }
     }
 
     // ============================================================================================================================
@@ -762,6 +863,7 @@ class SpijwebComponent extends Component
                     'anio' => Carbon::now()->year,
                     'enviarformatos' => "NO",
                     'enviarusuario' => "NO",
+                    'usuario' => $persona->dni,
                     
                     'activo' => 1,
                     'created_user' => $usuario,

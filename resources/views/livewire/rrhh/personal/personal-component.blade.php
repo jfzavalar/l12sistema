@@ -100,7 +100,7 @@
                             <th scope="col" class="table-danger">ROTACIÓN: UBICACIÓN FÍSICA</th>
                             <th scope="col">MEDIOS DE COMUNICACIÓN</th>
                             <th scope="col">CONDICIÓN</th>
-                            <th scope="col" colspan="2"><i class="fa-solid fa-gears"></i></th>
+                            <th scope="col" colspan="2" class="table-dark"><i class="fa-solid fa-gears"></i></th>
                             {{-- <th scope="col"><i class="fa-solid fa-gears"></i></th> --}}
                         </tr>
                     </thead>
@@ -270,7 +270,7 @@
                                                 </ul>
                                             </div>
                                         @endcan
-                                        <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#historialModal" wire:click="historial_documentos('{{ $item->dni }}')">
+                                        <button type="button" class="btn btn-outline-info btn-xs" data-bs-toggle="modal" data-bs-target="#historialModal" wire:click="historial_documentos('{{ $item->dni }}')">
                                             <i class="fa-solid fa-timeline"></i><br>Historial
                                         </button>
                                         {{-- <button type="button" class="btn btn-outline-secondary btn-xs" data-bs-toggle="modal" data-bs-target="#verDetallesModal" wire:click="editar({{ $item->id }})">
@@ -282,7 +282,14 @@
                                             </button>
                                         @endcan
                                     </div>
-                                </td> 
+                                </td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-outline-dark btn-xs">
+                                            <i class="fa-solid fa-file-zipper"></i>Legajos
+                                        </button>
+                                    </div>
+                                </td>
                             </tr>
                         @empty
                             <tr>
