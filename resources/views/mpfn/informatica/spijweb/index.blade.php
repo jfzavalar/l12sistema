@@ -5,7 +5,7 @@
 
 @section('content')
 
-    <livewire:informatica.spijweb.spijwebcomponent />
+    <livewire:informatica.spijweb.spijweb-component />
 @endsection
 
 @section('css')
