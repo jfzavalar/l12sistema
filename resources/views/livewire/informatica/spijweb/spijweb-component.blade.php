@@ -82,9 +82,11 @@
                             {{-- <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3 me-1" wire:click="nuevo">
                                 <i class="fa-solid fa-file"></i> Nuevo
                             </button> --}}
-                            <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3 me-1" wire:click="generarListaDeEntregaDeSpijweb">
-                                <i class="fa-solid fa-list"></i> Generar Año Fiscal
-                            </button>
+                            @can('mpfn.informatica.spijweb.create')
+                                <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3 me-1" wire:click="generarListaDeEntregaDeSpijweb">
+                                    <i class="fa-solid fa-list"></i> Generar Año Fiscal
+                                </button>
+                            @endcan
                             {{-- @can('mpfn.rrhh.personal.create')
                                 <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="generarGastosOperativos">
                                     <i class="fa-solid fa-file"></i> Genera Nuevo Año Fiscal
@@ -106,8 +108,10 @@
                             </th>
                             <th scope="col" class="table-danger">UBICACIÓN FÍSICA</th>
                             <th scope="col">MEDIOS DE COMUNICACIÓN</th>
-                            <th scope="col" class="table-success">FORMATOS</th>
-                            <th scope="col" class="table-success">USUARIO Y CONTRASEÑA</th>
+                            @can('mpfn.informatica.spijweb.create')
+                                <th scope="col" class="table-success">FORMATOS</th>
+                                <th scope="col" class="table-success">USUARIO Y CONTRASEÑA</th>
+                            @endcan
                             <th scope="col" colspan="2" class="table-dark"><i class="fa-solid fa-gears"></i></th>
                         </tr>
                     </thead>
@@ -141,31 +145,37 @@
                                     <br><b>Email institucional:</b> {{ $item->correoinstitucional }}
                                     <br><b>Cel. institucional:</b> {{ $item->celinstitucional }}
                                 </td>
-                                <td class="text-center">
-                                    <button type="button" class="btn btn-outline-{{ $item->enviarformatos === 'NO' ? 'danger' : 'info' }} btn-xs" wire:click="enviar_acta1({{ $item->id }})">
-                                        <i class="fa-solid fa-envelope"></i><br>Enviar
-                                    </button>
-                                </td>
-                                <td class="text-center">
-                                    <button type="button" class="btn btn-outline-{{ $item->enviarusuario === 'NO' ? 'danger' : 'info' }} btn-xs" wire:click="enviar_usuario1({{ $item->id }})">
-                                        <i class="fa-solid fa-envelope"></i><br>Enviar
-                                    </button>
-                                </td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-outline-success btn-xs">
-                                            <i class="fa-solid fa-pen-to-square"></i><br>Editar
+                                @can('mpfn.informatica.spijweb.create')
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-outline-{{ $item->enviarformatos === 'NO' ? 'danger' : 'info' }} btn-xs" wire:click="enviar_acta1({{ $item->id }})">
+                                            <i class="fa-solid fa-envelope"></i><br>Enviar
                                         </button>
-                                    </div>
-                                </td>
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-outline-{{ $item->enviarusuario === 'NO' ? 'danger' : 'info' }} btn-xs" wire:click="enviar_usuario1({{ $item->id }})">
+                                            <i class="fa-solid fa-envelope"></i><br>Enviar
+                                        </button>
+                                    </td>
+                                @endcan
+                                @can('mpfn.informatica.spijweb.destroy')
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-outline-success btn-xs">
+                                                <i class="fa-solid fa-pen-to-square"></i><br>Editar
+                                            </button>
+                                        </div>
+                                    </td>
+                                @endcan
                                 <td>
                                     <div class="btn-group" role="group">
                                         {{-- <a type="button" class="btn btn-outline-naranja btn-xs" href="{{ route('pdf.informatica.anexotelefonico-acta', ['id' => $item->id]) }}" target="_blank">
                                             <i class="fa-solid fa-file-pdf"></i><br>Acta
                                         </a> --}}
-                                        <button type="button" class="btn btn-outline-warning btn-xs" wire:click="editar_pdf({{ $item->id }})">
-                                            <i class="fa-solid fa-upload"></i><br>Cargar
-                                        </button>
+                                        @can('mpfn.informatica.spijweb.create')
+                                            <button type="button" class="btn btn-outline-warning btn-xs" wire:click="editar_pdf({{ $item->id }})">
+                                                <i class="fa-solid fa-upload"></i><br>Cargar
+                                            </button>
+                                        @endcan
                                         @if($item->ruta_documento)
                                             <a type="button" class="btn btn-outline-dark btn-xs" href="{{ asset('storage/'.$item->ruta_documento) }}" target="_blank">
                                                 <i class="fa-solid fa-eye"></i> <i class="fa-solid fa-file-signature"></i><br> Firmado
