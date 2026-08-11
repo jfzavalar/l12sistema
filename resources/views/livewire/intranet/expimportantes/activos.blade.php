@@ -83,11 +83,16 @@
                                         <i class="fa-solid fa-timeline"></i><br>Historial
                                     </button>                                  
                                 </td>
-                            </tr>                            
+                            </tr>                        
                         @empty
                             
                         @endforelse
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="9">{{ $lista_activos->links() }}</td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
