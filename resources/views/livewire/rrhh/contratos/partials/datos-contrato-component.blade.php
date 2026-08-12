@@ -29,7 +29,7 @@
     </div>
     
     <div class="col-xl-4 col-sm-12">
-        <label class="fw-bold fs-6">Contrato</label>
+        <label for="filecontrato" class="fw-bold fs-6">Contrato</label>
         <div class="input-group">
             <button class="btn btn-outline-dark btn-xs" type="button" id="btnimprimircontrato">
                 <i class="fa-solid fa-print"></i> Imprimir

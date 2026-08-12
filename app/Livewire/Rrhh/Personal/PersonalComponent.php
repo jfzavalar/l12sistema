@@ -9,6 +9,7 @@ use App\Models\Personales_cargo;
 use App\Models\Personales_dependencia;
 use App\Models\Personales_despacho;
 use App\Models\Personales_sede;
+use App\Models\PersonalesLegajo;
 use App\Models\PersonalesRotacione;
 use App\Models\Tbl_cargo;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -27,6 +28,23 @@ class PersonalComponent extends Component
     use WithFileUploads;
     use WithPagination;
     protected $paginationTheme = "bootstrap";
+
+    // VARIABLES PARA MODALES
+    public $modalNuevoEditarAbrir = false, $modalReportesFiltros = false;
+
+    public $modalPersonalBuscar = false;
+    public $modalPersonalSedeBuscar = false;
+    public $modalPersonalDependenciaBuscar = false;
+    public $modalPersonalDespachoBuscar = false;
+    public $modalPersonalCargoBuscar = false;
+    public $modalInformaticaServicioBuscar = false;
+    public $modalInformaticaServicioDetalleBuscar = false;
+    public $modalPatrimonioBienesBuscar = false;
+    public $modalPDFCargarLegajo = false;
+    public $modalPDFEvidenciaCargar = false;
+    public $modalHistorial = false;
+    public $modalLegajos = false;
+
 
     public $habilitarInputs = "";
     public $mostrarBtnBuscarDni = "d-none";
@@ -47,7 +65,7 @@ class PersonalComponent extends Component
 
 
     // Variables de búsqueda
-    public $search, $searchlicencias,$searchrenuncias,$searchhistorial, $searchpersonas, $searchsedes,$searchdependencias,$searchdespachos,$searchcargos;
+    public $search, $searchlicencias,$searchrenuncias,$searchhistorial, $searchpersonas, $searchsedes,$searchdependencias,$searchdespachos,$searchcargos,$searchhistoriallegajos,$historialLegajosPage;
     public function updatingSearch(){
         $this->resetPage('personalesPage');
     }
@@ -74,6 +92,9 @@ class PersonalComponent extends Component
     }
     public function updatingSearchcargos(){
         $this->resetPage('cargosPage');
+    }
+    public function updatingSearchhistoriallegajos(){
+        $this->resetPage('historiallegajosPage');
     }
 
     Public $filtrosede, $filtrodependencia;
@@ -135,6 +156,14 @@ class PersonalComponent extends Component
             $fecha_iniciou,
             $fecha_finu,
             $motivo_ubicacion;
+
+    public $legajos_id,
+            $motivo,
+            $titulodocumento,
+            $fechaemision,
+            $ruta_legajo,
+            $informatico_dni,
+            $informatico;
 
     public $pdf_acta;
 
@@ -294,6 +323,16 @@ class PersonalComponent extends Component
             ->orderBy('personales.id','desc')
             ->paginate(10, ['personas.*'], 'historialPage');
 
+        $lista_legajos = PersonalesLegajo::where('activo',1)
+            ->where('dni', $this->dni)
+            ->when($this->searchhistoriallegajos, function ($query) {
+                $query->where(function ($q) {
+                    $q->where('titulodocumento', 'like', '%' . $this->searchhistoriallegajos . '%');
+                });
+            })
+            ->orderBy('id','desc')
+            ->paginate(10, ['*'], 'historialLegajosPage');
+
         $lista_historial_rotaciones = Persona::join('personales_rotaciones', 'personas.id', '=', 'personales_rotaciones.persona_id')
             ->select('personas.*',
                 'personales_rotaciones.id as personal_id',
@@ -363,7 +402,7 @@ class PersonalComponent extends Component
             ->get();
 
         return view('livewire.rrhh.personal.personal-component',
-                        compact('lista_activos','lista_inactivos','lista_licencias','lista_historial','lista_historial_rotaciones',
+                        compact('lista_activos','lista_inactivos','lista_licencias','lista_historial','lista_historial_rotaciones','lista_legajos',
                                     'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos','lista_cargos2'));
     }
 
@@ -1481,8 +1520,181 @@ class PersonalComponent extends Component
 
 
 
-    // FUNCIONES PARA CARGAR PDF
+    // ============================================================================================================================
+    // MODALES CARGAR PDF
+    // ============================================================================================================================
 
+    public function nuevo_pdf()
+    {
+        // DATOS DE LA PERSONA
+        $iPersona = Persona::where('dni', $this->dni)->where('activo','1')->firstOrFail();
+        $this->persona_id = $iPersona->id;
+        $this->dni = $iPersona->dni;
+        $this->appaterno = $iPersona->appaterno;
+        $this->apmaterno = $iPersona->apmaterno;
+        $this->nombres = $iPersona->nombres;
+        $this->datos = $iPersona->datos;
+
+        $this->correopersonal = $iPersona->correopersonal;
+        $this->correoinstitucional = $iPersona->correoinstitucional;
+
+        // ===== DATOS PERSONAL =====
+        $iPersonal = Personale::where('persona_dni', $this->dni)->where('activo','1')->firstOrFail();
+
+        $this->personal_id = $iPersonal->id;
+        $this->regimen = $iPersonal->regimen;
+        $this->tipo_regimen = $iPersonal->tipo_regimen;
+        $this->cargo = $iPersonal->cargo;
+        $this->cargo_condicion = $iPersonal->cargo_condicion;
+
+        $this->codsedeorigen = $iPersonal->codsedeorigen;
+        $this->sedeorigen = $iPersonal->sedeorigen;
+        $this->coddependenciaorigen = $iPersonal->coddependenciaorigen;
+        $this->dependenciaorigen = $iPersonal->dependenciaorigen;
+        $this->coddespachoorigen = $iPersonal->coddespachoorigen;
+        $this->despachoorigen = $iPersonal->despachoorigen;
+
+        $this->codsededestino = $iPersonal->codsededestino;
+        $this->sededestino = $iPersonal->sededestino;
+        $this->coddependenciadestino = $iPersonal->coddependenciadestino;
+        $this->dependenciadestino = $iPersonal->dependenciadestino;
+        $this->coddespachodestino = $iPersonal->coddespachodestino;
+        $this->despachodestino = $iPersonal->despachodestino;
+
+        $this->celpersonal = $iPersonal->celpersonal;
+        $this->celinstitucional = $iPersonal->celinstitucional;
+
+        // ABRIR MODAL CARGAR PDF
+        $this->modalPDFCargarLegajo = true;
+    }
+
+    public function guardar_pdf()
+    {
+        $this->resetValidation();
+        $this->resetErrorBag();
+
+        // Validar PDF
+        $this->validate([
+            'pdf_acta' => 'required|file|mimes:pdf|max:5120',
+        ]);
+
+        try {
+
+            $registro = null;
+
+            DB::transaction(function () use (&$registro) {
+
+                $usuario_id    = auth()->user()->id;
+                $usuario_dni   = auth()->user()->dni;
+                $usuario_datos = auth()->user()->datos;
+                $usuario_cargo = auth()->user()->cargo;
+
+                // =====================================================
+                // 1. CREAR REGISTRO
+                // =====================================================
+
+                $registro = PersonalesLegajo::create([
+
+                    // DATOS DE LA PERSONA
+                    'persona_id' => $this->persona_id,
+                    'dni' => $this->dni,
+                    'appaterno' => $this->appaterno,
+                    'apmaterno' => $this->apmaterno,
+                    'nombres' => $this->nombres,
+                    'datos' => $this->datos,
+                    'celpersonal' => $this->celpersonal,
+                    'celinstitucional' => $this->celinstitucional,
+
+                    // DATOS DEL PERSONAL
+                    'personal_id' => $this->personal_id,
+                    'regimen' => $this->regimen,
+                    'tipo_regimen' => $this->tipo_regimen,
+                    'cargo' => $this->cargo,
+                    'cargo_condicion' => $this->cargo_condicion,
+
+                    'codsedeorigen' => $this->codsedeorigen,
+                    'sedeorigen' => $this->sedeorigen,
+                    'coddependenciaorigen' => $this->coddependenciaorigen,
+                    'dependenciaorigen' => $this->dependenciaorigen,
+                    'coddespachoorigen' => $this->coddespachoorigen,
+                    'despachoorigen' => $this->despachoorigen,
+
+                    'codsededestino' => $this->codsededestino,
+                    'sededestino' => $this->sededestino,
+                    'coddependenciadestino' => $this->coddependenciadestino,
+                    'dependenciadestino' => $this->dependenciadestino,
+                    'coddespachodestino' => $this->coddespachodestino,
+                    'despachodestino' => $this->despachodestino,
+
+                    'correopersonal' => $this->correopersonal,
+                    'correoinstitucional' => $this->correoinstitucional,
+
+                    // DATOS LEGAJO
+                    'motivo' => $this->motivo,
+                    'titulodocumento' => $this->titulodocumento,
+                    'fechaemision' => $this->fechaemision,
+
+                    // Inicialmente vacío
+                    'ruta_legajo' => null,
+
+                    'informatico_dni' => $this->informatico_dni,
+                    'informatico' => $iinformatico->datos ?? null,
+
+                    'activo' => '1',
+
+                    'created_user' => $usuario_datos,
+                    'updated_user' => $usuario_datos,
+                ]);
+
+                // =====================================================
+                // 2. GENERAR NOMBRE DEL PDF
+                // =====================================================
+
+                $nombreArchivo = $registro->id . '_' .
+                    $this->dni . '_' .
+                    time() . '.pdf';
+
+                // =====================================================
+                // 3. GUARDAR PDF
+                // =====================================================
+
+                $rutaPDF = $this->pdf_acta->storeAs(
+                    'archivos/rrhh/personal/legajos',
+                    $nombreArchivo,
+                    'public'
+                );
+
+                // =====================================================
+                // 4. ACTUALIZAR RUTA DEL PDF
+                // =====================================================
+
+                $registro->update([
+                    'ruta_legajo' => $rutaPDF,
+                ]);
+            });
+
+            // =====================================================
+            // MENSAJE DE ÉXITO
+            // =====================================================
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Legajo guardado',
+                mensaje: 'El documento PDF se cargó correctamente.',
+                tipo: 'success'
+            );
+
+            // Limpiar archivo temporal
+            $this->reset('pdf_acta');
+
+            // Cerrar modal
+            $this->modalPDFCargarLegajo = false;
+
+        } catch (\Throwable $e) {
+
+            dd($e);
+        }
+    }
 
     public function editar_pdf($personal_id)
     {
@@ -1540,9 +1752,57 @@ class PersonalComponent extends Component
         }
     }
 
+    private function validarActa()
+    {
+        $iPersonales = PersonalesLegajo::findOrFail($this->anexoasignado_id);
+
+        if (empty($iAnexoAsignado->ruta_documento)) {
+
+            $nombreArchivo = 'acta_' . $iPersonales->id . '_' .
+                            $iPersonales->anexo . '_' .
+                            $iPersonales->dni . '.pdf';
+
+            return $this->pdf_acta->storeAs(
+                'informatica/anexos/actas',
+                $nombreArchivo,
+                'public'
+            );
+        }
+
+        return $this->pdf_acta->storeAs(
+            dirname($iAnexoAsignado->ruta_documento),
+            basename($iAnexoAsignado->ruta_documento),
+            'public'
+        );
+    }
+
+    // ============================================================================================================================
+    // LEGAJOS
+    // ============================================================================================================================
+
+    public function legajos1($vPersonaDni,$vPersonaDatos)
+    {
+
+        $this->dni = $vPersonaDni;
+        $this->datos = $vPersonaDatos;
+
+        // ABRIMOS EL MODAL
+        $this->modalLegajos = true;
+    }
+
+    public function legajos_cerrar()
+    {
+        $this->modalLegajos = false;
+    }
+
+    // ============================================================================================================================
+    // MODALES CARGAR PDF
+    // ============================================================================================================================
 
 
+    // ============================================================================================================================
     // FUNCIONES PRIVADAS PARA REUTILIZAR
+    // ============================================================================================================================
 
     private function ver_persona(Persona $ipersona)
     {
