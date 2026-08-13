@@ -30,7 +30,10 @@ class PersonalComponent extends Component
     protected $paginationTheme = "bootstrap";
 
     // VARIABLES PARA MODALES
-    public $modalNuevoEditarAbrir = false, $modalReportesFiltros = false;
+    public $modalNuevoEditarAbrir = false, 
+            $modalReportesFiltros = false,
+            $modalLicenciasListar = false,
+            $modalRenunciasListar = false;
 
     public $modalPersonalBuscar = false;
     public $modalPersonalSedeBuscar = false;
@@ -40,6 +43,7 @@ class PersonalComponent extends Component
     public $modalInformaticaServicioBuscar = false;
     public $modalInformaticaServicioDetalleBuscar = false;
     public $modalPatrimonioBienesBuscar = false;
+    public $modalPDFCargar = false;
     public $modalPDFCargarLegajo = false;
     public $modalPDFEvidenciaCargar = false;
     public $modalHistorial = false;
@@ -65,7 +69,18 @@ class PersonalComponent extends Component
 
 
     // Variables de búsqueda
-    public $search, $searchlicencias,$searchrenuncias,$searchhistorial, $searchpersonas, $searchsedes,$searchdependencias,$searchdespachos,$searchcargos,$searchhistoriallegajos,$historialLegajosPage;
+    public $search, 
+            $searchlicencias,
+            $searchrenuncias,
+            $searchhistorial, 
+            $searchpersonas, 
+            $searchsedes,
+            $searchdependencias,
+            $searchdespachos,
+            $searchcargos,
+            $searchhistoriallegajos,
+            $historialLegajosPage;
+
     public function updatingSearch(){
         $this->resetPage('personalesPage');
     }
@@ -97,7 +112,7 @@ class PersonalComponent extends Component
         $this->resetPage('historiallegajosPage');
     }
 
-    Public $filtrosede, $filtrodependencia;
+    public $filtrosede, $filtrodependencia;
     public $filtrotipodocumento;
     public $filtroregimen;
     public $filtrocargo;
@@ -202,6 +217,59 @@ class PersonalComponent extends Component
         }
     }
 
+    // ============================================================================================================================
+    // FUNCIONES DE FILTRO
+    // ============================================================================================================================
+    
+    public $filtro_fiscales,$filtro_fsuperior,$filtro_fprovincial,$filtro_fasuperior,$filtro_faprovincial;
+
+    public function filtrarTotal($value = null)
+    {
+        $this->resetFiltros();
+    }
+    public function filtrarFiscales($value = null)
+    {
+        $this->resetFiltros();
+        $this->filtro_fiscales = 'FISCAL';
+    }
+    public function filtrarFSuperior($value = null)
+    {
+        $this->resetFiltros();
+        $this->filtro_fsuperior = 'FISCAL SUPERIOR';
+    }
+    public function filtrarFProvincial($value = null)
+    {
+        $this->resetFiltros();
+        $this->filtro_fprovincial = 'FISCAL PROVINCIAL';
+    }
+    public function filtrarFASuperior($value = null)
+    {
+        $this->resetFiltros();
+        $this->filtro_fasuperior = 'FISCAL ADJUNTO SUPERIOR';
+    }
+    public function filtrarFAProvincial($value = null)
+    {
+        $this->resetFiltros();
+        $this->filtro_faprovincial = 'FISCAL ADJUNTO PROVINCIAL';
+    }
+    
+    
+    public function resetFiltros()
+    {
+        $this->search = null;
+        $this->filtro_fiscales = null;
+        $this->filtro_fsuperior = null;
+        $this->filtro_fprovincial = null;
+        $this->filtro_fasuperior = null;
+        $this->filtro_faprovincial = null;
+
+        $this->resetPage('personalesPage');
+    }
+
+    // ============================================================================================================================
+    // RENDERIZADO DE PÁGINA
+    // ============================================================================================================================
+
     public function render()
     {
         $lista_activos = $this->queryConFiltros()
@@ -229,6 +297,41 @@ class PersonalComponent extends Component
                     ->orWhere('personas.datos', 'like', '%' . $this->search . '%');
                 });
             })
+            // FISCALES
+            ->when($this->filtro_fiscales, fn($q) => $q->where('personales.cargo', 'like', $this->filtro_fiscales . '%'))
+
+            // FISCAL SUPERIOR
+            ->when($this->filtro_fsuperior, function ($q) {
+                $q->where(
+                    'personales.cargo',
+                    $this->filtro_fsuperior
+                );
+            })
+
+            // FISCAL PROVINCIAL
+            ->when($this->filtro_fprovincial, function ($q) {
+                $q->where(
+                    'personales.cargo',
+                    $this->filtro_fprovincial
+                );
+            })
+
+            // FISCAL ADJUNTO SUPERIOR
+            ->when($this->filtro_fasuperior, function ($q) {
+                $q->where(
+                    'personales.cargo',
+                    $this->filtro_fasuperior
+                );
+            })
+
+            // FISCAL ADJUNTO PROVINCIAL
+            ->when($this->filtro_faprovincial, function ($q) {
+                $q->where(
+                    'personales.cargo',
+                    $this->filtro_faprovincial
+                );
+            })
+            // FILTROS OTROS
             ->when($this->filtrosede, fn($q) => $q->where('personales.codsededestino', $this->filtrosede))
             ->when($this->filtrodependencia, fn($q) => $q->where('personales.coddependenciadestino', $this->filtrodependencia))
             ->when($this->filtroregimen, fn($q) => $q->where('personales.regimen', 'like', '%' . $this->filtroregimen . '%'))
@@ -236,7 +339,7 @@ class PersonalComponent extends Component
             ->orderBy('personales.id', 'desc')
             ->paginate(30, ['personas.*'], 'personalesPage');
 
-        $lista_inactivos = $this->queryConFiltros()
+        $lista_renuncias = $this->queryConFiltros()
             ->select(
                 'personas.*',
                 'personales.persona_id',
@@ -262,7 +365,7 @@ class PersonalComponent extends Component
             ->where('personales.activo', "1")
             ->where('personales.tipo_documento','RENUNCIA')
             ->orderBy('personales.id', 'desc')
-            ->paginate(5, ['personas.*'], 'renunciasPage');
+            ->paginate(30, ['personas.*'], 'renunciasPage');
 
         $lista_licencias = $this->queryConFiltros()
             ->select(
@@ -290,7 +393,7 @@ class PersonalComponent extends Component
             ->where('personales.activo', "1")
             ->where('personales.tipo_documento','LICENCIA')
             ->orderBy('personales.id', 'desc')
-            ->paginate(5, ['personas.*'], 'licenciasPage');
+            ->paginate(30, ['personas.*'], 'licenciasPage');
 
         $lista_historial = $this->queryConFiltros()
             ->select('personas.*',
@@ -321,7 +424,45 @@ class PersonalComponent extends Component
                 });
             })
             ->orderBy('personales.id','desc')
-            ->paginate(10, ['personas.*'], 'historialPage');
+            ->paginate(30, ['personas.*'], 'historialPage');
+
+        $estadisticas = $this->queryConFiltros()
+            ->selectRaw("
+                COUNT(*) as total,
+
+                SUM(CASE
+                    WHEN cargo IN (
+                        'FISCAL SUPERIOR',
+                        'FISCAL PROVINcIAL',
+                        'FISCAL ADJUNTO SUPERIOR',
+                        'FISCAL ADJUNTO PROVINCIAL'
+                    )
+                    THEN 1 ELSE 0
+                END) as fiscales,
+
+                SUM(CASE
+                    WHEN cargo = 'FISCAL SUPERIOR'
+                    THEN 1 ELSE 0
+                END) as fsuperior,
+
+                SUM(CASE
+                    WHEN cargo = 'FISCAL PROVINCIAL'
+                    THEN 1 ELSE 0
+                END) as fprovincial,
+
+                SUM(CASE
+                    WHEN cargo = 'FISCAL ADJUNTO SUPERIOR'
+                    THEN 1 ELSE 0
+                END) as fasuperior,
+
+                SUM(CASE
+                    WHEN cargo = 'FISCAL ADJUNTO PROVINCIAL'
+                    THEN 1 ELSE 0
+                END) as faprovincial
+            ")
+            ->where('personales.tipo_documento','CONTRATO')
+            ->where('personales.activo', "1")
+            ->first();
 
         $lista_legajos = PersonalesLegajo::where('activo',1)
             ->where('dni', $this->dni)
@@ -346,12 +487,6 @@ class PersonalComponent extends Component
                 'personales_rotaciones.fecha_finu',
                 'personales_rotaciones.ruta_documento')
             ->where('personales_rotaciones.persona_dni', $this->dni)
-            // ->when($this->searchhistorial, function ($query) {
-            //     $query->where(function ($q) {
-            //         $q->where('personales.numero_convocatoria', 'like', '%' . $this->searchhistorial . '%')
-            //         ->orWhere('personales.tipo_documento', 'like', '%' . $this->searchhistorial . '%');
-            //     });
-            // })
             ->orderByDesc('id')
             ->paginate(10, ['*'], 'historialrotacionesPage');
 
@@ -402,31 +537,18 @@ class PersonalComponent extends Component
             ->get();
 
         return view('livewire.rrhh.personal.personal-component',
-                        compact('lista_activos','lista_inactivos','lista_licencias','lista_historial','lista_historial_rotaciones','lista_legajos',
+                        compact('lista_activos','lista_renuncias','lista_licencias','lista_historial','estadisticas','lista_historial_rotaciones','lista_legajos',
                                     'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos','lista_cargos2'));
     }
 
     private function queryConFiltros()
     {
         return Persona::join('personales', 'personas.id', '=', 'personales.persona_id');
-
-            // ->when($tipoDocumento, function ($query) use ($tipoDocumento) {
-            //     $query->where('personales.tipo_documento', $tipoDocumento);
-            // })
-
-            // ->when($this->search, function ($query) {
-            //     $query->where(function ($q) {
-            //         $q->where('personas.dni', 'like', '%' . $this->search . '%')
-            //         ->orWhere('personas.datos', 'like', '%' . $this->search . '%');
-            //     });
-            // });
-
-            // ->when($this->filtrosede, fn($q) => $q->where('personales.codsedeorigen', $this->filtrosede))
-            // ->when($this->filtrodependencia, fn($q) => $q->where('personales.coddependenciaorigen', $this->filtrodependencia))
-            // ->when($this->filtrotipodocumento, fn($q) => $q->where('personales.tipo_documento', 'like', '%' . $this->filtrotipodocumento . '%'));
-            // ->when($this->filtroregimen, fn($q) => $q->where('personales.regimen', 'like', '%' . $this->filtroregimen . '%'))
-            // ->when($this->filtrocargo, fn($q) => $q->where('personales.cargo', '=', $this->filtrocargo));
     }
+
+    // ============================================================================================================================
+    // REGLAS DE VALIDACIÓN
+    // ============================================================================================================================
 
     protected function rules(){
         return [
@@ -468,15 +590,13 @@ class PersonalComponent extends Component
         'regimen.required' => 'Campo requerido',
         'cargo.required' => 'Campo requerido',
 
-        // 'fecha_inicio.required' => 'Campo requerido',
-        // 'fecha_fin.required' => 'Campo requerido',
-
-        // 'fecha_inicio.before_or_equal' => 'La fecha de inicio no puede ser mayor a la fecha de fin.',
-        // 'fecha_fin.after_or_equal' => 'La fecha de fin no puede ser menor a la fecha de inicio.',
-
         'pdf_acta.mimes' => 'Solo se permiten archivos PDF.',
         'pdf_acta.max' => 'El archivo no debe superar 5MB.',
     ];
+
+    // ============================================================================================================================
+    // FUNCIONES CRUD
+    // ============================================================================================================================
 
     public function nuevo()
     {
@@ -494,13 +614,16 @@ class PersonalComponent extends Component
         $this->mostrarBtnBuscarDni = "d-none";
 
         $this->colorHeaderModal = "primary-subtle";
-        $this->textoHeaderModal = "Nuevo";
+        $this->textoHeaderModal = "NUEVO";
         $this->colorGuardarActualizar = "primary";
         $this->textoGuardarActualizar = "Guardar";
         $this->colorAgregar = "outline-primary";
 
         $this->tipo_documento = "CONTRATO";
         $this->bandera_documento = "CONTRATO";
+
+        // ABRIR MODAL NUEVO - EDITAR
+        $this->modalNuevoEditarAbrir = true;
     }
 
     public function guardar()
@@ -511,9 +634,9 @@ class PersonalComponent extends Component
 
             DB::transaction(function () {
 
-                $usuario = auth()->user()->datos; // Mejor que usar propiedad pública
+                $usuario = auth()->user()->datos;
 
-                // 📌 Subir FOTO si existe
+                // CARGAR FOTO SI EXISTE
                 $rutaFoto = null;
 
                 if ($this->foto) {
@@ -531,7 +654,6 @@ class PersonalComponent extends Component
                 }
 
                 // GUARDAR CAMPOS DE PERSONA
-
                 $persona = Persona::create([
                     'dni' => $this->dni,
                     'appaterno' => strtoupper($this->appaterno),
@@ -543,7 +665,7 @@ class PersonalComponent extends Component
                     'fechanacimiento' => $this->fechanacimiento,
                     'celpersonal' => $this->celpersonal,
                     'correopersonal' => $this->correopersonal,
-                    'foto' => $rutaFoto, // 🔥 GUARDAMOS FOTO
+                    'foto' => $rutaFoto,
                     'activo' => '1',
                     'created_user' => $usuario,
                     'updated_user' => $usuario,
@@ -578,12 +700,12 @@ class PersonalComponent extends Component
                     'celinstitucional' => $this->celinstitucional,
                     'correoinstitucional' => $this->correoinstitucional,
 
-                    'numero_convocatoria' => $this->numero_convocatoria,
-                    'tipo_documento' => $this->tipo_documento,
+                    'numero_convocatoria' => strtoupper($this->numero_convocatoria),
+                    'tipo_documento' => strtoupper($this->tipo_documento),
+
                     'fecha_inicio' => $this->fecha_inicio,
                     'fecha_fin' => $this->fecha_fin,
 
-                    // 🔥 Guardamos la ruta real del archivo
                     'ruta_documento' => $rutaDocumento,
 
                     'activo' => '1',
@@ -591,8 +713,6 @@ class PersonalComponent extends Component
                     'updated_user' => $usuario,
                 ]);
             });
-
-            // $this->resetExcept('searchPersonal');
 
             $this->dispatch(
                 'alerta-actualizado',
@@ -615,6 +735,9 @@ class PersonalComponent extends Component
                 tipo: 'error'
             );
         }
+
+        // CERRAR MODAL NUEVO - EDITAR
+        $this->modalNuevoEditarAbrir = false;
     }
 
     public function editar(Persona $ipersona)
@@ -654,10 +777,12 @@ class PersonalComponent extends Component
         $ipersonal = Personale::where('persona_dni', $this->dni)->where('activo','1')->firstOrFail();
 
         $this->personal_id = $ipersonal->id;
+
         $this->regimen = $ipersonal->regimen;
         $this->tipo_regimen = $ipersonal->tipo_regimen;
         $this->cargo = $ipersonal->cargo;
         $this->cargo_condicion = $ipersonal->cargo_condicion;
+
         $this->codsedeorigen = $ipersonal->codsedeorigen;
         $this->sedeorigen = $ipersonal->sedeorigen;
         $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
@@ -665,12 +790,12 @@ class PersonalComponent extends Component
         $this->coddespachoorigen = $ipersonal->coddespachoorigen;
         $this->despachoorigen = $ipersonal->despachoorigen;
 
-        // $this->codsededestino = $ipersonal->codsededestino;
-        // $this->sededestino = $ipersonal->sededestino;
-        // $this->coddependenciadestino = $ipersonal->coddependenciadestino;
-        // $this->dependenciadestino = $ipersonal->dependenciadestino;
-        // $this->coddespachodestino = $ipersonal->coddespachodestino;
-        // $this->despachodestino = $ipersonal->despachodestino;
+        $this->codsededestino = $ipersonal->codsededestino;
+        $this->sededestino = $ipersonal->sededestino;
+        $this->coddependenciadestino = $ipersonal->coddependenciadestino;
+        $this->dependenciadestino = $ipersonal->dependenciadestino;
+        $this->coddespachodestino = $ipersonal->coddespachodestino;
+        $this->despachodestino = $ipersonal->despachodestino;
 
         $this->celinstitucional = $ipersonal->celinstitucional;
         $this->correoinstitucional = $ipersonal->correoinstitucional;
@@ -681,6 +806,14 @@ class PersonalComponent extends Component
         $this->fecha_inicio = $ipersonal->fecha_inicio;
         $this->fecha_fin = $ipersonal->fecha_fin;
         $this->ruta_documento = $ipersonal->ruta_documento;
+
+        // CERRAR MODAL LISTA HISTORIAL Y RENUCNIAS
+        $this->modalHistorial = false;
+        $this->modalLicenciasListar = false;
+        $this->modalRenunciasListar = false;
+
+        // ABRIR MODAL NUEVO - EDITAR
+        $this->modalNuevoEditarAbrir = true;
         
     }
 
@@ -748,7 +881,7 @@ class PersonalComponent extends Component
 
                 $this->personal_id = $personal->id;
 
-                // Llamamos a la función privada para cargar documento
+                // FUNCION PRIVADA PARA CARGAR DOCUMENTO
                 $rutaDocumento = $this->actualizar_acta();
 
                 $personal->update([
@@ -763,18 +896,20 @@ class PersonalComponent extends Component
                     'dependenciaorigen' => $this->dependenciaorigen,
                     'coddespachoorigen' => $this->coddespachoorigen,
                     'despachoorigen' => $this->despachoorigen,
-
-                    // 'codsededestino' => $this->codsededestino,
-                    // 'sededestino' => $this->sededestino,
-                    // 'coddependenciadestino' => $this->coddependenciadestino,
-                    // 'dependenciadestino' => $this->dependenciadestino,
-                    // 'coddespachodestino' => $this->coddespachodestino,
+                    
+                    'codsededestino' => $this->codsedeorigen,
+                    'sededestino' => $this->sedeorigen,
+                    'coddependenciadestino' => $this->coddependenciaorigen,
+                    'dependenciadestino' => $this->dependenciaorigen,
+                    'coddespachodestino' => $this->coddespachoorigen,
+                    'despachodestino' => $this->despachoorigen,
 
                     'celinstitucional' => $this->celinstitucional,
                     'correoinstitucional' => $this->correoinstitucional,
-                    'numero_convocatoria' => $this->numero_convocatoria,
+                    
+                    'numero_convocatoria' => strtoupper($this->numero_convocatoria),
+                    'tipo_documento' => strtoupper($this->tipo_documento),
 
-                    // 🔥 Solo cambia si hay nuevo archivo
                     'ruta_documento' => $rutaDocumento,
 
                     'fecha_inicio' => $this->fecha_inicio,
@@ -803,6 +938,9 @@ class PersonalComponent extends Component
                 tipo: 'error'
             );
         }
+
+        // CERRAR MODAL NUEVO - EDITAR
+        $this->modalNuevoEditarAbrir = false;
     }
 
     public function cerrar()
@@ -817,59 +955,9 @@ class PersonalComponent extends Component
             );
     }
 
-    // FUNCIONES AGREGAR
-
-    public function agregar_persona(Persona $ipersona){
-        $this->persona_id = $ipersona->id;
-        $this->dni = $ipersona->dni;
-        $this->datos = $ipersona->datos;
-
-        $this->reset('searchpersonas');
-    }
-
-    public function agregar_sede(Personales_sede $isede)
-    {
-        $this->codsedeorigen = $isede->id;
-        $this->sedeorigen = $isede->nombre;
-
-        $this->codsededestino = $isede->id;
-        $this->sededestino = $isede->nombre;
-
-        $this->reset(['dependenciaorigen','despachoorigen']);
-
-        $this->reset(['searchdependencias','searchdespachos']);
-    }
-
-    public function agregar_dependencia(Personales_dependencia $idependencia)
-    {
-        $this->coddependenciaorigen = $idependencia->id;
-        $this->dependenciaorigen = $idependencia->nombre;
-
-        $this->coddependenciadestino = $idependencia->id;
-        $this->dependenciadestino = $idependencia->nombre;
-
-        $this->reset('despachoorigen');
-
-        $this->reset('searchdespachos');
-    }
-
-    public function agregar_despacho(Personales_despacho $idespacho)
-    {
-        $this->coddespachoorigen = $idespacho->id;
-        $this->despachoorigen = $idespacho->nombre;
-
-        $this->coddespachodestino = $idespacho->id;
-        $this->despachodestino = $idespacho->nombre;
-    }
-
-    public function agregar_cargo(Personales_cargo $icargo)
-    {
-        $this->cargo = $icargo->nombre;
-    }
-
-
-    // FUNCIONES PARA NUEVOS DOCUMENTOS
-
+    // ============================================================================================================================
+    // FUNCIONES PARA ADENDA
+    // ============================================================================================================================
 
     public function nuevo_adenda(Persona $ipersona)
     {
@@ -884,7 +972,7 @@ class PersonalComponent extends Component
         $this->mostrarBtnBuscarDni = "d-none";
 
         $this->colorHeaderModal = "primary-subtle";
-        $this->textoHeaderModal = "ADENDA";
+        $this->textoHeaderModal = "REGISTRAR ADENDA";
         $this->colorGuardarActualizar = "primary";
         $this->textoGuardarActualizar = "Guardar adenda";
         $this->colorAgregar = "outline-primary";
@@ -905,10 +993,16 @@ class PersonalComponent extends Component
         $this->ver_personal($ipersonal);
         
         $this->tipo_documento = "CONTRATO";
-        $this->fecha_inicio = $ipersonal->fecha_fin
-            ? Carbon::parse($ipersonal->fecha_fin)->addDay()->format('Y-m-d')
-            : null;
+        $this->fecha_inicio = "";
         $this->fecha_fin = "";
+
+        // CERRAR MODAL LISTA HISTORIAL Y RENUCNIAS
+        $this->modalHistorial = false;
+        $this->modalLicenciasListar = false;
+        $this->modalRenunciasListar = false;
+
+        // ABRIR MODAL ADENDA
+        $this->modalNuevoEditarAbrir = true;
     }
 
     public function guardar_adenda()
@@ -955,9 +1049,16 @@ class PersonalComponent extends Component
                 tipo: 'error'
             );
         }
+
+        // CERRAR MODAL NUEVO - EDITAR
+        $this->modalNuevoEditarAbrir = false;
     }
 
-    public function nuevo_renuncia(Persona $ipersona)
+    // ============================================================================================================================
+    // FUNCIONES DE CONTRATO
+    // ============================================================================================================================
+
+    public function nuevo_contrato(Persona $ipersona)
     {
         $this->resetValidation();   // ← limpia los errores
         $this->resetErrorBag();     // ← opcional extra seguridad
@@ -965,50 +1066,57 @@ class PersonalComponent extends Component
         // Restablecer todas las variables
         // $this->reset();
 
-        $this->funcionGuardarActualizar="guardar_renuncia";
+        $this->funcionGuardarActualizar="guardar_contrato";
 
         $this->mostrarBtnBuscarDni = "d-none";
 
-        $this->colorHeaderModal = "dark-subtle";
-        $this->textoHeaderModal = "RENUNCIA";
-        $this->colorGuardarActualizar = "dark";
-        $this->textoGuardarActualizar = "Guardar renuncia";
-        $this->colorAgregar = "outline-dark";
+        $this->colorHeaderModal = "info-subtle";
+        $this->textoHeaderModal = "REGISTRAR CONTRATO";
+        $this->colorGuardarActualizar = "info";
+        $this->textoGuardarActualizar = "Guardar contrato";
+        $this->colorAgregar = "outline-info";
 
         // ===== BLOQUEO DE SECCIONES =====
         $this->seccionFoto = "disabled";
         $this->seccionPersona = "disabled";
-        $this->seccionPersonal = "disabled";
+        $this->seccionPersonal = "";
 
         $this->bandera_documento = "CONTRATO";
 
-        // DATOS PERSONA
+        /// DATOS PERSONA
         $this->ver_persona($ipersona);
 
         // DATOS PERSONAL
         $ipersonal = Personale::where([['activo',"1"],['persona_dni', $this->dni],])->firstOrFail();
 
+        // USO DE FUNCION PRIVADA
         $this->ver_personal($ipersonal);
 
-        $this->tipo_documento = "RENUNCIA";
-        
-        $this->fecha_inicio = $ipersonal->fecha_inicio;
+        $this->numero_convocatoria = "";
+        $this->tipo_documento = "CONTRATO";
+
+        $this->personal_id = $ipersonal->id;
+
+        // CERRAR MODAL LISTA HISTORIAL Y RENUNCIAS
+        $this->modalHistorial = false;
+        $this->modalLicenciasListar = false;
+        $this->modalRenunciasListar = false;
+
+        // ABRIR MODAL NUEVO - EDITAR
+        $this->modalNuevoEditarAbrir = true;
     }
 
-    public function guardar_renuncia()
+    public function guardar_contrato()
     {
         $this->validate();
 
         try {
 
             DB::transaction(function () {
-                $usuario = auth()->user()->datos; // Mejor que usar propiedad pública
-
                 $ipersonal = Personale::where('id', $this->personal_id)->firstOrFail();
 
                 // Actualizar Personal
                 $ipersonal->update([
-                    'fecha_fin' => $this->fecha_fin,
                     'activo' => "0",
                 ]);
 
@@ -1042,7 +1150,113 @@ class PersonalComponent extends Component
                 tipo: 'error'
             );
         }
+
+        // CERRAR MODAL NUEVO - EDITAR
+        $this->modalNuevoEditarAbrir = false;
     }
+
+    // ============================================================================================================================
+    // FUNCIONES DE INCORPORACION
+    // ============================================================================================================================
+
+    public function nuevo_incorporacion(Persona $ipersona)
+    {
+        $this->resetValidation();   // ← limpia los errores
+        $this->resetErrorBag();     // ← opcional extra seguridad
+
+        // Restablecer todas las variables
+        // $this->reset();
+
+        $this->funcionGuardarActualizar="guardar_incorporacion";
+
+        $this->mostrarBtnBuscarDni = "d-none";
+
+        $this->colorHeaderModal = "danger-subtle";
+        $this->textoHeaderModal = "REGISTRAR INCORPORACIÓN";
+        $this->colorGuardarActualizar = "danger";
+        $this->textoGuardarActualizar = "Guardar incorporación";
+        $this->colorAgregar = "outline-danger";
+
+        // ===== BLOQUEO DE SECCIONES =====
+        $this->seccionFoto = "disabled";
+        $this->seccionPersona = "disabled";
+        $this->seccionPersonal = "disabled";
+
+        $this->bandera_documento = "CONTRATO";
+
+        /// DATOS PERSONA
+        $this->ver_persona($ipersona);
+
+        // DATOS PERSONAL
+        $ipersonal = Personale::where([['activo',"1"],['persona_dni', $this->dni],])->firstOrFail();
+
+        $this->ver_personal($ipersonal);
+
+        $this->tipo_documento = "CONTRATO";
+
+        $this->personal_id = $ipersonal->id;
+
+        // CERRAR MODAL LISTA HISTORIAL Y RENUNCIAS
+        $this->modalHistorial = false;
+        $this->modalLicenciasListar = false;
+        $this->modalRenunciasListar = false;
+
+        // ABRIR MODAL NUEVO - EDITAR
+        $this->modalNuevoEditarAbrir = true;
+    }
+
+    public function guardar_incorporacion()
+    {
+        $this->validate();
+
+        try {
+
+            DB::transaction(function () {
+                $ipersonal = Personale::where('id', $this->personal_id)->firstOrFail();
+
+                // Actualizar Personal
+                $ipersonal->update([
+                    'activo' => "0",
+                ]);
+
+                // FUNCIÓN PARA CARGAR DOCUMENTO
+                $rutaDocumento = $this->guardar_acta();
+
+                // GUARDAR CAMPOS DE PERSONAL
+                $this->guardar_personal($rutaDocumento);
+            });
+
+            $this->resetExcept('searchPersonal');
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Datos actualizados',
+                mensaje: 'Los datos se han actualizado correctamente.',
+                tipo: 'success'
+            );
+
+            // Evento para cerrar el modal
+            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
+
+        } catch (\Throwable $e) {
+
+            report($e);
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'Ocurrió un error al guardar.',
+                tipo: 'error'
+            );
+        }
+
+        // CERRAR MODAL NUEVO - EDITAR
+        $this->modalNuevoEditarAbrir = false;
+    }
+
+    // ============================================================================================================================
+    // FUNCIONES DE LICENCIA
+    // ============================================================================================================================
 
     public function nuevo_licencia(Persona $ipersona)
     {
@@ -1057,7 +1271,7 @@ class PersonalComponent extends Component
         $this->mostrarBtnBuscarDni = "d-none";
 
         $this->colorHeaderModal = "danger-subtle";
-        $this->textoHeaderModal = "LICENCIA";
+        $this->textoHeaderModal = "REGISTRAR LICENCIA";
         $this->colorGuardarActualizar = "danger";
         $this->textoGuardarActualizar = "Guardar licencia";
         $this->colorAgregar = "outline-danger";
@@ -1079,7 +1293,15 @@ class PersonalComponent extends Component
 
         $this->tipo_documento = "LICENCIA";
         
-        $this->fecha_inicio = $ipersonal->fecha_inicio;
+        $this->fecha_inicio = "";
+
+        // CERRAR MODAL LISTA HISTORIAL Y RENUNCIAS
+        $this->modalHistorial = false;
+        $this->modalLicenciasListar = false;
+        $this->modalRenunciasListar = false;
+
+        // ABRIR MODAL NUEVO - EDITAR
+        $this->modalNuevoEditarAbrir = true;
     }
 
     public function guardar_licencia()
@@ -1129,9 +1351,16 @@ class PersonalComponent extends Component
                 tipo: 'error'
             );
         }
+
+        // CERRAR MODAL NUEVO - EDITAR
+        $this->modalNuevoEditarAbrir = false;
     }
 
-    public function nuevo_contrato(Persona $ipersona)
+    // ============================================================================================================================
+    // FUNCIONES DE RENUNCIA
+    // ============================================================================================================================
+
+    public function nuevo_renuncia(Persona $ipersona)
     {
         $this->resetValidation();   // ← limpia los errores
         $this->resetErrorBag();     // ← opcional extra seguridad
@@ -1139,99 +1368,15 @@ class PersonalComponent extends Component
         // Restablecer todas las variables
         // $this->reset();
 
-        $this->funcionGuardarActualizar="guardar_contrato";
+        $this->funcionGuardarActualizar="guardar_renuncia";
 
         $this->mostrarBtnBuscarDni = "d-none";
 
-        $this->colorHeaderModal = "info-subtle";
-        $this->textoHeaderModal = "CONTRATO";
-        $this->colorGuardarActualizar = "info";
-        $this->textoGuardarActualizar = "Guardar contrato";
-        $this->colorAgregar = "outline-info";
-
-        // ===== BLOQUEO DE SECCIONES =====
-        $this->seccionFoto = "disabled";
-        $this->seccionPersona = "disabled";
-        $this->seccionPersonal = "";
-
-        $this->bandera_documento = "CONTRATO";
-
-        /// DATOS PERSONA
-        $this->ver_persona($ipersona);
-
-        // DATOS PERSONAL
-        $ipersonal = Personale::where([['activo',"1"],['persona_dni', $this->dni],])->firstOrFail();
-
-        $this->ver_personal($ipersonal);
-
-        $this->tipo_documento = "CONTRATO";
-
-        $this->personal_id = $ipersonal->id;
-    }
-
-    public function guardar_contrato()
-    {
-        $this->validate();
-
-        try {
-
-            DB::transaction(function () {
-                $ipersonal = Personale::where('id', $this->personal_id)->firstOrFail();
-
-                // Actualizar Personal
-                $ipersonal->update([
-                    'activo' => "0",
-                ]);
-
-                // FUNCIÓN PARA CARGAR DOCUMENTO
-                $rutaDocumento = $this->guardar_acta();
-
-                // GUARDAR CAMPOS DE PERSONAL
-                $this->guardar_personal($rutaDocumento);
-            });
-
-            $this->resetExcept('searchPersonal');
-
-            $this->dispatch(
-                'alerta-actualizado',
-                titulo: 'Datos actualizados',
-                mensaje: 'Los datos se han actualizado correctamente.',
-                tipo: 'success'
-            );
-
-            // Evento para cerrar el modal
-            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
-
-        } catch (\Throwable $e) {
-
-            report($e);
-
-            $this->dispatch(
-                'alerta-actualizado',
-                titulo: 'Error',
-                mensaje: 'Ocurrió un error al guardar.',
-                tipo: 'error'
-            );
-        }
-    }
-
-    public function nuevo_incorporacion(Persona $ipersona)
-    {
-        $this->resetValidation();   // ← limpia los errores
-        $this->resetErrorBag();     // ← opcional extra seguridad
-
-        // Restablecer todas las variables
-        // $this->reset();
-
-        $this->funcionGuardarActualizar="guardar_incorporacion";
-
-        $this->mostrarBtnBuscarDni = "d-none";
-
-        $this->colorHeaderModal = "danger-subtle";
-        $this->textoHeaderModal = "INCORPORACIÓN";
-        $this->colorGuardarActualizar = "danger";
-        $this->textoGuardarActualizar = "Guardar incorporación";
-        $this->colorAgregar = "outline-danger";
+        $this->colorHeaderModal = "dark-subtle";
+        $this->textoHeaderModal = "REGISTRAR RENUNCIA";
+        $this->colorGuardarActualizar = "dark";
+        $this->textoGuardarActualizar = "Guardar renuncia";
+        $this->colorAgregar = "outline-dark";
 
         // ===== BLOQUEO DE SECCIONES =====
         $this->seccionFoto = "disabled";
@@ -1240,7 +1385,7 @@ class PersonalComponent extends Component
 
         $this->bandera_documento = "CONTRATO";
 
-        /// DATOS PERSONA
+        // DATOS PERSONA
         $this->ver_persona($ipersona);
 
         // DATOS PERSONAL
@@ -1248,22 +1393,33 @@ class PersonalComponent extends Component
 
         $this->ver_personal($ipersonal);
 
-        $this->tipo_documento = "CONTRATO";
+        $this->tipo_documento = "RENUNCIA";
+        
+        $this->fecha_inicio = $ipersonal->fecha_inicio;
 
-        $this->personal_id = $ipersonal->id;
+        // CERRAR MODAL LISTA HISTORIAL Y RENUNCIAS
+        $this->modalHistorial = false;
+        $this->modalLicenciasListar = false;
+        $this->modalRenunciasListar = false;
+
+        // ABRIR MODAL NUEVO - EDITAR
+        $this->modalNuevoEditarAbrir = true;
     }
 
-    public function guardar_incorporacion()
+    public function guardar_renuncia()
     {
         $this->validate();
 
         try {
 
             DB::transaction(function () {
+                $usuario = auth()->user()->datos; // Mejor que usar propiedad pública
+
                 $ipersonal = Personale::where('id', $this->personal_id)->firstOrFail();
 
                 // Actualizar Personal
                 $ipersonal->update([
+                    'fecha_fin' => $this->fecha_fin,
                     'activo' => "0",
                 ]);
 
@@ -1297,12 +1453,124 @@ class PersonalComponent extends Component
                 tipo: 'error'
             );
         }
+
+        // CERRAR MODAL NUEVO - EDITAR
+        $this->modalNuevoEditarAbrir = false;
     }
 
+    // ============================================================================================================================
     // FUNCIONES DE HISTORIAL
+    // ============================================================================================================================
+
+    public function historial_editar($vPersonalId)
+    {
+        $this->resetValidation();
+        $this->resetErrorBag();
+
+        $this->funcionGuardarActualizar = "actualizar";
+
+        $this->mostrarBtnBuscarDni = "d-none";
+
+        $this->colorHeaderModal = "success-subtle";
+        $this->textoHeaderModal = "Editar";
+        $this->colorGuardarActualizar = "success";
+        $this->textoGuardarActualizar = "Actualizar";
+        $this->colorAgregar = "outline-success";
+
+        // ===== BLOQUEO DE SECCIONES =====
+        $this->seccionFoto = "";
+        $this->seccionPersona = "";
+        $this->seccionPersonal = "";
+
+        $this->bandera_documento = "CONTRATO";
+
+        // ===== DATOS PERSONA =====
+        $ipersonal = Personale::where('id', $vPersonalId)->firstOrFail();
+        $ipersona = Persona::where('dni', $ipersonal->persona_dni)->where('activo','1')->firstOrFail();
+
+        $this->persona_id = $ipersona->id;
+        $this->dni = $ipersona->dni;
+        $this->nombres = $ipersona->nombres;
+        $this->appaterno = $ipersona->appaterno;
+        $this->apmaterno = $ipersona->apmaterno;
+        $this->celpersonal = $ipersona->celpersonal;
+        $this->correopersonal = $ipersona->correopersonal;
+
+        $this->fotoactual = $ipersona->foto;
+
+        // ===== DATOS PERSONAL =====
+
+        $this->personal_id = $ipersonal->id;
+
+        $this->regimen = $ipersonal->regimen;
+        $this->tipo_regimen = $ipersonal->tipo_regimen;
+        $this->cargo = $ipersonal->cargo;
+        $this->cargo_condicion = $ipersonal->cargo_condicion;
+
+        $this->codsedeorigen = $ipersonal->codsedeorigen;
+        $this->sedeorigen = $ipersonal->sedeorigen;
+        $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
+        $this->dependenciaorigen = $ipersonal->dependenciaorigen;
+        $this->coddespachoorigen = $ipersonal->coddespachoorigen;
+        $this->despachoorigen = $ipersonal->despachoorigen;
+
+        $this->codsededestino = $ipersonal->codsededestino;
+        $this->sededestino = $ipersonal->sededestino;
+        $this->coddependenciadestino = $ipersonal->coddependenciadestino;
+        $this->dependenciadestino = $ipersonal->dependenciadestino;
+        $this->coddespachodestino = $ipersonal->coddespachodestino;
+        $this->despachodestino = $ipersonal->despachodestino;
+
+        $this->celinstitucional = $ipersonal->celinstitucional;
+        $this->correoinstitucional = $ipersonal->correoinstitucional;
+
+        // ===== DATOS CONTRATO =====
+        $this->numero_convocatoria = $ipersonal->numero_convocatoria;
+        $this->tipo_documento = $ipersonal->tipo_documento;
+        $this->fecha_inicio = $ipersonal->fecha_inicio;
+        $this->fecha_fin = $ipersonal->fecha_fin;
+        $this->ruta_documento = $ipersonal->ruta_documento;
+
+        // CERRAR MODAL LISTA HISTORIAL Y RENUCNIAS
+        $this->modalHistorial = false;
+        $this->modalLicenciasListar = false;
+        $this->modalRenunciasListar = false;
+
+        // ABRIR MODAL NUEVO - EDITAR
+        $this->modalNuevoEditarAbrir = true;
+        
+    }
+
+    public function historial_actualizar()
+    {
+        try {
+            $usuario = auth()->user()->datos;
+
+            $ipersonal = Personale::where('id', $this->personal_id)->firstOrFail();
+            
+            // Actualizar Personal
+                $ipersonal->update([
+                    'fecha_inicio' => $this->fecha_inicio,
+                    'fecha_fin' => $this->fecha_fin,
+                    'user_updated' => $usuario ,
+                ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
     public function historial_documentos($persona_dni)
     {
         $this->dni = $persona_dni;
+
+        // ABRIR MODAL HISTORIAL
+        $this->modalHistorial = true;
+    }
+
+    public function historial_documentos_cerrar()
+    {
+        // CERRAR MODAL HISTORIAL
+        $this->modalHistorial = false;
     }
 
     public function historial_rotaciones($persona_dni)
@@ -1310,7 +1578,38 @@ class PersonalComponent extends Component
         $this->dni = $persona_dni;
     }
 
-    // FUNCIONES DE TRANSFERIR PERSONAL
+    // ============================================================================================================================
+    // FUNCIONES LISTAR
+    // ============================================================================================================================
+
+    public function licencias_listar()
+    {
+        // ABRIR MODAL LISTA DE LICENCIAS
+        $this->modalLicenciasListar = true;
+    }
+
+    public function licencias_listar_cerrar()
+    {
+        // CERRAR MODAL LISTA DE LICENCIAS
+        $this->modalLicenciasListar = false;
+    }
+
+    public function renuncias_listar()
+    {
+        // ABRIR MODAL LISTA DE RENUNCIAS
+        $this->modalRenunciasListar = true;
+    }
+
+    public function renuncias_listar_cerrar()
+    {
+        // CERRAR MODAL LISTA DE RENUNCIAS
+        $this->modalRenunciasListar = false;
+    }
+
+
+    // ============================================================================================================================
+    // FUNCIONES ROTACIONES DE PERSONAL
+    // ============================================================================================================================
 
     public function nuevo_transferir_personal(Persona $ipersona)
     {
@@ -1517,9 +1816,6 @@ class PersonalComponent extends Component
         $this->reset();
     }
 
-
-
-
     // ============================================================================================================================
     // MODALES CARGAR PDF
     // ============================================================================================================================
@@ -1699,6 +1995,9 @@ class PersonalComponent extends Component
     public function editar_pdf($personal_id)
     {
         $this->personal_id = $personal_id;
+
+        // ABRIR MODAL CARGAR PDF
+        $this->modalPDFCargar = true;
     }
 
     public function actualizar_pdf()
@@ -1750,6 +2049,15 @@ class PersonalComponent extends Component
                 tipo: 'error'
             );
         }
+
+        // CERRAR MODAL CARGAR PDF
+        $this->modalPDFCargar = false;
+    }
+
+    public function pdf_cerrar()
+    {
+        // CERRAR MODAL CARGAR PDF
+        $this->modalPDFCargar = false;
     }
 
     private function validarActa()
@@ -1794,10 +2102,6 @@ class PersonalComponent extends Component
     {
         $this->modalLegajos = false;
     }
-
-    // ============================================================================================================================
-    // MODALES CARGAR PDF
-    // ============================================================================================================================
 
 
     // ============================================================================================================================
@@ -1880,7 +2184,6 @@ class PersonalComponent extends Component
             'fecha_inicio' => $this->fecha_inicio,
             'fecha_fin' => $this->fecha_fin,
 
-            // 🔥 Guardamos la ruta real del archivo
             'ruta_documento' => $rutaDocumento,
 
             'activo' => '1',
@@ -1958,7 +2261,219 @@ class PersonalComponent extends Component
         );
     }
 
-    // Exportar a Excel
+    // ============================================================================================================================
+    // MODALES REPORTES CON FILTROS
+    // ============================================================================================================================
+
+    public function reportesFiltros()
+    {
+        $this->modalReportesFiltros = true;
+    }
+
+    // ============================================================================================================================
+    // MODALES BUSCAR
+    // ============================================================================================================================
+
+    public function personalBuscar()
+    {
+        $this->modalPersonalBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchPersonal');
+    }
+    public function sedeBuscar()
+    {
+        $this->modalPersonalSedeBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchSede');
+    }
+    public function dependenciaBuscar()
+    {
+        $this->modalPersonalDependenciaBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchDependencia');
+    }
+    public function despachoBuscar()
+    {
+        $this->modalPersonalDespachoBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchDespacho');
+    }
+    public function cargoBuscar()
+    {
+        $this->modalPersonalCargoBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchCargo');
+    }
+    public function cerrarBuscar()
+    {
+        $this->modalReportesFiltros = false;
+
+        $this->modalPersonalBuscar = false;
+        $this->modalPersonalSedeBuscar = false;
+        $this->modalPersonalDependenciaBuscar = false;
+        $this->modalPersonalDespachoBuscar = false;
+        $this->modalPersonalCargoBuscar = false;
+        $this->modalInformaticaServicioBuscar = false;
+        $this->modalInformaticaServicioDetalleBuscar = false;
+        $this->modalPatrimonioBienesBuscar = false;
+    } 
+
+
+    // ============================================================================================================================
+    // FUNCIONES AGREGAR
+    // ============================================================================================================================
+
+    // ============================================================================================================================
+    // FUNCIONES AGREGAR
+    // ============================================================================================================================
+    public function agregar_persona(Persona $ipersona){
+        // DATOS DE LA PERSONA
+        $this->persona_id = $ipersona->id;
+        $this->dni = $ipersona->dni;
+        $this->appaterno = $ipersona->appaterno;
+        $this->apmaterno = $ipersona->apmaterno;
+        $this->nombres = $ipersona->nombres;
+        $this->datos = $ipersona->datos;
+        $this->celpersonal = $ipersona->celpersonal;
+        $this->correopersonal = $ipersona->correopersonal;
+        $this->fotoactual = $ipersona->foto;
+
+        // DATOS DEL PERSONAL
+        $ipersonal = Personale::where([['persona_dni',$this->dni],['activo',1],])->firstOrFail();
+
+        $this->personal_id = $ipersonal->id;
+
+        $this->codsedeorigen = $ipersonal->codsededestino;
+        $this->sedeorigen = $ipersonal->sededestino;   
+        $this->coddependenciaorigen = $ipersonal->coddependenciadestino;
+        $this->dependenciaorigen = $ipersonal->dependenciadestino;
+        $this->coddespachoorigen = $ipersonal->coddespachodestino;
+        $this->despachoorigen = $ipersonal->despachodestino;
+
+        $this->codsededestino = $ipersonal->codsededestino;
+        $this->sededestino = $ipersonal->sededestino;   
+        $this->coddependenciadestino = $ipersonal->coddependenciadestino;
+        $this->dependenciadestino = $ipersonal->dependenciadestino;
+        $this->coddespachodestino = $ipersonal->coddespachodestino;
+        $this->despachodestino = $ipersonal->despachodestino;
+
+        $this->celinstitucional = $ipersonal->celinstitucional;
+        $this->correoinstitucional = $ipersonal->correoinstitucional;
+        $this->regimen = $ipersonal->regimen;
+        $this->tipo_regimen = $ipersonal->tipo_regimen;
+        $this->cargo = $ipersonal->cargo;
+        $this->cargo_condicion = $ipersonal->cargo_condicion;
+        $this->tipo_documento = $ipersonal->tipo_documento;
+
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+            'searchservicios',
+            'searchincidenciasolicitud',
+            'searchbienes',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPersonalBuscar = false;
+    }
+
+    public function agregar_sede(Personales_sede $isede)
+    {
+        $this->codsedeorigen = $isede->id;
+        $this->sedeorigen = $isede->nombre;
+
+        $this->codsededestino = $isede->id;
+        $this->sededestino = $isede->nombre;
+
+        // RESTABLECER DEPENDENCIA Y DESPACHO
+        $this->reset([
+            'dependenciaorigen',
+            'despachoorigen',
+        ]);
+
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPersonalSedeBuscar = false;
+    }
+
+    public function agregar_dependencia(Personales_dependencia $idependencia)
+    {
+        $this->coddependenciaorigen = $idependencia->id;
+        $this->dependenciaorigen = $idependencia->nombre;
+
+        $this->coddependenciadestino = $idependencia->id;
+        $this->dependenciadestino = $idependencia->nombre;
+
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPersonalDependenciaBuscar = false;
+    }
+
+    public function agregar_despacho(Personales_despacho $idespacho)
+    {
+        $this->coddespachoorigen = $idespacho->id;
+        $this->despachoorigen = $idespacho->nombre;
+
+        $this->coddespachodestino = $idespacho->id;
+        $this->despachodestino = $idespacho->nombre;
+
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPersonalDespachoBuscar = false;
+    }
+
+    public function agregar_cargo(Personales_cargo $icargo)
+    {
+        $this->cargo = $icargo->nombre;
+
+        // RETABLECER SERVICIO DETALLE
+        
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPersonalCargoBuscar = false;
+    }
+
+
+    // ============================================================================================================================
+    // FUNCIONES EXCEL
+    // ============================================================================================================================
+
     public function exportarExcel()
     {
         return Excel::download(

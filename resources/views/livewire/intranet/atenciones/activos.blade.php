@@ -375,10 +375,10 @@
     </div> --}}
 
 
-    {{-- Modal Nuevo-Editar --}}
     {{-- <div wire:ignore.self class="modal fade" id="nuevoEditarModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="nuevoEditarModalLabel" aria-hidden="true"> --}}
     {{-- <div wire:ignore.self class="modal fade" id="nuevoEditarModal" tabindex="-1" aria-labelledby="nuevoEditarModalLabel" aria-hidden="true"> --}}
     <div>
+        {{-- Modal Nuevo-Editar --}}
         <div class="modal fade @if($modalNuevoEditarAbrir) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
             <div class="modal-dialog" style="max-width:95%;">
                 <div class="modal-content">

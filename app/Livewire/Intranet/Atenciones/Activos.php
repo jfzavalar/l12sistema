@@ -1332,7 +1332,7 @@ class Activos extends Component
         }
     }
 
-
+    // ============================================================================================================================
     // FUNCIONES AGREGAR
     // ============================================================================================================================
     public function agregar_persona(Persona $ipersona){
@@ -1788,6 +1788,11 @@ class Activos extends Component
         );
     }
 
+    public function pdf_cerrar()
+    {
+        // CERRAR MODAL CARGAR PDF
+        $this->modalPDFCargar = false;
+    }
 
     // FUNCIÓN PARA MODAL ENVIAR CORREO
     // ============================================================================================================================
