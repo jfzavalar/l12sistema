@@ -27,6 +27,26 @@ class PersonalrotacionComponent extends Component
     use WithPagination;
     protected $paginationTheme = "bootstrap";
 
+    // VARIABLES PARA MODALES
+    public $modalNuevoEditarAbrir = false;
+    public $modalInactivos = false;
+
+
+    public $modalPersonalBuscar = false;
+    public $modalPersonalSedeBuscar = false;
+    public $modalPersonalDependenciaBuscar = false;
+    public $modalPersonalDespachoBuscar = false;
+    public $modalPersonalCargoBuscar = false;
+    public $modalInformaticaServicioBuscar = false;
+    public $modalInformaticaServicioDetalleBuscar = false;
+    public $modalPatrimonioBienesBuscar = false;
+    public $modalPDFCargar = false;
+    public $modalPDFCargarLegajo = false;
+    public $modalPDFEvidenciaCargar = false;
+    public $modalHistorial = false;
+    public $modalLegajos = false;
+
+    //
     public $mostrarBtnBuscarDni = "d-none";
 
     public $colorHeaderModal, $textoHeaderModal;
@@ -390,7 +410,7 @@ class PersonalrotacionComponent extends Component
         $this->mostrarBtnBuscarDni = "d-none";
 
         $this->colorHeaderModal = "primary-subtle";
-        $this->textoHeaderModal = "Nuevo ubicación de personal";
+        $this->textoHeaderModal = "NUEVA ROTACIÓN DE PERSONAL";
         $this->colorGuardarActualizar = "primary";
         $this->textoGuardarActualizar = "Guardar";
         $this->colorAgregar = "outline-primary";
@@ -403,6 +423,9 @@ class PersonalrotacionComponent extends Component
         $this->despachodestino = "";
 
         $this->bandera_documento = "RESOLUCION";
+
+        // ABRIR MODAL NUEVO EDITAR
+        $this->modalNuevoEditarAbrir = true;
     }
 
     public function guardar()
@@ -486,6 +509,9 @@ class PersonalrotacionComponent extends Component
                 tipo: 'error'
             );
         }
+
+        // CERRAR MODAL NUEVO EDITAR
+        $this->modalNuevoEditarAbrir = false;
     }
 
     public function editar(Persona $ipersona)
@@ -557,6 +583,9 @@ class PersonalrotacionComponent extends Component
         $this->fecha_finu = $ipersonalrotacion->fecha_finu;
         $this->motivo_ubicacion = $ipersonalrotacion->motivo_ubicacion;
         $this->ruta_documento = $ipersonalrotacion->ruta_documento;
+
+        // ABRIR MODAL NUEVO EDITAR
+        $this->modalNuevoEditarAbrir = true;
         
     }
 
@@ -627,6 +656,9 @@ class PersonalrotacionComponent extends Component
                 tipo: 'error'
             );
         }
+
+        // CERRAR MODAL NUEVO EDITAR
+        $this->modalNuevoEditarAbrir = false;
     }
 
     public function nuevo_retorno($id)
@@ -716,6 +748,9 @@ class PersonalrotacionComponent extends Component
 
         $this->celinstitucional = $ipersonal->celinstitucional;
         $this->correoinstitucional = $ipersonal->correoinstitucional;
+
+        // ABRIR MODAL NUEVO EDITAR
+        $this->modalNuevoEditarAbrir = true;
     }
 
     public function guardar_retorno()
@@ -799,11 +834,15 @@ class PersonalrotacionComponent extends Component
                 tipo: 'error'
             );
         }
+
+        // CERRAR MODAL NUEVO EDITAR
+        $this->modalNuevoEditarAbrir = false;
     }
 
     public function cerrar()
     {
-        $this->reset();
+        // CERRAR MODEL NUEVO EDITAR
+        $this->modalNuevoEditarAbrir = false;
 
         $this->dispatch(
                 'alerta-cancelar',
@@ -813,109 +852,10 @@ class PersonalrotacionComponent extends Component
             );
     }
 
-    // FUNCIONES AGREGAR
-    public function agregar_persona(Persona $ipersona){
-        $this->persona_id = $ipersona->id;
-        $this->dni = $ipersona->dni;
-        $this->appaterno = $ipersona->appaterno;
-        $this->apmaterno = $ipersona->apmaterno;
-        $this->nombres = $ipersona->nombres;
 
-        $this->datos = $ipersona->datos;
-
-        $this->celpersonal = $ipersona->celpersonal;
-        $this->correopersonal = $ipersona->correopersonal;
-
-        $this->fotoactual = $ipersona->foto;
-
-        $ipersonal = Personale::where([['activo',1],['persona_dni',$this->dni],])->firstOrFail();
-
-        $this->sedeorigen = $ipersonal->sedeorigen;
-        $this->dependenciaorigen = $ipersonal->dependenciaorigen;
-        $this->despachoorigen = $ipersonal->despachoorigen;
-        $this->celinstitucional = $ipersonal->celinstitucional;
-        $this->correoinstitucional = $ipersonal->correoinstitucional;
-        $this->regimen = $ipersonal->regimen;
-        $this->tipo_regimen = $ipersonal->tipo_regimen;
-        $this->cargo = $ipersonal->cargo;
-
-        // $this->reset('searchpersonas');
-    }
-
-    public function agregar_sede(Personales_sede $isede)
-    {
-        $this->codsedeorigen = $isede->id;
-        $this->sedeorigen = $isede->nombre;
-
-        $this->codsededestino = $isede->id;
-        $this->sededestino = $isede->nombre;
-
-        $this->reset(['dependenciaorigen','despachoorigen']);
-
-        $this->reset(['searchdependencias','searchdespachos']);
-    }
-    public function agregar_sede2(Personales_sede $isede)
-    {
-        // $this->codsedeorigen = $isede->id;
-        // $this->sedeorigen = $isede->nombre;
-
-        $this->codsededestino = $isede->id;
-        $this->sededestino = $isede->nombre;
-
-        $this->reset(['dependenciadestino','despachodestino']);
-
-        $this->reset(['searchdependencias','searchdespachos']);
-    }
-
-    public function agregar_dependencia(Personales_dependencia $idependencia)
-    {
-        // $this->coddependenciaorigen = $idependencia->id;
-        // $this->dependenciaorigen = $idependencia->nombre;
-
-        $this->coddependenciadestino = $idependencia->id;
-        $this->dependenciadestino = $idependencia->nombre;
-
-        $this->reset('despachodestino');
-
-        $this->reset('searchdespachos');
-    }
-    public function agregar_dependencia2(Personales_dependencia $idependencia)
-    {
-        // $this->coddependenciaorigen = $idependencia->id;
-        // $this->dependenciaorigen = $idependencia->nombre;
-
-        $this->coddependenciadestino = $idependencia->id;
-        $this->dependenciadestino = $idependencia->nombre;
-
-        // $this->reset('despachoorigen');
-
-        $this->reset('searchdespachos');
-    }
-
-    public function agregar_despacho(Personales_despacho $idespacho)
-    {
-        $this->coddespachoorigen = $idespacho->id;
-        $this->despachoorigen = $idespacho->nombre;
-
-        $this->coddespachodestino = $idespacho->id;
-        $this->despachodestino = $idespacho->nombre;
-    }
-    public function agregar_despacho2(Personales_despacho $idespacho)
-    {
-        // $this->coddespachoorigen = $idespacho->id;
-        // $this->despachoorigen = $idespacho->nombre;
-
-        $this->coddespachodestino = $idespacho->id;
-        $this->despachodestino = $idespacho->nombre;
-    }
-
-    public function agregar_cargo(Personales_cargo $icargo)
-    {
-        $this->cargo = $icargo->nombre;
-    }
-
-
-    // FUNCIONES PARA NUEVOS DOCUMENTOS
+    // ============================================================================================================================
+    // FUNCIONES PARA NUEVO DOCUMENTO
+    // ============================================================================================================================
 
 
     public function nuevo_adenda(Persona $ipersona)
@@ -1346,7 +1286,10 @@ class PersonalrotacionComponent extends Component
         }
     }
 
-    // FUNCIONES DE HISTORIAL
+    // ============================================================================================================================
+    // FUNCIONES HISTORIAL
+    // ============================================================================================================================
+
     public function historial_documentos($persona_dni)
     {
         $this->dni = $persona_dni;
@@ -1355,10 +1298,21 @@ class PersonalrotacionComponent extends Component
     public function historial_rotaciones($persona_dni)
     {
         $this->dni = $persona_dni;
+
+        // ABRIR MODAL HISTORIAL
+        $this->modalHistorial = true;
+    }
+
+    public function historial_rotaciones_cerrar()
+    {
+        // CERRAR MODAL HISTORIAL
+        $this->modalHistorial = false;
     }
 
 
-    // FUNCIONES PARA CARGAR PDF
+    // ============================================================================================================================
+    // FUNCIONES CARGAR PDF
+    // ============================================================================================================================
 
 
     public function editar_pdf($personal_id)
@@ -1417,9 +1371,204 @@ class PersonalrotacionComponent extends Component
         }
     }
 
+    // ============================================================================================================================
+    // MODALES BUSCAR
+    // ============================================================================================================================
 
+    public function personalBuscar()
+    {
+        $this->modalPersonalBuscar = true;
 
+        $this->dispatch('focus-input', id: 'txtSearchPersonal');
+    }
+    public function sedeBuscar()
+    {
+        $this->modalPersonalSedeBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchSede');
+    }
+    public function dependenciaBuscar()
+    {
+        $this->modalPersonalDependenciaBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchDependencia');
+    }
+    public function despachoBuscar()
+    {
+        $this->modalPersonalDespachoBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchDespacho');
+    }
+    public function cargoBuscar()
+    {
+        $this->modalPersonalCargoBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchCargo');
+    }
+    public function cerrarBuscar()
+    {
+        // $this->modalReportesFiltros = false;
+
+        $this->modalPersonalBuscar = false;
+        $this->modalPersonalSedeBuscar = false;
+        $this->modalPersonalDependenciaBuscar = false;
+        $this->modalPersonalDespachoBuscar = false;
+        $this->modalPersonalCargoBuscar = false;
+        $this->modalInformaticaServicioBuscar = false;
+        $this->modalInformaticaServicioDetalleBuscar = false;
+        $this->modalPatrimonioBienesBuscar = false;
+    }
+
+    // ============================================================================================================================
+    // FUNCIONES AGREGAR
+    // ============================================================================================================================
+
+    public function agregar_persona(Persona $ipersona)
+    {
+        // DATOS DE LA PERSONA
+        $this->persona_id = $ipersona->id;
+        $this->dni = $ipersona->dni;
+        $this->appaterno = $ipersona->appaterno;
+        $this->apmaterno = $ipersona->apmaterno;
+        $this->nombres = $ipersona->nombres;
+        $this->datos = $ipersona->datos;
+        $this->celpersonal = $ipersona->celpersonal;
+        $this->correopersonal = $ipersona->correopersonal;
+        $this->fotoactual = $ipersona->foto;
+
+        // DATOS DEL PERSONAL
+        $ipersonal = Personale::where([['persona_dni',$this->dni],['activo',1],])->firstOrFail();
+
+        $this->personal_id = $ipersonal->id;
+
+        $this->codsedeorigen = $ipersonal->codsedeorigen;
+        $this->sedeorigen = $ipersonal->sedeorigen;   
+        $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
+        $this->dependenciaorigen = $ipersonal->dependenciaorigen;
+        $this->coddespachoorigen = $ipersonal->coddespachoorigen;
+        $this->despachoorigen = $ipersonal->despachoorigen;
+
+        // $this->codsededestino = $ipersonal->codsededestino;
+        // $this->sededestino = $ipersonal->sededestino;   
+        // $this->coddependenciadestino = $ipersonal->coddependenciadestino;
+        // $this->dependenciadestino = $ipersonal->dependenciadestino;
+        // $this->coddespachodestino = $ipersonal->coddespachodestino;
+        // $this->despachodestino = $ipersonal->despachodestino;
+
+        $this->celinstitucional = $ipersonal->celinstitucional;
+        $this->correoinstitucional = $ipersonal->correoinstitucional;
+        $this->regimen = $ipersonal->regimen;
+        $this->tipo_regimen = $ipersonal->tipo_regimen;
+        $this->cargo = $ipersonal->cargo;
+        $this->cargo_condicion = $ipersonal->cargo_condicion;
+        $this->tipo_documento = $ipersonal->tipo_documento;
+
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPersonalBuscar = false;
+    }
+
+    public function agregar_sede(Personales_sede $isede)
+    {
+        // $this->codsedeorigen = $isede->id;
+        // $this->sedeorigen = $isede->nombre;
+
+        $this->codsededestino = $isede->id;
+        $this->sededestino = $isede->nombre;
+
+        // RESTABLECER DEPENDENCIA Y DESPACHO
+        $this->reset([
+            // 'dependenciaorigen',
+            // 'despachoorigen',
+            'dependenciadestino',
+            'despachodestino',
+        ]);
+
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPersonalSedeBuscar = false;
+    }
+
+    public function agregar_dependencia(Personales_dependencia $idependencia)
+    {
+        // $this->coddependenciaorigen = $idependencia->id;
+        // $this->dependenciaorigen = $idependencia->nombre;
+
+        $this->coddependenciadestino = $idependencia->id;
+        $this->dependenciadestino = $idependencia->nombre;
+
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPersonalDependenciaBuscar = false;
+    }
+
+    public function agregar_despacho(Personales_despacho $idespacho)
+    {
+        // $this->coddespachoorigen = $idespacho->id;
+        // $this->despachoorigen = $idespacho->nombre;
+
+        $this->coddespachodestino = $idespacho->id;
+        $this->despachodestino = $idespacho->nombre;
+
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPersonalDespachoBuscar = false;
+    }
+
+    public function agregar_cargo(Personales_cargo $icargo)
+    {
+        $this->cargo = $icargo->nombre;
+
+        // RETABLECER SERVICIO DETALLE
+        
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPersonalCargoBuscar = false;
+    }
+
+    // ============================================================================================================================
     // FUNCIONES PRIVADAS PARA REUTILIZAR
+    // ============================================================================================================================
 
     private function ver_persona(Persona $ipersona)
     {

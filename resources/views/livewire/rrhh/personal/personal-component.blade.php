@@ -155,7 +155,7 @@
                                     <b>Hasta:</b> --}}
                                 </td>
                                 <td class="text-nowrap">
-                                    <b>Email personal:</b> {{ $item->correopersonal }}:
+                                    <b>Email personal:</b> {{ $item->correopersonal }}
                                     <br><b>Cel. personal:</b> {{ $item->celpersonal }}
                                     <br><b>Email institucional:</b> {{ $item->correoinstitucional }}
                                     <br><b>Cel. institucional:</b> {{ $item->celinstitucional }}
@@ -778,6 +778,7 @@
                     <div class="modal-body">
                         <div class="table-responsive-xl">
                             <div class="input-group mb-3">
+                                <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_licencias->total() }}</span>
                                 <input type="text" id="txtsearchi" class="form-control form-control-sm" wire:model.live="searchlicencias" placeholder="Buscar">
                             </div>
                             <table class="table table-striped table-hover table-sm table-xsmall">
@@ -989,6 +990,7 @@
                     <div class="modal-body">
                         <div class="table-responsive-xl">
                             <div class="input-group mb-3">
+                                <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_renuncias->total() }}</span>
                                 <input type="text" id="txtsearchi" class="form-control form-control-sm" wire:model.live="searchlicencias" placeholder="Buscar">
                             </div>
                             <table class="table table-striped table-hover table-sm table-xsmall">
@@ -1188,7 +1190,6 @@
         </div>
 
         
-
         <!-- Modal Detalles de persona personal -->
         <div wire:ignore.self class="modal fade" id="verDetallesModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="verDetallesModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl">
@@ -1288,8 +1289,7 @@
                                     </table>
                                 </fieldset>
                             </div>
-                        </div>
-                        
+                        </div>                      
                     </div>
                     <div class="modal-footer">
                         <a type="button" href="{{ route('pdf.rrhh.personal.reportePDF') }}" target="_blank" class="btn btn-naranja btn-sm">
