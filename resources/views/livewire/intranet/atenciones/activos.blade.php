@@ -316,13 +316,13 @@
                                                 <i class="fa-solid fa-pen-to-square"></i><br>Atender
                                             </button> 
                                         @endif
-                                        @can('mpfn.intranet.atenciones.destroy')
+                                        {{-- @can('mpfn.intranet.atenciones.destroy') --}}
                                             @if ($item->created_user === auth()->user()->datos || auth()->user()->hasRole('Admin-Super'))
                                                 <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar({{ $item->id }})">
                                                     <i class="fa-solid fa-pen-to-square"></i><br>Editar
                                                 </button> 
                                             @endif
-                                        @endcan
+                                        {{-- @endcan --}}
                                         @can('mpfn.intranet.atenciones.destroy')
                                             <button type="button" class="btn btn-outline-danger btn-xs">
                                                 <i class="fa-solid fa-trash-can"></i><br>Eliminar

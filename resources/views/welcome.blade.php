@@ -140,8 +140,10 @@
       <!-- Wrap the rest of the page in another container to center all the content. -->
       <div class="container marketing">
         <!-- Three columns of text below the carousel -->
-        <fieldset class="border p-3 rounded mb-3">
-          <legend class="float-none px-3 fs-6 fw-bold text-muted text-center rounded bg-primary-subtle">SERVICIOS INTERNOS DEL DFJUNÍN</legend>
+        <h2 class="text-center">SERVICIOS INTERNOS DEL DFJUNÍN</h2>
+        <hr class="featurette-divider" />
+        {{-- <fieldset class="border p-3 rounded mb-3">
+          <legend class="float-none px-3 fs-6 fw-bold text-muted text-center rounded bg-primary-subtle">SERVICIOS INTERNOS DEL DFJUNÍN</legend> --}}
           <div class="row">
             <div class="col-lg-4">
               <svg aria-label="Placeholder" class="bd-placeholder-img rounded-circle" height="140" preserveAspectRatio="xMidYMid slice" role="img" width="140" xmlns="http://www.w3.org/2000/svg">
@@ -152,7 +154,7 @@
               <p>Registro de Incidencias / Solicitudes</p>
               <p>
                 <a class="btn btn-primary" href="{{ route('paginas.informatica-atenciones.index') }}">
-                    <i class="fa-solid fa-user"></i> Registrar &raquo;
+                    <i class="fa-solid fa-file"></i> Registrar &raquo;
                 </a>
               </p>
             </div>
@@ -223,7 +225,7 @@
               </p>
             </div>
           </div> --}}
-        </fieldset>
+        {{-- </fieldset> --}}
 
 
 
@@ -343,15 +345,135 @@
       </div>
       <!-- /.container -->
       <!-- FOOTER -->
-      {{-- <footer class="container">
-        <p class="float-end">
-        </p>
-        <p>
-          &copy; 2025 Ministerio Público. &middot;
-        </p>
-      </footer> --}}
     </main>
-        
+    <!-- FOOTER -->
+    <footer class="w-100 bg-dark text-white p-3">
+      <div class="container-fluid">
+          <div class="row">
+
+              <!-- Logo / Copyright -->
+              <div class="col-6 col-md-3 mb-3">
+                  <a href="/"
+                    class="d-flex align-items-center mb-3 link-body-emphasis text-decoration-none">
+                      <i class="fa-brands fa-bootstrap fs-3 text-primary"></i>
+                  </a>
+
+                  <p class="mb-0">
+                      © 2017–2025
+                  </p>
+              </div>
+
+              <!-- Features -->
+              <div class="col-6 col-md-3 mb-3">
+                <h5>MPFN</h5>
+
+                <ul class="nav flex-column">
+                  <li class="nav-item mb-2">
+                      <a href="https://aulavirtualmp.mpfn.gob.pe" class="nav-link p-0" target="_blank">
+                        AULA VIRTUAL
+                      </a>
+                  </li>
+                  
+                  <li class="nav-item mb-2">
+                      <a href="https://cea.mpfn.gob.pe" class="nav-link p-0" target="_blank">
+                        CEA
+                      </a>
+                  </li>
+
+                  <li class="nav-item mb-2">
+                      <a href="https://portalogti.mpfn.gob.pe" class="nav-link p-0" target="_blank">
+                        GLPI
+                      </a>
+                  </li>
+
+                  <li class="nav-item mb-2">
+                      <a href="http://intranet.mpfn.gob.pe" class="nav-link p-0" target="_blank">
+                        INTRANET
+                      </a>
+                  </li>
+
+                  <li class="nav-item mb-2">
+                      <a href="https://cfe-int.mpfn.gob.pe/generador-notificaciones/" class="nav-link p-0" target="_blank">
+                        NOTIFICACIONES
+                      </a>
+                  </li>
+
+                  <li class="nav-item mb-2">
+                      <a href="https://sistemas2.mpfn.gob.pe" class="nav-link p-0" target="_blank">
+                        SISTEMAS2
+                      </a>
+                  </li>
+
+                </ul>
+              </div>
+
+              <!-- Resources -->
+              <div class="col-6 col-md-3 mb-3">
+                <h5>EXTERNOS</h5>
+
+                <ul class="nav flex-column">
+                  <li class="nav-item mb-2">
+                    <a href="#" class="nav-link p-0" target="_blank">
+                      Migraciones
+                    </a>
+                  </li>
+
+                  <li class="nav-item mb-2">
+                    <a href="https://msiap.pj.gob.pe/msiap/faces/login.jsp" class="nav-link p-0" target="_blank">
+                      MSIAP
+                    </a>
+                  </li>
+
+                  <li class="nav-item mb-2">
+                    <a href="https://casillas.pj.gob.pe/sinoe/login.xhtml" class="nav-link p-0" target="_blank">
+                      SINOE
+                    </a>
+                  </li>
+
+                  {{-- <li class="nav-item mb-2">
+                    <a href="#" class="nav-link p-0">
+                      Final resource
+                    </a>
+                  </li> --}}
+
+                </ul>
+              </div>
+
+              <!-- About -->
+              <div class="col-6 col-md-3 mb-3">
+                  <h5>SERVICIOS</h5>
+
+                  <ul class="nav flex-column">
+                      <li class="nav-item mb-2">
+                        <a href="#" class="nav-link p-0" target="_blank">
+                            Informática
+                        </a>
+                      </li>
+
+                      {{-- <li class="nav-item mb-2">
+                        <a href="#" class="nav-link p-0">
+                            MSIAP
+                        </a>
+                      </li>
+
+                      <li class="nav-item mb-2">
+                        <a href="#" class="nav-link p-0">
+                          SINOE
+                        </a>
+                      </li>
+
+                      <li class="nav-item mb-2">
+                        <a href="#" class="nav-link p-0">
+                            Terms
+                        </a>
+                      </li> --}}
+
+                  </ul>
+              </div>
+
+          </div>
+      </div>
+    </footer>    
 @endsection
 
 
