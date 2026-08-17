@@ -61,6 +61,17 @@
                     </span>
                 </button>
             </div>
+
+            <div class="col-auto">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarRegistrados">
+                    <span class="alert alert-warning d-block mb-0">
+                        <span class="fw-bold">
+                            <i class="fa-solid fa-check-double"></i>
+                            REGISTRADOS: {{ $estadisticas2->registrados }}
+                        </span>
+                    </span>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -282,8 +293,15 @@
                                     {{ $item->respuesta }}
                                 </td>
                                 <td class="text-center align-middle">
-                                    <span class="badge py-1 rounded-pill {{ $item->atendido == 'SI' ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }}">
-                                        {{ $item->atendido === 'SI' ? 'ATENDIDO' : 'NO ATENDIDO' }}
+                                    @php
+                                        $estadoAtendido = match($item->atendido) {
+                                            'SI' => ['clase' => 'bg-success-subtle text-success', 'texto' => 'ATENDIDO'],
+                                            'NO' => ['clase' => 'bg-danger-subtle text-danger', 'texto' => 'NO ATENDIDO'],
+                                            default => ['clase' => 'bg-warning-subtle text-warning', 'texto' => 'REGISTRADO'],
+                                        };
+                                    @endphp
+                                    <span class="badge py-1 rounded-pill {{ $estadoAtendido['clase'] }}">
+                                        {{ $estadoAtendido['texto'] }}
                                     </span>
                                 </td>
                                 <td class="text-center align-middle small text-nowrap">
@@ -293,11 +311,18 @@
                                 </td>
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
-                                        @if ($item->created_user === auth()->user()->datos || auth()->user()->hasRole('Admin-Super'))
+                                        @if ($item->atendido === "NN")
                                             <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar({{ $item->id }})">
-                                                <i class="fa-solid fa-pen-to-square"></i><br>Editar
+                                                <i class="fa-solid fa-pen-to-square"></i><br>Atender
                                             </button> 
                                         @endif
+                                        @can('mpfn.intranet.atenciones.destroy')
+                                            @if ($item->created_user === auth()->user()->datos || auth()->user()->hasRole('Admin-Super'))
+                                                <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar({{ $item->id }})">
+                                                    <i class="fa-solid fa-pen-to-square"></i><br>Editar
+                                                </button> 
+                                            @endif
+                                        @endcan
                                         @can('mpfn.intranet.atenciones.destroy')
                                             <button type="button" class="btn btn-outline-danger btn-xs">
                                                 <i class="fa-solid fa-trash-can"></i><br>Eliminar

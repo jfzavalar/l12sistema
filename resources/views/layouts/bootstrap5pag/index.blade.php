@@ -21,7 +21,7 @@
     <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <script src="{{ asset('superadmin/bootstrap/assets/js/color-modes.js') }}"></script>
+    {{-- <script src="{{ asset('superadmin/bootstrap/assets/js/color-modes.js') }}"></script> --}}
     <link href="{{ asset('superadmin/bootstrap/assets/dist/css/bootstrap.min.css') }}" rel="stylesheet" />
     <meta name="theme-color" content="#712cf9" />
     <link href="{{ asset('superadmin/bootstrap/carousel/carousel.css') }}" rel="stylesheet" />
@@ -421,7 +421,7 @@
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">
+                <a class="nav-link active" aria-current="page" href="{{ route('home') }}">
                     <i class="fa-solid fa-house"></i> Home
                 </a>
               </li>

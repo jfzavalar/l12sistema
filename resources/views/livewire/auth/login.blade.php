@@ -117,7 +117,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
             type="text"
             required
             autofocus
-            autocomplete="dni"
+            autocomplete="off"
             placeholder="Ingrese su DNI"
         />
 

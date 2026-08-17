@@ -140,87 +140,90 @@
       <!-- Wrap the rest of the page in another container to center all the content. -->
       <div class="container marketing">
         <!-- Three columns of text below the carousel -->
-        <div class="row">
-          {{-- <div class="col-lg-4">
-            <svg aria-label="Placeholder" class="bd-placeholder-img rounded-circle" height="140" preserveAspectRatio="xMidYMid slice" role="img" width="140" xmlns="http://www.w3.org/2000/svg">
-              <title>Placeholder</title>
-              <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
-            </svg>
-            <h2 class="fw-normal">INFORMATICA</h2>
-            <p>DFJunín - Incidencias / Solicitudes</p>
-            <p>
-              <a class="btn btn-primary" href="{{ route('paginas.informatica-atenciones.index') }}">
-                  <i class="fa-solid fa-user"></i> Registrar &raquo;
-              </a>
-            </p>
-          </div> --}}
+        <fieldset class="border p-3 rounded mb-3">
+          <legend class="float-none px-3 fs-6 fw-bold text-muted text-center rounded bg-primary-subtle">SERVICIOS INTERNOS DEL DFJUNÍN</legend>
+          <div class="row">
+            <div class="col-lg-4">
+              <svg aria-label="Placeholder" class="bd-placeholder-img rounded-circle" height="140" preserveAspectRatio="xMidYMid slice" role="img" width="140" xmlns="http://www.w3.org/2000/svg">
+                <title>Placeholder</title>
+                <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
+              </svg>
+              <h2 class="fw-normal">INFORMÁTICA</h2>
+              <p>Registro de Incidencias / Solicitudes</p>
+              <p>
+                <a class="btn btn-primary" href="{{ route('paginas.informatica-atenciones.index') }}">
+                    <i class="fa-solid fa-user"></i> Registrar &raquo;
+                </a>
+              </p>
+            </div>
 
-          
-          {{-- <div class="col-lg-4">
-            <svg
-              aria-label="Placeholder"
-              class="bd-placeholder-img rounded-circle"
-              height="140"
-              preserveAspectRatio="xMidYMid slice"
-              role="img"
-              width="140"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <title>Placeholder</title>
-              <rect
-                width="100%"
-                height="100%"
-                fill="var(--bs-secondary-color)"
-              ></rect>
-            </svg>
-            <h2 class="fw-normal">Intranet DFJ v1.0</h2>
-            <p>
-              Modulos Administrativos
-            </p>
-            <p>
-              <a class="btn btn-primary" href="http://10.13.100.19/dfjunin/">
-                <i class="fa-solid fa-user"></i> Acceder &raquo;
-              </a>
-            </p>
-          </div>
-          
-          
-          <div class="col-lg-4">
-            <svg
-              aria-label="Placeholder"
-              class="bd-placeholder-img rounded-circle"
-              height="140"
-              preserveAspectRatio="xMidYMid slice"
-              role="img"
-              width="140"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <title>Placeholder</title>
-              <rect
-                width="100%"
-                height="100%"
-                fill="var(--bs-secondary-color)"
-              ></rect>
-            </svg>
-            <h2 class="fw-normal">Intranet DFJ v2.0</h2>
-            <p>
-              Modulos Administrativos
-            </p>
-            <p>
-              @if (Route::has('login'))
-                <div class="sm:fixed sm:top-0 sm:right-0 p-6 text-right z-10">
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="btn btn-primary">Dashboard</a>
-                    @else
-                        <a href="{{ route('login') }}" class="btn btn-primary">
-                            <i class="fa-solid fa-user"></i> Iniciar sesión
-                        </a>
-                    @endauth
-                </div>
-              @endif
-            </p>
-          </div>
-        </div> --}}
+            
+            {{-- <div class="col-lg-4">
+              <svg
+                aria-label="Placeholder"
+                class="bd-placeholder-img rounded-circle"
+                height="140"
+                preserveAspectRatio="xMidYMid slice"
+                role="img"
+                width="140"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <title>Placeholder</title>
+                <rect
+                  width="100%"
+                  height="100%"
+                  fill="var(--bs-secondary-color)"
+                ></rect>
+              </svg>
+              <h2 class="fw-normal">Intranet DFJ v1.0</h2>
+              <p>
+                Modulos Administrativos
+              </p>
+              <p>
+                <a class="btn btn-primary" href="http://10.13.100.19/dfjunin/">
+                  <i class="fa-solid fa-user"></i> Acceder &raquo;
+                </a>
+              </p>
+            </div>
+            
+            
+            <div class="col-lg-4">
+              <svg
+                aria-label="Placeholder"
+                class="bd-placeholder-img rounded-circle"
+                height="140"
+                preserveAspectRatio="xMidYMid slice"
+                role="img"
+                width="140"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <title>Placeholder</title>
+                <rect
+                  width="100%"
+                  height="100%"
+                  fill="var(--bs-secondary-color)"
+                ></rect>
+              </svg>
+              <h2 class="fw-normal">Intranet DFJ v2.0</h2>
+              <p>
+                Modulos Administrativos
+              </p>
+              <p>
+                @if (Route::has('login'))
+                  <div class="sm:fixed sm:top-0 sm:right-0 p-6 text-right z-10">
+                      @auth
+                          <a href="{{ url('/dashboard') }}" class="btn btn-primary">Dashboard</a>
+                      @else
+                          <a href="{{ route('login') }}" class="btn btn-primary">
+                              <i class="fa-solid fa-user"></i> Iniciar sesión
+                          </a>
+                      @endauth
+                  </div>
+                @endif
+              </p>
+            </div>
+          </div> --}}
+        </fieldset>
 
 
 

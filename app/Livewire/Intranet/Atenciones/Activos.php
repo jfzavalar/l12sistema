@@ -284,6 +284,12 @@ class Activos extends Component
         $this->filtro_enviadolima = 'SI';
         $this->filtroinformatico = $value ? trim($value) : null;
     }
+    public function filtrarRegistrados($value = null)
+    {
+        $this->resetFiltros();
+        $this->filtro_atendido = 'NN';
+        $this->filtroinformatico = $value ? trim($value) : null;
+    }
     public function resetFiltros()
     {
         $this->search = null;
@@ -370,7 +376,12 @@ class Activos extends Component
                 SUM(CASE 
                     WHEN enviado_lima = 'SI' 
                     THEN 1 ELSE 0 
-                END) as enviado_lima
+                END) as enviado_lima,
+
+                SUM(CASE 
+                    WHEN atendido = 'NN' 
+                    THEN 1 ELSE 0 
+                END) as registrados
             ")
             // 🔥 FILTRO AÑO
             ->when($this->filtro_anio, function ($q) {
