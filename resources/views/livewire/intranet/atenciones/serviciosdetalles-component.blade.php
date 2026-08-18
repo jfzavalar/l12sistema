@@ -38,8 +38,11 @@
                                                 <button type="button" class="btn btn-success btn-xs me-2" wire:click="editar_servicio({{ $item->id }})">
                                                     <i class="fa-solid fa-pen-to-square me-1"></i>Editar
                                                 </button>
-                                                <button type="button" class="btn btn-info btn-xs" wire:click="listar_servicios_detalle({{ $item->id }})">
+                                                <button type="button" class="btn btn-info btn-xs me-2" wire:click="listar_servicios_detalle({{ $item->id }})">
                                                     <i class="fa-solid fa-list me-1"></i>Listar detalles
+                                                </button>
+                                                <button type="button" class="btn btn-danger btn-xs">
+                                                    <i class="fa-solid fa-trash me-1"></i>Eliminar
                                                 </button>
                                             </div>
                                         </td>
@@ -102,6 +105,9 @@
                                             <div class="btn-group" role="group" aria-label="Basic example">
                                                 <button type="button" class="btn btn-success btn-xs me-2" wire:click="editar_servicio_detalle({{ $item->id }})">
                                                     <i class="fa-solid fa-pen-to-square me-1"></i>Editar
+                                                </button>
+                                                <button type="button" class="btn btn-danger btn-xs">
+                                                    <i class="fa-solid fa-trash me-1"></i>Eliminar
                                                 </button>
                                             </div>
                                         </td>

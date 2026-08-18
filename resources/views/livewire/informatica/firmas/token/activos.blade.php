@@ -154,7 +154,7 @@
                                     </button>
                                 </td>
                                 <td>{{ $item->cargo }}</td>
-                                <td>{{ $item->token_codigo }}</td>
+                                <th class="text-center">{{ $item->token_codigo }}</th>
                                 <td>{{ $item->fecha_expiracion }}</td>
                                 <td>
                                     @if ($item->asignacion == "ASIGNACION" || $item->asignacion == "REASIGNACION")

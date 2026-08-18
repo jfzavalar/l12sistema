@@ -302,7 +302,7 @@ class Activos extends Component
                 });
             })
             ->orderBy('personas.datos')
-            ->paginate(10,['*'],'personasPage');
+            ->paginate(15,['*'],'personasPage');
 
         $lista_sedes = Personales_sede::select('id','nombre','nombred')
             ->where('activo','1')

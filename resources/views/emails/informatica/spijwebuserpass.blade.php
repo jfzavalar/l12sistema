@@ -76,14 +76,10 @@
             <hr>
 
             <!-- MENSAJE -->
-            <p>Estimado(a):</p>
-
-            <p>
-                Se le remite las credenciales del SPIJWEB.
-            </p>
+            <p>Estimado(a) Dr.(Dra.):</p>
 
             <!-- TABLA  DATOS PERSONALES-->
-            <div class="title">INFORMACIÓN DEL USUARIO</div>
+            {{-- <div class="title">INFORMACIÓN DEL USUARIO</div> --}}
 
             <table class="table">
                 <tr>
@@ -102,22 +98,33 @@
                     <td><strong>DESPACHO</strong></td>
                     <td>{{ $registro->despachodestino }}</td>
                 </tr>
+            </table>
+
+            <p>Por medio de la presente, se remite las credenciales de acceso al SPIJ WEB 2026:</p>
+
+            <table class="table">
                 <tr>
-                    <td><strong>USUARIO</strong></td>
+                    <th><strong>USUARIO</strong></th>
                     <td>{{ $registro->usuario }}</td>
                 </tr>
                 <tr>
-                    <td><strong>PASSWORD</strong></td>
+                    <th><strong>PASSWORD</strong></th>
                     <td>{{ $registro->password }}</td>
+                </tr>
+                <tr>
+                    <th><strong>Link de acceso</strong></th>
+                    <td>https://spij.minjus.gob.pe/spij-ext-web/#/inicio</td>
                 </tr>
             </table>
 
-            <div class="title">GRACIAS</div>
+            <div class="title">ATENTAMENTE</div>
+
+            <div class="title">OFICINA DE INFORMÁTICA – JUNÍN</div>
 
             <!-- MENSAJE FINAL -->
-            <p style="margin-top:15px;">
+            {{-- <p style="margin-top:15px;">
                 Este correo ha sido generado automáticamente. Por favor, no responder.
-            </p>
+            </p> --}}
 
             <!-- FOOTER -->
             <div class="footer">

@@ -25,7 +25,7 @@ class NotificacionInformaticaSpijwebUserPass extends Mailable
     {
         // Enviamos el correo
 
-        return $this->subject('DFJunin: Notificación Informática')
+        return $this->subject('Remito Credenciales para acceso al SPIJ WEB 2026')
             ->view('emails.informatica.spijwebuserpass')
             ->with([
                 'registro' => $this->registro,

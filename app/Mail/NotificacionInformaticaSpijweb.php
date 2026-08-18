@@ -31,7 +31,7 @@ class NotificacionInformaticaSpijweb extends Mailable
             ]
         );
 
-        return $this->subject('DFJunin: Notificación Informática')
+        return $this->subject('Remisión de Carta de Riesgo para Usuarios Finales – SPIJ WEB 2026')
             ->view('emails.informatica.spijweb')
             ->with([
                 'registro' => $this->registro,

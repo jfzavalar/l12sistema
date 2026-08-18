@@ -20,7 +20,7 @@
                     <span class="alert alert-success d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-file"></i>
-                            ASIGNADOS: {{ $estadisticas->fasignados }}
+                            FORMATOS: {{ $estadisticas->fasignados }}
                         </span>
                     </span>
                 </button>
@@ -42,7 +42,7 @@
                     <span class="alert alert-success d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-user"></i>
-                            ASIGNADOS: {{ $estadisticas->uasignados }}
+                            USUARIOS: {{ $estadisticas->uasignados }}
                         </span>
                     </span>
                 </button>

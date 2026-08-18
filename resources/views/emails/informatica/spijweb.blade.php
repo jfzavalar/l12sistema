@@ -76,14 +76,10 @@
             <hr>
 
             <!-- MENSAJE -->
-            <p>Estimado(a):</p>
-
-            <p>
-                Se le remite Acta para la entrega de credenciales del SPIJWEB.
-            </p>
+            <p>Estimado(a) Dr.(Dra.):</p>
 
             <!-- TABLA  DATOS PERSONALES-->
-            <div class="title">INFORMACIÓN DEL USUARIO</div>
+            {{-- <div class="title">INFORMACIÓN DEL USUARIO</div> --}}
 
             <table class="table">
                 <tr>
@@ -104,14 +100,22 @@
                 </tr>
             </table>
 
-            <div class="title">FIRMARLO Y SELLARLO, O CON FIRMA DIGITAL</div>
-            <div class="title">DEVOLVER POR CORREO ELECTRÓNICO</div>
-            <div class="title">GRACIAS</div>
+            <p>Por medio de la presente, se remite la Carta de Riesgo para Usuarios Finales – SPIJ WEB 2026, a fin de que pueda ser firmada y sellada, o, de corresponder, firmada digitalmente.</p>
+                
+            <p>Una vez suscrita, agradeceremos remitirla al correo electrónico informatica.junin@mpn.gob.pe, para su correspondiente revisión y validación por parte de la OCTI – JUNÍN.</p>
+
+            <p>Luego de verificar la correcta recepción y conformidad de la Carta de Riesgo, se procederá a remitir a su correo electrónico las credenciales de acceso al SPIJ WEB 2026.</p>
+            
+            <p>Agradecemos de antemano su atención y colaboración.</p>
+
+            <div class="title">ATENTAMENTE</div>
+
+            <div class="title">OFICINA DE INFORMÁTICA – JUNÍN</div>
 
             <!-- MENSAJE FINAL -->
-            <p style="margin-top:15px;">
+            {{-- <p style="margin-top:15px;">
                 Este correo ha sido generado automáticamente. Por favor, no responder.
-            </p>
+            </p> --}}
 
             <!-- FOOTER -->
             <div class="footer">
