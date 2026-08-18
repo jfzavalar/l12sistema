@@ -315,7 +315,7 @@ class Activos extends Component
             )
             ->where('personales_atenciones.activo', 1)
             ->orderBy('personales_atenciones.id', 'desc')
-            ->paginate(10,['*'],'atencionesPage'
+            ->paginate(30,['*'],'atencionesPage'
             );
 
         $lista_inactivos = $this->queryConFiltros()

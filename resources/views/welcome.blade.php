@@ -414,7 +414,7 @@
                 <ul class="nav flex-column">
                   <li class="nav-item mb-2">
                     <a href="#" class="nav-link p-0" target="_blank">
-                      Migraciones
+                      MIGRACIONES
                     </a>
                   </li>
 
@@ -446,7 +446,7 @@
                   <ul class="nav flex-column">
                       <li class="nav-item mb-2">
                         <a href="#" class="nav-link p-0" target="_blank">
-                            Informática
+                          INFORMÁTICA
                         </a>
                       </li>
 
