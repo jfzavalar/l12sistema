@@ -37,6 +37,7 @@ class InformaticasSpijwebsEntrega extends Model
         'tipo_regimen',
         'cargo',
         'cargo_condicion',
+        'tipo_documento',
 
         'anio',
         'enviarformatos',

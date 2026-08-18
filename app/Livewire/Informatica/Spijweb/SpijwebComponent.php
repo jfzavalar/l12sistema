@@ -859,6 +859,7 @@ class SpijwebComponent extends Component
                     'tipo_regimen' => $persona->tipo_regimen,
                     'cargo' => $persona->cargo,
                     'cargo_condicion' => $persona->cargo_condicion,
+                    'tipo_documento' => $persona->tipo_documento,
 
                     'anio' => Carbon::now()->year,
                     'enviarformatos' => "NO",

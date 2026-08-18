@@ -108,6 +108,7 @@
                             </th>
                             <th scope="col" class="table-danger">UBICACIÓN FÍSICA</th>
                             <th scope="col">MEDIOS DE COMUNICACIÓN</th>
+                            <th scope="col">CONDICIÓN</th>
                             @can('mpfn.informatica.spijweb.create')
                                 <th scope="col" class="table-success">FORMATOS</th>
                                 <th scope="col" class="table-success">USUARIO Y CONTRASEÑA</th>
@@ -144,6 +145,14 @@
                                     <br><b>Cel. personal:</b> {{ $item->celpersonal }}
                                     <br><b>Email institucional:</b> {{ $item->correoinstitucional }}
                                     <br><b>Cel. institucional:</b> {{ $item->celinstitucional }}
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge @if(in_array($item->tipo_documento, ['ADENDA','CONTRATO','INCORPORACION'])) text-bg-primary
+                                        @elseif(in_array($item->tipo_documento, ['LICENCIA','RENUNCIA']))
+                                            text-bg-danger
+                                        @endif">
+                                        {{ $item->tipo_documento }}
+                                    </span>
                                 </td>
                                 @can('mpfn.informatica.spijweb.create')
                                     <td class="text-center">
