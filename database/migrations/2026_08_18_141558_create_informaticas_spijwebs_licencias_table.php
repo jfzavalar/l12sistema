@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('personales_legajos', function (Blueprint $table) {
+        Schema::create('informaticas_spijwebs_licencias', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
         });
@@ -22,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('personales_legajos');
+        Schema::dropIfExists('informaticas_spijwebs_licencias');
     }
 };

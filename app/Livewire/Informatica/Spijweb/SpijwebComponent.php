@@ -6,6 +6,7 @@ use App\Mail\NotificacionInformaticaSpijweb;
 use App\Mail\NotificacionInformaticaSpijwebUserPass;
 use App\Models\ContabilidadesGastosoperativosEntrega;
 use App\Models\InformaticasSpijwebsEntrega;
+use App\Models\InformaticasSpijwebsLicencia;
 use App\Models\Persona;
 use App\Models\Personale;
 use App\Models\Personales_cargo;
@@ -47,6 +48,7 @@ class SpijwebComponent extends Component
     public $modalPDFCargar = false;
     public $modalPDFEvidenciaCargar = false;
     public $modalHistorial = false;
+    public $modalLicenciaBuscar = false;
 
     // VARIABLES PARA ADMINISTRAR MODALES
     public $colorHeaderModal, $textoHeaderModal;
@@ -78,7 +80,8 @@ class SpijwebComponent extends Component
             $searchcargos,
             $searchservicios,
             $searchincidenciasolicitud,
-            $searchbienes;
+            $searchbienes,
+            $searchlicencias;
     
     public function updatingSearch(){
         $this->resetPage('spijwebPage');
@@ -115,6 +118,9 @@ class SpijwebComponent extends Component
     }
     public function updatingSearchbienes(){
         $this->resetPage('bienesPage');
+    }
+    public function updatingSearchlicencias(){
+        $this->resetPage('licenciasPage');
     }
 
     public $user_login;
@@ -170,6 +176,8 @@ class SpijwebComponent extends Component
             $activo,
             $created_user,
             $updated_user;
+
+    public $licencia_id;
 
     public $pdf_acta, $pdf_evidencia;
 
@@ -309,9 +317,19 @@ class SpijwebComponent extends Component
             ->orderBy('datos')
             ->get();
 
+        $lista_licencias = InformaticasSpijwebsLicencia::where('activo','1')
+            ->where('asignado','0')
+            ->when($this->searchlicencias !== '', function ($query) {
+                $query->where(function ($q) {
+                    $q->where('usuario', 'like', '%' . $this->searchlicencias . '%');
+                });
+            })
+            ->orderBy('id')
+            ->paginate(15,['*'],'licenciasPage');
+
         return view('livewire.informatica.spijweb.spijweb-component',
                         compact('lista_activos','estadisticas','anios',
-                            'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos',));
+                            'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos','lista_licencias'));
     }
 
     private function queryConFiltros($tipoDocumento = null)
@@ -476,7 +494,7 @@ class SpijwebComponent extends Component
         $this->resetErrorBag();     // ← opcional extra seguridad
 
         // Restablecer todas las variables
-        $this->resetExcept(['filtro_anio', 'filtro_mes']);
+        // $this->resetExcept(['filtro_anio', 'filtro_mes']);
 
         $this->foto = null;
         $this->fotoactual = null;
@@ -528,8 +546,6 @@ class SpijwebComponent extends Component
 
         // DATOS DEL REGISTRO
         $this->spijwebasignado_id = $instanciaTabla->id;
-        $this->usuario = $instanciaTabla->usuario;
-        $this->password = $instanciaTabla->password;
 
         // ABRIR MODAL NUEVO - EDITAR
         $this->modalNuevoEditarAbrir = true;
@@ -564,10 +580,10 @@ class SpijwebComponent extends Component
             |--------------------------------------------------------------------------
             */
 
-            $registro->update([
-                'usuario' => $this->usuario,
-                'password' => $this->password,
-            ]);
+            // $registro->update([
+            //     'usuario' => $this->usuario,
+            //     'password' => $this->password,
+            // ]);
 
             /*
             |--------------------------------------------------------------------------
@@ -639,7 +655,7 @@ class SpijwebComponent extends Component
         $this->resetErrorBag();     // ← opcional extra seguridad
 
         // Restablecer todas las variables
-        $this->resetExcept(['filtro_anio', 'filtro_mes']);
+        // $this->resetExcept(['filtro_anio', 'filtro_mes']);
 
         $this->foto = null;
         $this->fotoactual = null;
@@ -702,11 +718,9 @@ class SpijwebComponent extends Component
     {
         try {
 
-            $registro = InformaticasSpijwebsEntrega::findOrFail(
-                $this->spijwebasignado_id
-            );
+            $usuario_datos = auth()->user()->datos;
 
-            // Correo seleccionado para el envío
+            // Validar correo
             $correo = trim($this->enviar_a);
 
             if (empty($correo)) {
@@ -723,22 +737,32 @@ class SpijwebComponent extends Component
 
             /*
             |--------------------------------------------------------------------------
-            | ACTUALIZAR USUARIO Y PASSWORD
+            | OBTENER REGISTROS
+            |--------------------------------------------------------------------------
+            */
+
+            $registro = InformaticasSpijwebsEntrega::findOrFail(
+                $this->spijwebasignado_id
+            );
+
+            $registro2 = InformaticasSpijwebsLicencia::where('usuario', $this->usuario)->firstOrFail();
+
+            /*
+            |--------------------------------------------------------------------------
+            | ACTUALIZAR CREDENCIALES
             |--------------------------------------------------------------------------
             */
 
             $registro->update([
-                'usuario' => $this->usuario,
-                'password' => $this->password,
+                'usuario'      => $this->usuario,
+                'password'     => $this->password,
+                'updated_user' => $usuario_datos,
             ]);
 
             /*
             |--------------------------------------------------------------------------
-            | REFRESCAR EL REGISTRO
+            | REFRESCAR REGISTRO
             |--------------------------------------------------------------------------
-            |
-            | De esta manera $registro contiene los datos recién actualizados.
-            |
             */
 
             $registro->refresh();
@@ -755,42 +779,64 @@ class SpijwebComponent extends Component
 
             /*
             |--------------------------------------------------------------------------
-            | MARCAR COMO ENVIADO
+            | SI EL CORREO SE ENVIÓ CORRECTAMENTE
             |--------------------------------------------------------------------------
             */
-            
+
             $registro->update([
                 'enviarusuario' => 'SI',
             ]);
 
-            // Cerrar modal
+            $registro2->update([
+                'asignado' => 1,
+                'user_updated' => $usuario_datos,
+            ]);
+
+            /*
+            |--------------------------------------------------------------------------
+            | CERRAR MODAL
+            |--------------------------------------------------------------------------
+            */
+
             $this->modalNuevoEditarAbrir = false;
 
-            // Limpiar variables
+            /*
+            |--------------------------------------------------------------------------
+            | LIMPIAR VARIABLES
+            |--------------------------------------------------------------------------
+            */
+
             $this->resetExcept([
                 'filtro_anio',
                 'filtro_mes'
             ]);
 
+            /*
+            |--------------------------------------------------------------------------
+            | MENSAJE DE ÉXITO
+            |--------------------------------------------------------------------------
+            */
+
             $this->dispatch(
                 'alerta-actualizado',
-                titulo: 'Credenciales',
-                mensaje: 'Usuario y Password fue enviado correctamente al correo ' . $correo,
+                titulo: 'Credenciales enviadas',
+                mensaje: 'Usuario y Password fueron enviados correctamente al correo ' . $correo,
                 tipo: 'success'
             );
 
         } catch (\Throwable $e) {
 
-            \Log::error('Error al enviar formato PDF', [
-                'id' => $this->spijwebasignado_id,
-                'correo' => $this->enviar_a,
-                'error' => $e->getMessage(),
+            \Log::error('Error al enviar credenciales SPIJ WEB', [
+                'id'       => $this->spijwebasignado_id,
+                'licencia' => $this->licencia_id,
+                'correo'   => $this->enviar_a,
+                'error'    => $e->getMessage(),
             ]);
 
             $this->dispatch(
                 'alerta-actualizado',
                 titulo: 'Error',
-                mensaje: 'No se pudo enviar el formato: ' . $e->getMessage(),
+                mensaje: 'No se pudo enviar el correo: ' . $e->getMessage(),
                 tipo: 'error'
             );
         }
@@ -1011,7 +1057,32 @@ class SpijwebComponent extends Component
         );
     }
 
+    // ============================================================================================================================
+    // MODALES BUSCAR
+    // ============================================================================================================================
 
+    public function licenciaBuscar()
+    {
+        $this->modalLicenciaBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchPersonal');
+    }
+
+    public function cerrarBuscar()
+    {
+        $this->modalReportesFiltros = false;
+
+        $this->modalPersonalBuscar = false;
+        $this->modalPersonalSedeBuscar = false;
+        $this->modalPersonalDependenciaBuscar = false;
+        $this->modalPersonalDespachoBuscar = false;
+        $this->modalPersonalCargoBuscar = false;
+        $this->modalInformaticaServicioBuscar = false;
+        $this->modalInformaticaServicioDetalleBuscar = false;
+        $this->modalPatrimonioBienesBuscar = false;
+        $this->modalHistorial = false;
+        $this->modalLicenciaBuscar = false;
+    } 
 
     // ============================================================================================================================
     // FUNCIONES AGREGAR
@@ -1095,5 +1166,15 @@ class SpijwebComponent extends Component
     public function agregar_cargo(Personales_cargo $icargo)
     {
         $this->cargo = $icargo->nombre;
+    }
+
+    public function agregar_licencia(InformaticasSpijwebsLicencia $ilicencia)
+    {
+        $this->licencia_id = $ilicencia->id;
+        $this->usuario = $ilicencia->usuario;
+        $this->password = $ilicencia->password;
+
+        // CERRAR MODAL
+        $this->modalLicenciaBuscar = false;
     }
 }

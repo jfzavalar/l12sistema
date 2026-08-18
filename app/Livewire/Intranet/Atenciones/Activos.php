@@ -1346,6 +1346,7 @@ class Activos extends Component
     // ============================================================================================================================
     // FUNCIONES AGREGAR
     // ============================================================================================================================
+    
     public function agregar_persona(Persona $ipersona){
         // DATOS DE LA PERSONA
         $this->persona_id = $ipersona->id;

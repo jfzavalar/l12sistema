@@ -214,7 +214,7 @@
     </div>
 
     <div>
-        {{-- Modal Nuevo-Editar --}}
+        {{-- MODAL NUEVO EDITAR --}}
         <div class="modal fade @if($modalNuevoEditarAbrir) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
             <div class="modal-dialog" style="max-width:90%;">
                 <div class="modal-content">
@@ -255,14 +255,21 @@
                                     <fieldset class="border p-3 rounded mb-3" {{ $seccionDetalle }}>
                                         <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DETALLES SPIJWEB</legend>
                                         <div class="row">
-                                            <div class="col-xl-2">
-                                                <label for="txtusuario" class="fw-bold fs-6">Usuario</label>
-                                                <input type="textusuario" id="txt" class="form-control form-control-sm" wire:model="usuario" required>
-                                            </div>
-                                            <div class="col-xl-2">
-                                                <label for="txtpassword" class="fw-bold fs-6">Contraseña</label>
-                                                <input type="textpassword" id="txt" class="form-control form-control-sm" wire:model="password" required>
-                                            </div>
+                                            @if ($textoHeaderModal === "ENVIAR USUARIO")
+                                                <div class="col-xl-2">
+                                                    <label for="txtusuario" class="fw-bold fs-6">Usuario</label>
+                                                    <div class="input-group">
+                                                        <button type="button" class="btn btn-dark btn-xs" wire:click="licenciaBuscar">
+                                                            <i class="fa-solid fa-magnifying-glass"></i> Buscar
+                                                        </button>
+                                                        <input type="textusuario" id="txt" class="form-control form-control-sm" wire:model="usuario" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-2">
+                                                    <label for="txtpassword" class="fw-bold fs-6">Contraseña</label>
+                                                    <input type="textpassword" id="txt" class="form-control form-control-sm" wire:model="password" required>
+                                                </div>
+                                            @endif
                                             <div class="col-xl-8">
                                                 <label for="txtenviar" class="fw-bold fs-6">Enviar a:</label>
                                                 <div class="d-flex gap-2">
@@ -279,6 +286,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
+                            {{ $spijwebasignado_id }} - {{ $usuario }}
                             <button type="submit" class="btn btn-{{ $colorGuardarActualizar }} btn-sm">
                                 <i class="fa-solid fa-floppy-disk"></i> {{ $textoGuardarActualizar }}
                             </button>
@@ -317,6 +325,85 @@
                             </button>
                             <button type="button" class="btn btn-secondary btn-sm" wire:click="cerrar_alerta_cambio_estado">
                                 <i class="fa-solid fa-square-xmark me-1"></i>Cerrar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {{-- MODAL BUSCAR LICENCIA --}}
+        <div class="modal fade @if($modalLicenciaBuscar) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <form action="">
+                        <div class="modal-header bg-{{ $colorHeaderModal }}">
+                            <h1 class="modal-title fs-5" id="buscar-sedes-componentLabel">
+                                <i class="fa-brands fa-searchengin"></i> BUSCAR LICENCIA
+                            </h1>
+                            <button type="button" class="btn-close" aria-label="Close" wire:click="cerrarBuscar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="table-responsive-xl">
+                                <form>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_licencias->total() }}</span>
+                                                <input type="text" id="txtSearchLicencia" class="form-control form-control-sm" placeholder="Buscar licencia" wire:model.live="searchlicencias">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <table class="table table-striped table-hover table-sm table-xsmall">
+                                    <thead class="table-dark text-center">
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">USUARIO</th>
+                                            <th scope="col">PASSWORD</th>
+                                            <th scope="col">ASINADO</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($lista_licencias as $item)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $item->usuario }}</td>
+                                                <td>{{ $item->password }}</td>
+                                                <td class="text-center">
+                                                    @if ($item->asignado === '0')
+                                                        <span class="badge bg-success-subtle text-success-emphasis px-3 py-2">
+                                                            <i class="fa-solid fa-circle-check me-1"></i>
+                                                            Libre
+                                                        </span>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                        <div class="btn-group" role="group">
+                                                            <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_licencia({{ $item->id }})">
+                                                                <i class="fa-solid fa-circle-plus"></i> Agregar
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr class="align-middle"><td colspan="5">Sin registros.</td></tr>
+                                        @endforelse
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="5">{{ $lista_licencias->links() }}</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>                      
+                            </div>          
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" wire:click="cerrarBuscar">
+                                <i class="fa-solid fa-door-closed"></i> Cerrar
                             </button>
                         </div>
                     </form>
