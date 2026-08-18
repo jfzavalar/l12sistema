@@ -721,12 +721,44 @@ class SpijwebComponent extends Component
                 return;
             }
 
-            // Enviar correo con el PDF adjunto
+            /*
+            |--------------------------------------------------------------------------
+            | ACTUALIZAR USUARIO Y PASSWORD
+            |--------------------------------------------------------------------------
+            */
+
+            $registro->update([
+                'usuario' => $this->usuario,
+                'password' => $this->password,
+            ]);
+
+            /*
+            |--------------------------------------------------------------------------
+            | REFRESCAR EL REGISTRO
+            |--------------------------------------------------------------------------
+            |
+            | De esta manera $registro contiene los datos recién actualizados.
+            |
+            */
+
+            $registro->refresh();
+
+            /*
+            |--------------------------------------------------------------------------
+            | ENVIAR CORREO
+            |--------------------------------------------------------------------------
+            */
+
             Mail::to($correo)->send(
                 new NotificacionInformaticaSpijwebUserPass($registro)
             );
 
-            // El correo fue enviado correctamente
+            /*
+            |--------------------------------------------------------------------------
+            | MARCAR COMO ENVIADO
+            |--------------------------------------------------------------------------
+            */
+            
             $registro->update([
                 'enviarusuario' => 'SI',
             ]);
