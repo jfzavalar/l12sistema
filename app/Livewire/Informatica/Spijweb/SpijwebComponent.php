@@ -183,16 +183,47 @@ class SpijwebComponent extends Component
 
     public $enviar_a;
 
-
-
-    // VARIABLES MODAL DE MOTIVO DE CAMBIO
-    public $modal_abierto_alerta_cambio_estado = false;
-
     public $filtroanio;
     
     public function mount()
     {
         $this->filtroanio = now()->year;
+    }
+
+    // VARIABLES DE FILTROS
+    public $filtro_enviadoformatos,$filtro_enviadousuario;
+
+    public function filtrarTotal($value = null)
+    {
+        $this->resetFiltros();
+    }
+    public function filtrarFormatos($value = null)
+    {
+        $this->resetFiltros();
+        $this->filtro_enviadoformatos = 'SI';
+    }
+    public function filtrarNoformatos($value = null)
+    {
+        $this->resetFiltros();
+        $this->filtro_enviadoformatos = 'NO';
+    }
+    public function filtrarUsuario($value = null)
+    {
+        $this->resetFiltros();
+        $this->filtro_enviadousuario = 'SI';
+    }
+    public function filtrarNousuario($value = null)
+    {
+        $this->resetFiltros();
+        $this->filtro_enviadousuario = 'NO';
+    }
+    public function resetFiltros()
+    {
+        $this->search = null;
+        $this->filtro_enviadoformatos = null;
+        $this->filtro_enviadousuario = null;
+
+        $this->resetPage('spijwebPage');
     }
 
 
@@ -206,6 +237,24 @@ class SpijwebComponent extends Component
                     $q->where('dni', 'like', '%' . $search . '%')
                     ->orWhere('datos', 'like', '%' . $search . '%');
                 });
+            })
+            // FILTRO ENVIO DE FORMATOS
+            ->when($this->filtro_enviadoformatos, function ($q) {
+
+                $q->where(
+                    'enviarformatos',
+                    $this->filtro_enviadoformatos
+                );
+
+            })
+            // FILTRO ENVIO DE USUARIO
+            ->when($this->filtro_enviadousuario, function ($q) {
+
+                $q->where(
+                    'enviarusuario',
+                    $this->filtro_enviadousuario
+                );
+
             })
             ->orderBy('datos')
             ->paginate(30,['*'],'spijwebPage');

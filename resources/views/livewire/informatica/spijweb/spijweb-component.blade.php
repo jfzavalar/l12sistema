@@ -16,7 +16,7 @@
             </div>
 
             <div class="col-auto">
-                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarAtendido">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarFormatos">
                     <span class="alert alert-success d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-file"></i>
@@ -27,7 +27,7 @@
             </div>
 
             <div class="col-auto">
-                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarNoatendido">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarNoformatos">
                     <span class="alert alert-danger d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-file"></i>
@@ -38,7 +38,7 @@
             </div>
 
             <div class="col-auto">
-                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarAtendido">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarUsuario">
                     <span class="alert alert-success d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-user"></i>
@@ -49,7 +49,7 @@
             </div>
 
             <div class="col-auto">
-                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarNoatendido">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarNousuario">
                     <span class="alert alert-danger d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-user"></i>
@@ -292,39 +292,6 @@
                             </button>
                             <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" wire:click="cerrar">
                                 <i class="fa-solid fa-rectangle-xmark"></i> Cerrar
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal de Alerta al Cambio de estado-->
-        <div class="modal fade @if($modal_abierto_alerta_cambio_estado) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
-            <div class="modal-dialog modal-ms">
-                <div class="modal-content">
-                    {{-- <form wire:submit.prevent="{{ $btn_guardar_actualizar }}"> --}}
-                    <form wire:submit.prevent="actualizar_entregado">
-                        <div class="modal-header bg-success-subtle">
-                            <h1 class="modal-title fs-5" id="NuevoEditarModalLabel">
-                                <i class="fa-solid fa-file-pen"></i> Actualizar
-                            </h1>
-                            <button type="button" class="btn-close" wire:click="cerrar_alerta_cambio_estado"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-xl-12">
-                                    <label for="cmb_reportado" class="fw-bold fs-6">OBSERVACIONES:</label>
-                                    <textarea id="txtupdated_motivo" class="form-control" rows="3" style="font-size: 12px; white-space: nowrap; overflow-x: auto;" wire:model="mes_observacion"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary btn-sm">
-                                <i class="fa-solid fa-floppy-disk me-1"></i>Guardar
-                            </button>
-                            <button type="button" class="btn btn-secondary btn-sm" wire:click="cerrar_alerta_cambio_estado">
-                                <i class="fa-solid fa-square-xmark me-1"></i>Cerrar
                             </button>
                         </div>
                     </form>
