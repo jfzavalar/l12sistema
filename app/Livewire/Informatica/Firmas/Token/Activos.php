@@ -100,8 +100,6 @@ class Activos extends Component
         $this->resetPage('tokensPage');
     }
 
-    Public $filtro_firma,$filtro_asignacion,$filtro_verificar;
-
     public $persona_id,
             $dni,
             $datos,
@@ -164,45 +162,48 @@ class Activos extends Component
 
     public $pdf_acta;
 
-    public function filtrarTotal()
+
+    Public $filtro_firma,$filtro_asignacion,$filtro_verificar;
+
+    public function filtrarTotal($value = null)
     {
         $this->resetFiltros();
     }
 
-    public function filtrarFirmadas()
+    public function filtrarFirmadas($value = null)
     {
         $this->resetFiltros();
         $this->filtro_firma = 'con';
     }
 
-    public function filtrarSinFirmar()
+    public function filtrarSinFirmar($value = null)
     {
         $this->resetFiltros();
         $this->filtro_firma = 'sin';
     }
 
-    public function filtrarAsignados()
+    public function filtrarAsignados($value = null)
     {
         $this->resetFiltros();
         $this->filtro_asignacion = 'ASIGNACION';
     }
 
-    public function filtrarDevueltos()
+    public function filtrarDevueltos($value = null)
     {
         $this->resetFiltros();
         $this->filtro_asignacion = 'DEVOLUCION';
     }
 
-    public function filtrarVerificados()
+    public function filtrarVerificados($value = null)
     {
         $this->resetFiltros();
-        $this->filtro_verificar = 1; // ✅
+        $this->filtro_verificar = 1;
     }
 
-    public function filtrarNoVerificados()
+    public function filtrarNoVerificados($value = null)
     {
         $this->resetFiltros();
-        $this->filtro_verificar = 0; // ✅
+        $this->filtro_verificar = 0; 
     }
 
     private function resetFiltros()

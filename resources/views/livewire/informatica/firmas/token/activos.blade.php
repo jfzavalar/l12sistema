@@ -16,7 +16,7 @@
             </div>
             
             <div class="col-auto">
-                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarAtendido">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarAsignados">
                     <span class="alert alert-success d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-check-double"></i>
@@ -27,7 +27,7 @@
             </div>
 
             <div class="col-auto">
-                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarNoatendido">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarDevueltos">
                     <span class="alert alert-danger d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-check-double"></i>
@@ -38,7 +38,7 @@
             </div>
 
             <div class="col-auto">
-                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarEnviadolima">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarFirmadas">
                     <span class="alert alert-success d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-check-double"></i>
@@ -49,7 +49,7 @@
             </div>
 
             <div class="col-auto">
-                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarRegistrados">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarSinFirmar">
                     <span class="alert alert-danger d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-check-double"></i>
@@ -60,7 +60,7 @@
             </div>
 
             <div class="col-auto">
-                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarRegistrados">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarVerificados">
                     <span class="alert alert-primary d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-square-check"></i>
@@ -71,7 +71,7 @@
             </div>
 
             <div class="col-auto">
-                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarRegistrados">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarNoVerificados">
                     <span class="alert alert-secondary d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-ban"></i>
