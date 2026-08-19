@@ -37,18 +37,19 @@ class SpijwebComponent extends Component
     // VARIABLES PARA MODALES
     public $modalNuevoEditarAbrir = false, $modalReportesFiltros = false;
 
-    public $modalPersonalBuscar = false;
-    public $modalPersonalSedeBuscar = false;
-    public $modalPersonalDependenciaBuscar = false;
-    public $modalPersonalDespachoBuscar = false;
-    public $modalPersonalCargoBuscar = false;
-    public $modalInformaticaServicioBuscar = false;
-    public $modalInformaticaServicioDetalleBuscar = false;
-    public $modalPatrimonioBienesBuscar = false;
-    public $modalPDFCargar = false;
-    public $modalPDFEvidenciaCargar = false;
-    public $modalHistorial = false;
-    public $modalLicenciaBuscar = false;
+    public $modalPersonalBuscar = false,
+            $modalPersonalSedeBuscar = false,
+            $modalPersonalDependenciaBuscar = false,
+            $modalPersonalDespachoBuscar = false,
+            $modalPersonalCargoBuscar = false,
+            $modalInformaticaServicioBuscar = false,
+            $modalInformaticaServicioDetalleBuscar = false,
+            $modalPatrimonioBienesBuscar = false,
+            $modalPDFCargar = false,
+            $modalPDFEvidenciaCargar = false,
+            $modalHistorial = false,
+            $modalLicenciaBuscar = false,
+            $modalLicenciaListar = false;
 
     // VARIABLES PARA ADMINISTRAR MODALES
     public $colorHeaderModal, $textoHeaderModal;
@@ -698,6 +699,10 @@ class SpijwebComponent extends Component
         }
     }
 
+    // ============================================================================================================================
+    // FUNCIONES PARA ENVIO DE CORREO
+    // ============================================================================================================================
+
     public function enviar_usuario1(InformaticasSpijwebsEntrega $instanciaTabla)
     {
         $this->resetValidation();   // ← limpia los errores
@@ -1225,5 +1230,20 @@ class SpijwebComponent extends Component
 
         // CERRAR MODAL
         $this->modalLicenciaBuscar = false;
+    }
+
+    // ============================================================================================================================
+    // MODALES LISTAR
+    // ============================================================================================================================
+
+    public function licencias_listar()
+    {
+        // ABRIR MODAL LISTA LICENCIA
+        $this->modalLicenciaListar = true;
+    }
+
+    public function cerrarListar()
+    {
+        $this->modalLicenciaListar = false;
     }
 }

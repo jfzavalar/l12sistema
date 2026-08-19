@@ -671,19 +671,31 @@ class Activos extends Component
         $this->validate();
         
         try {
-
             $registro = null;
 
-            if ( in_array($this->detalle_servicio_id, [101, 102]) && PatrimoniosBiene::where('ip', $this->bien_ip)->exists())
-            {
-                $this->dispatch(
-                    'alerta-actualizado',
-                    titulo: 'Duplicado',
-                    mensaje: 'La IP ya está registrada.',
-                    tipo: 'warning'
-                );
+            // Limpiamos la IP de espacios accidentales
+            $ip = trim($this->bien_ip);
 
-                return;
+            // Validar únicamente si hay una IP escrita
+            if (!empty($ip) && in_array((int) $this->servicio_id, [9, 11], true)) {
+                
+                // Si estás editando, ignoramos el ID del bien actual para que no choque consigo mismo
+                $existeIp = PatrimoniosBiene::where('ip', $ip)
+                    ->when($this->bien_id, function ($query) {
+                        $query->where('id', '!=', $this->bien_id);
+                    })
+                    ->exists();
+
+                if ($existeIp) {
+                    $this->dispatch(
+                        'alerta-actualizado',
+                        titulo: 'Duplicado',
+                        mensaje: 'La IP ya está registrada.',
+                        tipo: 'warning'
+                    );
+
+                    return;
+                }
             }
 
             DB::transaction(function () use (&$registro) {
@@ -1346,7 +1358,7 @@ class Activos extends Component
     // ============================================================================================================================
     // FUNCIONES AGREGAR
     // ============================================================================================================================
-    
+
     public function agregar_persona(Persona $ipersona){
         // DATOS DE LA PERSONA
         $this->persona_id = $ipersona->id;
