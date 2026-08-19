@@ -381,7 +381,7 @@
             </div>
         </div>
 
-        {{-- MODAL BUSCAR LICENCIAS --}}
+        {{-- MODAL LISTAR LICENCIAS --}}
 
         <div class="modal fade @if($modalLicenciaListar) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
             <div class="modal-dialog modal-lg">
@@ -399,7 +399,7 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="input-group mb-2">
-                                                <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_licencias->total() }}</span>
+                                                <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_licencias_total->total() }}</span>
                                                 <input type="text" id="txtSearchLicencia" class="form-control form-control-sm" placeholder="Buscar licencia" wire:model.live="searchlicencias">
                                             </div>
                                         </div>
@@ -416,27 +416,29 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse ($lista_licencias as $item)
+                                        @forelse ($lista_licencias_total as $item)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $item->usuario }}</td>
                                                 <td>{{ $item->password }}</td>
                                                 <td class="text-center">
-                                                    @if ($item->asignado === '0')
-                                                        <span class="badge bg-success-subtle text-success-emphasis px-3 py-2">
-                                                            <i class="fa-solid fa-circle-check me-1"></i>
-                                                            Libre
-                                                        </span>
-                                                    @endif
+                                                    @php
+                                                        $isLibre = $item->asignado == '0';
+                                                    @endphp
+                                                    
+                                                    <span class="badge {{ $isLibre ? 'bg-success-subtle text-success-emphasis' : 'bg-danger-subtle text-danger-emphasis' }} px-3 py-2">
+                                                        <i class="fa-solid {{ $isLibre ? 'fa-circle-check' : 'fa-user-check' }} me-1"></i>
+                                                        {{ $isLibre ? 'Libre' : 'Asignado' }}
+                                                    </span>
                                                 </td>
                                                 <td>
-                                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                    {{-- <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                         <div class="btn-group" role="group">
                                                             <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_licencia({{ $item->id }})">
                                                                 <i class="fa-solid fa-circle-plus"></i> Agregar
                                                             </button>
                                                         </div>
-                                                    </div>
+                                                    </div> --}}
                                                 </td>
                                             </tr>
                                         @empty
@@ -445,7 +447,7 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="5">{{ $lista_licencias->links() }}</td>
+                                            <td colspan="5">{{ $lista_licencias_total->links() }}</td>
                                         </tr>
                                     </tfoot>
                                 </table>                      

@@ -30,6 +30,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
+use ZipArchive;
 
 class Activos extends Component
 {
@@ -1932,6 +1933,77 @@ class Activos extends Component
                 $this->filtro_incidencia,
             ),
             'reporte_tickes.xlsx'
+        );
+    }
+
+    
+    // ============================================================================================================================
+    // DESCARGAR TODOS LOS PDF EN UN ZIP
+    // ============================================================================================================================
+
+    public function descargarPdfsMasivo()
+    {
+        set_time_limit(300);
+        ini_set('memory_limit', '512M');
+
+        // 1. Filtramos desde la BD descartando nulos, cadenas vacías y 'null' como string
+        $registros = $this->queryConFiltros()
+            ->where('personales_atenciones.activo', 1)
+            ->whereNotNull('ruta_documento')
+            ->whereNotIn('ruta_documento', ['', 'null', 'NULL'])
+            ->get();
+
+        if ($registros->isEmpty()) {
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Sin archivos',
+                mensaje: 'No se encontraron registros activos con PDF adjunto para los filtros seleccionados.',
+                tipo: 'warning'
+            );
+            return;
+        }
+
+        $nombreZip = 'atenciones_pdf_' . now()->format('Ymd_His') . '.zip';
+        $rutaZipTemporal = storage_path('app/public/' . $nombreZip);
+
+        $zip = new ZipArchive();
+
+        if ($zip->open($rutaZipTemporal, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+
+            $archivosAgregados = 0;
+
+            foreach ($registros as $item) {
+                
+                // 2. Validación preventiva antes de consultar el sistema de archivos
+                if (empty($item->ruta_documento) || is_null($item->ruta_documento)) {
+                    continue; // Salta al siguiente registro en caso de valor nulo o vacío
+                }
+
+                // 3. Comprobamos la existencia real del PDF en el disco
+                if (Storage::disk('public')->exists($item->ruta_documento)) {
+                    
+                    // Lectura segura en modo solo lectura
+                    $contenidoPdf = Storage::disk('public')->get($item->ruta_documento);
+                    
+                    $nombreEnZip = "Atencion_{$item->id}_{$item->dni}.pdf";
+
+                    $zip->addFromString($nombreEnZip, $contenidoPdf);
+                    $archivosAgregados++;
+                }
+            }
+
+            $zip->close();
+
+            if ($archivosAgregados > 0) {
+                return response()->download($rutaZipTemporal)->deleteFileAfterSend(true);
+            }
+        }
+
+        $this->dispatch(
+            'alerta-actualizado',
+            titulo: 'Error',
+            mensaje: 'No se encontraron los archivos PDF físicos en el servidor.',
+            tipo: 'error'
         );
     }
 

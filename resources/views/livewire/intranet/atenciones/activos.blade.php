@@ -277,13 +277,15 @@
                                         <i class="fa-brands fa-whatsapp"></i>
                                     @endif
                                 </td>
-                                <td class="text-center align-middle">
+                                {{-- <td class="text-center align-middle">
                                     <span class="badge py-1 rounded-pill {{ $item->solicitud_incidencia == 'INCIDENCIA' ? 'bg-primary-subtle text-primary' : 'bg-dark-subtle text-dark' }}">
                                         {{ $item->solicitud_incidencia }}
                                     </span>
-                                </td>
+                                </td> --}}
                                 <td>
-                                    <b>TIPO: </b>{{ $item->solicitud_incidencia }}
+                                    <span class="badge py-1 rounded-pill {{ $item->solicitud_incidencia == 'INCIDENCIA' ? 'bg-primary-subtle text-primary' : 'bg-dark-subtle text-dark' }}">
+                                        {{ $item->solicitud_incidencia }}
+                                    </span>
                                     <br>
                                     <b>SERVICIO: </b> {{ $item->servicio }}
                                     <br>
@@ -846,6 +848,9 @@
                         </button>
                         <button class="btn btn-success btn-sm" wire:click="exportarExcel">
                             <i class="fa-solid fa-file-excel"></i> Exportar a Excel
+                        </button>
+                        <button class="btn btn-dark btn-sm" wire:click="descargarPdfsMasivo">
+                            <i class="fa-solid fa-file-pdf"></i> Descargar Actas de Mantenimiento
                         </button>
                         <button type="button" class="btn btn-secondary btn-sm" wire:click="cerrarBuscar">
                             <i class="fa-solid fa-rectangle-xmark"></i> Cerrar

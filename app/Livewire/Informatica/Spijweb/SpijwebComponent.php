@@ -377,9 +377,18 @@ class SpijwebComponent extends Component
             ->orderBy('id')
             ->paginate(15,['*'],'licenciasPage');
 
+        $lista_licencias_total = InformaticasSpijwebsLicencia::where('activo','1')
+            ->when($this->searchlicencias !== '', function ($query) {
+                $query->where(function ($q) {
+                    $q->where('usuario', 'like', '%' . $this->searchlicencias . '%');
+                });
+            })
+            ->orderBy('id')
+            ->paginate(15);
+
         return view('livewire.informatica.spijweb.spijweb-component',
                         compact('lista_activos','estadisticas','anios',
-                            'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos','lista_licencias'));
+                            'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos','lista_licencias','lista_licencias_total'));
     }
 
     private function queryConFiltros($tipoDocumento = null)
@@ -1117,6 +1126,12 @@ class SpijwebComponent extends Component
 
     public function licenciaBuscar()
     {
+        $this->colorHeaderModal = "success-subtle";
+        $this->textoHeaderModal = "ENVIAR USUARIO";
+        $this->colorGuardarActualizar = "success";
+        $this->textoGuardarActualizar = "Guardar y enviar";
+        $this->colorAgregar = "outline-success";
+
         $this->modalLicenciaBuscar = true;
 
         $this->dispatch('focus-input', id: 'txtSearchPersonal');
@@ -1238,6 +1253,12 @@ class SpijwebComponent extends Component
 
     public function licencias_listar()
     {
+        $this->colorHeaderModal = "success-subtle";
+        $this->textoHeaderModal = "ENVIAR USUARIO";
+        $this->colorGuardarActualizar = "success";
+        $this->textoGuardarActualizar = "Guardar y enviar";
+        $this->colorAgregar = "outline-success";
+        
         // ABRIR MODAL LISTA LICENCIA
         $this->modalLicenciaListar = true;
     }

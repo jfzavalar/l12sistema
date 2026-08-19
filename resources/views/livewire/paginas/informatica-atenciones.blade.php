@@ -173,19 +173,14 @@
 
                     <div class="col-xl-12">
                         <div class="row">
-                            <div class="col-xl-3">
+                            <div class="col-xl-2">
                                 <div class="input-group input-group-sm mb-3">
                                     <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
                                     <input type="text" name="search" id="search" class="form-control form-control-sm me-1 fw-bold is-valid" placeholder="INGRESE SU DNI" wire:model.live="search">
                                 </div>
                             </div>
-                            <div class="col-xl-8">
+                            <div class="col-xl-10">
                                 <label class="form-control form-control-sm me-1 fw-bold">{{ $datos . ' | ' . $sededestino . ' | ' . $dependenciadestino }}</label>
-                            </div>
-                            <div class="col-xl-1 text-end">
-                                <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3 me-1" wire:click="guardar">
-                                    <i class="fa-solid fa-floppy-disk"></i> Guardar
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -359,7 +354,12 @@
                                             @endif
                                         </div>
                                     </div>
-                                </div>                      --}}
+                                </div>--}}
+                                <div class="col-xl-12 text-end">
+                                    <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3 mt-3" wire:click="guardar">
+                                        <i class="fa-solid fa-floppy-disk"></i><br> Guardar
+                                    </button>
+                                </div>
                             </div>
                         </fieldset>
                     </div>
