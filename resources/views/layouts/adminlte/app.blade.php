@@ -659,19 +659,19 @@
 
         {{-- ASIGNAR FOCUS A LAS INPUTS --}}
         <script>
-        document.addEventListener('livewire:init', () => {
+            document.addEventListener('livewire:init', () => {
 
-            Livewire.on('focus-input', (event) => {
+                Livewire.on('focus-input', (event) => {
 
-                requestAnimationFrame(() => {
-                    setTimeout(() => {
-                        document.getElementById(event.id)?.focus();
-                    }, 50);
+                    requestAnimationFrame(() => {
+                        setTimeout(() => {
+                            document.getElementById(event.id)?.focus();
+                        }, 50);
+                    });
+
                 });
 
             });
-
-        });
         </script>
 
         {{-- MODALES DE ALERTA ACTUALIZAR--}}

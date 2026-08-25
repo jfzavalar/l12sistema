@@ -228,7 +228,7 @@
                             {{-- <th scope="col" class="table-danger">TIPO</th> --}}
                             <th scope="col" class="bg-success-subtle">MEDIO</th>
                             <th scope="col" class="bg-success-subtle">TIPO</th>
-                            <th scope="col" class="bg-success-subtle">DESCRIPCIÓN DEL SERVICIO</th>
+                            {{-- <th scope="col" class="bg-success-subtle">DESCRIPCIÓN DEL SERVICIO</th> --}}
                             <th scope="col" class="bg-success-subtle">SOLUCIÓN</th>                     
                             <th scope="col" class="bg-success-subtle">ESTADO</th>
                             <th scope="col" class="bg-success-subtle">ATENDIDO POR</th>
