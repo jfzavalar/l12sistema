@@ -39,7 +39,7 @@
                 <p class="opacity-75">
                   Distrito Fiscal de Junín
                 </p>
-                <p>
+                {{-- <p>
                   @if (Route::has('login'))
                     <div class="sm:fixed sm:top-0 sm:right-0 p-6 text-right z-10">
                         @auth
@@ -49,15 +49,15 @@
                                 <i class="fa-solid fa-user"></i> Iniciar sesión
                             </a>
 
-                            {{-- @if (Route::has('register'))
+                            @if (Route::has('register'))
                                 <a href="{{ route('register') }}" class="btn btn-primary">
                                     <i class="fa-solid fa-address-card"></i> Register
                                 </a>
-                            @endif --}}
+                            @endif
                         @endauth
                     </div>
                   @endif
-                </p>
+                </p> --}}
               </div>
             </div>
           </div>
@@ -140,23 +140,26 @@
       <!-- Wrap the rest of the page in another container to center all the content. -->
       <div class="container marketing">
         <!-- Three columns of text below the carousel -->
-        <h2 class="text-center">SERVICIOS INTERNOS DEL DFJUNÍN</h2>
-        <hr class="featurette-divider" />
-        {{-- <fieldset class="border p-3 rounded mb-3">
-          <legend class="float-none px-3 fs-6 fw-bold text-muted text-center rounded bg-primary-subtle">SERVICIOS INTERNOS DEL DFJUNÍN</legend> --}}
-          <div class="row">
-            <div class="col-lg-4">
-              <svg aria-label="Placeholder" class="bd-placeholder-img rounded-circle" height="140" preserveAspectRatio="xMidYMid slice" role="img" width="140" xmlns="http://www.w3.org/2000/svg">
-                <title>Placeholder</title>
-                <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
-              </svg>
-              <h2 class="fw-normal">INFORMÁTICA</h2>
-              <p>Registro de Incidencias / Solicitudes</p>
-              <p>
-                <a class="btn btn-primary" href="{{ route('paginas.informatica-atenciones.index') }}">
-                    <i class="fa-solid fa-file"></i> Registrar &raquo;
-                </a>
-              </p>
+        <h3 class="text-center">SERVICIOS INTERNOS DEL DFJUNÍN</h3>
+        <hr />
+
+            <div class="col-lg-4 col-md-6 mb-4">
+              <a href="{{ route('paginas.informatica-atenciones.index') }}" class="text-decoration-none">
+                  <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-4 card-hover transition bg-primary-subtle">                     
+                    <!-- Contenedor del Icono/Imagen centrado -->
+                    <div class="d-flex justify-content-center align-items-center mb-3">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle d-inline-flex">
+                            <i class="fa-solid fa-laptop-code text-primary fs-1"></i>
+                            <!-- Si prefieres mantener tu SVG o imagen circular, reemplaza la línea del <i> por tu <img> o <svg> -->
+                        </div>
+                    </div>
+                    <!-- Título y Descripción -->
+                    <div class="card-body p-0">
+                        <h3 class="fw-bold text-dark fs-4 mb-2">INFORMÁTICA</h3>
+                        <p class="text-muted mb-0">Registro de Incidencias / Solicitudes</p>
+                    </div>
+                  </div>
+              </a>
             </div>
 
             
@@ -353,13 +356,13 @@
 
               <!-- Logo / Copyright -->
               <div class="col-6 col-md-3 mb-3">
-                  <a href="/"
+                  {{-- <a href="/"
                     class="d-flex align-items-center mb-3 link-body-emphasis text-decoration-none">
                       <i class="fa-brands fa-bootstrap fs-3 text-primary"></i>
-                  </a>
+                  </a> --}}
 
                   <p class="mb-0">
-                      © 2017–2025
+                      2026
                   </p>
               </div>
 

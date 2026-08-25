@@ -67,7 +67,10 @@ class Activos extends Component
     public $mostrarotrosp = "d-none", $mostrarotrosc = "d-none",$mostrarcargafoto = "d-none";
 
     //VARIABLES PARA BLOQUEAR SECCIONES
-    public $seccionFoto, $seccionPersona, $seccionPersonal;
+    public $seccionFoto, 
+            $seccionPersona, 
+            $seccionPersonal,
+            $seccionServicio ;
 
     // VARIABLES DE FUNCION GUARDAR O ACTUALIZAR
     public $funcionGuardarActualizar;
@@ -658,6 +661,12 @@ class Activos extends Component
         $this->textoGuardarActualizar = "Guardar";
         $this->colorAgregar = "outline-primary";
 
+        // ===== BLOQUEO DE SECCIONES =====
+        $this->seccionFoto = "";
+        $this->seccionPersona = "";
+        $this->seccionPersonal = "";
+        $this->seccionServicio = "";
+
         $this->tipo_documento = "CONTRATO";
 
         // CAMBIAR EL VALOR DE LA BANDERA PARA PODER CARGAR EVIDENCIAS PDF
@@ -888,6 +897,7 @@ class Activos extends Component
         $this->seccionFoto = "";
         $this->seccionPersona = "";
         $this->seccionPersonal = "";
+        $this->seccionServicio = "";
 
         // CAMBIAR EL VALOR DE LA BANDERA PARA PODER CARGAR EVIDENCIAS PDF
         $this->bandera_documento = "EVIDENCIA";
@@ -1171,7 +1181,7 @@ class Activos extends Component
                 tipo: 'success'
             );
 
-            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
+            // $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
 
         // } catch (\Throwable $e) {
 
@@ -1190,6 +1200,115 @@ class Activos extends Component
             dd($e); // 🔥 Déjalo mientras pruebas
 
         };
+    }
+
+    public function atender(PersonalesAtencione $ipersonalatencion)
+    {
+        $this->resetValidation();
+        $this->resetErrorBag();
+
+        $this->funcionGuardarActualizar = "actualizar";
+
+        // $this->mostrarBtnBuscarDni = "d-none";
+
+        $this->colorHeaderModal = "warning-subtle";
+        $this->textoHeaderModal = "ATENDER SOLICITUD / INCIDENCIA";
+        $this->colorGuardarActualizar = "warning";
+        $this->textoGuardarActualizar = "Atender";
+        $this->colorAgregar = "outline-warning";
+
+        // ===== BLOQUEO DE SECCIONES =====
+        $this->seccionFoto = "disabled";
+        $this->seccionPersona = "disabled";
+        $this->seccionPersonal = "disabled";
+        $this->seccionServicio = "disabled";
+
+        // CAMBIAR EL VALOR DE LA BANDERA PARA PODER CARGAR EVIDENCIAS PDF
+        $this->bandera_documento = "EVIDENCIA";
+
+        // DATOS DE LA PERSONA
+        $this->atencion_id = $ipersonalatencion->id;
+
+        $this->persona_id = $ipersonalatencion->persona_id;
+        $this->dni = $ipersonalatencion->dni;
+        $this->appaterno = $ipersonalatencion->appaterno;
+        $this->apmaterno = $ipersonalatencion->apmaterno;
+        $this->nombres = $ipersonalatencion->nombres;
+        $this->datos = $ipersonalatencion->datos;
+        $this->celpersonal = $ipersonalatencion->celpersonal;
+        $this->celinstitucional = $ipersonalatencion->celinstitucional;
+        $this->correopersonal = $ipersonalatencion->correopersonal;
+        $this->correoinstitucional = $ipersonalatencion->correoinstitucional;
+
+        // DATOS DEL PERSONAL
+        $this->personal_id = $ipersonalatencion->personal_id;
+
+        $this->codsedeorigen = $ipersonalatencion->codsededestino;
+        $this->sedeorigen = $ipersonalatencion->sededestino;
+        $this->coddependenciaorigen= $ipersonalatencion->coddependenciadestino;
+        $this->dependenciaorigen = $ipersonalatencion->dependenciadestino;
+        $this->coddespachoorigen = $ipersonalatencion->coddespachodestino;
+        $this->despachoorigen = $ipersonalatencion->despachodestino;
+
+        $this->codsededestino = $ipersonalatencion->codsededestino;
+        $this->sededestino = $ipersonalatencion->sededestino;
+        $this->coddependenciadestino= $ipersonalatencion->coddependenciadestino;
+        $this->dependenciadestino = $ipersonalatencion->dependenciadestino;
+        $this->coddespachodestino = $ipersonalatencion->coddespachodestino;
+        $this->despachodestino = $ipersonalatencion->despachodestino;
+
+        $this->regimen = $ipersonalatencion->regimen;
+        $this->tipo_regimen = $ipersonalatencion->tipo_regimen;
+        $this->cargo = $ipersonalatencion->cargo;
+        $this->cargo_condicion = $ipersonalatencion->cargo_condicion;
+
+        // DATOS DE LA ATENCIÓN
+        $this->reportado_por = $ipersonalatencion->reportado_por;
+        $this->solicitud_incidencia = $ipersonalatencion->solicitud_incidencia;
+        $this->servicio = $ipersonalatencion->servicio;
+        $this->detalle_servicio = $ipersonalatencion->detalle_servicio;
+        $this->bien_id = $ipersonalatencion->bien_id;
+        $this->cod = $ipersonalatencion->cod;
+        $this->cod_patrimonial = $ipersonalatencion->cod_patrimonial;
+        $this->bien_ip_anterior = $ipersonalatencion->ip;
+        $this->bien_ip = $ipersonalatencion->ip;
+        $this->datos_bien = $ipersonalatencion->datos_bien;
+        $this->cea = $ipersonalatencion->cea;
+        $this->sgf = $ipersonalatencion->sgf;
+        $this->glpi = $ipersonalatencion->glpi;
+        $this->enviado_lima = $ipersonalatencion->enviado_lima;
+        $this->detalle_problema = $ipersonalatencion->detalle_problema;
+        $this->ncopias = $ipersonalatencion->ncopias;
+        $this->obs_usuario = $ipersonalatencion->obs_usuario;
+        $this->obs_informatico = $ipersonalatencion->obs_informatico;
+        $this->estado = $ipersonalatencion->estado;
+        $this->atendido = $ipersonalatencion->atendido;
+        $this->atendido_por_id = $ipersonalatencion->atendido_por_id;
+        $this->atendido_por_dni = $ipersonalatencion->atendido_por_dni;
+        $this->atendido_por_datos = $ipersonalatencion->atendido_por_datos;
+        $this->tiempo_atencion = $ipersonalatencion->tiempo_atencion;
+        $this->respuesta = $ipersonalatencion->respuesta;
+        $this->conformidad = $ipersonalatencion->conformidad;
+        $this->ruta_evidencia = $ipersonalatencion->ruta_evidencia;
+        $this->ruta_documento = $ipersonalatencion->ruta_documento;
+        $this->informatico_dni = $ipersonalatencion->informatico_dni;
+        $this->informatico = $ipersonalatencion->informatico;
+        $this->activo = $ipersonalatencion->activo;
+        $this->created_user_cargo = $ipersonalatencion->created_user_cargo;
+        $this->created_user = $ipersonalatencion->created_user;
+        $this->updated_user = $ipersonalatencion->updated_user;
+
+
+        if (in_array($this->servicio_id, [9, 11, 19]) || in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA-MULTIFUNCIONAL", "SERVIDORES"]))
+        {
+            $this->mostrarcontroles = "";
+        } else {
+            $this->mostrarcontroles = "d-none";
+        }
+
+        // ABRIR MODAL NUEVO - EDITAR
+        $this->modalNuevoEditarAbrir = true;
+        
     }
 
     public function cerrar()

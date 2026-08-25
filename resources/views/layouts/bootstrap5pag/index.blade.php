@@ -472,9 +472,34 @@
     </header>
 
     @livewireScripts
+
+    <!-- SWEETALERT2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     @yield('content')
     
     <script src="{{ asset('superadmin/bootstrap/assets/dist/js/bootstrap.bundle.min.js') }}" class="astro-vvvwv3sm"></script>
+    
+    {{-- MODALES DE ALERTA ACTUALIZAR--}}
+
+    <script>
+        document.addEventListener('livewire:initialized', () => {
+
+            Livewire.on('alerta-actualizado', (data) => {
+
+                Swal.fire({
+                    title: data.titulo,
+                    text: data.mensaje,
+                    icon: data.tipo,
+                    confirmButtonColor: '#3085d6',
+
+                    timer: 1500,              // 1.5 segundos
+                    showConfirmButton: false  // oculta botón OK
+                });
+
+            });
+
+        });
+    </script>
   </body>
 </html>

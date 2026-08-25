@@ -314,7 +314,7 @@
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
                                         @if ($item->atendido === "NN")
-                                            <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar({{ $item->id }})">
+                                            <button type="button" class="btn btn-outline-warning btn-xs" wire:click="atender({{ $item->id }})">
                                                 <i class="fa-solid fa-pen-to-square"></i><br>Atender
                                             </button> 
                                         @endif
@@ -459,7 +459,7 @@
                             {{-- REGISTRO DE TICKES --}}
                             <div class="row">
                                 <div class="col-xl-7">
-                                    <fieldset class="border p-3 rounded mb-3">
+                                    <fieldset class="border p-3 rounded mb-3" {{ $seccionPersonal }}>
                                         <legend class="float-none px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DETALLE DE LA INCIDENCIA/SOLICITUD</legend>
                                         <div class="row">
                                             <div class="col-xl-2">

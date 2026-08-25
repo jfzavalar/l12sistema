@@ -735,15 +735,15 @@ class InformaticaAtenciones extends Component
                     'servicio' => $this->servicio,
                     'detalle_servicio' => $this->detalle_servicio,
 
-                    // 'bien_id' => $this->bien_id,
-                    // 'cod' => $this->cod,
-                    // 'cod_patrimonial' => $this->cod_patrimonial,
-                    // 'datos_bien' => $this->datos_bien,
-                    // 'ip' => $this->bien_ip,
-                    // 'cea' => $this->cea,
-                    // 'sgf' => $this->sgf,
-                    // 'glpi' => $this->glpi,
-                    // 'enviado_lima' => $this->enviado_lima,
+                    'bien_id' => $this->bien_id,
+                    'cod' => $this->cod,
+                    'cod_patrimonial' => $this->cod_patrimonial,
+                    'datos_bien' => $this->datos_bien,
+                    'ip' => $this->bien_ip,
+                    'cea' => $this->cea,
+                    'sgf' => $this->sgf,
+                    'glpi' => $this->glpi,
+                    'enviado_lima' => $this->enviado_lima,
 
                     'detalle_problema' => $this->detalle_problema,
                     // 'ncopias' => $this->ncopias,
@@ -755,7 +755,7 @@ class InformaticaAtenciones extends Component
                     // 'atendido_por_dni' => $usuario_dni,
                     // 'atendido_por_datos' => $usuario_datos,
                     // 'tiempo_atencion' => $this->tiempo_atencion,
-                    // 'respuesta' => $this->respuesta,
+                    'respuesta' => $this->respuesta,
                     // 'conformidad' => $this->conformidad,
                     // 'ruta_evidencia' => $ruta_evidencia,
                     // 'ruta_documento' => $this->ruta_documento,
@@ -830,6 +830,11 @@ class InformaticaAtenciones extends Component
             // RESET
             // $this->resetExcept(['filtro_anio', 'filtro_mes']);
 
+            $this->reset(['servicio_id','servicio','detalle_servicio','detalle_problema']);
+
+            // CERRAR MODAL NUEVO - EDITAR
+            $this->modalNuevoEditarAbrir = false;
+
             // MENSAJE
             $this->dispatch(
                 'alerta-actualizado',
@@ -838,7 +843,7 @@ class InformaticaAtenciones extends Component
                 tipo: 'warning'
             );
 
-            $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
+            // $this->dispatch('cerrar-modal', id: 'nuevoEditarModal');
 
         } catch (\Throwable $e) {
 
@@ -1133,6 +1138,9 @@ class InformaticaAtenciones extends Component
             // Restablecer todas las variables
             // $this->resetExcept(['filtro_anio', 'filtro_mes']);
 
+            // CERRAR MODAL NUEVO - EDITAR
+            $this->modalNuevoEditarAbrir = false;
+
             $this->dispatch(
                 'alerta-actualizado',
                 titulo: 'Datos actualizados',
@@ -1195,6 +1203,12 @@ class InformaticaAtenciones extends Component
         $this->modalInformaticaServicioDetalleBuscar = true;
 
         $this->dispatch('focus-input', id: 'txtSearchServicioDetalle');
+    }
+    public function bienesBuscar()
+    {
+        $this->modalPatrimonioBienesBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchBienes');
     }
 
     // ============================================================================================================================
@@ -1453,6 +1467,7 @@ class InformaticaAtenciones extends Component
 
         // INSTANCIA DEL BIEN RECEPTADO COMO PARAMETRO
         $this->bien_id = $ibien->id;
+
         $this->fill([
             'cod' => $ibien->codigo_barra,
             'cod_patrimonial' => $ibien->codigo_patrimonial,
@@ -1469,6 +1484,8 @@ class InformaticaAtenciones extends Component
 
         $dni = $ibien->usuario_dni;
 
+        
+
         // DATOS DE LA PERSONA
         if ($persona = Persona::where('activo',1)->where('dni',$dni)->first()) {
 
@@ -1481,6 +1498,8 @@ class InformaticaAtenciones extends Component
                 'datos' => $persona->datos,
                 'celpersonal' => $persona->celpersonal,
                 'correopersonal' => $persona->correopersonal,
+
+                'search' => $persona->dni,
             ]);
 
             $this->fotoactual = $persona->foto;
@@ -1515,7 +1534,20 @@ class InformaticaAtenciones extends Component
             ]);
         }
 
-        $this->reset('searchbienes');
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+            'searchservicios',
+            'searchincidenciasolicitud',
+            'searchbienes',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPatrimonioBienesBuscar = false;
     }
 
     public function cerrar_bien()
@@ -1525,10 +1557,17 @@ class InformaticaAtenciones extends Component
 
     public function cerrarBuscar()
     {
+        $this->modalReportesFiltros = false;
 
+        $this->modalPersonalBuscar = false;
+        $this->modalPersonalSedeBuscar = false;
+        $this->modalPersonalDependenciaBuscar = false;
+        $this->modalPersonalDespachoBuscar = false;
+        $this->modalPersonalCargoBuscar = false;
         $this->modalInformaticaServicioBuscar = false;
         $this->modalInformaticaServicioDetalleBuscar = false;
-    }
+        $this->modalPatrimonioBienesBuscar = false;
+    } 
 
     // --------------------------------------------------
 

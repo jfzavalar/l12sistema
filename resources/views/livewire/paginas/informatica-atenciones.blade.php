@@ -171,19 +171,23 @@
                         </div>
                     </div> --}}
 
-                    <div class="col-xl-12">
+                    {{-- <div class="col-xl-12">
                         <div class="row">
                             <div class="col-xl-2">
                                 <div class="input-group input-group-sm mb-3">
                                     <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
-                                    <input type="text" name="search" id="search" class="form-control form-control-sm me-1 fw-bold is-valid" placeholder="INGRESE SU DNI" wire:model.live="search">
+                                    <input type="text" name="search" id="search" class="form-control form-control-sm me-1 fw-bold is-valid" placeholder="INGRESE SU DNI" wire:model.live="search" required>
                                 </div>
+                                @error('dni')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
                             <div class="col-xl-10">
                                 <label class="form-control form-control-sm me-1 fw-bold">{{ $datos . ' | ' . $sededestino . ' | ' . $dependenciadestino }}</label>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
+
                     {{-- <div class="col-xl-6">
                         <fieldset class="border p-3 rounded mb-3" disabled>
                             <div class="row">
@@ -316,7 +320,7 @@
                                     <label for="txtservicio" class="fw-bold fs-6">SERVICIO</label>
                                     <div class="input-group">
                                         <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" wire:click="servicioBuscar">
-                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                            <i class="fa-solid fa-magnifying-glass"></i> Buscar
                                         </button>
                                         <input type="text" id="txtservicio" class="form-control form-control-xs bg-light" wire:model="servicio" readonly required>
                                     </div>
@@ -328,7 +332,7 @@
                                     <label for="txtdetalle_servicio" class="fw-bold fs-6">SOLICITUD / INCIDENCIA</label>
                                     <div class="input-group">
                                         <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" wire:click="servicioDetalleBuscar">
-                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                            <i class="fa-solid fa-magnifying-glass"></i> Buscar
                                         </button>
                                         <input type="text" id="txtdetalle_servicio" class="form-control form-control-xs bg-light" wire:model="detalle_servicio" readonly required>
                                     </div>
@@ -336,6 +340,37 @@
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
+                                @if (in_array($this->servicio_id, [9, 11, 19]) || in_array($this->servicio, ["EQUIPO DE COMPUTO", "IMPRESORA-MULTIFUNCIONAL", "SERVIDORES"]))
+                                    <div class="row">
+                                        <div class="col-xl-2">
+                                            <label for="txtcod" class="fw-bold fs-6 {{ $mostrarcontroles }}">COD</label>
+                                            <div class="input-group">
+                                                <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs {{ $mostrarcontroles }}" wire:click="bienesBuscar">
+                                                    <i class="fa-solid fa-magnifying-glass"></i> Buscar bienes
+                                                </button>
+                                                <input type="text" id="txtcod" class="form-control form-control-xs {{ $mostrarcontroles }} bg-light is-valid" wire:model="cod" readonly >
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-2">
+                                            <label for="txtcodpatrimonial" class="fw-bold fs-6 {{ $mostrarcontroles }}">COD_PATRIMONIAL</label>
+                                            <div class="input-group">
+                                                {{-- <span class="input-group-text input-group-text-xs {{ $mostrarcontroles }}" id="basic-addon1">Cod. Patrimonial</span> --}}
+                                                <input type="text" id="txtcodpatrimonial" class="form-control form-control-xs {{ $mostrarcontroles }} bg-light is-valid" wire:model="cod_patrimonial" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <label for="txtequipo" class="fw-bold fs-6 {{ $mostrarcontroles }}">BIEN INFORMATICO</label>
+                                            <div class="input-group">
+                                                {{-- <span class="input-group-text input-group-text-xs {{ $mostrarcontroles }}" id="basic-addon1">Bien</span> --}}
+                                                <input type="text" id="txtequipo" class="form-control form-control-xs {{ $mostrarcontroles }} bg-light is-valid" wire:model="datos_bien" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-2">
+                                            <label for="txtip" class="fw-bold fs-6 {{ $mostrarcontroles }}">IP</label>
+                                            <input type="text" id="txtip" class="form-control form-control-xs {{ $mostrarcontroles }} is-valid" wire:model.defer="bien_ip" oninput="this.value = this.value.replace(/[^0-9.]/g, '')">
+                                        </div>
+                                    </div>
+                                @endif
                                 <div class="col-xl-12">
                                     <label for="txtobservacion" class="fw-bold fs-6">DETALLE DEL PROBLEMA</label>
                                     <div class="input-group input-group">
@@ -355,6 +390,23 @@
                                         </div>
                                     </div>
                                 </div>--}}
+
+                                <div class="col-xl-12 mt-3">
+                                    <div class="row">
+                                        <div class="col-xl-2">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
+                                                <input type="text" name="search" id="search" class="form-control form-control-sm me-1 fw-bold is-valid" placeholder="INGRESE SU DNI" wire:model.live="search" required>
+                                            </div>
+                                            @error('dni')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+                                        <div class="col-xl-10">
+                                            <label class="form-control form-control-sm me-1 fw-bold">{{ $datos . ' | ' . $sededestino . ' | ' . $dependenciadestino }}</label>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-xl-12 text-end">
                                     <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3 mt-3" wire:click="guardar">
                                         <i class="fa-solid fa-floppy-disk"></i><br> Guardar
@@ -660,6 +712,9 @@
                 </div>
             </div>
         </div>
+
+        {{-- MODAL BUSCAR BIENES PATRIMONIALES --}}
+        @include('livewire.partials.modales.buscar-patrimonio-bienes')
         
         {{-- MODAL CARGAR PDF --}}
         @include('livewire.intranet.atenciones.partials.pdf-cargar-component')
