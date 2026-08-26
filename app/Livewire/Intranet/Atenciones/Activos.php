@@ -1401,81 +1401,6 @@ class Activos extends Component
     } 
 
     // ============================================================================================================================
-    // FUNCIONES PARA CARGAR PDF
-    // ============================================================================================================================
-
-    public function editar_pdf($atencion_id)
-    {
-        $this->atencion_id = $atencion_id;
-
-        $this->pdf_acta = null; // 🔥 CLAVE
-        
-        
-        // CAMBIAR EL VALOR DE LA BANDERA PARA PODER CARGAR ACTA PDF
-        $this->bandera_documento = "ACTA";
-
-        // ABRIR MODAL CARGAR PDF
-        $this->modalPDFCargar = true;
-    }
-
-    public function actualizar_pdf()
-    {
-        // ===== DATOS PERSONAL =====
-        $iatencion = PersonalesAtencione::where('id', $this->atencion_id)->firstOrFail();
-
-        $this->dni = $iatencion->dni;
-        // $this->cod_patrimonial = $isoporte->bien_cod_patrimonial;
-        
-        // Validar solo el PDF
-        $this->validate([
-            'pdf_acta' => 'required|file|mimes:pdf|max:5120'
-        ]);
-
-        try {
-
-            DB::transaction(function () use ($iatencion) {
-
-                $usuario = auth()->user()->datos;
-
-                // Ruta actual
-                $rutaDocumento = $this->actualizar_acta();
-
-                $iatencion->update([
-                    'ruta_documento' => $rutaDocumento,
-                    'updated_user' => $usuario,
-                ]);
-
-            });
-
-            $this->reset('pdf_acta');
-
-            // CERRAR EL MODAL
-            $this->modalPDFCargar = false;
-
-            $this->dispatch(
-                'alerta-actualizado',
-                titulo: 'Documento cargado',
-                mensaje: 'El PDF se cargó correctamente.',
-                tipo: 'success'
-            );
-
-        }
-        catch (\Throwable $e) {
-
-            report($e);
-
-            $this->pdf_acta = null;
-
-            $this->dispatch(
-                'alerta-actualizado',
-                titulo: 'Error',
-                mensaje: 'Ocurrió un error al cargar el PDF.',
-                tipo: 'error'
-            );
-        }
-    }
-
-    // ============================================================================================================================
     // FUNCIONES AGREGAR
     // ============================================================================================================================
 
@@ -1843,6 +1768,81 @@ class Activos extends Component
 
         // CERRAR MODAL
         $this->modalPatrimonioBienesBuscar = false;
+    }
+
+    // ============================================================================================================================
+    // FUNCIONES PARA CARGAR PDF
+    // ============================================================================================================================
+
+    public function editar_pdf($atencion_id)
+    {
+        $this->atencion_id = $atencion_id;
+
+        $this->pdf_acta = null; // 🔥 CLAVE
+        
+        
+        // CAMBIAR EL VALOR DE LA BANDERA PARA PODER CARGAR ACTA PDF
+        $this->bandera_documento = "ACTA";
+
+        // ABRIR MODAL CARGAR PDF
+        $this->modalPDFCargar = true;
+    }
+
+    public function actualizar_pdf()
+    {
+        // ===== DATOS PERSONAL =====
+        $iatencion = PersonalesAtencione::where('id', $this->atencion_id)->firstOrFail();
+
+        $this->dni = $iatencion->dni;
+        // $this->cod_patrimonial = $isoporte->bien_cod_patrimonial;
+        
+        // Validar solo el PDF
+        $this->validate([
+            'pdf_acta' => 'required|file|mimes:pdf|max:5120'
+        ]);
+
+        try {
+
+            DB::transaction(function () use ($iatencion) {
+
+                $usuario = auth()->user()->datos;
+
+                // Ruta actual
+                $rutaDocumento = $this->actualizar_acta();
+
+                $iatencion->update([
+                    'ruta_documento' => $rutaDocumento,
+                    'updated_user' => $usuario,
+                ]);
+
+            });
+
+            $this->reset('pdf_acta');
+
+            // CERRAR EL MODAL
+            $this->modalPDFCargar = false;
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Documento cargado',
+                mensaje: 'El PDF se cargó correctamente.',
+                tipo: 'success'
+            );
+
+        }
+        catch (\Throwable $e) {
+
+            report($e);
+
+            $this->pdf_acta = null;
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'Ocurrió un error al cargar el PDF.',
+                tipo: 'error'
+            );
+        }
     }
 
 

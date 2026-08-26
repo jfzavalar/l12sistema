@@ -504,7 +504,7 @@
                                         <li class="nav-item">
                                             <a class="nav-link ms-3 {{ request()->routeIs('mpfn.patrimonio.traslado.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.patrimonio.traslado.index') }}">
                                                 <i class="nav-icon fa-regular fa-circle"></i>
-                                                <p>Traslado temporal</p>
+                                                <p>Desplazamiento<br>Temporal</p>
                                             </a>
                                         </li>
                                         @endcan

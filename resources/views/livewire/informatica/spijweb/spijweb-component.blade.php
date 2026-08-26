@@ -1,15 +1,26 @@
 <div>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-1 mb-2 border-bottom">
         <h1 class="h2">
-            <i class="fa-solid fa-ticket"></i> SPIJWEB - CREDENCIALES
+            <i class="fa-solid fa-ticket"></i> SPIJWEB
         </h1>
         <div class="row">
             <div class="col-auto">
                 <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarTotal">
-                    <span class="alert alert-primary d-block mb-0">
+                    <span class="alert alert-dark d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-chart-simple"></i>
-                            TOTAL: {{ $estadisticas->total }}
+                            PERSONAL_FISCAL: {{ $estadisticas->total }}
+                        </span>
+                    </span>
+                </button>
+            </div>
+
+            <div class="col-auto">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarFormatos">
+                    <span class="alert alert-primary d-block mb-0">
+                        <span class="fw-bold">
+                            <i class="fa-solid fa-file"></i>
+                            LICENCIAS: {{ $lista_licencias_total->total() }}
                         </span>
                     </span>
                 </button>
@@ -20,13 +31,13 @@
                     <span class="alert alert-success d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-file"></i>
-                            FORMATOS: {{ $estadisticas->fasignados }}
+                            CARTAS_ENVIADAS: {{ $estadisticas->fasignados }}
                         </span>
                     </span>
                 </button>
             </div>
 
-            <div class="col-auto">
+            {{-- <div class="col-auto">
                 <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarNoformatos">
                     <span class="alert alert-danger d-block mb-0">
                         <span class="fw-bold">
@@ -35,20 +46,20 @@
                         </span>
                     </span>
                 </button>
-            </div>
+            </div> --}}
 
             <div class="col-auto">
                 <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarUsuario">
-                    <span class="alert alert-success d-block mb-0">
+                    <span class="alert alert-info d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-user"></i>
-                            USUARIOS: {{ $estadisticas->uasignados }}
+                            CREDENCIALES_ENVIADAS: {{ $estadisticas->uasignados }}
                         </span>
                     </span>
                 </button>
             </div>
 
-            <div class="col-auto">
+            {{-- <div class="col-auto">
                 <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarNousuario">
                     <span class="alert alert-danger d-block mb-0">
                         <span class="fw-bold">
@@ -57,7 +68,7 @@
                         </span>
                     </span>
                 </button>
-            </div>
+            </div> --}}
         </div>
     </div>
 
