@@ -47,7 +47,7 @@
                         <div class="input-group input-group-sm mb-2">
                             <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
                             <input type="text" id="txtsearchusuario" class="form-control form-control-sm me-2" wire:model.live="search" placeholder="Buscar DNI y/o apellidos y nombres">
-                            @can('mpfn.patrimonio.asignaciones.create')
+                            @can('mpfn.patrimonio.traslado.create')
                                 <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3" wire:click="nuevo">
                                     <i class="fa-solid fa-file"></i> Nuevo
                                 </button>
@@ -126,7 +126,7 @@
                                 </td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        @can('mpfn.patrimonio.asignaciones.create')
+                                        @can('mpfn.patrimonio.traslado.create')
                                             <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar({{ $item->id }})">
                                                 <i class="fa-solid fa-pen-to-square"></i><br>Editar
                                             </button>
