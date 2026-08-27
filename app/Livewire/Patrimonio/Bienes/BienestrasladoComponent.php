@@ -241,12 +241,45 @@ class BienestrasladoComponent extends Component
                     ->orWhere('datos', 'like', '%' . $this->search . '%');
                 });
             })
-            // ->when($this->filtrosede, fn($q) => $q->where('personales.codsedeorigen', $this->filtrosede))
-            // ->when($this->filtrodependencia, fn($q) => $q->where('personales.coddependenciaorigen', $this->filtrodependencia))
-            // ->when($this->filtroregimen, fn($q) => $q->where('personales.regimen', 'like', '%' . $this->filtroregimen . '%'))
-            // ->when($this->filtrocargo, fn($q) => $q->where('personales.cargo', '=', $this->filtrocargo))
             ->orderBy('id', 'desc')
             ->paginate(30, ['*'], 'desplazamientosPage');
+
+
+        // ======================================================
+        // IDs DE LOS DESPLAZAMIENTOS DE LA PÁGINA ACTUAL
+        // ======================================================
+
+        $idsDesplazamientos = $lista_activos->pluck('id');
+
+
+        // ======================================================
+        // DETALLES DE LOS BIENES
+        // ======================================================
+
+        $lista_activos_detalle = PatrimoniosBienesDesplazamientosTemporalesDetalle::whereIn('desplazamiento_id', $idsDesplazamientos)
+            ->join(
+                'patrimonios_bienes as pb',
+                'pb.id',
+                '=',
+                'patrimonios_bienes_desplazamientos_temporales_detalles.bien_id'
+            )
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'desplazamiento_id'   => $item->desplazamiento_id,
+                    'id'                  => $item->bien_id,
+                    'codigo_barra'        => $item->cod,
+                    'codigo_patrimonial'  => $item->cod_patrimonial,
+                    'descripcion'         => $item->bien,
+                    'marca'               => $item->marca,
+                    'modelo'              => $item->modelo,
+                    'nro_serie'           => $item->nro_serie,
+                    'medidas'             => $item->medidas,
+                    'color'               => $item->color,
+                    'estado'              => $item->estado,
+                ];
+            })
+            ->groupBy('desplazamiento_id');
 
         $lista_personas = Persona::join('personales','personas.id','=','personales.persona_id')
             ->select(
@@ -372,14 +405,8 @@ class BienestrasladoComponent extends Component
             ->orderBy('descripcion')
             ->paginate(10,['*'],'bienesPage');
 
-        $lista_bienes = PatrimoniosBiene::where('activo','1')
-            ->where('codigo_patrimonial','like','%' . $this->searchbienes . '%')
-            ->distinct()
-            ->orderBy('descripcion')
-            ->paginate(10,['*'],'bienesPage');
-
         return view('livewire.patrimonio.bienes.bienestraslado-component',
-                        compact('lista_activos',
+                        compact('lista_activos','lista_activos_detalle',
                                     'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos',
                                     'lista_personas2','lista_sedes2','lista_dependencias2','lista_despachos2','lista_cargos2',
                                     'lista_bienes'));

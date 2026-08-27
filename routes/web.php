@@ -96,11 +96,11 @@ Route::middleware('auth','can:procesos.administracion.archivo.index')->group(fun
     Route::resource('archivo', ArchivoController::class)->names('procesos.administracion.archivo');
 });
 
-Route::middleware('auth','can:procesos.administracion.patrimonio.index')->group(function () {
-    Route::resource('patrimonio', PatrimonioController::class)->names('procesos.administracion.patrimonio');
-    Route::get('pdf/patrimonio/bien-asignado-acta/{id}', [PatrimonioController::class, 'exportarPDFAsignacion'])->name('pdf.patrimonio.bien-asignado-acta');
-    Route::get('pdf/patrimonio/bieninformatico-traslado-acta/{id}', [PatrimonioController::class, 'exportarPDF'])->name('pdf.patrimonio.bieninformatico-traslado-acta');
-});
+// Route::middleware('auth','can:procesos.administracion.patrimonio.index')->group(function () {
+//     Route::resource('patrimonio', PatrimonioController::class)->names('procesos.administracion.patrimonio');
+//     Route::get('pdf/patrimonio/bien-asignado-acta/{id}', [PatrimonioController::class, 'exportarPDFAsignacion'])->name('pdf.patrimonio.bien-asignado-acta');
+//     Route::get('pdf/patrimonio/bieninformatico-traslado-acta/{id}', [PatrimonioController::class, 'exportarPDF'])->name('pdf.patrimonio.bieninformatico-traslado-acta');
+// });
 
 Route::middleware('auth','can:procesos.administracion.rrhh.index')->group(function () {
     Route::resource('rrhh', RrhhController::class)->names('procesos.administracion.rrhh');
@@ -188,6 +188,7 @@ Route::middleware('auth','can:mpfn.patrimonio.asignacionessobrantes.index')->gro
 });
 Route::middleware('auth','can:mpfn.patrimonio.traslado.index')->group(function () {
     Route::resource('bienestraslado', BienestrasladoController::class)->names('mpfn.patrimonio.traslado');
+    Route::get('pdf/patrimio/bienesdesplazamiento-acta/{id}', [BienestrasladoController::class, 'exportarPDF'])->name('pdf.patrimonio.bienesdesplazamiento-acta');
 });
 
 // VOLUNTARIADO

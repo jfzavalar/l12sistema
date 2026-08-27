@@ -67,7 +67,7 @@
                             </th>
                             <th scope="col">REFERENCIA</th>
                             <th scope="col">MOTIVO</th>
-                            <th scope="col">BIENES TRASLADADOS</th>
+                            <th scope="col">BIENES</th>
                             <th scope="col" class="table-dark"><i class="fa-solid fa-gears"></i></th>
                         </tr>
                     </thead>
@@ -91,9 +91,39 @@
                                     <br><b>DEPENDENCIA:</b> {{ $item->dependenciaorigen2 }}
                                     <br><b>DESPACHO:</b> {{ $item->despachoorigen2 }}
                                 </td>
-                                <td></td>
+                                <td>{{ $item->referencia }}</td>
                                 <td>{{ $item->motivo }}</td>
-                                <td></td>
+                                <td>
+                                    @forelse($lista_activos_detalle->get($item->id, []) as $bien)
+
+                                        <div class="mb-1">
+                                            <span class="badge bg-primary" style="font-size: 10px;">
+                                                {{ $bien['codigo_patrimonial'] }}
+                                            </span>
+                                            <br>
+                                            <small>{{ $bien['descripcion'] }}</small>
+                                            <br>
+                                            @if($bien['marca'])
+                                                <small class="text-muted">
+                                                    | {{ $bien['marca'] }}
+                                                </small>
+                                            @endif
+
+                                            @if($bien['modelo'])
+                                                <small class="text-muted">
+                                                    | {{ $bien['modelo'] }}
+                                                </small>
+                                            @endif
+                                        </div>
+
+                                    @empty
+
+                                        <span class="text-muted">
+                                            Sin bienes
+                                        </span>
+
+                                    @endforelse
+                                </td>
                                 <td>
                                     <div class="btn-group" role="group">
                                         @can('mpfn.patrimonio.asignaciones.create')
@@ -101,7 +131,7 @@
                                                 <i class="fa-solid fa-pen-to-square"></i><br>Editar
                                             </button>
                                         @endcan
-                                        <a type="button" class="btn btn-outline-naranja btn-xs" href="{{ route('pdf.patrimonio.bienesasignados-acta', $item->id) }}" target="_blank">
+                                        <a type="button" class="btn btn-outline-naranja btn-xs" href="{{ route('pdf.patrimonio.bienesdesplazamiento-acta', $item->id) }}" target="_blank">
                                             <i class="fa-solid fa-file-pdf"></i><br>Acta
                                         </a>
                                     </div>
