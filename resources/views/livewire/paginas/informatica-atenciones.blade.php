@@ -15,7 +15,7 @@
 
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-1 mb-2 border-bottom">
         <h1 class="h2">
-            <i class="fa-solid fa-users-between-lines"></i> TICKETS ATENCIONES: {{ strtoupper(now()->locale('es')->translatedFormat('F Y')) }}
+            <i class="fa-solid fa-users-between-lines"></i> REGISTRO DE INCIDENCIAS / SOLICITUDES: {{ strtoupper(now()->locale('es')->translatedFormat('F Y')) }}
         </h1>
         {{-- <div class="row">
             <div class="col-auto">
@@ -367,14 +367,14 @@
                                         </div>
                                         <div class="col-xl-2">
                                             <label for="txtip" class="fw-bold fs-6 {{ $mostrarcontroles }}">IP</label>
-                                            <input type="text" id="txtip" class="form-control form-control-xs {{ $mostrarcontroles }} is-valid" wire:model.defer="bien_ip" oninput="this.value = this.value.replace(/[^0-9.]/g, '')">
+                                            <input type="text" id="txtip" class="form-control form-control-xs {{ $mostrarcontroles }} is-valid" wire:model.defer="bien_ip" oninput="this.value = this.value.replace(/[^0-9.]/g, '')" readonly>
                                         </div>
                                     </div>
                                 @endif
-                                <div class="col-xl-12">
-                                    <label for="txtobservacion" class="fw-bold fs-6">DETALLE DEL PROBLEMA</label>
+                                <div class="col-xl-12 mt-3">
+                                    <label for="txtobservacion" class="fw-bold fs-6">ESPECIFICAR EL DETALLE DEL PROBLEMA PARA BRINDARLE EL SOPORTE ADECUADO</label>
                                     <div class="input-group input-group">
-                                        <input type="text" id="txtobservacion" class="form-control form-control-xs text-uppercase" wire:model="detalle_problema">
+                                        <input type="text" id="txtobservacion" class="form-control form-control-xs text-uppercase is-valid" wire:model="detalle_problema">
                                     </div>
                                 </div>
                                 {{-- <div class="col-xl-4">

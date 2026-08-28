@@ -455,6 +455,7 @@ class InformaticaAtenciones extends Component
 
         $lista_servicios = PersonalesAtencionesServicio::select('id','tipo','servicio')
             ->where('activo','1')
+            ->where('usuario_mostrar','2')
             ->where('servicio','like','%' . $this->searchservicios . '%')
             ->orderBy('servicio')
             ->paginate(20,['*'],'serviciosPage');
