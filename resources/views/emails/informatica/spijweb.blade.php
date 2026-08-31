@@ -102,7 +102,7 @@
 
             <p>Por medio de la presente, se remite la Carta de Riesgo para Usuarios Finales – SPIJ WEB 2026, a fin de que pueda ser firmada y sellada, o, de corresponder, firmada digitalmente.</p>
                 
-            <p>Una vez suscrita, agradeceremos remitirla al correo electrónico informatica.junin@mpn.gob.pe, para su correspondiente revisión y validación por parte de la OCTI – JUNÍN.</p>
+            <p>Una vez suscrita, agradeceremos remitirla al correo electrónico informatica.junin@mpfn.gob.pe, para su correspondiente revisión y validación por parte de la OCTI – JUNÍN.</p>
 
             <p>Luego de verificar la correcta recepción y conformidad de la Carta de Riesgo, se procederá a remitir a su correo electrónico las credenciales de acceso al SPIJ WEB 2026.</p>
             
