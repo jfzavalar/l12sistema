@@ -157,7 +157,7 @@
         </div>
     </div>
 
-    {{-- Modal Nuevo-Editar --}}
+    {{-- MODAL NUEVO EDITAR --}}
     <div class="modal fade @if($modalNuevoEditarAbrir) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
         <div class="modal-dialog" style="max-width:90%;">
             <div class="modal-content">

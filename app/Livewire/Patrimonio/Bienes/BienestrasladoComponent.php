@@ -142,7 +142,7 @@ class BienestrasladoComponent extends Component
 
     public $personal_id,
             $regimen,
-            $regimen_tipo,
+            $tipo_regimen,
             $cargo,
             $cargo_condicion,
 
@@ -180,7 +180,7 @@ class BienestrasladoComponent extends Component
 
     public $personal_id2,
             $regimen2,
-            $regimen_tipo2,
+            $tipo_regimen2,
             $cargo2,
             $cargo_condicion2,
 
@@ -379,7 +379,7 @@ class BienestrasladoComponent extends Component
             
         $lista_dependencias2 = Personales_dependencia::select('id','nombre')
             ->where('activo','1')
-            ->where('sede_id',$this->codsededestino)
+            ->where('sede_id',$this->codsededestino2)
             ->where('nombre','like','%' . $this->searchdependencias . '%')
             ->distinct()
             ->orderBy('nombre')
@@ -863,6 +863,9 @@ class BienestrasladoComponent extends Component
 
             $this->reset();
 
+            // CERRAR MODAL NUEVO - EDITAR
+            $this->modalNuevoEditarAbrir = false;
+
             $this->dispatch(
                 'alerta-actualizado',
                 titulo: 'Actualizado',
@@ -1251,16 +1254,16 @@ class BienestrasladoComponent extends Component
 
     public function agregar_sede2(Personales_sede $isede)
     {
-        $this->codsedeorigen = $isede->id;
-        $this->sedeorigen = $isede->nombre;
+        $this->codsedeorigen2 = $isede->id;
+        $this->sedeorigen2 = $isede->nombre;
 
-        $this->codsededestino = $isede->id;
-        $this->sededestino = $isede->nombre;
+        $this->codsededestino2 = $isede->id;
+        $this->sededestino2 = $isede->nombre;
 
         // RESTABLECER DEPENDENCIA Y DESPACHO
         $this->reset([
-            'dependenciaorigen',
-            'despachoorigen',
+            'dependenciaorigen2',
+            'despachoorigen2',
         ]);
 
         // RESTABLECER VARIABLES DE BUSQUEDA
@@ -1281,11 +1284,11 @@ class BienestrasladoComponent extends Component
 
     public function agregar_dependencia2(Personales_dependencia $idependencia)
     {
-        $this->coddependenciaorigen = $idependencia->id;
-        $this->dependenciaorigen = $idependencia->nombre;
+        $this->coddependenciaorigen2 = $idependencia->id;
+        $this->dependenciaorigen2 = $idependencia->nombre;
 
-        $this->coddependenciadestino = $idependencia->id;
-        $this->dependenciadestino = $idependencia->nombre;
+        $this->coddependenciadestino2 = $idependencia->id;
+        $this->dependenciadestino2 = $idependencia->nombre;
 
         // RESTABLECER VARIABLES DE BUSQUEDA
         $this->reset([
@@ -1305,11 +1308,11 @@ class BienestrasladoComponent extends Component
 
     public function agregar_despacho2(Personales_despacho $idespacho)
     {
-        $this->coddespachoorigen = $idespacho->id;
-        $this->despachoorigen = $idespacho->nombre;
+        $this->coddespachoorigen2 = $idespacho->id;
+        $this->despachoorigen2 = $idespacho->nombre;
 
-        $this->coddespachodestino = $idespacho->id;
-        $this->despachodestino = $idespacho->nombre;
+        $this->coddespachodestino2 = $idespacho->id;
+        $this->despachodestino2 = $idespacho->nombre;
 
         // RESTABLECER VARIABLES DE BUSQUEDA
         $this->reset([

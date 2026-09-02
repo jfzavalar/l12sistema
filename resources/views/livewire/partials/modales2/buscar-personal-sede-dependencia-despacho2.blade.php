@@ -96,7 +96,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($lista_dependencias as $dependencia)
+                                @forelse ($lista_dependencias2 as $dependencia)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $dependencia->nombre }}</td>

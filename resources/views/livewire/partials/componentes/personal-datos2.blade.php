@@ -13,7 +13,7 @@
         @enderror
     </div>
     <div class="col-xl-6 col-lg-6 col-sm-12">
-        <label for="txt_dependencia"2 class="fw-bold fs-6">Dependencia</label>
+        <label for="txt_dependencia2" class="fw-bold fs-6">Dependencia</label>
         <div class="input-group position-relative">
             <button type="button" class="btn btn-dark btn-xs" wire:click=dependenciaBuscar2>
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -67,7 +67,7 @@
         </select>
     </div>
     <div class="col-xl-4 col-lg-6 col-sm-12">
-        <label for="txt_cargo"2 class="fw-bold fs-6">Cargo</label>
+        <label for="txt_cargo2" class="fw-bold fs-6">Cargo</label>
         <div class="input-group">
             <button type="button" class="btn btn-dark btn-xs" wire:click=cargoBuscar2>
                 <i class="fa-solid fa-magnifying-glass"></i>
