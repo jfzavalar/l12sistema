@@ -142,7 +142,7 @@ class BienestrasladoComponent extends Component
 
     public $personal_id,
             $regimen,
-            $tipo_regimen,
+            $regimen_tipo,
             $cargo,
             $cargo_condicion,
 
@@ -180,7 +180,7 @@ class BienestrasladoComponent extends Component
 
     public $personal_id2,
             $regimen2,
-            $tipo_regimen2,
+            $regimen_tipo2,
             $cargo2,
             $cargo_condicion2,
 
@@ -400,7 +400,13 @@ class BienestrasladoComponent extends Component
             ->paginate(10,['*'], 'cargosPage');
 
         $lista_bienes = PatrimoniosBiene::where('activo','1')
-            ->where('codigo_patrimonial','like','%' . $this->searchbienes . '%')
+            // ->where('codigo_patrimonial','like','%' . $this->searchbienes . '%')
+            ->when($this->searchbienes !== '', function ($query) {
+                $query->where(function ($q) {
+                    $q->where('codigo_patrimonial', 'like', '%' . $this->searchbienes . '%')
+                    ->orWhere('codigo_barra', 'like', '%' . $this->searchbienes . '%');
+                });
+            })
             ->distinct()
             ->orderBy('descripcion')
             ->paginate(15,['*'],'bienesPage');

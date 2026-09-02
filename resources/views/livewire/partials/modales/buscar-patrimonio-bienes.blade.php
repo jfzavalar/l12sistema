@@ -14,7 +14,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="input-group mb-2">
-                                        <input type="text" id="txtSearchBienes" class="form-control form-control-sm" placeholder="Buscar por código patrimonial" wire:model.live="searchbienes">
+                                        <input type="text" id="txtSearchBienes" class="form-control form-control-sm" placeholder="Buscar por CODIGO DE BARRA o CODIGO PATRIMONIAL" wire:model.live="searchbienes">
                                     </div>
                                 </div>
                             </div>
@@ -37,7 +37,7 @@
                                 @forelse ($lista_bienes as $bien)
                                     <tr>
                                         <th>{{ $loop->iteration }}</th>
-                                        <th>{{ $bien->cod_barra }}</th>
+                                        <th>{{ $bien->codigo_barra }}</th>
                                         <td>{{ $bien->codigo_patrimonial }}</td>
                                         <td>{{ $bien->descripcion }}</td>
                                         @can('mpfn.informatica')
