@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form action="">
-                <div class="modal-header bg-{{ $colorHeaderModal }}">
+                <div class="modal-header bg-dark text-white">
                     <h1 class="modal-title fs-5" id="buscar-sedes-componentLabel">
                         <i class="fa-brands fa-searchengin"></i> BUSCAR SEDE
                     </h1>
@@ -70,7 +70,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <form action="">
-                <div class="modal-header bg-{{ $colorHeaderModal }}">
+                <div class="modal-header bg-dark text-white">
                     <h1 class="modal-title fs-5" id="buscar-dependencias-componentLabel">
                         <i class="fa-brands fa-searchengin"></i> BUSCAR DEPENDENCIA
                     </h1>
@@ -138,7 +138,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form action="">
-                <div class="modal-header bg-{{ $colorHeaderModal }}">
+                <div class="modal-header bg-dark text-white">
                     <h1 class="modal-title fs-5" id="buscar-despachos-componentLabel">
                         <i class="fa-brands fa-searchengin"></i> BUSCAR DESPACHOS
                     </h1>

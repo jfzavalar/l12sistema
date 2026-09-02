@@ -2,7 +2,7 @@
     <div class="col-xl-3 col-lg-6 col-sm-12">
         <label for="txt_sede2" class="fw-bold fs-6">Sede</label>
         <div class="input-group">
-            <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-sedes-component">
+            <button type="button" class="btn btn-dark btn-xs" wire:click=sedeBuscar2>
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
             <input type="text" id="txt_sede2" class="form-control form-control-xs bg-light" wire:model="sedeorigen2" readonly required>
@@ -15,7 +15,7 @@
     <div class="col-xl-6 col-lg-6 col-sm-12">
         <label for="txt_dependencia"2 class="fw-bold fs-6">Dependencia</label>
         <div class="input-group position-relative">
-            <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-dependencias-component">
+            <button type="button" class="btn btn-dark btn-xs" wire:click=dependenciaBuscar2>
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
             <input type="text" id="txt_dependencia2" class="form-control form-control-xs bg-light" wire:model="dependenciaorigen2" readonly required>
@@ -28,7 +28,7 @@
     <div class="col-xl-3 col-lg-6 col-sm-12">
         <label for="txt_despacho2" class="fw-bold fs-6">Despacho</label>
         <div class="input-group position-relative">
-            <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-despachos-component">
+            <button type="button" class="btn btn-dark btn-xs" wire:click=despachoBuscar2>
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
             <input type="text" id="txt_despacho2" class="form-control form-control-xs bg-light" wire:model="despachoorigen2" readonly required>
@@ -45,13 +45,13 @@
         <label for="regimen2762" class="fw-bold fs-6">Regimen</label>
         <div class="d-flex gap-2">
             <input type="radio" id="regimen2762" name="regimen2" class="btn-check" value="D.L.276" autocomplete="off" wire:model.live="regimen2">
-            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="regimen2762">D.L.276</label>
+            <label class="btn btn-outline-dark btn-xs flex-fill" for="regimen2762">D.L.276</label>
 
             <input type="radio" id="regimen7282" name="regimen2" class="btn-check" value="D.L.728" autocomplete="off" wire:model.live="regimen2">
-            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="regimen7282">D.L.728</label>
+            <label class="btn btn-outline-dark btn-xs flex-fill" for="regimen7282">D.L.728</label>
 
             <input type="radio" id="regimenCAS2" name="regimen2" class="btn-check" value="CAS" autocomplete="off" wire:model.live="regimen2">
-            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="regimenCAS2">CAS</label>
+            <label class="btn btn-outline-dark btn-xs flex-fill" for="regimenCAS2">CAS</label>
         </div>
         @error('regimen2')
             <small class="text-danger">{{ $message }}</small>
@@ -69,7 +69,7 @@
     <div class="col-xl-4 col-lg-6 col-sm-12">
         <label for="txt_cargo"2 class="fw-bold fs-6">Cargo</label>
         <div class="input-group">
-            <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-cargos-component">
+            <button type="button" class="btn btn-dark btn-xs" wire:click=cargoBuscar2>
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
             <input type="text" id="txt_cargo2" class="form-control form-control-xs bg-light" wire:model="cargo2" readonly required>

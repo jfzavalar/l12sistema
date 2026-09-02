@@ -17,12 +17,13 @@
     <div class="card">
         <div class="card-body">
             <div class="table-responsive small">
-                <div class="input-group mb-3">
-                    <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="searchusuario" placeholder="Buscar usuario">
-                    <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
+                <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
+                    <input type="text" id="txtsearchusuario" class="form-control form-control-sm me-1 is-valid" wire:model.live="search" placeholder="Buscar por DNI o Apellidos y Nombres">
+                    <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3 me-1" wire:click="nuevo">
                         <i class="fa-solid fa-file"></i> Nuevo
                     </button>
-                    <button type="button" id="btnnuevo" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#inactivosModal">
+                    <button type="button" id="btnnuevo" class="btn btn-dark btn-sm rounded-3" wire:click="listarInactivos">
                         <i class="fa-solid fa-ban"></i> Inactivos
                     </button>
                 </div>
@@ -34,7 +35,8 @@
                                 <i class="fa-solid fa-user"></i> DNI - PERSONAL
                             </th>
                             <th scope="col" class="table-success">ROLES</th>
-                            <th scope="col"><i class="fa-solid fa-gears"></i></th>
+                            <th scope="col">OBSERVACIÓN</th>
+                            <th scope="col" class="table-dark"><i class="fa-solid fa-gears"></i></th>
                         </tr>
                     </thead>
                     <tbody class="align-middle">
@@ -42,14 +44,15 @@
                             <tr>
                                 <th class="text-center">{{ $loop->iteration }}</th>
                                 <td class="fw-bold">{{ $item->dni }}<br>{{ $item->datos }}</td>
-                                <td>{{ $item->getRoleNames()->implode(' | ') }}</td>
+                                <td>{!! $item->getRoleNames()->sort()->implode(' <br> ') !!}</td>
+                                <td>{{ $item->cargo }}</td>
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-outline-success btn-xs" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="editar({{ $item->id }})">
+                                        <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar({{ $item->id }})">
                                             <i class="fa-solid fa-pen-to-square"></i><br>Editar
                                         </button>
-                                        <button type="button" class="btn btn-outline-warning btn-xs" data-bs-toggle="modal" data-bs-target="#user-password-component" wire:click="editar_password({{ $item->id }})">
-                                            <i class="fa-solid fa-pen-to-square"></i><br>Password
+                                        <button type="button" class="btn btn-outline-warning btn-xs" wire:click="editar_password({{ $item->id }})">
+                                            <i class="fa-solid fa-pen-to-square"></i><br>Reset_Password
                                         </button>
                                         <a href="{{ route('procesos.admin.users.roles.edit', $item->id) }}" class="btn btn-outline-primary btn-xs">
                                             <i class="fa-solid fa-user-gear"></i><br>Asignar_rol
@@ -82,41 +85,41 @@
         </div>
     </div>
 
-    {{-- Modal Nuevo-Editar --}}
-    <div wire:ignore.self class="modal fade" id="nuevoEditarModal" tabindex="-1" aria-labelledby="nuevoEditarModalLabel" aria-hidden="true">
+    {{-- MODAL NUEVO EDITAR --}}
+    <div class="modal fade @if($modalNuevoEditarAbrir) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
         <div class="modal-dialog" style="max-width:90%;">
             <div class="modal-content rounded-5">
                 <div class="modal-header bg-{{ $colorHeaderModal }}">
                     <h1 class="modal-title fs-5" id="nuevoEditarModalLabel">
                         <i class="fa-solid fa-file"></i> {{ $textoHeaderModal }}
                     </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" wire:click="cerrar"></button>
+                    <button type="button" class="btn-close" aria-label="Close" wire:click="cerrar"></button>
                 </div>
                 <form wire:submit.prevent="{{ $funcionGuardarActualizar }}">
                         <div class="modal-body">
                         <div class="row">
-                            <div class="col-xl-2 col-sm-12">
+                            {{-- <div class="col-xl-2 col-sm-12">
                                 <fieldset class="border p-3 rounded text-center mb-3" disabled>
                                     <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">FOTO DE PERFIL</legend>
                                     @include('livewire.rrhh.personal.partials.datos-foto-component')
                                 </fieldset>
-                            </div>
+                            </div> --}}
                             
-                            <div class="col-xl-10 col-sm-12">                           
+                            <div class="col-xl-12 col-sm-12">                           
                                 <div class="row">
-                                    <div class="col-xl-4">
-                                        <fieldset class="border p-3 rounded mb-3" disabled>
+                                    <div class="col-xl-6">
+                                        <fieldset class="border p-3 rounded mb-3">
                                             <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS PERSONALES</legend>
-                                            @include('livewire.rrhh.personal.partials.datos-personales-component')
+                                            @include('livewire.partials.componentes.persona-datos')
                                         </fieldset>
-                                        <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-sm" data-bs-toggle="modal" data-bs-target="#buscar-personal-component">
+                                        {{-- <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-sm">
                                             <i class="fa-solid fa-magnifying-glass"></i> Buscar
-                                        </button>
+                                        </button> --}}
                                     </div>
-                                    <div class="col-xl-8">
+                                    <div class="col-xl-6">
                                         <fieldset class="border p-3 rounded mb-3" disabled>
                                             <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS INSTITUCIONALES</legend>
-                                            @include('livewire.rrhh.personal.partials.datos-institucionales-component')
+                                            @include('livewire.partials.componentes.personal-datos')
                                         </fieldset>
                                     </div>
                                 </div>
@@ -127,7 +130,7 @@
                         <button type="submit" class="btn btn-{{ $colorGuardarActualizar }} btn-sm">
                             <i class="fa-solid fa-floppy-disk"></i> {{ $textoGuardarActualizar }}
                         </button>
-                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" wire:click="cerrar">
+                        <button type="button" class="btn btn-secondary btn-sm" wire:click="cerrar">
                             <i class="fa-solid fa-rectangle-xmark"></i> Cerrar
                         </button>
                     </div>
@@ -136,20 +139,20 @@
         </div>
     </div>
 
-    {{-- Modal Inactivos --}}
-    <div wire:ignore.self class="modal fade" id="inactivosModal" tabindex="-1" aria-labelledby="inactivosModalLabel" aria-hidden="true">
+    {{-- MODAL INACTIVOS --}}
+    <div class="modal fade @if($modalInactivos) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
         <div class="modal-dialog" style="max-width:90%;">
             <div class="modal-content rounded-5">
                 <div class="modal-header bg-danger-subtle">
                     <h1 class="modal-title fs-5" id="inactivosModalLabel">
                         <i class="fa-solid fa-trash"></i> INACTIVOS
                     </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" aria-label="Close" wire:click=cerrar></button>
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive small">
                         <div class="input-group mb-3">
-                            <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="searchinactivos" placeholder="Buscar usuario">
+                            <input type="text" id="txtsearchusuarioi" class="form-control form-control-sm" wire:model.live="searchi" placeholder="Buscar usuario">
                         </div>
                         <table class="table table-striped table-hover table-sm table-xsmall">
                             <thead class="table-dark text-center align-middle">
@@ -197,7 +200,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-secondary btn-sm" wire:click=cerrar>
                         <i class="fa-solid fa-rectangle-xmark"></i> Cerrar
                     </button>
                 </div>
@@ -205,79 +208,51 @@
         </div>
     </div>
 
-    {{-- Barra de paginación flotante con total --}}
-    {{-- <div class="pagination-floating position-fixed bottom-0 start-50 translate-middle-x bg-white border-top shadow-sm py-2 px-4 w-100 w-md-auto" style="z-index: 1050;">
-        <div class="d-flex justify-content-between align-items-center flex-wrap">
-            <div class="text-muted small">
-                <strong>Total de registros:</strong> {{ $lista_activos->total() }}
-            </div>
-            <div class="d-inline-block">
-                {{ $lista_activos->links() }}
-            </div>
-        </div>
-    </div> --}}
-
-    {{-- <!-- Modal Nuevo-Editar-->
-    <div class="modal fade @if($modal_abierto_personal) show d-block @endif" id="NuevoEditarModal" tabindex="-1">
-        <div class="modal-dialog modal-xl" style="max-width:90%;">
+    <!-- MODAL ACTUALIZAR PASSWORD -->
+    <div class="modal fade @if($modalPasswordActualizar) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
+        <div class="modal-dialog modal-ms">
             <div class="modal-content">
-                <form wire:submit.prevent="{{ $btn_guardar_actualizar }}">
-                    <div class="modal-header bg-{{ $modal_header_color }}">
-                        <h1 class="modal-title fs-5" id="NuevoEditarModalLabel">
-                            @if ($modal_header_titulo === "nuevo")
-                                <i class="fa-solid fa-file"></i> NUEVO
-                            @else
-                                <i class="fa-solid fa-pen-to-square"></i> EDITAR
-                            @endif
+                <form wire:submit.prevent="actualizar_password">
+                    <div class="modal-header bg-warning-subtle">
+                        <h1 class="modal-title fs-5" id="user-password-componentLabel">
+                            <i class="fa-solid fa-key"></i> RESTABLECER PASSWORD
                         </h1>
-                        <button type="button" class="btn-close" wire:click="cerrar"></button>
+                        <button type="button" class="btn-close" aria-label="Close" wire:click="cerrar"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="row">
-                            <div class="row">
-                                <div class="col-xl-4 col-sm-12">
-                                    <fieldset class="border p-3 rounded text-center" disabled>
-                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">FOTO DE PERFIL</legend>
-                                        @include('livewire.partials.personal-datos-foto')
-                                    </fieldset>
-                                    <fieldset class="border p-3 rounded">
-                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">DATOS PERSONALES</legend>
-                                        @include('livewire.partials.personal-datos-personales')
-                                    </fieldset>  
-                                </div>
-                                <div class="col-xl-8 col-sm-12">
-                                    @include('livewire.partials.personal-datos-institucionales-mir')
-                                    <fieldset class="border p-3 rounded">
-                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted">DATOS INSTITUCIONALES</legend>
-                                        @include('livewire.partials.personal-datos-institucionales')
-                                    </fieldset>
-                                </div>
-                            </div>
-                        </div>
+                        <label for="txt_password1"><strong>Password: Se restablece a su DNI</strong></label>
+                        <input type="password" id="txt_password1" class="form-control form-control-sm" wire:model="password">
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-{{ $btn_guardar_actualizar_color }} btn-sm">
-                            @if ($btn_guardar_actualizar === "guardar")
-                                <i class="fa-solid fa-floppy-disk"></i><br>Guardar
-                            @else
-                                <i class="fa-solid fa-floppy-disk"></i><br>Actualizar
-                            @endif    
+                        <button type="submit" class="btn btn-outline-warning btn-sm">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            <br>Restablecer Contraseña
                         </button>
-                        <button type="button" class="btn btn-secondary btn-sm" wire:click="cerrar">
-                            <i class="fa-solid fa-square-xmark"></i><br>Cerrar
+                        <button type="button" class="btn btn-outline-secondary btn-sm" wire:click="cerrar">
+                            <i class="fa-solid fa-door-closed"></i>
+                            <br>Cerrar
                         </button>
                     </div>
                 </form>
             </div>
         </div>
-    </div> --}}
+    </div>
 
-    {{-- @include('livewire.partials.personal-modal-foto')
-    
-    @include('livewire.partials.personal-modal-buscar')--}}
-    @include('livewire.rrhh.personal.partials.buscar-personal-component')
+    {{--MODAL BUSCAR PERSONAL --}}
+        @include('livewire.partials.modales.buscar-personal-datos')
 
-    @include('livewire.admin.partials.user-password-component') 
+        {{-- MODALE BUSCAR SEDES-DEPENDENCIAS-DESPACHOS --}}
+        @include('livewire.partials.modales.buscar-personal-sede-dependencia-despacho')
+        
+        {{-- MODAL BUSCAR CARGO --}}
+        @include('livewire.partials.modales.buscar-personal-cargo')
+
+        {{-- MODAL BUSCAR BIENES PATRIMONIALES --}}
+        {{-- @include('livewire.partials.modales.buscar-patrimonio-bienes') --}}
+        
+        {{-- MODAL CARGAR PDF --}}
+        @include('livewire.partials.modales.cargar-pdf-acta')
+        @include('livewire.partials.modales.cargar-pdf-evidencia')
 
 </div>
 

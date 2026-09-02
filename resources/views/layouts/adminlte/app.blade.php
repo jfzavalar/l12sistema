@@ -368,7 +368,7 @@
                                         </li>
 
                                         <li class="nav-item">
-                                            <a class="nav-link ms-3 {{ request()->routeIs('procesos.admin.permissions.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.admin.permissions.index') }}">
+                                            <a class="nav-link ms-3 {{ request()->routeIs('mpfn.admin.despachos.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.admin.despachos.index') }}">
                                                 <i class="nav-icon fa-regular fa-circle"></i>
                                                 <p>Despachos</p>
                                             </a>

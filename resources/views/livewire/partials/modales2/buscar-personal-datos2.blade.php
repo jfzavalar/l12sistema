@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content rounded-5">
             <form action="">
-                <div class="modal-header bg-{{ $colorHeaderModal }}">
+                <div class="modal-header bg-dark text-white">
                     <h1 class="modal-title fs-5" id="buscar-personal-componentLabel">
                         <i class="fa-solid fa-magnifying-glass"></i> BUSCAR PERSONAL
                     </h1>

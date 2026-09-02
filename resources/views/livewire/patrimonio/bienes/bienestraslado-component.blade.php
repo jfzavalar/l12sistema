@@ -236,7 +236,7 @@
                                                     <th scope="col">COLOR</th>
                                                     <th scope="col">ESTADO</th>
                                                     <th scope="col" class="table-dark text-end">
-                                                        <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-sm" wire:click="bienesBuscar">
+                                                        <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-sm rounded-5" wire:click="bienesBuscar">
                                                             <i class="fa-solid fa-circle-plus"></i> Agregar bienes
                                                         </button>
                                                     </th>

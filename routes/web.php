@@ -1,6 +1,7 @@
 <?php
 use App\Exports\UsuariosExport;
 use App\Http\Controllers\Admin\DependenciasController;
+use App\Http\Controllers\Admin\DespachosController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\SedesController;
@@ -89,6 +90,7 @@ Route::middleware(['auth','can:procesos.admin.roles.index'])->group(function () 
 //ADMIN
 Route::middleware('auth')->group(function () {
     Route::resource('dependencias', DependenciasController::class)->names('mpfn.admin.dependencias');
+    Route::resource('despachos', DespachosController::class)->names('mpfn.admin.despachos');
     Route::resource('sedes', SedesController::class)->names('mpfn.admin.sedes');
 });
 //ADMINISTRACION

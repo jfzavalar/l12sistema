@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form action="">
-                <div class="modal-header bg-{{ $colorHeaderModal }}">
+                <div class="modal-header bg-dark text-white">
                     <h1 class="modal-title fs-5" id="buscar-cargos-componentLabel">
                         <i class="fa-brands fa-searchengin"></i> BUSCAR CARGOS
                     </h1>

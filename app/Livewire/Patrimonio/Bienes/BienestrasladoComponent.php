@@ -403,7 +403,7 @@ class BienestrasladoComponent extends Component
             ->where('codigo_patrimonial','like','%' . $this->searchbienes . '%')
             ->distinct()
             ->orderBy('descripcion')
-            ->paginate(10,['*'],'bienesPage');
+            ->paginate(15,['*'],'bienesPage');
 
         return view('livewire.patrimonio.bienes.bienestraslado-component',
                         compact('lista_activos','lista_activos_detalle',
