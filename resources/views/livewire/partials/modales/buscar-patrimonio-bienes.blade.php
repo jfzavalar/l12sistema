@@ -26,9 +26,9 @@
                                     <th scope="col">COD</th>
                                     <th scope="col">COD PATRIMONIAL</th>
                                     <th scope="col">BIEN</th>
-                                    @can('mpfn.informatica')
+                                    {{-- @can('mpfn.informatica')
                                         <th scope="col">ESTADO</th>
-                                    @endcan
+                                    @endcan --}}
                                     <th scope="col"></th>
                                     <th scope="col"><i class="fa-solid fa-gears"></i></th>
                                 </tr>
@@ -40,13 +40,13 @@
                                         <th>{{ $bien->codigo_barra }}</th>
                                         <td>{{ $bien->codigo_patrimonial }}</td>
                                         <td>{{ $bien->descripcion }}</td>
-                                        @can('mpfn.informatica')
+                                        {{-- @can('mpfn.informatica')
                                             <td>
                                                 <span class="badge rounded-pill {{ $bien->asignacion === 'ASIGNADO' ? 'text-bg-success' : 'text-bg-danger' }}">
                                                     {{ $bien->asignacion === 'ASIGNADO' ? 'ASIGNADO' : 'LIBRE' }}
                                                 </span>
                                             </td>
-                                        @endcan
+                                        @endcan --}}
                                         <td></td>
                                         <td>
                                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
