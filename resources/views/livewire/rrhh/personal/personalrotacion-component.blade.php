@@ -226,7 +226,7 @@
                                             <div class="col-xl-12 col-sm-12">
                                                 <div class="row">
                                                     <div class="col-xl-12">
-                                                        <label for="txt_sede2" class="fw-bold fs-6">Sede</label>
+                                                        <label for="txt_sede2" class="fw-bold fs-6">Sede destino</label>
                                                         <div class="input-group">
                                                             <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" wire:click="sedeBuscar">
                                                                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -238,7 +238,7 @@
                                                         @enderror
                                                     </div>
                                                     <div class="col-xl-12">
-                                                        <label for="txt_dependencia2" class="fw-bold fs-6">Dependencia</label>
+                                                        <label for="txt_dependencia2" class="fw-bold fs-6">Dependencia destino</label>
                                                         <div class="input-group position-relative">
                                                             <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" wire:click="dependenciaBuscar">
                                                                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -250,7 +250,7 @@
                                                         @enderror
                                                     </div>
                                                     <div class="col-xl-12">
-                                                        <label for="txt_despacho2" class="fw-bold fs-6">Despacho</label>
+                                                        <label for="txt_despacho2" class="fw-bold fs-6">Despacho destino</label>
                                                         <div class="input-group position-relative">
                                                             <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" wire:click="despachoBuscar">
                                                                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -576,7 +576,47 @@
                                         @include('livewire.rrhh.personal.partials.sede-dependencia-despacho-component')
                                     </div>
                                     <div class="col-xl-12 col-sm-12 mb-3">
-                                        @include('livewire.rrhh.personal.partials.datos-personales-transferencia-ubicacion-component')
+                                        <div class="row">
+                                            <div class="col-xl-4 col-sm-12 mt-2">
+                                                <label for="txtresolucionu" class="fw-bold fs-6">N° Expediente</label>
+                                                <input type="text" id="txtresolucionu" class="form-control form-control-xs" wire:model="num_expediente">
+                                                @error('num_expediente')
+                                                    <small class="text-danger">{{ $message }}</small>
+                                                @enderror
+                                            </div>
+                                            <div class="col-xl-8 col-sm-12 mt-2">
+                                                <label for="filecontrato" class="fw-bold fs-6">Resolución de ubicación o transferencia</label>
+                                                <div class="input-group">
+                                                    <input type="file" class="form-control form-control-xs" id="filecontrato" aria-describedby="inputGroupFileAddon04" aria-label="Upload" accept="application/pdf" wire:model="pdf_acta">
+                                                    @if ($ruta_documento)
+                                                        <a class="btn btn-{{ $colorAgregar }} btn-xs" type="button" id="btnverevidencia" href="{{ asset('storage/'.$ruta_documento) }}" target="_blank">
+                                                            <i class="fa-solid fa-file-pdf"></i> Ver firmado
+                                                        </a>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-2 col-sm-12 mt-2">
+                                                <label for="txtfechainiciou" class="fw-bold fs-6">Fecha de inicio</label>
+                                                <input type="date" id="txtfechainiciou" class="form-control form-control-xs" wire:model="fecha_iniciou">
+                                                @error('fecha_iniciou')
+                                                    <small class="text-danger">{{ $message }}</small>
+                                                @enderror
+                                            </div>
+                                            <div class="col-xl-2 col-sm-12 mt-2">
+                                                <label for="txtfechafinu" class="fw-bold fs-6">Fecha de fin</label>
+                                                <input type="date" id="txtfechafinu" class="form-control form-control-xs" wire:model="fecha_finu">
+                                                @error('fecha_finu')
+                                                    <small class="text-danger">{{ $message }}</small>
+                                                @enderror
+                                            </div>
+                                            <div class="col-xl-8 col-sm-12 mt-2">
+                                                <label for="txtobservacionu" class="fw-bold fs-6">Observación o motivo</label>
+                                                <input type="text" id="txtobservacionu" class="form-control form-control-xs" wire:model="motivo_ubicacion">
+                                                @error('motivou')
+                                                    <small class="text-danger">{{ $message }}</small>
+                                                @enderror
+                                            </div>                              
+                                        </div>
                                     </div>                              
                                 </div>
                             </fieldset>
@@ -666,6 +706,20 @@
         {{-- MODAL CARGAR PDF --}}
         @include('livewire.partials.modales.cargar-pdf-acta')
         @include('livewire.partials.modales.cargar-pdf-evidencia')
+
+        {{-- ========================================================================================== --}}
+        {{-- MODALES SECUNDARIOS --}}
+        {{-- ========================================================================================== --}}
+
+
+        {{--MODAL BUSCAR PERSONAL 02 --}}
+        @include('livewire.partials.modales2.buscar-personal-datos2')
+
+        {{-- MODALE BUSCAR SEDES-DEPENDENCIAS-DESPACHOS 02 --}}
+        @include('livewire.partials.modales2.buscar-personal-sede-dependencia-despacho2')
+        
+        {{-- MODAL BUSCAR CARGO 02 --}}
+        @include('livewire.partials.modales2.buscar-personal-cargo2')
 
 
     </div>

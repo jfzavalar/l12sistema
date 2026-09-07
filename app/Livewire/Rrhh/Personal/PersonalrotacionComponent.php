@@ -46,7 +46,21 @@ class PersonalrotacionComponent extends Component
     public $modalHistorial = false;
     public $modalLegajos = false;
 
-    //
+    // VARIABLES PARA MODALES SECUNDARIAS
+    public $modalNuevoEditarAbrir2 = false, $modalReportesFiltros2 = false;
+
+    public $modalPersonalBuscar2 = false;
+    public $modalPersonalSedeBuscar2 = false;
+    public $modalPersonalDependenciaBuscar2 = false;
+    public $modalPersonalDespachoBuscar2 = false;
+    public $modalPersonalCargoBuscar2 = false;
+    public $modalInformaticaServicioBuscar2 = false;
+    public $modalInformaticaServicioDetalleBuscar2 = false;
+    public $modalPatrimonioBienesBuscar2 = false;
+    public $modalPDFCargar2 = false;
+    public $modalPDFEvidenciaCargar2 = false;
+
+
     public $mostrarBtnBuscarDni = "d-none";
 
     public $colorHeaderModal, $textoHeaderModal;
@@ -284,58 +298,52 @@ class PersonalrotacionComponent extends Component
             ->orderByDesc('id')
             ->paginate(10, ['*'], 'historialrotacionesPage');
 
-        $lista_personas = Persona::where('activo','1')
+        $lista_personas = Persona::join('personales','personas.id','=','personales.persona_id')
+            ->select(
+                'personas.*',
+                'personales.persona_id',
+                'personales.celinstitucional',
+                'personales.correoinstitucional',
+                'personales.regimen',
+                'personales.tipo_regimen',
+                'personales.cargo',
+                'personales.cargo_condicion',
+                'personales.sedeorigen',
+                'personales.dependenciaorigen',
+                'personales.despachoorigen',
+                'personales.sededestino',
+                'personales.dependenciadestino',
+                'personales.despachodestino',
+                'personales.tipo_documento'
+            )
+            // ->where('personales.tipo_documento','CONTRATO')
+            ->where('personales.activo', "1")
+            ->where('personas.activo','1')
             ->when($this->searchpersonas !== '', function ($query) {
                 $query->where(function ($q) {
-                    $q->where('dni', 'like', '%' . $this->searchpersonas . '%')
-                    ->orWhere('datos', 'like', '%' . $this->searchpersonas . '%');
+                    $q->where('personas.dni', 'like', '%' . $this->searchpersonas . '%')
+                    ->orWhere('personas.datos', 'like', '%' . $this->searchpersonas . '%');
                 });
             })
-            ->orderBy('datos')
+            ->orderBy('personas.datos')
             ->paginate(10,['*'],'personasPage');
 
         $lista_sedes = Personales_sede::select('id','nombre','nombred')
             ->where('activo','1')
             ->where('nombre','like','%' . $this->searchsedes . '%')
-            // ->distinct()
+            ->distinct()
             ->orderBy('nombre')
-            ->paginate(30,['*'], 'sedesPage');
+            ->paginate(15,['*'], 'sedesPage');
             
         $lista_dependencias = Personales_dependencia::select('id','nombre')
             ->where('activo','1')
-            ->where(function ($query) {
-                $query->where('sede_id', $this->codsedeorigen)
-                    ->orWhere('sede_id', $this->filtrosede);
-            })
+            ->where('sede_id',$this->codsededestino)
             ->where('nombre','like','%' . $this->searchdependencias . '%')
+            ->distinct()
             ->orderBy('nombre')
             ->paginate(10,['*'], 'dependenciasPage');
 
         $lista_despachos = Personales_despacho::select('id','nombre')
-            ->where('activo','1')
-            ->where('nombre','like','%' . $this->searchdespachos . '%')
-            ->distinct()
-            ->orderBy('nombre')
-            ->paginate(10,['*'], 'despachosPage');
-
-        $lista_sedes2 = Personales_sede::select('id','nombre','nombred')
-            ->where('activo','1')
-            ->where('nombre','like','%' . $this->searchsedes . '%')
-            // ->distinct()
-            ->orderBy('nombre')
-            ->paginate(30,['*'], 'sedesPage');
-            
-        $lista_dependencias2 = Personales_dependencia::select('id','nombre')
-            ->where('activo','1')
-            ->where(function ($query) {
-                $query->where('sede_id', $this->codsededestino)
-                    ->orWhere('sede_id', $this->filtrosede);
-            })
-            ->where('nombre','like','%' . $this->searchdependencias . '%')
-            ->orderBy('nombre')
-            ->paginate(10,['*'], 'dependenciasPage');
-
-        $lista_despachos2 = Personales_despacho::select('id','nombre')
             ->where('activo','1')
             ->where('nombre','like','%' . $this->searchdespachos . '%')
             ->distinct()
@@ -349,10 +357,69 @@ class PersonalrotacionComponent extends Component
             ->orderBy('nombre')
             ->paginate(10,['*'], 'cargosPage');
 
+        $lista_personas2 = Persona::join('personales','personas.id','=','personales.persona_id')
+            ->select(
+                'personas.*',
+                'personales.persona_id',
+                'personales.celinstitucional',
+                'personales.correoinstitucional',
+                'personales.regimen',
+                'personales.tipo_regimen',
+                'personales.cargo',
+                'personales.cargo_condicion',
+                'personales.sedeorigen',
+                'personales.dependenciaorigen',
+                'personales.despachoorigen',
+                'personales.sededestino',
+                'personales.dependenciadestino',
+                'personales.despachodestino',
+                'personales.tipo_documento'
+            )
+            // ->where('personales.tipo_documento','CONTRATO')
+            ->where('personales.activo', "1")
+            ->where('personas.activo','1')
+            ->when($this->searchpersonas !== '', function ($query) {
+                $query->where(function ($q) {
+                    $q->where('personas.dni', 'like', '%' . $this->searchpersonas . '%')
+                    ->orWhere('personas.datos', 'like', '%' . $this->searchpersonas . '%');
+                });
+            })
+            ->orderBy('personas.datos')
+            ->paginate(10,['*'],'personasPage');
+
+        $lista_sedes2 = Personales_sede::select('id','nombre','nombred')
+            ->where('activo','1')
+            ->where('nombre','like','%' . $this->searchsedes . '%')
+            ->distinct()
+            ->orderBy('nombre')
+            ->paginate(15,['*'], 'sedesPage');
+            
+        $lista_dependencias2 = Personales_dependencia::select('id','nombre')
+            ->where('activo','1')
+            ->where('sede_id',$this->codsededestino)
+            ->where('nombre','like','%' . $this->searchdependencias . '%')
+            ->distinct()
+            ->orderBy('nombre')
+            ->paginate(10,['*'], 'dependenciasPage');
+
+        $lista_despachos2 = Personales_despacho::select('id','nombre')
+            ->where('activo','1')
+            ->where('nombre','like','%' . $this->searchdespachos . '%')
+            ->distinct()
+            ->orderBy('nombre')
+            ->paginate(10,['*'], 'despachosPage');
+
+        $lista_cargos2 = Personales_cargo::select('id','nombre')
+            ->where('activo','1')
+            ->where('nombre','like','%' . $this->searchcargos . '%')
+            ->distinct()
+            ->orderBy('nombre')
+            ->paginate(10,['*'], 'cargosPage');
+
         return view('livewire.rrhh.personal.personalrotacion-component',
                         compact('lista_activos','lista_inactivos','lista_historial_rotaciones',
                                     'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos',
-                                    'lista_sedes2','lista_dependencias2','lista_despachos2'));
+                                    'lista_personas2','lista_sedes2','lista_dependencias2','lista_despachos2','lista_cargos2'));
     }
 
     protected function rules(){
@@ -1560,6 +1627,201 @@ class PersonalrotacionComponent extends Component
             'searchdependencias',
             'searchdespachos',
             'searchcargos',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPersonalCargoBuscar = false;
+    }
+
+    // ============================================================================================================================
+    // MODALES BUSCAR SECUNDARIAS
+    // ============================================================================================================================
+
+    public function personalBuscar2()
+    {
+        $this->modalPersonalBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchPersonal');
+    }
+    public function sedeBuscar2()
+    {
+        $this->modalPersonalSedeBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchSede');
+    }
+    public function dependenciaBuscar2()
+    {
+        $this->modalPersonalDependenciaBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchDependencia');
+    }
+    public function despachoBuscar2()
+    {
+        $this->modalPersonalDespachoBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchDespacho');
+    }
+    public function cargoBuscar2()
+    {
+        $this->modalPersonalCargoBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchCargo');
+    }
+    public function cerrarBuscar2()
+    {
+        // $this->modalReportesFiltros = false;
+
+        $this->modalPersonalBuscar = false;
+        $this->modalPersonalSedeBuscar = false;
+        $this->modalPersonalDependenciaBuscar = false;
+        $this->modalPersonalDespachoBuscar = false;
+        $this->modalPersonalCargoBuscar = false;
+        $this->modalInformaticaServicioBuscar = false;
+        $this->modalInformaticaServicioDetalleBuscar = false;
+        $this->modalPatrimonioBienesBuscar = false;
+    }
+
+    // ============================================================================================================================
+    // FUNCIONES AGREGAR SECUNDARIAS
+    // ============================================================================================================================
+
+    public function agregar_persona2(Persona $ipersona)
+    {
+        // DATOS DE LA PERSONA
+        $this->persona_id = $ipersona->id;
+        $this->dni = $ipersona->dni;
+        $this->appaterno = $ipersona->appaterno;
+        $this->apmaterno = $ipersona->apmaterno;
+        $this->nombres = $ipersona->nombres;
+        $this->datos = $ipersona->datos;
+        $this->celpersonal = $ipersona->celpersonal;
+        $this->correopersonal = $ipersona->correopersonal;
+        $this->fotoactual = $ipersona->foto;
+
+        // DATOS DEL PERSONAL
+        $ipersonal = Personale::where([['persona_dni',$this->dni],['activo',1],])->firstOrFail();
+
+        $this->personal_id = $ipersonal->id;
+
+        $this->codsedeorigen = $ipersonal->codsedeorigen;
+        $this->sedeorigen = $ipersonal->sedeorigen;   
+        $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
+        $this->dependenciaorigen = $ipersonal->dependenciaorigen;
+        $this->coddespachoorigen = $ipersonal->coddespachoorigen;
+        $this->despachoorigen = $ipersonal->despachoorigen;
+
+        // $this->codsededestino = $ipersonal->codsededestino;
+        // $this->sededestino = $ipersonal->sededestino;   
+        // $this->coddependenciadestino = $ipersonal->coddependenciadestino;
+        // $this->dependenciadestino = $ipersonal->dependenciadestino;
+        // $this->coddespachodestino = $ipersonal->coddespachodestino;
+        // $this->despachodestino = $ipersonal->despachodestino;
+
+        $this->celinstitucional = $ipersonal->celinstitucional;
+        $this->correoinstitucional = $ipersonal->correoinstitucional;
+        $this->regimen = $ipersonal->regimen;
+        $this->tipo_regimen = $ipersonal->tipo_regimen;
+        $this->cargo = $ipersonal->cargo;
+        $this->cargo_condicion = $ipersonal->cargo_condicion;
+        $this->tipo_documento = $ipersonal->tipo_documento;
+
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPersonalBuscar = false;
+    }
+
+    public function agregar_sede2(Personales_sede $isede)
+    {
+        // $this->codsedeorigen = $isede->id;
+        // $this->sedeorigen = $isede->nombre;
+
+        $this->codsededestino = $isede->id;
+        $this->sededestino = $isede->nombre;
+
+        // RESTABLECER DEPENDENCIA Y DESPACHO
+        $this->reset([
+            // 'dependenciaorigen',
+            // 'despachoorigen',
+            'dependenciadestino',
+            'despachodestino',
+        ]);
+
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPersonalSedeBuscar = false;
+    }
+
+    public function agregar_dependencia2(Personales_dependencia $idependencia)
+    {
+        // $this->coddependenciaorigen = $idependencia->id;
+        // $this->dependenciaorigen = $idependencia->nombre;
+
+        $this->coddependenciadestino = $idependencia->id;
+        $this->dependenciadestino = $idependencia->nombre;
+
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPersonalDependenciaBuscar = false;
+    }
+
+    public function agregar_despacho2(Personales_despacho $idespacho)
+    {
+        // $this->coddespachoorigen = $idespacho->id;
+        // $this->despachoorigen = $idespacho->nombre;
+
+        $this->coddespachodestino = $idespacho->id;
+        $this->despachodestino = $idespacho->nombre;
+
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPersonalDespachoBuscar = false;
+    }
+
+    public function agregar_cargo2(Personales_cargo $icargo)
+    {
+        $this->cargo = $icargo->nombre;
+
+        // RETABLECER SERVICIO DETALLE
+        
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas2',
+            'searchsedes2',
+            'searchdependencias2',
+            'searchdespachos2',
+            'searchcargos2',
         ]);
 
         // CERRAR MODAL

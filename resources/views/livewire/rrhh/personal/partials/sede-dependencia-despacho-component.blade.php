@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-xl-12">
-        <label for="txt_sede2" class="fw-bold fs-6">Sede</label>
+        <label for="txt_sede2" class="fw-bold fs-6">Sede destino</label>
         <div class="input-group">
             <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#2buscar-sedes-component">
                 <i class="fa-solid fa-magnifying-glass"></i>
