@@ -16,29 +16,40 @@
             </div>
 
             <div class="col-auto">
-                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarAtendido">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarAsignados">
                     <span class="alert alert-success d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-check-double"></i>
-                            ASIGNADOS: {{ $estadisticas->asignados + $estadisticas->reasignados  }}
+                            ASIGNADOS: {{ $estadisticas->asignados }}
                         </span>
                     </span>
                 </button>
             </div>
 
             <div class="col-auto">
-                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarNoatendido">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarAsignados">
+                    <span class="alert alert-secondary d-block mb-0">
+                        <span class="fw-bold">
+                            <i class="fa-solid fa-check-double"></i>
+                            REASIGNADOS: {{ $estadisticas->reasignados  }}
+                        </span>
+                    </span>
+                </button>
+            </div>
+
+            <div class="col-auto">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarReasignados">
                     <span class="alert alert-danger d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-check-double"></i>
-                            LIBRES: {{ $estadisticas->libres }}
+                            DEVUELTOS: {{ $estadisticas->libres }}
                         </span>
                     </span>
                 </button>
             </div>
 
             <div class="col-auto">
-                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarEnviadolima">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarDevueltos">
                     <span class="alert alert-info d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-check-double"></i>
@@ -77,10 +88,10 @@
                             {{-- <th scope="col">DEPENDENCIA ORIGEN</th> --}}
                             <th scope="col">DEPENDENCIA</th>
                             <th scope="col" class="table-success">ANEXO</th>
-                            <th scope="col" class="table-success">SERIE</th>
+                            {{-- <th scope="col" class="table-success">SERIE</th> --}}
                             <th scope="col" class="table-success">ESTADO</th>
-                            <th scope="col" class="table-success"></th>
-                            <th scope="col" class="table-success">FECHA</th>
+                            <th scope="col" class="table-success">EN_CUSTODIA</th>
+                            {{-- <th scope="col" class="table-success">FECHA</th> --}}
                             <th scope="col" class="table-dark">INFORMÁTICO</th>
                             <th scope="col" class="table-success">REGISTRADO POR</th>
                             <th scope="col" class="table-dark" colspan="3" ><i class="fa-solid fa-gears"></i></th>
@@ -109,27 +120,45 @@
                                     <br>
                                     <b>DESPACHO: </b>{{ $item->despachodestino }}
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     <span class="badge py-1 bg-primary-subtle text-primary fs-7">
                                         {{ $item->anexo }}
                                     </span>
+                                    <br>{{ $item->serie }}
+                                    <br>{{ $item->marca }}
+                                    <br>{{ $item->modelo }}
                                 </td>
-                                <th class="text-center">
+                                {{-- <th class="text-center">
                                     {{ $item->serie }}
                                     <br>{{ $item->marca }}
                                     <br>{{ $item->modelo }}
-                                </th>
-                                <td>{{ $item->estado }}</td>
-                                <td>
+                                </th> --}}
+                                <td class="text-center">
+                                    <b>{{ $item->estado }}</b>
+                                    <br>
                                     <span class="badge py-1 {{ in_array($item->asignacionlibrecustodia, ['ASIGNACION', 'REASIGNACION']) ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }}">
                                         {{ $item->asignacionlibrecustodia }}
                                     </span>
-                                    {{ $item->custodia }}
                                 </td>
-                                <td>
+                                <td class="text-center">
+                                    <span class="badge py-1 {{ in_array($item->custodia, ['NO']) ? 'bg-primary-subtle text-primary' : 'bg-danger-subtle text-danger' }} fs-7">
+                                        {{ $item->custodia }}
+                                    </span>
+                                    <br>
+                                    @if ($item->custodia === "SI")
+                                        <b>Desde:</b>
+                                        <br>
+                                        <span class="text-primary">{{ $item->asignacionlibrecustodiadesde }}</span>
+                                        <br>
+                                        <b>Hasta:</b>
+                                        <br>
+                                        <span class="text-primary">{{ $item->asignacionlibrecustodiahasta}}</span>
+                                    @endif
+                                </td>
+                                {{-- <td>
                                     Desde: {{ $item->asignacionlibrecustodiadesde}}
                                     <br>Hasta: {{ $item->asignacionlibrecustodiahasta}}
-                                </td>
+                                </td> --}}
                                 <td>{{ $item->informatico }}</td>
                                 <td>{{ $item->created_user }}</td>
                                 <td>
@@ -137,15 +166,15 @@
                                         <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar({{ $item->id }})">
                                             <i class="fa-solid fa-pen-to-square"></i><br>Editar
                                         </button>
-                                        @if ( $item->asignacionlibrecustodia !== "ASIGNACION" && $item->asignacionlibrecustodia !== "REASIGNACION")
+                                        {{-- @if ( $item->asignacionlibrecustodia !== "ASIGNACION" && $item->asignacionlibrecustodia !== "REASIGNACION") --}}
                                             <button type="button" class="btn btn-outline-primary btn-xs" wire:click="nuevo({{ $item->id }},'REASIGNACION')">
                                                 <i class="fa-solid fa-right-to-bracket"></i><br>Reasignar
                                             </button>
-                                        @else
+                                        {{-- @else
                                             <button type="button" class="btn btn-outline-danger btn-xs" wire:click="nuevo({{ $item->id }},'DEVOLUCION')">
                                                 <i class="fa-solid fa-right-from-bracket"></i><br>Devolver
                                             </button>
-                                        @endif
+                                        @endif --}}
                                     </div>
                                 </td>
                                 <td>
@@ -345,8 +374,7 @@
                                         </div>
                                     </fieldset>
                                     <fieldset class="border p-3 rounded mb-3">
-                                        <div class="row">
-                                            
+                                        <div class="row">                                          
                                             @if ($asignacionlibrecustodia === "REASIGNACION")
                                                 <div class="col-12 col-xl">
                                                     <label for="txtbase" class="fw-bold fs-6">CUSTODIA</label>
@@ -381,7 +409,7 @@
                                                 </div>
                                                 <div class="col-12 col-xl">
                                                     <label for="txthasta" class="fw-bold fs-6">HASTA:</label>
-                                                    <input type="date" id="txthasta" class="form-control form-control-sm">
+                                                    <input type="date" id="txthasta" class="form-control form-control-sm" wire:model="asignacionlibrecustodiahasta">
                                                 </div>
                                             @endif
                                         </div>
@@ -450,10 +478,10 @@
                                         {{-- <th scope="col">DEPENDENCIA ORIGEN</th> --}}
                                         <th scope="col">DEPENDENCIA</th>
                                         <th scope="col" class="table-success">ANEXO</th>
-                                        <th scope="col" class="table-success">SERIE</th>
+                                        {{-- <th scope="col" class="table-success">SERIE</th> --}}
                                         <th scope="col" class="table-success">ESTADO</th>
-                                        <th scope="col" class="table-success"></th>
-                                        <th scope="col" class="table-success">FECHA</th>
+                                        <th scope="col" class="table-success">CUSTODIA</th>
+                                        {{-- <th scope="col" class="table-success">FECHA</th> --}}
                                         <th scope="col" class="table-dark">INFORMÁTICO</th>
                                         <th scope="col" class="table-success">REGISTRADO POR</th>
                                         <th scope="col" class="table-dark" colspan="1" ><i class="fa-solid fa-gears"></i></th>
@@ -482,25 +510,41 @@
                                                 <br>
                                                 <b>DESPACHO: </b>{{ $item->despachodestino }}
                                             </td>
-                                            <td>
+                                            <td class="text-center">
                                                 <span class="badge py-1 bg-primary-subtle text-primary fs-7">
                                                     {{ $item->anexo }}
                                                 </span>
-                                            </td>
-                                            <th class="text-center">
-                                                {{ $item->serie }}
+                                                <br>{{ $item->serie }}
                                                 <br>{{ $item->marca }}
                                                 <br>{{ $item->modelo }}
-                                            </th>
-                                            <td>{{ $item->estado }}</td>
-                                            <td>
+                                            </td>
+                                            {{-- <th class="text-center">
+                                                
+                                            </th> --}}
+                                            <td class="text-center">
+                                                {{ $item->estado }}
+                                                <br>
                                                 <span class="badge py-1 {{ in_array($item->asignacionlibrecustodia, ['ASIGNACION', 'REASIGNACION']) ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }}">
                                                     {{ $item->asignacionlibrecustodia }}
                                                 </span>
                                             </td>
-                                            <td>
-                                                Desde: {{ $item->asignacionlibrecustodiadesde}}
-                                                <br>Hasta: {{ $item->asignacionlibrecustodiahasta}}
+                                            {{-- <td>
+                                                
+                                            </td> --}}
+                                            <td class="text-center">
+                                                <span class="badge py-1 {{ in_array($item->custodia, ['NO']) ? 'bg-primary-subtle text-primary' : 'bg-danger-subtle text-danger' }} fs-7">
+                                                    {{ $item->custodia }}
+                                                </span>
+                                                <br>
+                                                @if ($item->custodia === "SI")
+                                                    <b>Desde:</b>
+                                                    <br>
+                                                    <span class="text-primary">{{ $item->asignacionlibrecustodiadesde }}</span>
+                                                    <br>
+                                                    <b>Hasta:</b>
+                                                    <br>
+                                                    <span class="text-primary">{{ $item->asignacionlibrecustodiahasta}}</span>
+                                                @endif
                                             </td>
                                             <td>{{ $item->informatico }}</td>
                                             <td>{{ $item->created_user }}</td>

@@ -721,7 +721,6 @@
         {{-- MODAL BUSCAR CARGO 02 --}}
         @include('livewire.partials.modales2.buscar-personal-cargo2')
 
-
     </div>
 
 </div>

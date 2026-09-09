@@ -159,6 +159,39 @@
             </tr>
         </tbody>
     </table>
+
+    <br>
+
+    @if ($instanciaTbl->custodia === "SI")
+        <table width="100%">
+            <thead>
+                <tr>
+                    <th style="background-color: #e9ecef; color: black; text-align: center;">CUSTODIA</th>
+                </tr>
+            </thead>
+        </table>
+
+        <br>
+
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>OBSERVACIÓN</th>
+                    <th>MOTIVO</th>
+                    <th>DESDE</th>
+                    <th>HASTA</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align: center;">{{ $instanciaTbl->observacion }}</td>
+                    <td style="text-align: center;">{{ $instanciaTbl->motivo }}</td>
+                    <td style="text-align: center;">{{ $instanciaTbl->asignacionlibrecustodiadesde }}</td>
+                    <td style="text-align: center;">{{ $instanciaTbl->asignacionlibrecustodiahasta }}</td>
+                </tr>
+            </tbody>
+        </table>
+    @endif
     
 </div>
 

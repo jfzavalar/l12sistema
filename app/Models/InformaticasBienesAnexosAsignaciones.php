@@ -47,6 +47,7 @@ class InformaticasBienesAnexosAsignaciones extends Model
         'transformador',
         'auriculares',
         'baseauriculares',
+        'custodia',
         'motivo',
         'asignacionlibrecustodia',
         'asignacionlibrecustodiadesde',

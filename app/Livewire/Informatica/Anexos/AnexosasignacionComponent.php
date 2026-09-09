@@ -213,6 +213,49 @@ class AnexosasignacionComponent extends Component
         }
     }
 
+    // ============================================================================================================================
+    // FUNCIONES DE FILTRADO
+    // ============================================================================================================================
+    public $filtro_asignados,
+            $filtro_reasignados,
+            $filtro_devueltos,
+            $filtro_custodia;
+
+    public function filtrarTotal($value = null)
+    {
+        $this->resetFiltros();
+    }
+    public function filtrarAsignados($value = null)
+    {
+        $this->resetFiltros();
+        $this->filtro_asignados = 'ASIGNACION';
+    }
+    public function filtrarReasignados($value = null)
+    {
+        $this->resetFiltros();
+        $this->filtro_reasignados = 'REASIGNACION';
+    }
+    public function filtrarDevueltos($value = null)
+    {
+        $this->resetFiltros();
+        $this->filtro_devueltos = 'DEVOLUCION';
+    }
+    public function filtrarCustodia($value = null)
+    {
+        $this->resetFiltros();
+        $this->filtro_custodia = 'SI';
+    }
+    public function resetFiltros()
+    {
+        $this->search = null;
+        $this->filtro_asignados = null;
+        $this->filtro_reasignados = null;
+        $this->filtro_devueltos = null; 
+        $this->filtro_custodia = null;
+
+        $this->resetPage('anexosasignacionPage');
+    }
+
 
     // ============================================================================================================================
     // RENDERIZADO DE PÁGINA
@@ -221,12 +264,48 @@ class AnexosasignacionComponent extends Component
     public function render()
     {
         $lista_activos = InformaticasBienesAnexosAsignaciones::where('activo',1)
+            // FILTRO ATENDIDO
+            ->when($this->filtro_asignados, function ($q) {
+
+                $q->where(
+                    'asignacionlibrecustodia',
+                    $this->filtro_asignados
+                );
+
+            })
+            // FILTRO ENVIADO LIMA
+            ->when($this->filtro_reasignados, function ($q) {
+
+                $q->where(
+                    'asignacionlibrecustodia',
+                    $this->filtro_reasignados
+                );
+
+            })
+            // FILTRO ATENDIDO USUARIO
+            ->when($this->filtro_devueltos, function ($q) {
+
+                $q->where(
+                    'asignacionlibrecustodia',
+                    $this->filtro_devueltos
+                );
+
+            })
+            // FILTRO INFORMÁTICO
+            ->when($this->filtro_custodia, function ($q) {
+
+                $q->where(
+                    'custodia',
+                    trim($this->filtro_custodia)
+                );
+
+            })
             ->orderBy('id','desc')
-            ->paginate(10,['*'],'atencionesPage');
+            ->paginate(10,['*'],'anexosasignacionPage');
 
         $lista_historial = InformaticasBienesAnexosAsignaciones::where('anexo_id',$this->anexo_id)
             ->orderBy('id','desc')
-            ->paginate(10,['*'],'atencionesHistorialPage');
+            ->paginate(10,['*'],'anexosasignacionHistorialPage');
         
         $estadisticas = InformaticasBienesAnexosAsignaciones::where('activo', 1)
             ->selectRaw("
@@ -356,15 +435,14 @@ class AnexosasignacionComponent extends Component
 
         $this->funcionGuardarActualizar="guardar";
 
-        $this->colorHeaderModal = "primary-subtle";
-        $this->textoHeaderModal = "NUEVO";
-        $this->colorGuardarActualizar = "primary";
-        $this->textoGuardarActualizar = "Guardar";
-        $this->colorAgregar = "outline-primary";
-
         if ($instanciaTabla) {
             
             if ($vAsignacionlibrecustodia === 'DEVOLUCION') {
+                $this->colorHeaderModal = "dark-subtle";
+                $this->textoHeaderModal = "DEVOLUCIÓN";
+                $this->colorGuardarActualizar = "dark";
+                $this->textoGuardarActualizar = "Guardar";
+                $this->colorAgregar = "outline-dark";
                 // BLOQUEAMOS LAS SECCIONES
                 $this->seccionFoto = "disabled";
                 $this->seccionPersona = "disabled";
@@ -416,9 +494,15 @@ class AnexosasignacionComponent extends Component
                 $this->transformador = $instanciaTabla->transformador;
                 $this->auriculares = $instanciaTabla->auriculares;
                 $this->baseauriculares = $instanciaTabla->baseauriculares;
+                $this->custodia = $instanciaTabla->custodia;
                 $this->estado = $instanciaTabla->estado;
                 $this->asignacionlibrecustodia = $vAsignacionlibrecustodia;
             } elseif ($vAsignacionlibrecustodia === 'REASIGNACION'){
+                $this->colorHeaderModal = "info-subtle";
+                $this->textoHeaderModal = "REASIGNACIÓN";
+                $this->colorGuardarActualizar = "info";
+                $this->textoGuardarActualizar = "Guardar";
+                $this->colorAgregar = "outline-info";
                 // DATOS DEL REGISTRO
                 $this->anexoasignado_id = $instanciaTabla->id;
                 $this->anexo_id = $instanciaTabla->anexo_id;
@@ -430,6 +514,7 @@ class AnexosasignacionComponent extends Component
                 $this->transformador = $instanciaTabla->transformador;
                 $this->auriculares = $instanciaTabla->auriculares;
                 $this->baseauriculares = $instanciaTabla->baseauriculares;
+                $this->custodia = $instanciaTabla->custodia;
                 $this->estado = $instanciaTabla->estado;
                 $this->asignacionlibrecustodia = $vAsignacionlibrecustodia;
 
@@ -438,6 +523,12 @@ class AnexosasignacionComponent extends Component
                 $this->seccionPersonal    = "";
                 $this->seccionDetalle = "disabled";
             } else{
+                $this->colorHeaderModal = "primary-subtle";
+                $this->textoHeaderModal = "NUEVO";
+                $this->colorGuardarActualizar = "primary";
+                $this->textoGuardarActualizar = "Guardar";
+                $this->colorAgregar = "outline-primary";
+
                 $this->seccionFoto = "";
                 $this->seccionPersona = "";
                 $this->seccionPersonal    = "";
@@ -576,6 +667,7 @@ class AnexosasignacionComponent extends Component
                     'transformador' => $this->transformador,
                     'auriculares' => $this->auriculares,
                     'baseauriculares' => $this->baseauriculares,
+                    'custodia' => $this->custodia,
                     'motivo' => $this->motivo,
                     'asignacionlibrecustodia' => $this->asignacionlibrecustodia,
                     'asignacionlibrecustodiadesde' => $this->asignacionlibrecustodiadesde,
@@ -693,8 +785,11 @@ class AnexosasignacionComponent extends Component
         $this->transformador = $instanciaTabla->trasformador;
         $this->auriculares = $instanciaTabla->auriculares;
         $this->baseauriculares = $instanciaTabla->baseauriculares;
+        $this->custodia = $instanciaTabla->custodia;
         $this->motivo = $instanciaTabla->motivo;
         $this->asignacionlibrecustodia = $instanciaTabla->asignacionlibrecustodia;
+        $this->asignacionlibrecustodiadesde = $instanciaTabla->asignacionlibrecustodiadesde;
+        $this->asignacionlibrecustodiahasta = $instanciaTabla->asignacionlibrecustodiahasta;
         $this->observacion = $instanciaTabla->observacion;
         $this->estado = $instanciaTabla->estado;
         $this->informatico_dni = $instanciaTabla->informatico_dni;
@@ -707,6 +802,110 @@ class AnexosasignacionComponent extends Component
         // ABRIR MODAL NUEVO - EDITAR
         $this->modalNuevoEditarAbrir = true;
         
+    }
+
+    public function actualizar(){
+
+        $this->validate();
+
+        try {
+
+            DB::transaction(function () {
+
+                $usuario_id = auth()->user()->id;
+                $usuario_dni = auth()->user()->dni;
+                $usuario_datos = auth()->user()->datos;
+                $usuario_cargo = auth()->user()->cargo;
+
+                // CREAMOS LA INSTANCIA PARA ACTUALIZAR
+                $ipersonalanexo = InformaticasBienesAnexosAsignaciones::findOrFail($this->anexoasignado_id);
+
+                // OBTENEMOS LOS DATOS DEL INFORMATICO SELECCIONADO PARA FIRMAR EL ACTA
+                $iinformatico = User::select('datos')
+                    ->where('dni', $this->informatico_dni)
+                    ->first();
+
+
+                $ipersonalanexo->update([
+                    // DATOS DE LA PERSONA
+                    'persona_id' => $this->persona_id,
+                    'dni' => $this->dni,
+                    'appaterno' => $this->appaterno,
+                    'apmaterno' => $this->apmaterno,
+                    'nombres' => $this->nombres,                   
+                    'datos' => $this->datos,
+                    'celpersonal' => $this->celpersonal,
+                    'celinstitucional' => $this->celinstitucional,
+                    'correopersonal' => $this->correopersonal,
+                    'correoinstitucional' => $this->correoinstitucional,
+
+                    // DATOS DEL PERSONAL 
+                    'personal_id' => $this->personal_id,
+
+                    'codsedeorigen' => $this->codsedeorigen,
+                    'sedeorigen' => $this->sedeorigen,
+                    'coddependenciaorigen' => $this->coddependenciaorigen,
+                    'dependenciaorigen' => $this->dependenciaorigen,
+                    'coddespachoorigen' => $this->coddespachoorigen,
+                    'despachoorigen' => $this->despachoorigen,
+
+                    'codsededestino' => $this->codsededestino,
+                    'sededestino' => $this->sededestino,
+                    'coddependenciadestino' => $this->coddependenciadestino,
+                    'dependenciadestino' => $this->dependenciadestino,
+                    'coddespachodestino' => $this->coddespachodestino,
+                    'despachodestino' => $this->despachodestino,
+
+                    'regimen' => $this->regimen,
+                    'tipo_regimen' => $this->tipo_regimen,
+                    'cargo' => $this->cargo,
+                    'cargo_condicion' => $this->cargo_condicion,
+
+                    // DATOS DEl ANEXO
+                    'anexo_id' => $this->anexo_id,
+                    'serie' => $this->serie,
+                    'tipo' => $this->tipo,
+                    'modelo' => $this->modelo,
+                    'anexo' => $this->anexo,
+                    'marca' => $this->marca,
+                    'transformador' => $this->transformador,
+                    'auriculares' => $this->auriculares,
+                    'baseauriculares' => $this->baseauriculares,
+                    'motivo' => $this->motivo,
+                    'asignacionlibrecustodia' => $this->asignacionlibrecustodia,
+                    'asignacionlibrecustodiadesde' => $this->asignacionlibrecustodiadesde,
+                    'asignacionlibrecustodiahasta' => $this->asignacionlibrecustodiahasta,
+                    'observacion' => $this->observacion,
+                    'estado' => $this->estado,
+
+                    'informatico_dni' => $this->informatico_dni,
+                    'informatico' => $iinformatico->datos ?? null,
+                    // 'activo' => '1',
+                    // 'created_user_cargo' => $usuario_cargo,
+                    // 'created_user' => $usuario_datos,
+                    'updated_user' => $usuario_datos,
+                ]);
+
+            });
+
+            // CERRAR MODAL NUEVO - EDITAR
+            $this->modalNuevoEditarAbrir = false;
+            $this->modalPDFCargar = false;
+            $this->modalPDFEvidenciaCargar = false;
+            
+            // ALERTA DE ACTUALIZACIÓN
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Datos actualizados',
+                mensaje: 'Los datos se han actualizado correctamente.',
+                tipo: 'success'
+            );
+
+        } catch (\Throwable $e) {
+
+            dd($e); // 🔥 Déjalo mientras pruebas
+
+        };
     }
 
     public function cerrar()
@@ -728,7 +927,7 @@ class AnexosasignacionComponent extends Component
         $this->anexo_id = $anexoAsignadoId;
 
         $this->colorHeaderModal = "info-subtle";
-        $this->textoHeaderModal = "NUEVO";
+        $this->textoHeaderModal = "HISTORIAL";
         $this->colorGuardarActualizar = "info";
         $this->textoGuardarActualizar = "Guardar";
         $this->colorAgregar = "outline-info";
