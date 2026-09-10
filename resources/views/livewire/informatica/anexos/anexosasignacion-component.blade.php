@@ -69,11 +69,11 @@
                         <div class="input-group input-group-sm mb-2">
                             <span class="input-group-text fw-bold" id="basic-addon2">Total: </span>
                             <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar por Apellidos y Nombres O Anexo Telefónico">
-                            {{-- @can('mpfn.rrhh.personal.create') --}}
+                            @can('mpfn.informatica.anexos.create')
                                 <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" wire:click="nuevo">
                                     <i class="fa-solid fa-file"></i> Nuevo
                                 </button>
-                            {{-- @endcan --}}
+                            @endcan
                         </div>
                     </div>
                 </div>
@@ -163,9 +163,11 @@
                                 <td>{{ $item->created_user }}</td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar({{ $item->id }})">
-                                            <i class="fa-solid fa-pen-to-square"></i><br>Editar
-                                        </button>
+                                        @can('mpfn.informatica.anexos.edit')
+                                            <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar({{ $item->id }})">
+                                                <i class="fa-solid fa-pen-to-square"></i><br>Editar
+                                            </button>
+                                        @endcan                                       
                                         {{-- @if ( $item->asignacionlibrecustodia !== "ASIGNACION" && $item->asignacionlibrecustodia !== "REASIGNACION") --}}
                                             <button type="button" class="btn btn-outline-primary btn-xs" wire:click="nuevo({{ $item->id }},'REASIGNACION')">
                                                 <i class="fa-solid fa-right-to-bracket"></i><br>Reasignar

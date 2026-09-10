@@ -414,12 +414,14 @@
                                     </a>
                                     
                                     <ul class="nav nav-treeview">
+                                        @can('mpfn.informatica.anexos.index')
                                             <li class="nav-item">
                                                 <a class="nav-link ms-3 {{ request()->routeIs('mpfn.informatica.anexos.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('mpfn.informatica.anexos.index') }}">
                                                     <i class="nav-icon fa-regular fa-circle"></i>
                                                     <p>Anexos telefónicos</p>
                                                 </a>
                                             </li>
+                                        @endcan
                                         @can('procesos.informatica.firmasdigitales.index')
                                             <li class="nav-item">
                                                 <a class="nav-link ms-3 {{ request()->routeIs('procesos.informatica.firmasdigitales.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}" href="{{ route('procesos.informatica.firmasdigitales.index') }}">
