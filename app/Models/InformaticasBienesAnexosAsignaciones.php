@@ -37,6 +37,9 @@ class InformaticasBienesAnexosAsignaciones extends Model
         'tipo_regimen',
         'cargo',
         'cargo_condicion',
+
+        'piso',
+        'oficina',
         
         'anexo_id',
         'serie',

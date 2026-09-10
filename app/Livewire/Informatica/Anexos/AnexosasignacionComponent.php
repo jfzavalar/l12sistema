@@ -53,6 +53,8 @@ class AnexosasignacionComponent extends Component
     public $modalPDFCargar = false;
     public $modalPDFEvidenciaCargar = false;
     public $modalHistorial = false;
+    public $modalAnexoBuscar = false;
+    public $modalAnexoTelefonico;
 
     // VARIABLES PARA ADMINISTRAR MODALES
     public $colorHeaderModal, $textoHeaderModal;
@@ -84,16 +86,17 @@ class AnexosasignacionComponent extends Component
             $searchcargos,
             $searchservicios,
             $searchincidenciasolicitud,
-            $searchbienes;
+            $searchbienes,
+            $searchanexos;
     
     public function updatingSearch(){
-        $this->resetPage('atencionesPage');
+        $this->resetPage('anexosasignacionPage');
     }
     public function updatingSearchi(){
-        $this->resetPage('atencionesinactivosPage');
+        $this->resetPage('anexosasignacioninactivosPage');
     }
     public function updatingSearchhistorial(){
-        $this->resetPage('atencioneshistorialPage');
+        $this->resetPage('anexosasignacionhistorialPage');
     }
     public function updatingSearchpersonas(){
         $this->resetPage('personasPage');
@@ -121,6 +124,9 @@ class AnexosasignacionComponent extends Component
     }
     public function updatingSearchbienes(){
         $this->resetPage('bienesPage');
+    }
+    public function updatingSearchanexos(){
+        $this->resetPage('anexosPage');
     }
 
     public $user_login;
@@ -162,7 +168,10 @@ class AnexosasignacionComponent extends Component
             
             $celinstitucional,            
             $correoinstitucional,
-            $tipo_documento;
+            $tipo_documento,
+            
+            $piso,
+            $oficina;
 
     public $anexoasignado_id,
             $anexo_id,
@@ -189,6 +198,14 @@ class AnexosasignacionComponent extends Component
             $created_user_cargo,
             $created_user,
             $updated_user;
+    
+    public $anexo_id2,
+            $anexo2,
+            $serie2,
+            $tipo2,
+            $modelo2,
+            $marca2,
+            $asignado;
 
     public $pdf_acta;
 
@@ -264,6 +281,18 @@ class AnexosasignacionComponent extends Component
     public function render()
     {
         $lista_activos = InformaticasBienesAnexosAsignaciones::where('activo',1)
+            // BUSCADOR
+            ->when($this->search, function ($query) {
+
+                $search = trim($this->search);
+
+                $query->where(function ($q) use ($search) {
+
+                    $q->where('anexo', 'like', '%' . $search . '%')
+                    ->orWhere('datos', 'like', '%' . $search . '%');
+                });
+            })
+
             // FILTRO ATENDIDO
             ->when($this->filtro_asignados, function ($q) {
 
@@ -398,9 +427,16 @@ class AnexosasignacionComponent extends Component
             ->orderBy('datos')
             ->get();
 
+        $lista_anexos = InformaticasBienesAnexos::where('activo','1')
+            ->where('asignado','0')
+            ->where('anexo','like','%' . $this->searchanexos . '%')
+            ->orderBy('anexo')
+            ->paginate(5,['*'], 'anexosPage');
+
         return view('livewire.informatica.anexos.anexosasignacion-component',
                     compact('lista_activos','lista_historial','estadisticas',
-                            'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos','lista_informaticos'));
+                            'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos','lista_informaticos',
+                            'lista_anexos'));
     }
 
     // ============================================================================================================================
@@ -514,7 +550,7 @@ class AnexosasignacionComponent extends Component
                 $this->transformador = $instanciaTabla->transformador;
                 $this->auriculares = $instanciaTabla->auriculares;
                 $this->baseauriculares = $instanciaTabla->baseauriculares;
-                $this->custodia = $instanciaTabla->custodia;
+                // $this->custodia = $instanciaTabla->custodia;
                 $this->estado = $instanciaTabla->estado;
                 $this->asignacionlibrecustodia = $vAsignacionlibrecustodia;
 
@@ -657,6 +693,9 @@ class AnexosasignacionComponent extends Component
                     'cargo' => $this->cargo,
                     'cargo_condicion' => $this->cargo_condicion,
 
+                    'piso' => $this->piso,
+                    'oficina' => $this->oficina,
+
                     // DATOS DEl ANEXO
                     'anexo_id' => $registro->id,
                     'serie' => $this->serie,
@@ -773,6 +812,9 @@ class AnexosasignacionComponent extends Component
         $this->cargo = $instanciaTabla->cargo;
         $this->cargo_condicion = $instanciaTabla->cargo_condicion;
 
+        $this->piso = $instanciaTabla->piso;
+        $this->oficina = $instanciaTabla->oficina;
+
         // DATOS DEL REGISTRO
 
         $this->anexoasignado_id = $instanciaTabla->id;
@@ -860,6 +902,9 @@ class AnexosasignacionComponent extends Component
                     'tipo_regimen' => $this->tipo_regimen,
                     'cargo' => $this->cargo,
                     'cargo_condicion' => $this->cargo_condicion,
+
+                    'piso' => $this->piso,
+                    'oficina' => $this->oficina,
 
                     // DATOS DEl ANEXO
                     'anexo_id' => $this->anexo_id,
@@ -1083,6 +1128,12 @@ class AnexosasignacionComponent extends Component
 
         $this->dispatch('focus-input', id: 'txtSearchCargo');
     }
+    public function anexoBuscar()
+    {
+        $this->modalAnexoBuscar = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchAnexo');
+    }
     public function cerrarBuscar()
     {
         $this->modalReportesFiltros = false;
@@ -1095,6 +1146,7 @@ class AnexosasignacionComponent extends Component
         $this->modalInformaticaServicioBuscar = false;
         $this->modalInformaticaServicioDetalleBuscar = false;
         $this->modalPatrimonioBienesBuscar = false;
+        $this->modalAnexoBuscar = false;
     } 
 
     // ============================================================================================================================
@@ -1254,5 +1306,108 @@ class AnexosasignacionComponent extends Component
 
         // CERRAR MODAL
         $this->modalPersonalCargoBuscar = false;
+    }
+
+    public function agregar_anexo(InformaticasBienesAnexos $ianexo)
+    {
+        $this->anexo_id = $ianexo->id;
+        $this->anexo = $ianexo->anexo;
+        $this->serie = $ianexo->serie;
+        $this->tipo = $ianexo->tipo;
+        $this->modelo = $ianexo->modelo;
+        $this->marca = $ianexo->marca;
+        $this->transformador = $ianexo->transformador;
+        $this->auriculares = $ianexo->auriculares;
+        $this->baseauriculares = $ianexo->baseauriculares;
+        $this->asignado = $ianexo->asignado;
+        $this->observacion = $ianexo->observacion;
+        $this->estado = $ianexo->estado;
+        $this->custodia = $ianexo->custodia;
+
+        // CERRAR MODAL
+        $this->modalAnexoBuscar = false;
+
+    }
+
+    // ============================================================================================================================
+    // FUNCIONES PARA ANEXO TELEFÓNICO
+    // ============================================================================================================================
+
+    public function editar_anexo(InformaticasBienesAnexos $ianexo)
+    {
+        $this->anexo_id2 = $ianexo->id;
+        $this->anexo2 = $ianexo->anexo;
+        $this->serie2 = $ianexo->serie;
+        $this->tipo2 = $ianexo->tipo;
+        $this->modelo2 = $ianexo->modelo;
+        $this->marca2 = $ianexo->marca;
+
+        $this->modalAnexoTelefonico = true;
+    }
+
+    public function actualizar_anexo()
+    {
+        try {
+
+            DB::transaction(function () {
+
+                $usuario_id = auth()->user()->id;
+                $usuario_dni = auth()->user()->dni;
+                $usuario_datos = auth()->user()->datos;
+                $usuario_cargo = auth()->user()->cargo;
+
+                // CREAMOS LA INSTANCIA PARA ACTUALIZAR
+                $anexo = InformaticasBienesAnexos::findOrFail($this->anexo_id2);
+
+                // OBTENEMOS LOS DATOS DEL INFORMATICO SELECCIONADO PARA FIRMAR EL ACTA
+                $iinformatico = User::select('datos')
+                    ->where('dni', $this->informatico_dni)
+                    ->first();
+
+
+                $anexo->update([
+                    // DATOS DEL ANEXO
+                    'anexo' => $this->anexo2,
+                    'serie' => $this->serie2,
+                    'tipo' => $this->tipo2,
+                    'modelo' => $this->modelo2,
+                    'marca' => $this->marca2,
+                    
+
+                    'informatico_dni' => $this->informatico_dni,
+                    'informatico' => $iinformatico->datos ?? null,
+                    // 'activo' => '1',
+                    // 'created_user_cargo' => $usuario_cargo,
+                    // 'created_user' => $usuario_datos,
+                    'updated_user' => $usuario_datos,
+                ]);
+
+            });
+
+            // CERRAR MODAL NUEVO - EDITAR
+            $this->modalAnexoTelefonico = false;
+            
+            // RESTABLECER ALGUNAS VARIABLES
+            $this->reset(['searchanexos']);
+
+            
+            // ALERTA DE ACTUALIZACIÓN
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Datos actualizados',
+                mensaje: 'Los datos se han actualizado correctamente.',
+                tipo: 'success'
+            );
+
+        } catch (\Throwable $e) {
+
+            dd($e); // 🔥 Déjalo mientras pruebas
+
+        };
+    }
+
+    public function cerrar_anexo()
+    {
+        $this->modalAnexoTelefonico = false;
     }
 }

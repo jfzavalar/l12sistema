@@ -17,7 +17,7 @@ class InformaticasBienesAnexos extends Model
         'transformador',
         'auriculares',
         'baseauriculares',
-        'asignacionlibrecustodia',
+        'asignado',
         'observacion',
         'estado',
         'activo',

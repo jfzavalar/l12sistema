@@ -79,18 +79,18 @@
                     {{ $instanciaTbl->despachodestino}}
                 </td>
             </tr>
-            {{-- <tr>
-                <td><b>PISO - OFICINA:</b></td>
+            <tr>
+                <td><b>PISO:</b></td>
                 <td colspan="3">
-                    
+                    {{ $instanciaTbl->piso}}
                 </td>
             </tr>
             <tr>
-                <td><b>DIRECCIÓN:</b></td>
+                <td><b>OFICINA:</b></td>
                 <td colspan="3">
-                    
+                    {{ $instanciaTbl->oficina}}
                 </td>
-            </tr> --}}
+            </tr>
         </thead>
     </table>
 

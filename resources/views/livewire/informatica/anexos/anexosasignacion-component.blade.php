@@ -1,7 +1,7 @@
 <div>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-1 mb-2 border-bottom">
         <h1 class="h2">
-            <i class="fa-solid fa-ticket"></i> ANEXOS TELEFÓNICOS:
+            <i class="fa-solid fa-blender-phone"></i> ANEXOS TELEFÓNICOS:
         </h1>
         <div class="row">
             <div class="col-auto">
@@ -68,9 +68,9 @@
                     <div class="col-xl-12">
                         <div class="input-group input-group-sm mb-2">
                             <span class="input-group-text fw-bold" id="basic-addon2">Total: </span>
-                            <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar por DNI, Apellidos y Nombres o Anexo">
+                            <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar por Apellidos y Nombres O Anexo Telefónico">
                             {{-- @can('mpfn.rrhh.personal.create') --}}
-                                <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#nuevoEditarModal" wire:click="nuevo">
+                                <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" wire:click="nuevo">
                                     <i class="fa-solid fa-file"></i> Nuevo
                                 </button>
                             {{-- @endcan --}}
@@ -266,7 +266,7 @@
                                                     <div class="col-xl-3">
                                                         <label for="txtanexo" class="fw-bold fs-6">ANEXO:</label>
                                                         <div class="input-group input-group-xs">
-                                                            <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-sm" data-bs-toggle="modal" data-bs-target="#buscar-sedes-component">
+                                                            <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-sm" wire:click="anexoBuscar">
                                                                 <i class="fa-solid fa-magnifying-glass"></i> Buscar
                                                             </button>
                                                             <input type="text" id="txtanexo" class="form-control form-control-sm" wire:model="anexo" required>
@@ -274,7 +274,7 @@
                                                     </div>
                                                     <div class="col-xl-3">
                                                         <label for="txtserie" class="fw-bold fs-6">SERIE:</label>
-                                                        <input type="text" id="txtserie" class="form-control form-control-xs" wire:model="serie">
+                                                        <input type="text" id="txtserie" class="form-control form-control-xs" wire:model="serie" disabled>
                                                     </div>
                                                     <div class="col-xl-3">
                                                         <label for="txtmarca" class="fw-bold fs-6">MARCA:</label>
@@ -303,59 +303,59 @@
                                                     </div>
                                                     
                                                     <div class="col-xl-3">
-                                                        <label for="txtcargador" class="fw-bold fs-6">TRANSFORMADOR:</label>
+                                                        <label for="transformador_si" class="fw-bold fs-6">TRANSFORMADOR:</label>
                                                         <div class="d-flex gap-2">
-                                                            <input type="radio" id="Si" name="cargador" class="btn-check" value="SI" autocomplete="off" wire:model="transformador">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="Si">SI</label>
+                                                            <input type="radio" id="transformador_si" name="transformador" class="btn-check" value="SI" autocomplete="off" wire:model.live="transformador">
+                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="transformador_si">SI</label>
 
-                                                            <input type="radio" id="No" name="cargador" class="btn-check" value="NO" autocomplete="off" wire:model="transformador">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="No">NO</label>
+                                                            <input type="radio" id="transformador_no" name="transformador" class="btn-check" value="NO" autocomplete="off" wire:model.live="transformador">
+                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="transformador_no">NO</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-3">
-                                                        <label for="txtauticulares" class="fw-bold fs-6">AURICULARES:</label>
+                                                        <label for="auriculares_si" class="fw-bold fs-6">AURICULARES:</label>
                                                         <div class="d-flex gap-2">
-                                                            <input type="radio" id="Si2" name="auriculares" class="btn-check" value="SI" autocomplete="off" wire:model="auriculares">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="Si2">SI</label>
+                                                            <input type="radio" id="auriculares_si" name="auriculares" class="btn-check" value="SI" autocomplete="off" wire:model.live="auriculares">
+                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="auriculares_si">SI</label>
 
-                                                            <input type="radio" id="No2" name="auriculares" class="btn-check" value="NO" autocomplete="off" wire:model="auriculares">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="No2">NO</label>
+                                                            <input type="radio" id="auriculares_no" name="auriculares" class="btn-check" value="NO" autocomplete="off" wire:model.live="auriculares">
+                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="auriculares_no">NO</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-3">
-                                                        <label for="txtbase" class="fw-bold fs-6">BASE AURICULAR:</label>
+                                                        <label for="baseauricular_si" class="fw-bold fs-6">BASE AURICULAR:</label>
                                                         <div class="d-flex gap-2">
-                                                            <input type="radio" id="Si3" name="baseauricular" class="btn-check" value="SI" autocomplete="off" wire:model="baseauriculares">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="Si3">SI</label>
+                                                            <input type="radio" id="baseauricular_si" name="baseauricular" class="btn-check" value="SI" autocomplete="off" wire:model.live="baseauriculares">
+                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="baseauricular_si">SI</label>
 
-                                                            <input type="radio" id="No3" name="baseauricular" class="btn-check" value="NO" autocomplete="off" wire:model="baseauriculares">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="No3">NO</label>
+                                                            <input type="radio" id="baseauricular_no" name="baseauricular" class="btn-check" value="NO" autocomplete="off" wire:model.live="baseauriculares">
+                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="baseauricular_no">NO</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-6">
-                                                        <label for="txtestado" class="fw-bold fs-6">ESTADO:</label>
+                                                        <label for="estado_bueno" class="fw-bold fs-6">ESTADO:</label>
                                                         <div class="d-flex gap-2">
-                                                            <input type="radio" id="BUENO" name="estado" class="btn-check" value="BUENO" autocomplete="off" wire:model="estado">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="BUENO">BUENO</label>
+                                                            <input type="radio" id="estado_bueno" name="estado" class="btn-check" value="BUENO" autocomplete="off" wire:model.live="estado">
+                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="estado_bueno">BUENO</label>
 
-                                                            <input type="radio" id="MALO" name="estado" class="btn-check" value="MALO" autocomplete="off" wire:model="estado">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="MALO">MALO</label>
+                                                            <input type="radio" id="estado_malo" name="estado" class="btn-check" value="MALO" autocomplete="off" wire:model.live="estado">
+                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="estado_malo">MALO</label>
 
-                                                            <input type="radio" id="REGULAR" name="estado" class="btn-check" value="REGULAR" autocomplete="off" wire:model="estado">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="REGULAR">REGULAR</label>
+                                                            <input type="radio" id="estado_regular" name="estado" class="btn-check" value="REGULAR" autocomplete="off" wire:model.live="estado">
+                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="estado_regular">REGULAR</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-6">
-                                                        <label for="txtcustodia" class="fw-bold fs-6">ASIGNACIÓN</label>
+                                                        <label for="alc_asignacion" class="fw-bold fs-6">ASIGNACIÓN:</label>
                                                         <div class="d-flex gap-2">
-                                                            <input type="radio" id="asignacion" name="asignacionlibrecustodia"" class="btn-check" value="ASIGNACION" autocomplete="off" wire:model="asignacionlibrecustodia">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="asignacion">ASIGNACION</label>
+                                                            <input type="radio" id="alc_asignacion" name="asignacionlibrecustodia" class="btn-check" value="ASIGNACION" autocomplete="off" wire:model.live="asignacionlibrecustodia">
+                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="alc_asignacion">ASIGNACIÓN</label>
 
-                                                            <input type="radio" id="reasignacion" name="asignacionlibrecustodia"" class="btn-check" value="REASIGNACION" autocomplete="off" wire:model="asignacionlibrecustodia">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="reasignacion">REASIGNACION</label>
+                                                            <input type="radio" id="alc_reasignacion" name="asignacionlibrecustodia" class="btn-check" value="REASIGNACION" autocomplete="off" wire:model.live="asignacionlibrecustodia">
+                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="alc_reasignacion">REASIGNACIÓN</label>
 
-                                                            <input type="radio" id="devolucion" name="asignacionlibrecustodia"" class="btn-check" value="DEVOLUCION" autocomplete="off" wire:model="asignacionlibrecustodia">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="devolucion">DEVOLUCION</label>
+                                                            <input type="radio" id="alc_devolucion" name="asignacionlibrecustodia" class="btn-check" value="DEVOLUCION" autocomplete="off" wire:model.live="asignacionlibrecustodia">
+                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="alc_devolucion">DEVOLUCIÓN</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -377,28 +377,28 @@
                                         <div class="row">                                          
                                             @if ($asignacionlibrecustodia === "REASIGNACION")
                                                 <div class="col-12 col-xl">
-                                                    <label for="txtbase" class="fw-bold fs-6">CUSTODIA</label>
+                                                    <label for="custodia_si" class="fw-bold fs-6">CUSTODIA:</label>
                                                     <div class="d-flex gap-2">
-                                                        <input type="radio" id="Si4" name="custodia" class="btn-check" value="SI" autocomplete="off" wire:model.live="custodia">
-                                                        <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="Si4">SI</label>
+                                                        <input type="radio" id="custodia_si" name="custodia" class="btn-check" value="SI" autocomplete="off" wire:model.live="custodia">
+                                                        <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="custodia_si">SI</label>
 
-                                                        <input type="radio" id="No4" name="custodia" class="btn-check" value="NO" autocomplete="off" wire:model.live="custodia">
-                                                        <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="No4">NO</label>
+                                                        <input type="radio" id="custodia_no" name="custodia" class="btn-check" value="NO" autocomplete="off" wire:model.live="custodia">
+                                                        <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="custodia_no">NO</label>
                                                     </div>
                                                 </div>
                                             @endif
                                             @if ($custodia === "SI")
                                                 <div class="col-12 col-xl">
-                                                    <label for="txtcustodia" class="fw-bold fs-6">MOTIVO</label>
+                                                    <label for="motivo_renuncia" class="fw-bold fs-6">MOTIVO:</label>
                                                     <div class="d-flex gap-2">
-                                                        <input type="radio" id="renuncia" name="motivo" class="btn-check" value="RENUNCIA" autocomplete="off" wire:model.live="motivo">
-                                                        <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="renuncia">RENUNCIA</label>
+                                                        <input type="radio" id="motivo_renuncia" name="motivo" class="btn-check" value="RENUNCIA" autocomplete="off" wire:model.live="motivo">
+                                                        <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="motivo_renuncia">RENUNCIA</label>
 
-                                                        <input type="radio" id="licencia" name="motivo" class="btn-check" value="LICENCIA" autocomplete="off" wire:model.live="motivo">
-                                                        <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="licencia">LICENCIA</label>
+                                                        <input type="radio" id="motivo_licencia" name="motivo" class="btn-check" value="LICENCIA" autocomplete="off" wire:model.live="motivo">
+                                                        <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="motivo_licencia">LICENCIA</label>
 
-                                                        <input type="radio" id="vacaciones" name="motivo" class="btn-check" value="VACACIONES" autocomplete="off" wire:model.live="motivo">
-                                                        <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="vacaciones">VACACIONES</label>                     
+                                                        <input type="radio" id="motivo_vacaciones" name="motivo" class="btn-check" value="VACACIONES" autocomplete="off" wire:model.live="motivo">
+                                                        <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="motivo_vacaciones">VACACIONES</label>
                                                     </div>
                                                 </div>
                                             @endif
@@ -414,11 +414,32 @@
                                             @endif
                                         </div>
                                         <div class="row">
-                                            <div class="col-xl-6">
+                                            <div class="col-xl-1">
+                                                <label for="cmbpiso" class="fw-bold fs-6">PISO:</label>
+                                                <select name="" id="cmbpiso" class="form-select form-select-sm" wire:model="piso">
+                                                    <option value="">...</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-xl-1">
+                                                <label for="txtoficina" class="fw-bold fs-6">OFICINA:</label>
+                                                <input type="text" id="txtoficina" class="form-control form-control-sm" wire:model="oficina">
+                                            </div>
+
+                                            <div class="col-xl-5">
                                                 <label for="txtobservacion" class="fw-bold fs-6">OBSERVACIÓN:</label>
                                                 <input type="text" id="txtobservacion" class="form-control form-control-sm" wire:model="observacion">
                                             </div>
-                                            <div class="col-xl-6">
+                                            <div class="col-xl-5">
                                                 <label for="txt_informatico" class="fw-bold fs-6">INFORMÁTICO RESPONSABLE</label>
                                                 <select id="txt_informatico" class="form-select form-select-sm" wire:model="informatico_dni" required>
                                                     <option value="">Seleccionar...</option>
@@ -587,6 +608,159 @@
                             <i class="fa-solid fa-rectangle-xmark"></i> Cerrar
                         </button>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade @if($modalAnexoBuscar) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content rounded-5">
+                    <form action="">
+                        <div class="modal-header bg-{{ $colorHeaderModal }}">
+                            <h1 class="modal-title fs-5" id="buscar-personal-componentLabel">
+                                <i class="fa-solid fa-magnifying-glass"></i> BUSCAR ANEXO
+                            </h1>
+                            <button type="button" class="btn-close" wire:click="cerrarBuscar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="table-responsive-xl">
+                                <form>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text input-group-text-xs fw-bold" id="basic-addon2">Total: {{ $lista_personas->total() }}</span>
+                                                <input type="text" id="txtSearchAnexo" class="form-control form-control-sm" placeholder="Buscar anexo ..." wire:model.live="searchanexos">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <table class="table table-striped table-hover table-sm table-xsmall align-middle">
+                                    <thead class="table-dark text-center">
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th></th>
+                                            <th scope="col">ANEXO</th>
+                                            <th scope="col">SERIE</th>
+                                            <th scope="col">TIPO</th>
+                                            <th scope="col">MODELO</th>
+                                            <th scope="col">MARCA</th>
+                                            <th scope="col"><i class="fa-solid fa-gears"></i></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($lista_anexos as $anexo)
+                                            <tr>
+                                                <th>{{ $loop->iteration }}</th>
+                                                <td>
+                                                    @if ($anexo->tipo === "1")
+                                                        <img src="{{ asset('storage/imagenes/anexos/tipo1.png') }}" width="80">
+                                                    @elseif ($anexo->tipo === "2")
+                                                        <img src="{{ asset('storage/imagenes/anexos/tipo2.png') }}" width="80">
+                                                    @elseif ($anexo->tipo === "3")
+                                                        <img src="{{ asset('storage/imagenes/anexos/tipo3.png') }}" width="80">
+                                                    @endif
+                                                </td>
+                                                <th class="text-center fs-7">
+                                                    {{ $anexo->anexo }}
+                                                    <br>
+                                                    <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar_anexo({{ $anexo->id }})">
+                                                        <i class="fa-solid fa-pen-to-square"></i>
+                                                    </button>
+                                                </th>
+                                                <td class="text-center">{{ $anexo->serie }}</td>
+                                                <td class="text-center">{{ $anexo->tipo }}</td>
+                                                <td class="text-center">{{ $anexo->modelo }}</td>
+                                                <td class="text-center">{{ $anexo->marca }}</td>
+                                                <td>
+                                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                        <div class="btn-group" role="group">
+                                                            <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_anexo({{ $anexo->id }})">
+                                                                <i class="fa-solid fa-circle-plus"></i><br>Agregar
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            
+                                        @endforelse
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="8">
+                                                {{ $lista_anexos->links() }}
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>                       
+                            </div>          
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" wire:click="cerrarBuscar">
+                                <i class="fa-solid fa-door-closed"></i> Cerrar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {{-- MODAL PARA ACTUALIZAR ANEXO --}}
+
+        <div class="modal fade @if($modalAnexoTelefonico) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content rounded-5">
+                    <form wire:submit.prevent="actualizar_anexo">
+                        <div class="modal-header bg-{{ $colorHeaderModal }}">
+                            <h1 class="modal-title fs-5" id="buscar-personal-componentLabel">
+                                <i class="fa-solid fa-pen-to-square"></i> EDITAR ANEXO
+                            </h1>
+                            <button type="button" class="btn-close" wire:click="cerrar_anexo"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="table-responsive-xl">
+                                <div class="row">
+                                    <div class="col-xl-12 col-lg-6 col-sm-3">
+                                        <label for="txtanexo2" class="fw-bold">ANEXO</label>
+                                        <input type="text" id="txtanexo2" class="form-control form-control-sm" wire:model="anexo2">
+                                    </div>
+                                    <div class="col-xl-3 col-lg-6 col-sm-3">
+                                        <label for="txtserie2" class="fw-bold">SERIE</label>
+                                        <input type="text" id="txtserie2" class="form-control form-control-sm" wire:model="serie2">
+                                    </div>
+                                    <div class="col-xl-3 col-lg-6 col-sm-3">
+                                        <label for="txttipo2" class="fw-bold">TIPO</label>
+                                        <input type="text" id="txttipo2" class="form-control form-control-sm" wire:model="tipo2">
+                                    </div>
+                                    <div class="col-xl-3 col-lg-6 col-sm-3">
+                                        <label for="txtmodelo2" class="fw-bold">MODELO</label>
+                                        <input type="text" id="txtmodelo2" class="form-control form-control-sm" wire:model="modelo2">
+                                    </div>
+                                    <div class="col-xl-3 col-lg-6 col-sm-3">
+                                        <label for="txtmarca2" class="fw-bold">MARCA</label>
+                                        <input type="text" id="txtmarca2" class="form-control form-control-sm" wire:model="marca2">
+                                    </div>
+                                    <div class="col-12 text-center">
+                                        @if ($tipo2 === "1")
+                                            <img src="{{ asset('storage/imagenes/anexos/tipo1.png') }}" width="300">
+                                        @elseif ($tipo2 === "2")
+                                            <img src="{{ asset('storage/imagenes/anexos/tipo2.png') }}" width="300">
+                                        @elseif ($tipo2 === "3")
+                                            <img src="{{ asset('storage/imagenes/anexos/tipo3.png') }}" width="300">
+                                        @endif
+                                    </div>
+                                </div>                    
+                            </div>          
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-{{ $colorGuardarActualizar }} btn-sm">
+                                <i class="fa-solid fa-floppy-disk"></i> Actualizar
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" wire:click="cerrar_anexo">
+                                <i class="fa-solid fa-door-closed"></i> Cerrar
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
