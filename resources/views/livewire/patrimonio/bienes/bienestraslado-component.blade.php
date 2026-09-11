@@ -127,7 +127,7 @@
                                 <td>
                                     <div class="btn-group" role="group">
                                         @can('mpfn.patrimonio.traslado.create')
-                                            <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar({{ $item->id }})">
+                                            <button type="button" class="btn btn-outline-success btn-xs me-2" wire:click="editar({{ $item->id }})">
                                                 <i class="fa-solid fa-pen-to-square"></i><br>Editar
                                             </button>
                                         @endcan
@@ -199,7 +199,7 @@
                                             <div class="col-xl-12">
                                                 <div class="input-group">
                                                     <span class="input-group-text input-group-text-xs" id="basic-addon1">Referencia</span>
-                                                    <input type="text" class="form-control form-control-xs" wire:model="referencia">
+                                                    <input type="text" id="txtreferencia" class="form-control form-control-xs" wire:model="referencia">
                                                 </div>
                                             </div>
                                         </div>
@@ -219,7 +219,7 @@
                                             <div class="col-xl-12">
                                                 <div class="input-group">
                                                     <span class="input-group-text input-group-text-xs" id="basic-addon1">Motivo</span>
-                                                    <input type="text" class="form-control form-control-xs" wire:model="motivo">
+                                                    <input type="text" id="txtmotivo" class="form-control form-control-xs" wire:model="motivo">
                                                 </div>
                                             </div>
                                         </div>

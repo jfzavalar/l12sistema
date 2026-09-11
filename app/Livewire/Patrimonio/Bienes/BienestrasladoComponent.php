@@ -143,7 +143,7 @@ class BienestrasladoComponent extends Component
 
     public $personal_id,
             $regimen,
-            $regimen_tipo,
+            $tipo_regimen,
             $cargo,
             $cargo_condicion,
 
@@ -181,7 +181,7 @@ class BienestrasladoComponent extends Component
 
     public $personal_id2,
             $regimen2,
-            $regimen_tipo2,
+            $tipo_regimen2,
             $cargo2,
             $cargo_condicion2,
 
