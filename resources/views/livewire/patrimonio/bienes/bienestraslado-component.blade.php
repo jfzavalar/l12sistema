@@ -131,9 +131,21 @@
                                                 <i class="fa-solid fa-pen-to-square"></i><br>Editar
                                             </button>
                                         @endcan
-                                        <a type="button" class="btn btn-outline-naranja btn-xs" href="{{ route('pdf.patrimonio.bienesdesplazamiento-acta', $item->id) }}" target="_blank">
-                                            <i class="fa-solid fa-file-pdf"></i><br>Acta
-                                        </a>
+                                        @if (!empty($item->id))
+                                            <a type="button" class="btn btn-outline-naranja btn-xs" href="{{ route('pdf.patrimonio.bienesdesplazamiento-acta', ['id' => $item->id]) }}" target="_blank">
+                                                <i class="fa-solid fa-file-pdf"></i><br>Acta
+                                            </a>
+                                        @endif
+                                        @if ($item->created_user === auth()->user()->datos || auth()->user()->hasRole('Admin-Super'))
+                                            <button type="button" class="btn btn-outline-warning btn-xs" wire:click="editar_pdf({{ $item->id }})">
+                                                <i class="fa-solid fa-upload"></i><br>Cargar
+                                            </button>
+                                        @endif
+                                        @if($item->ruta_documento)
+                                            <a type="button" class="btn btn-outline-dark btn-xs" href="{{ asset('storage/'.$item->ruta_documento) }}" target="_blank">
+                                                <i class="fa-solid fa-eye"></i> <i class="fa-solid fa-file-signature"></i><br> Firmado
+                                            </a>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>

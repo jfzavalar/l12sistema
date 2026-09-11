@@ -14,6 +14,7 @@ use App\Models\Personales_cargo;
 use App\Models\Personales_dependencia;
 use App\Models\Personales_despacho;
 use App\Models\Personales_sede;
+use App\Models\Tbl_patrimonio_bienes_desplazamiento;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -1356,6 +1357,93 @@ class BienestrasladoComponent extends Component
 
         // CERRAR MODAL
         $this->modalPersonalCargoBuscar2 = false;
+    }
+
+    // ============================================================================================================================
+    // MODALES CARGAR PDF
+    // ============================================================================================================================
+
+    public function editar_pdf($desplazamiento_id)
+    {
+        $this->desplazamiento_id = $desplazamiento_id;
+
+        $this->pdf_acta = null; // 🔥 CLAVE
+
+        // ABRIR MODAL CARGAR PDF
+        $this->modalPDFCargar = true;
+    }
+
+    public function actualizar_pdf()
+    {
+        // ===== VALIDAR SOLO PDF =====
+        $this->validate([
+            'pdf_acta' => 'required|file|mimes:pdf|max:5120'
+        ]);
+
+        // ===== DATOS DE LA INSTANCIA =====
+        $iDesplazamiento = PatrimoniosBienesDesplazamientosTemporale::where('id', $this->desplazamiento_id)->firstOrFail();
+
+        try {
+            // 1. Guardar/Validar el archivo en Storage PRIMERO
+            $rutaDocumento = $this->validarActa();
+
+            // 2. Transacción ligera solo para la Base de Datos
+            DB::transaction(function () use ($iDesplazamiento, $rutaDocumento) {
+                $iDesplazamiento->update([
+                    'ruta_documento' => $rutaDocumento,
+                    'updated_user'   => auth()->user()->datos,
+                ]);
+            });
+
+            // 3. Limpieza de estado de Livewire
+            $this->reset('pdf_acta');
+            $this->modalPDFCargar = false;
+
+            // 4. Notificación de éxito
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Documento cargado',
+                mensaje: 'El PDF se cargó correctamente.',
+                tipo: 'success'
+            );
+
+        } catch (\Throwable $e) {
+            report($e);
+
+            // Opcional: Si necesitas eliminar el archivo si falló la BD,
+            // puedes usar Storage::delete($rutaDocumento) aquí si $rutaDocumento existe.
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'Ocurrió un error al cargar el PDF.',
+                tipo: 'error'
+            );
+        }
+    }
+
+    private function validarActa()
+    {
+        $iDesplazamiento = PatrimoniosBienesDesplazamientosTemporale::findOrFail($this->desplazamiento_id);
+
+        if (empty($iDesplazamiento->ruta_documento)) {
+
+            $nombreArchivo = 'acta_' . $iDesplazamiento->id . '_' .
+                            $iDesplazamiento->dni . '_' .
+                            $iDesplazamiento->dni2 . '.pdf';
+
+            return $this->pdf_acta->storeAs(
+                'patrimonio/desplazamiento_temporal/actas',
+                $nombreArchivo,
+                'public'
+            );
+        }
+
+        return $this->pdf_acta->storeAs(
+            dirname($iDesplazamiento->ruta_documento),
+            basename($iDesplazamiento->ruta_documento),
+            'public'
+        );
     }
 
     // ============================================================================================================================
