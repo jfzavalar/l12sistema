@@ -27,7 +27,7 @@
             </div>
 
             <div class="col-auto">
-                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarAsignados">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarReasignados">
                     <span class="alert alert-secondary d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-check-double"></i>
@@ -38,7 +38,7 @@
             </div>
 
             <div class="col-auto">
-                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarReasignados">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarDevueltos">
                     <span class="alert alert-danger d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-check-double"></i>
@@ -49,7 +49,7 @@
             </div>
 
             <div class="col-auto">
-                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarDevueltos">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarCustodia">
                     <span class="alert alert-info d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-check-double"></i>

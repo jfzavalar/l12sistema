@@ -136,11 +136,11 @@
                                                 <i class="fa-solid fa-file-pdf"></i><br>Acta
                                             </a>
                                         @endif
-                                        @if ($item->created_user === auth()->user()->datos || auth()->user()->hasRole('Admin-Super'))
+                                        {{-- @if ($item->created_user === auth()->user()->datos || auth()->user()->hasRole('Admin-Super')) --}}
                                             <button type="button" class="btn btn-outline-warning btn-xs" wire:click="editar_pdf({{ $item->id }})">
                                                 <i class="fa-solid fa-upload"></i><br>Cargar
                                             </button>
-                                        @endif
+                                        {{-- @endif --}}
                                         @if($item->ruta_documento)
                                             <a type="button" class="btn btn-outline-dark btn-xs" href="{{ asset('storage/'.$item->ruta_documento) }}" target="_blank">
                                                 <i class="fa-solid fa-eye"></i> <i class="fa-solid fa-file-signature"></i><br> Firmado

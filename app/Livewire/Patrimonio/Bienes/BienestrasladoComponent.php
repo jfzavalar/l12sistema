@@ -204,6 +204,7 @@ class BienestrasladoComponent extends Component
             $tipo_documento2;
 
     public $bienes = [];
+    public $traslado_estado;
 
     public $bien_id,
             $cod_patrimonial,

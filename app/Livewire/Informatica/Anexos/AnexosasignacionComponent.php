@@ -293,7 +293,7 @@ class AnexosasignacionComponent extends Component
                 });
             })
 
-            // FILTRO ATENDIDO
+            // FILTRO ASIGNADOS
             ->when($this->filtro_asignados, function ($q) {
 
                 $q->where(
@@ -302,7 +302,7 @@ class AnexosasignacionComponent extends Component
                 );
 
             })
-            // FILTRO ENVIADO LIMA
+            // FILTRO REASIGNADOS
             ->when($this->filtro_reasignados, function ($q) {
 
                 $q->where(
@@ -311,7 +311,7 @@ class AnexosasignacionComponent extends Component
                 );
 
             })
-            // FILTRO ATENDIDO USUARIO
+            // FILTRO DEVULETOS
             ->when($this->filtro_devueltos, function ($q) {
 
                 $q->where(
@@ -320,12 +320,12 @@ class AnexosasignacionComponent extends Component
                 );
 
             })
-            // FILTRO INFORMÁTICO
+            // FILTRO CUSTODIA
             ->when($this->filtro_custodia, function ($q) {
 
                 $q->where(
                     'custodia',
-                    trim($this->filtro_custodia)
+                    $this->filtro_custodia
                 );
 
             })
@@ -356,7 +356,7 @@ class AnexosasignacionComponent extends Component
                 END) as libres,
 
                 SUM(CASE
-                    WHEN asignacionlibrecustodia = 'CUSTODIA'
+                    WHEN custodia = 'SI'
                     THEN 1 ELSE 0
                 END) as custodia
             ")
@@ -573,7 +573,9 @@ class AnexosasignacionComponent extends Component
 
             // $this->estado = $instanciaTabla->estado;
 
-            // $this->activo = $instanciaTabla->activo;
+            $this->piso = $instanciaTabla->piso;
+            $this->oficina = $instanciaTabla->oficina;
+
             $this->created_user_cargo = $instanciaTabla->created_user_cargo;
             $this->created_user = $instanciaTabla->created_user;
             $this->updated_user = $instanciaTabla->updated_user;

@@ -53,6 +53,8 @@ class PatrimoniosBienesDesplazamientosTemporalesDetalle extends Model
         'cod',
         'cod_patrimonial',
         'bien',
+
+        'estado',
         
         'activo',
         'created_us,er',
