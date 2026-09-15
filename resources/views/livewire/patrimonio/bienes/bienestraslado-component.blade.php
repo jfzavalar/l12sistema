@@ -60,10 +60,10 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">
-                                <i class="fa-solid fa-user"></i> PERSONAL
+                                <i class="fa-solid fa-user"></i> ORIGEN
                             </th>
                             <th scope="col" class="table-success">
-                                <i class="fa-solid fa-user"></i> PERSONAL QUE DESPLAZA EL BIEN
+                                <i class="fa-solid fa-user"></i> DESTINO
                             </th>
                             <th scope="col">REFERENCIA</th>
                             <th scope="col">MOTIVO</th>
