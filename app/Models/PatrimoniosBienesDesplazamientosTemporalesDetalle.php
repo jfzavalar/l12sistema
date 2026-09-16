@@ -49,6 +49,29 @@ class PatrimoniosBienesDesplazamientosTemporalesDetalle extends Model
         'coddespachodestino2',
         'despachodestino2',
 
+        'persona_id3',
+        'persona_dni3',
+        'personal_id3',
+        'datos3',
+        'regimen3',
+        'regimen_tipo3',
+        'cargo3',
+        'cargo_condicion3',
+
+        'codsedeorigen3',
+        'sedeorigen3',
+        'coddependenciaorigen3',
+        'dependenciaorigen3',
+        'coddespachoorigen3',
+        'despachoorigen3',
+        
+        'codsededestino3',
+        'sededestino3',
+        'coddependenciadestino3',
+        'dependenciadestino3',
+        'coddespachodestino3',
+        'despachodestino3',
+
         'bien_id',
         'cod',
         'cod_patrimonial',
@@ -57,7 +80,7 @@ class PatrimoniosBienesDesplazamientosTemporalesDetalle extends Model
         'estado',
         
         'activo',
-        'created_us,er',
+        'created_user',
         'updated_user',
     ];
 }

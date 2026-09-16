@@ -70,7 +70,7 @@
                 </td>
                 <th style="text-align: left; vertical-align: top;">DESTINO</th>
                 <td style="text-align: left; vertical-align: top;">
-                    <b>Usuario: </b>{{ $instanciaTbl->datos2 }}
+                    <b>Personal: </b>{{ $instanciaTbl->datos2 }}
                     <br>
                     <b>Sede: </b>{{ $instanciaTbl->sedeorigen2 }}
                     <br>
@@ -88,6 +88,23 @@
                 <td style="text-align: left; vertical-align: top;">{{ $instanciaTbl->motivo }}</td>
             </tr>
         </tbody>
+    </table>
+
+    <br>
+
+    <table width="100%" style="font-size: 10px;">
+        <thead>
+            <tr style="background-color: rgba(207, 204, 204, 0.76);">
+                <th style="text-align: left; vertical-align: top;">PERSONAL QUE TRASLADA:</th>
+                <td style="text-align: left; vertical-align: top;">{{ $instanciaTbl->datos3 }}</td>
+                <th style="text-align: left; vertical-align: top;">SEDE:</th>
+                <td style="text-align: left; vertical-align: top;">{{ $instanciaTbl->sedeorigen3 }}</td>
+                <th style="text-align: left; vertical-align: top;">DEPENDENCIA:</th>
+                <td style="text-align: left; vertical-align: top;">{{ $instanciaTbl->dependenciaorigen3 }}</td>
+                <th style="text-align: left; vertical-align: top;">DESPACHO:</th>
+                <td style="text-align: left; vertical-align: top;">{{ $instanciaTbl->despachoorigen3 }}</td>
+            </tr>
+        </thead>
     </table>
     
     <br>

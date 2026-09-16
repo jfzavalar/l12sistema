@@ -59,6 +59,21 @@ class BienestrasladoComponent extends Component
     public $modalPDFCargar2 = false;
     public $modalPDFEvidenciaCargar2 = false;
 
+
+    // VARIABLES PARA MODALES TERCIARIAS
+    public $modalNuevoEditarAbrir3 = false, $modalReportesFiltros3 = false;
+
+    public $modalPersonalBuscar3 = false;
+    public $modalPersonalSedeBuscar3 = false;
+    public $modalPersonalDependenciaBuscar3 = false;
+    public $modalPersonalDespachoBuscar3 = false;
+    public $modalPersonalCargoBuscar3 = false;
+    public $modalInformaticaServicioBuscar3 = false;
+    public $modalInformaticaServicioDetalleBuscar3 = false;
+    public $modalPatrimonioBienesBuscar3 = false;
+    public $modalPDFCargar3 = false;
+    public $modalPDFEvidenciaCargar3 = false;
+
     // VARIABLES PARA ADMINISTRAR MODALES
     public $colorHeaderModal, $textoHeaderModal;
     public $colorNuevoEditar, $textoNuevoEditar;
@@ -202,6 +217,44 @@ class BienestrasladoComponent extends Component
             $celinstitucional2,          
             $correoinstitucional2,
             $tipo_documento2;
+
+    public $persona_id3,
+            $dni3,
+            $datos3,
+            $appaterno3,
+            $apmaterno3,
+            $nombres3,
+            $genero3,
+            $estadocivil3,
+            $fechanacimiento3,
+            $celpersonal3,
+            $correopersonal3,
+            $foto3,$fotoactual3,$inputFileKey3,
+            $activo3;
+
+    public $personal_id3,
+            $regimen3,
+            $regimen_tipo3,
+            $cargo3,
+            $cargo_condicion3,
+
+            $codsedeorigen3,
+            $sedeorigen3,
+            $coddependenciaorigen3,
+            $dependenciaorigen3,
+            $coddespachoorigen3,
+            $despachoorigen3,
+
+            $codsededestino3,
+            $sededestino3,
+            $coddependenciadestino3,
+            $dependenciadestino3,
+            $coddespachodestino3,
+            $despachodestino3,
+            
+            $celinstitucional3,          
+            $correoinstitucional3,
+            $tipo_documento3;
 
     public $bienes = [];
     public $traslado_estado;
@@ -401,6 +454,36 @@ class BienestrasladoComponent extends Component
             ->orderBy('nombre')
             ->paginate(10,['*'], 'cargosPage');
 
+        $lista_personas3 = Persona::join('personales','personas.id','=','personales.persona_id')
+            ->select(
+                'personas.*',
+                'personales.persona_id',
+                'personales.celinstitucional',
+                'personales.correoinstitucional',
+                'personales.regimen',
+                'personales.tipo_regimen',
+                'personales.cargo',
+                'personales.cargo_condicion',
+                'personales.sedeorigen',
+                'personales.dependenciaorigen',
+                'personales.despachoorigen',
+                'personales.sededestino',
+                'personales.dependenciadestino',
+                'personales.despachodestino',
+                'personales.tipo_documento'
+            )
+            // ->where('personales.tipo_documento','CONTRATO')
+            ->where('personales.activo', "1")
+            ->where('personas.activo','1')
+            ->when($this->searchpersonas !== '', function ($query) {
+                $query->where(function ($q) {
+                    $q->where('personas.dni', 'like', '%' . $this->searchpersonas . '%')
+                    ->orWhere('personas.datos', 'like', '%' . $this->searchpersonas . '%');
+                });
+            })
+            ->orderBy('personas.datos')
+            ->paginate(10,['*'],'personasPage');
+
         $lista_bienes = PatrimoniosBiene::where('activo','1')
             // ->where('codigo_patrimonial','like','%' . $this->searchbienes . '%')
             ->when($this->searchbienes !== '', function ($query) {
@@ -417,6 +500,7 @@ class BienestrasladoComponent extends Component
                         compact('lista_activos','lista_activos_detalle',
                                     'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos',
                                     'lista_personas2','lista_sedes2','lista_dependencias2','lista_despachos2','lista_cargos2',
+                                    'lista_personas3',
                                     'lista_bienes'));
     }
 
@@ -509,6 +593,29 @@ class BienestrasladoComponent extends Component
                     'dependenciadestino2' => $this->dependenciadestino2,
                     'coddespachodestino2' => $this->coddespachodestino2,
                     'despachodestino2' => $this->despachodestino2,
+
+                    'persona_id3' => $this->persona_id3,
+                    'dni3' => $this->dni3,
+                    'personal_id3' => $this->personal_id3,
+                    'datos3' => $this->datos3,
+                    'regimen3' => $this->regimen3,
+                    'regimen_tipo3' => $this->regimen_tipo3,
+                    'cargo3' => $this->cargo3,
+                    'cargo_condicion3' => $this->cargo_condicion3,
+
+                    'codsedeorigen3' => $this->codsedeorigen3,
+                    'sedeorigen3' => $this->sedeorigen3,
+                    'coddependenciaorigen3' => $this->coddependenciaorigen3,
+                    'dependenciaorigen3' => $this->dependenciaorigen3,
+                    'coddespachoorigen3' => $this->coddespachoorigen3,
+                    'despachoorigen3' => $this->despachoorigen3,
+
+                    'codsededestino3' => $this->codsededestino3,
+                    'sededestino3' => $this->sededestino3,
+                    'coddependenciadestino3' => $this->coddependenciadestino3,
+                    'dependenciadestino3' => $this->dependenciadestino3,
+                    'coddespachodestino3' => $this->coddespachodestino3,
+                    'despachodestino3' => $this->despachodestino3,
 
                     'referencia' => $this->referencia,
                     'motivo' => $this->motivo,
@@ -690,6 +797,47 @@ class BienestrasladoComponent extends Component
 
         $this->coddespachodestino2 = $desplazamiento->coddespachodestino2;
         $this->despachodestino2 = $desplazamiento->despachodestino2;
+
+        $this->referencia = $desplazamiento->referencia;
+        $this->motivo = $desplazamiento->motivo;
+
+        // ===== PERSONAL QUE TRASLADA =====
+        $this->persona_id3 = $desplazamiento->persona_id3;
+
+        $persona3 = Persona::findOrFail($this->persona_id3);
+        $this->dni3 = $persona3->dni;
+        $this->nombres3 = $persona3->nombres;
+        $this->appaterno3 = $persona3->appaterno;
+        $this->apmaterno3 = $persona3->apmaterno;
+        $this->celpersonal3 = $persona3->celpersonal;
+        $this->correopersonal3 = $persona3->correopersonal;
+
+        $this->personal_id3 = $desplazamiento->personal_id3;
+
+        $personal3 = Personale::findOrFail($this->personal_id3);
+        $this->correoinstitucional3 = $personal3->correoinstitucional;
+
+        $this->datos3 = $desplazamiento->datos3;
+        $this->regimen3 = $desplazamiento->regimen3;
+        $this->cargo3 = $desplazamiento->cargo3;
+
+        $this->codsedeorigen3 = $desplazamiento->codsedeorigen3;
+        $this->sedeorigen3 = $desplazamiento->sedeorigen3;
+
+        $this->coddependenciaorigen3 = $desplazamiento->coddependenciaorigen3;
+        $this->dependenciaorigen3 = $desplazamiento->dependenciaorigen3;
+
+        $this->coddespachoorigen3 = $desplazamiento->coddespachoorigen3;
+        $this->despachoorigen3 = $desplazamiento->despachoorigen3;
+
+        $this->codsededestino3 = $desplazamiento->codsededestino3;
+        $this->sededestino3 = $desplazamiento->sededestino3;
+
+        $this->coddependenciadestino3 = $desplazamiento->coddependenciadestino3;
+        $this->dependenciadestino3 = $desplazamiento->dependenciadestino3;
+
+        $this->coddespachodestino3 = $desplazamiento->coddespachodestino3;
+        $this->despachodestino3 = $desplazamiento->despachodestino3;
 
         $this->referencia = $desplazamiento->referencia;
         $this->motivo = $desplazamiento->motivo;
@@ -1358,6 +1506,231 @@ class BienestrasladoComponent extends Component
 
         // CERRAR MODAL
         $this->modalPersonalCargoBuscar2 = false;
+    }
+
+    // ============================================================================================================================
+    // MODALES BUSCAR TERCIARIAS
+    // ============================================================================================================================
+
+    public function personalBuscar3()
+    {
+        $this->modalPersonalBuscar3 = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchPersonal');
+    }
+    public function sedeBuscar3()
+    {
+        $this->modalPersonalSedeBuscar3 = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchSede');
+    }
+    public function dependenciaBuscar3()
+    {
+        $this->modalPersonalDependenciaBuscar3 = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchDependencia');
+    }
+    public function despachoBuscar3()
+    {
+        $this->modalPersonalDespachoBuscar3 = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchDespacho');
+    }
+    public function cargoBuscar3()
+    {
+        $this->modalPersonalCargoBuscar3 = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchCargo');
+    }
+    public function servicioBuscar3()
+    {
+        $this->modalInformaticaServicioBuscar3 = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchServicio');
+    }
+    public function servicioDetalleBuscar3()
+    {
+        $this->modalInformaticaServicioDetalleBuscar3 = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchServicioDetalle');
+    }
+    public function bienesBuscar3()
+    {
+        $this->modalPatrimonioBienesBuscar3 = true;
+
+        $this->dispatch('focus-input', id: 'txtSearchBienes');
+    }
+    public function cerrarBuscar3()
+    {
+        $this->modalReportesFiltros3 = false;
+
+        $this->modalPersonalBuscar3 = false;
+        $this->modalPersonalSedeBuscar3 = false;
+        $this->modalPersonalDependenciaBuscar3 = false;
+        $this->modalPersonalDespachoBuscar3 = false;
+        $this->modalPersonalCargoBuscar3 = false;
+        $this->modalInformaticaServicioBuscar3 = false;
+        $this->modalInformaticaServicioDetalleBuscar3 = false;
+        $this->modalPatrimonioBienesBuscar3 = false;
+    } 
+
+    // ============================================================================================================================
+    // FUNCIONES AGREGAR TERCIARIAS
+    // ============================================================================================================================
+
+    public function agregar_persona3(Persona $ipersona3){
+        // DATOS DE LA PERSONA
+        $this->persona_id3 = $ipersona3->id;
+        $this->dni3 = $ipersona3->dni;
+        $this->appaterno3 = $ipersona3->appaterno;
+        $this->apmaterno3 = $ipersona3->apmaterno;
+        $this->nombres3 = $ipersona3->nombres;
+        $this->datos3 = $ipersona3->datos;
+        $this->celpersonal3 = $ipersona3->celpersonal;
+        $this->correopersonal3 = $ipersona3->correopersonal;
+        $this->fotoactual3 = $ipersona3->foto;
+
+        // DATOS DEL PERSONAL
+        $ipersonal3 = Personale::where([['persona_dni',$this->dni3],['activo',1],])->firstOrFail();
+
+        $this->personal_id3 = $ipersonal3->id;
+
+        $this->codsedeorigen3 = $ipersonal3->codsededestino;
+        $this->sedeorigen3 = $ipersonal3->sededestino;   
+        $this->coddependenciaorigen3 = $ipersonal3->coddependenciadestino;
+        $this->dependenciaorigen3 = $ipersonal3->dependenciadestino;
+        $this->coddespachoorigen3 = $ipersonal3->coddespachodestino;
+        $this->despachoorigen3 = $ipersonal3->despachodestino;
+
+        $this->codsededestino3 = $ipersonal3->codsededestino;
+        $this->sededestino3 = $ipersonal3->sededestino;   
+        $this->coddependenciadestino3 = $ipersonal3->coddependenciadestino;
+        $this->dependenciadestino3 = $ipersonal3->dependenciadestino;
+        $this->coddespachodestino3 = $ipersonal3->coddespachodestino;
+        $this->despachodestino3 = $ipersonal3->despachodestino;
+
+        $this->celinstitucional3 = $ipersonal3->celinstitucional;
+        $this->correoinstitucional3 = $ipersonal3->correoinstitucional;
+        $this->regimen3 = $ipersonal3->regimen;
+        $this->regimen_tipo3 = $ipersonal3->tipo_regimen;
+        $this->cargo3 = $ipersonal3->cargo;
+        $this->cargo_condicion3 = $ipersonal3->cargo_condicion;
+        $this->tipo_documento3 = $ipersonal3->tipo_documento;
+
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+            'searchservicios',
+            'searchincidenciasolicitud',
+            'searchbienes',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPersonalBuscar3 = false;
+    }
+
+    public function agregar_sede3(Personales_sede $isede)
+    {
+        $this->codsedeorigen3 = $isede->id;
+        $this->sedeorigen3 = $isede->nombre;
+
+        $this->codsededestino3 = $isede->id;
+        $this->sededestino3 = $isede->nombre;
+
+        // RESTABLECER DEPENDENCIA Y DESPACHO
+        $this->reset([
+            'dependenciaorigen3',
+            'despachoorigen3',
+        ]);
+
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+            'searchservicios',
+            'searchincidenciasolicitud',
+            'searchbienes',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPersonalSedeBuscar3 = false;
+    }
+
+    public function agregar_dependencia3(Personales_dependencia $idependencia)
+    {
+        $this->coddependenciaorigen3 = $idependencia->id;
+        $this->dependenciaorigen3 = $idependencia->nombre;
+
+        $this->coddependenciadestino3 = $idependencia->id;
+        $this->dependenciadestino3 = $idependencia->nombre;
+
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+            'searchservicios',
+            'searchincidenciasolicitud',
+            'searchbienes',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPersonalDependenciaBuscar3 = false;
+    }
+
+    public function agregar_despacho3(Personales_despacho $idespacho)
+    {
+        $this->coddespachoorigen3 = $idespacho->id;
+        $this->despachoorigen3 = $idespacho->nombre;
+
+        $this->coddespachodestino3 = $idespacho->id;
+        $this->despachodestino3 = $idespacho->nombre;
+
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+            'searchservicios',
+            'searchincidenciasolicitud',
+            'searchbienes',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPersonalDespachoBuscar3 = false;
+    }
+
+    public function agregar_cargo3(Personales_cargo $icargo)
+    {
+        $this->cargo = $icargo->nombre;
+
+        // RETABLECER SERVICIO DETALLE
+        
+        // RESTABLECER VARIABLES DE BUSQUEDA
+        $this->reset([
+            'searchpersonas',
+            'searchsedes',
+            'searchdependencias',
+            'searchdespachos',
+            'searchcargos',
+            'searchservicios',
+            'searchincidenciasolicitud',
+            'searchbienes',
+        ]);
+
+        // CERRAR MODAL
+        $this->modalPersonalCargoBuscar3 = false;
     }
 
     // ============================================================================================================================

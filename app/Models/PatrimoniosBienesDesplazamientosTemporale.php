@@ -55,6 +55,29 @@ class PatrimoniosBienesDesplazamientosTemporale extends Model
         'coddespachodestino2',
         'despachodestino2',
 
+        'persona_id3',
+        'dni3',
+        'personal_id3',
+        'datos3',
+        'regimen3',
+        'regimen_tipo3',
+        'cargo3',
+        'cargo_condicion3',
+
+        'codsedeorigen3',
+        'sedeorigen3',
+        'coddependenciaorigen3',
+        'dependenciaorigen3',
+        'coddespachoorigen3',
+        'despachoorigen3',
+
+        'codsededestino3',
+        'sededestino3',
+        'coddependenciadestino3',
+        'dependenciadestino3',
+        'coddespachodestino3',
+        'despachodestino3',
+
         'referencia',
         'motivo',
 

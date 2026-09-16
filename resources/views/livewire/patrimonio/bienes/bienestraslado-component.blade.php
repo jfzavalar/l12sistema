@@ -60,10 +60,13 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">
-                                <i class="fa-solid fa-user"></i> ORIGEN
+                                ORIGEN
+                            </th>
+                            <th scope="col" class="table-secondary">
+                                PERSONAL QUE TRASLADA
                             </th>
                             <th scope="col" class="table-success">
-                                <i class="fa-solid fa-user"></i> DESTINO
+                                DESTINO
                             </th>
                             <th scope="col">REFERENCIA</th>
                             <th scope="col">MOTIVO</th>
@@ -82,6 +85,14 @@
                                     <br><b>SEDE:</b> {{ $item->sedeorigen }}
                                     <br><b>DEPENDENCIA:</b> {{ $item->dependenciaorigen }}
                                     <br><b>DESPACHO:</b> {{ $item->despachoorigen }}
+                                </td>
+                                <td>
+                                    <b>DNI:</b> {{ $item->dni3 }}
+                                    <br><b>DATOS:</b> {{ $item->datos3 }}
+                                    <br><b>CARGO:</b> {{ $item->cargo3 }}
+                                    <br><b>SEDE:</b> {{ $item->sedeorigen3 }}
+                                    <br><b>DEPENDENCIA:</b> {{ $item->dependenciaorigen3 }}
+                                    <br><b>DESPACHO:</b> {{ $item->despachoorigen3 }}
                                 </td>
                                 <td>
                                     <b>DNI:</b> {{ $item->dni2 }}
@@ -171,7 +182,7 @@
 
     {{-- MODAL NUEVO EDITAR --}}
     <div class="modal fade @if($modalNuevoEditarAbrir) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
-        <div class="modal-dialog" style="max-width:90%;">
+        <div class="modal-dialog" style="max-width:95%;">
             <div class="modal-content">
                 <div class="modal-header bg-{{ $colorHeaderModal }}">
                     <h1 class="modal-title fs-5" id="nuevoEditarModalLabel">
@@ -189,44 +200,51 @@
                                             <legend class="float-none px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS DE ORIGEN</legend>
                                             @include('livewire.partials.componentes.persona-datos')
                                             @include('livewire.partials.componentes.personal-datos')
+                                            <label for="txt_dni3" class="fw-bold fs-6">OBSERVACIÓN</label>
+                                            <input type="text" id="txtreferencia" class="form-control form-control-xs" wire:model="referencia">
                                         </fieldset>
-                                        <div class="row">
-                                            {{-- <div class="col-xl-2">
-                                                <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-personal-component">
-                                                    <i class="fa-solid fa-magnifying-glass"></i> Buscar personal
-                                                </button>
-                                            </div> --}}
-                                            <div class="col-xl-12">
-                                                <div class="input-group">
-                                                    <span class="input-group-text input-group-text-xs" id="basic-addon1">Referencia</span>
-                                                    <input type="text" id="txtreferencia" class="form-control form-control-xs" wire:model="referencia">
-                                                </div>
-                                            </div>
-                                        </div>
+                                        
                                     </div>
                                     <div class="col-xl-6">
                                         <fieldset class="border p-3 rounded mb-3">
                                             <legend class="float-none px-3 fs-6 fw-bold text-muted text-center rounded bg-dark" style="color: white !important;">DATOS DE DESTINO</legend>
                                             @include('livewire.partials.componentes.persona-datos2')
                                             @include('livewire.partials.componentes.personal-datos2')
+                                            <label for="txt_dni3" class="fw-bold fs-6">OBSERVACIÓN</label>
+                                            <input type="text" id="txtmotivo" class="form-control form-control-xs" wire:model="motivo">
                                         </fieldset>
-                                        <div class="row">
-                                            {{-- <div class="col-xl-2">
-                                                <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-xs" data-bs-toggle="modal" data-bs-target="#buscar-personal-component2">
-                                                    <i class="fa-solid fa-magnifying-glass"></i> Buscar personal
-                                                </button>
-                                            </div> --}}
-                                            <div class="col-xl-12">
-                                                <div class="input-group">
-                                                    <span class="input-group-text input-group-text-xs" id="basic-addon1">Motivo</span>
-                                                    <input type="text" id="txtmotivo" class="form-control form-control-xs" wire:model="motivo">
-                                                </div>
-                                            </div>
-                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <label for="txt_dni3" class="fw-bold fs-6">
+                                <i class="fa-solid fa-car-side"></i> PERSONAL QUE TRASLADA
+                            </label>
+                            <div class="col-xl-1">
+                                <div class="input-group">
+                                    <button type="button" class="btn btn-dark btn-xs" wire:click="personalBuscar3">
+                                        <i class="fa-solid fa-magnifying-glass"></i> Buscar
+                                    </button>
+                                    <input type="text" id="txt_dni2" maxlength="8" pattern="[0-9]*" placeholder="DNI" wire:model.lazy="dni3" oninput="this.value = this.value.replace(/\D/g,'').slice(0,8)" class="form-control form-control-xs @error('dni') is-invalid border-danger shadow-sm @enderror bg-light" readonly>
+                                </div>
+                            </div>
+                            <div class="col-xl-2">
+                                <input type="text" id="txt_nombres2" class="form-control form-control-xs text-uppercase bg-light" placeholder="{{ $appaterno3 . ' ' . $apmaterno3 . ' ' . $nombres3 }}" readonly>
+                            </div>
+                            <div class="col-xl-3">
+                                <input type="text" id="txt_nombres2" class="form-control form-control-xs bg-light" placeholder="{{ $celpersonal3 . ' / ' . $celinstitucional3 . ' / ' . $correopersonal3 . ' / ' . $correoinstitucional3 }}" readonly>
+                            </div>
+                            <div class="col-xl-4">
+                                <input type="text" id="txt_nombres2" class="form-control form-control-xs text-uppercase bg-light" placeholder="{{ $sededestino3 . ' / ' . $dependenciadestino3 . ' / ' .$despachodestino3 }}" readonly>
+                            </div>
+                            <div class="col-xl-2">
+                                <input type="text" id="txt_nombres2" class="form-control form-control-xs text-uppercase bg-light" placeholder="{{ $regimen3 . ' / ' . $cargo3 }}" readonly>
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="col">
                                 <fieldset class="border p-3 rounded mt-3 mb-3">
@@ -334,5 +352,19 @@
     
     {{-- MODAL BUSCAR CARGO 02 --}}
     @include('livewire.partials.modales2.buscar-personal-cargo2')
+
+    {{-- ========================================================================================== --}}
+    {{-- MODALES TERCIARIOS --}}
+    {{-- ========================================================================================== --}}
+
+
+    {{--MODAL BUSCAR PERSONAL 02 --}}
+    @include('livewire.partials.modales3.buscar-personal-datos3')
+
+    {{-- MODALE BUSCAR SEDES-DEPENDENCIAS-DESPACHOS 02 --}}
+    @include('livewire.partials.modales3.buscar-personal-sede-dependencia-despacho3')
+    
+    {{-- MODAL BUSCAR CARGO 02 --}}
+    @include('livewire.partials.modales3.buscar-personal-cargo3')
 
 </div>

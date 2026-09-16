@@ -37,13 +37,21 @@
             <p></p>
             <table class="tabla-firma" width="100%">
                 <tr>
-                    <td class="borde-superior">Entregué conforme</td>
-                    <td></td>
-                    <td class="borde-superior">Recibí conforme</td>
-                    <td></td>
-                    <td class="borde-superior">Control Patrimonial</td>
+                    <td class="borde-superior" width="17%">Entregué conforme</td>
+                    <td width="1%"></td>
+                    <td class="borde-superior" width="17%">Recibí conforme</td>
+                    <td width="1%"></td>
+                    <td class="borde-superior" width="17%">V.B. Administración o<br>Control Patrimonial</td>
+                    <td width="1%"></td>                  
+                    <td class="borde-superior" width="17%">V.B. Traslado</td>
+                    <td width="1%"></td>                  
+                    <td class="borde-superior">V.B. Vigilancia Origen</td>
+                    <td width="1%"></td>
+                    <td class="borde-superior">V.B. Vigilancia Destino</td>
                 </tr>
             </table>
+
+            <br>
 
             <hr>
             Ministerio Público - Fiscalía de Nación - Distrito Fiscal Junín
