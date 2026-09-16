@@ -158,7 +158,7 @@ class BienestrasladoComponent extends Component
 
     public $personal_id,
             $regimen,
-            $regimen_tipo,
+            $tipo_regimen,
             $cargo,
             $cargo_condicion,
 
@@ -196,7 +196,7 @@ class BienestrasladoComponent extends Component
 
     public $personal_id2,
             $regimen2,
-            $regimen_tipo2,
+            $tipo_regimen2,
             $cargo2,
             $cargo_condicion2,
 
@@ -234,7 +234,7 @@ class BienestrasladoComponent extends Component
 
     public $personal_id3,
             $regimen3,
-            $regimen_tipo3,
+            $tipo_regimen3,
             $cargo3,
             $cargo_condicion3,
 
@@ -553,7 +553,7 @@ class BienestrasladoComponent extends Component
                     'personal_id' => $this->personal_id,
                     'datos' => $this->datos,
                     'regimen' => $this->regimen,
-                    'regimen_tipo' => $this->regimen_tipo,
+                    'regimen_tipo' => $this->tipo_regimen,
                     'cargo' => $this->cargo,
                     'cargo_condicion' => $this->cargo_condicion,
 
@@ -576,7 +576,7 @@ class BienestrasladoComponent extends Component
                     'personal_id2' => $this->personal_id2,
                     'datos2' => $this->datos2,
                     'regimen2' => $this->regimen2,
-                    'regimen_tipo2' => $this->regimen_tipo2,
+                    'regimen_tipo2' => $this->tipo_regimen2,
                     'cargo2' => $this->cargo2,
                     'cargo_condicion2' => $this->cargo_condicion2,
 
@@ -599,7 +599,7 @@ class BienestrasladoComponent extends Component
                     'personal_id3' => $this->personal_id3,
                     'datos3' => $this->datos3,
                     'regimen3' => $this->regimen3,
-                    'regimen_tipo3' => $this->regimen_tipo3,
+                    'regimen_tipo3' => $this->tipo_regimen3,
                     'cargo3' => $this->cargo3,
                     'cargo_condicion3' => $this->cargo_condicion3,
 
@@ -705,7 +705,7 @@ class BienestrasladoComponent extends Component
     }
 
 
-    public function editar($id)
+    public function editar(PatrimoniosBienesDesplazamientosTemporale $instanciaTblEditar)
     {
         $this->resetValidation();
         $this->resetErrorBag();
@@ -718,12 +718,12 @@ class BienestrasladoComponent extends Component
         $this->textoGuardarActualizar = "Actualizar";
         $this->colorAgregar = "outline-success";
         
-        $desplazamiento = PatrimoniosBienesDesplazamientosTemporale::findOrFail($id);
+        // $desplazamiento = PatrimoniosBienesDesplazamientosTemporale::findOrFail($id);
 
-        $this->desplazamiento_id = $desplazamiento->id;
+        $this->desplazamiento_id = $instanciaTblEditar->id;
 
         // ===== ORIGEN =====
-        $this->persona_id = $desplazamiento->persona_id;
+        $this->persona_id = $instanciaTblEditar->persona_id;
 
         $persona = Persona::findOrFail($this->persona_id);
         $this->dni = $persona->dni;
@@ -733,35 +733,37 @@ class BienestrasladoComponent extends Component
         $this->celpersonal = $persona->celpersonal;
         $this->correopersonal = $persona->correopersonal;
 
-        $this->personal_id = $desplazamiento->personal_id;
+        $this->personal_id = $instanciaTblEditar->personal_id;
+        $persona = Personale::findOrFail($this->personal_id);
+        $this->celinstitucional = $persona->celinstitucional;
+        $this->correoinstitucional = $instanciaTblEditar->correoinstitucional;
 
-        $personal = Personale::findOrFail($this->personal_id);
-        $this->correoinstitucional = $personal->correoinstitucional;
+        $this->datos = $instanciaTblEditar->datos;
+        $this->regimen = $instanciaTblEditar->regimen;
+        $this->tipo_regimen = $instanciaTblEditar->regimen_tipo;
+        $this->cargo = $instanciaTblEditar->cargo;
+        $this->cargo_condicion = $instanciaTblEditar->cargo_condicion;
 
-        $this->datos = $desplazamiento->datos;
-        $this->regimen = $desplazamiento->regimen;
-        $this->cargo = $desplazamiento->cargo;
+        $this->codsedeorigen = $instanciaTblEditar->codsedeorigen;
+        $this->sedeorigen = $instanciaTblEditar->sedeorigen;
 
-        $this->codsedeorigen = $desplazamiento->codsedeorigen;
-        $this->sedeorigen = $desplazamiento->sedeorigen;
+        $this->coddependenciaorigen = $instanciaTblEditar->coddependenciaorigen;
+        $this->dependenciaorigen = $instanciaTblEditar->dependenciaorigen;
 
-        $this->coddependenciaorigen = $desplazamiento->coddependenciaorigen;
-        $this->dependenciaorigen = $desplazamiento->dependenciaorigen;
+        $this->coddespachoorigen = $instanciaTblEditar->coddespachoorigen;
+        $this->despachoorigen = $instanciaTblEditar->despachoorigen;
 
-        $this->coddespachoorigen = $desplazamiento->coddespachoorigen;
-        $this->despachoorigen = $desplazamiento->despachoorigen;
+        $this->codsededestino = $instanciaTblEditar->codsededestino;
+        $this->sededestino = $instanciaTblEditar->sededestino;
 
-        $this->codsededestino = $desplazamiento->codsededestino;
-        $this->sededestino = $desplazamiento->sededestino;
+        $this->coddependenciadestino = $instanciaTblEditar->coddependenciadestino;
+        $this->dependenciadestino = $instanciaTblEditar->dependenciadestino;
 
-        $this->coddependenciadestino = $desplazamiento->coddependenciadestino;
-        $this->dependenciadestino = $desplazamiento->dependenciadestino;
-
-        $this->coddespachodestino = $desplazamiento->coddespachodestino;
-        $this->despachodestino = $desplazamiento->despachodestino;
+        $this->coddespachodestino = $instanciaTblEditar->coddespachodestino;
+        $this->despachodestino = $instanciaTblEditar->despachodestino;
 
         // ===== DESTINO =====
-        $this->persona_id2 = $desplazamiento->persona_id2;
+        $this->persona_id2 = $instanciaTblEditar->persona_id2;
 
         $persona2 = Persona::findOrFail($this->persona_id2);
         $this->dni2 = $persona2->dni;
@@ -771,79 +773,94 @@ class BienestrasladoComponent extends Component
         $this->celpersonal2 = $persona2->celpersonal;
         $this->correopersonal2 = $persona2->correopersonal;
 
-        $this->personal_id2 = $desplazamiento->personal_id2;
-
+        $this->personal_id2 = $instanciaTblEditar->personal_id;
         $personal2 = Personale::findOrFail($this->personal_id2);
+        $this->celinstitucional2 = $persona->celinstitucional;
         $this->correoinstitucional2 = $personal2->correoinstitucional;
 
-        $this->datos2 = $desplazamiento->datos2;
-        $this->regimen2 = $desplazamiento->regimen2;
-        $this->cargo2 = $desplazamiento->cargo2;
+        $this->datos2 = $instanciaTblEditar->datos2;
+        $this->regimen2 = $instanciaTblEditar->regimen2;
+        $this->cargo2 = $instanciaTblEditar->cargo2;
 
-        $this->codsedeorigen2 = $desplazamiento->codsedeorigen2;
-        $this->sedeorigen2 = $desplazamiento->sedeorigen2;
+        $this->codsedeorigen2 = $instanciaTblEditar->codsedeorigen2;
+        $this->sedeorigen2 = $instanciaTblEditar->sedeorigen2;
 
-        $this->coddependenciaorigen2 = $desplazamiento->coddependenciaorigen2;
-        $this->dependenciaorigen2 = $desplazamiento->dependenciaorigen2;
+        $this->coddependenciaorigen2 = $instanciaTblEditar->coddependenciaorigen2;
+        $this->dependenciaorigen2 = $instanciaTblEditar->dependenciaorigen2;
 
-        $this->coddespachoorigen2 = $desplazamiento->coddespachoorigen2;
-        $this->despachoorigen2 = $desplazamiento->despachoorigen2;
+        $this->coddespachoorigen2 = $instanciaTblEditar->coddespachoorigen2;
+        $this->despachoorigen2 = $instanciaTblEditar->despachoorigen2;
 
-        $this->codsededestino2 = $desplazamiento->codsededestino2;
-        $this->sededestino2 = $desplazamiento->sededestino2;
+        $this->codsededestino2 = $instanciaTblEditar->codsededestino2;
+        $this->sededestino2 = $instanciaTblEditar->sededestino2;
 
-        $this->coddependenciadestino2 = $desplazamiento->coddependenciadestino2;
-        $this->dependenciadestino2 = $desplazamiento->dependenciadestino2;
+        $this->coddependenciadestino2 = $instanciaTblEditar->coddependenciadestino2;
+        $this->dependenciadestino2 = $instanciaTblEditar->dependenciadestino2;
 
-        $this->coddespachodestino2 = $desplazamiento->coddespachodestino2;
-        $this->despachodestino2 = $desplazamiento->despachodestino2;
+        $this->coddespachodestino2 = $instanciaTblEditar->coddespachodestino2;
+        $this->despachodestino2 = $instanciaTblEditar->despachodestino2;
 
-        $this->referencia = $desplazamiento->referencia;
-        $this->motivo = $desplazamiento->motivo;
+        $this->referencia = $instanciaTblEditar->referencia;
+        $this->motivo = $instanciaTblEditar->motivo;
 
         // ===== PERSONAL QUE TRASLADA =====
-        $this->persona_id3 = $desplazamiento->persona_id3;
+        $this->persona_id3 = $instanciaTblEditar->persona_id3;
 
-        $persona3 = Persona::findOrFail($this->persona_id3);
-        $this->dni3 = $persona3->dni;
-        $this->nombres3 = $persona3->nombres;
-        $this->appaterno3 = $persona3->appaterno;
-        $this->apmaterno3 = $persona3->apmaterno;
-        $this->celpersonal3 = $persona3->celpersonal;
-        $this->correopersonal3 = $persona3->correopersonal;
+        if ($this->persona_id3) {
+            $persona3 = Persona::find($this->persona_id3);
+            $this->dni3           = $persona3?->dni;
+            $this->nombres3       = $persona3?->nombres;
+            $this->appaterno3     = $persona3?->appaterno;
+            $this->apmaterno3     = $persona3?->apmaterno;
+            $this->celpersonal3   = $persona3?->celpersonal;
+            $this->correopersonal3 = $persona3?->correopersonal;
+        } else {
+            $this->dni3 = $this->nombres3 = $this->appaterno3 = $this->apmaterno3 = $this->celpersonal3 = $this->correopersonal3 = null;
+        }
 
-        $this->personal_id3 = $desplazamiento->personal_id3;
+        // Nota: Asegúrate si la propiedad de la instancia es personal_id3 o personal_id
+        $this->personal_id3 = $instanciaTblEditar->personal_id3; 
 
-        $personal3 = Personale::findOrFail($this->personal_id3);
-        $this->correoinstitucional3 = $personal3->correoinstitucional;
+        if ($this->personal_id3) {
+            $personal3 = Personale::find($this->personal_id3);
+            $this->celinstitucional3   = $personal3?->celinstitucional;
+            $this->correoinstitucional3 = $personal3?->correoinstitucional;
+        } else {
+            $this->celinstitucional3 = $this->correoinstitucional3 = null;
+        }
 
-        $this->datos3 = $desplazamiento->datos3;
-        $this->regimen3 = $desplazamiento->regimen3;
-        $this->cargo3 = $desplazamiento->cargo3;
+        $this->dni3 = $instanciaTblEditar->dni3;
+        $this->datos3 = $instanciaTblEditar->datos3;
 
-        $this->codsedeorigen3 = $desplazamiento->codsedeorigen3;
-        $this->sedeorigen3 = $desplazamiento->sedeorigen3;
+        $this->personal_id3 = $instanciaTblEditar->personal_id3;
 
-        $this->coddependenciaorigen3 = $desplazamiento->coddependenciaorigen3;
-        $this->dependenciaorigen3 = $desplazamiento->dependenciaorigen3;
+        $this->datos3 = $instanciaTblEditar->datos3;
+        $this->regimen3 = $instanciaTblEditar->regimen3;
+        $this->cargo3 = $instanciaTblEditar->cargo3;
 
-        $this->coddespachoorigen3 = $desplazamiento->coddespachoorigen3;
-        $this->despachoorigen3 = $desplazamiento->despachoorigen3;
+        $this->codsedeorigen3 = $instanciaTblEditar->codsedeorigen3;
+        $this->sedeorigen3 = $instanciaTblEditar->sedeorigen3;
 
-        $this->codsededestino3 = $desplazamiento->codsededestino3;
-        $this->sededestino3 = $desplazamiento->sededestino3;
+        $this->coddependenciaorigen3 = $instanciaTblEditar->coddependenciaorigen3;
+        $this->dependenciaorigen3 = $instanciaTblEditar->dependenciaorigen3;
 
-        $this->coddependenciadestino3 = $desplazamiento->coddependenciadestino3;
-        $this->dependenciadestino3 = $desplazamiento->dependenciadestino3;
+        $this->coddespachoorigen3 = $instanciaTblEditar->coddespachoorigen3;
+        $this->despachoorigen3 = $instanciaTblEditar->despachoorigen3;
 
-        $this->coddespachodestino3 = $desplazamiento->coddespachodestino3;
-        $this->despachodestino3 = $desplazamiento->despachodestino3;
+        $this->codsededestino3 = $instanciaTblEditar->codsededestino3;
+        $this->sededestino3 = $instanciaTblEditar->sededestino3;
 
-        $this->referencia = $desplazamiento->referencia;
-        $this->motivo = $desplazamiento->motivo;
+        $this->coddependenciadestino3 = $instanciaTblEditar->coddependenciadestino3;
+        $this->dependenciadestino3 = $instanciaTblEditar->dependenciadestino3;
+
+        $this->coddespachodestino3 = $instanciaTblEditar->coddespachodestino3;
+        $this->despachodestino3 = $instanciaTblEditar->despachodestino3;
+
+        $this->referencia = $instanciaTblEditar->referencia;
+        $this->motivo = $instanciaTblEditar->motivo;
 
         // ===== DETALLES =====
-        $this->bienes = PatrimoniosBienesDesplazamientosTemporalesDetalle::where('desplazamiento_id', $id)
+        $this->bienes = PatrimoniosBienesDesplazamientosTemporalesDetalle::where('desplazamiento_id', $instanciaTblEditar->id)
             ->join('patrimonios_bienes as pb', 'pb.id', '=', 'patrimonios_bienes_desplazamientos_temporales_detalles.bien_id')
             ->get()
             ->map(function ($item) {
@@ -912,7 +929,7 @@ class BienestrasladoComponent extends Component
                     'personal_id' => $this->personal_id,
                     'datos' => $this->datos,
                     'regimen' => $this->regimen,
-                    'regimen_tipo' => $this->regimen_tipo,
+                    'regimen_tipo' => $this->tipo_regimen,
                     'cargo' => $this->cargo,
                     'cargo_condicion' => $this->cargo_condicion,
 
@@ -935,7 +952,7 @@ class BienestrasladoComponent extends Component
                     'personal_id2' => $this->personal_id2,
                     'datos2' => $this->datos2,
                     'regimen2' => $this->regimen2,
-                    'regimen_tipo2' => $this->regimen_tipo2,
+                    'regimen_tipo2' => $this->tipo_regimen2,
                     'cargo2' => $this->cargo2,
                     'cargo_condicion2' => $this->cargo_condicion2,
 
@@ -1162,7 +1179,7 @@ class BienestrasladoComponent extends Component
         $this->celinstitucional = $ipersonal->celinstitucional;
         $this->correoinstitucional = $ipersonal->correoinstitucional;
         $this->regimen = $ipersonal->regimen;
-        $this->regimen_tipo = $ipersonal->tipo_regimen;
+        $this->tipo_regimen = $ipersonal->tipo_regimen;
         $this->cargo = $ipersonal->cargo;
         $this->cargo_condicion = $ipersonal->cargo_condicion;
         $this->tipo_documento = $ipersonal->tipo_documento;
@@ -1387,7 +1404,7 @@ class BienestrasladoComponent extends Component
         $this->celinstitucional2 = $ipersonal2->celinstitucional;
         $this->correoinstitucional2 = $ipersonal2->correoinstitucional;
         $this->regimen2 = $ipersonal2->regimen;
-        $this->regimen_tipo2 = $ipersonal2->tipo_regimen;
+        $this->tipo_regimen2 = $ipersonal2->regimen_tipo;
         $this->cargo2 = $ipersonal2->cargo;
         $this->cargo_condicion2 = $ipersonal2->cargo_condicion;
         $this->tipo_documento2 = $ipersonal2->tipo_documento;
@@ -1612,7 +1629,7 @@ class BienestrasladoComponent extends Component
         $this->celinstitucional3 = $ipersonal3->celinstitucional;
         $this->correoinstitucional3 = $ipersonal3->correoinstitucional;
         $this->regimen3 = $ipersonal3->regimen;
-        $this->regimen_tipo3 = $ipersonal3->tipo_regimen;
+        $this->tipo_regimen3 = $ipersonal3->regimen_tipo;
         $this->cargo3 = $ipersonal3->cargo;
         $this->cargo_condicion3 = $ipersonal3->cargo_condicion;
         $this->tipo_documento3 = $ipersonal3->tipo_documento;

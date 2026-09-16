@@ -200,7 +200,7 @@
                                             <legend class="float-none px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS DE ORIGEN</legend>
                                             @include('livewire.partials.componentes.persona-datos')
                                             @include('livewire.partials.componentes.personal-datos')
-                                            <label for="txt_dni3" class="fw-bold fs-6">OBSERVACIÓN</label>
+                                            <label for="txtreferencia" class="fw-bold fs-6">OBSERVACIÓN</label>
                                             <input type="text" id="txtreferencia" class="form-control form-control-xs" wire:model="referencia">
                                         </fieldset>
                                         
@@ -210,7 +210,7 @@
                                             <legend class="float-none px-3 fs-6 fw-bold text-muted text-center rounded bg-dark" style="color: white !important;">DATOS DE DESTINO</legend>
                                             @include('livewire.partials.componentes.persona-datos2')
                                             @include('livewire.partials.componentes.personal-datos2')
-                                            <label for="txt_dni3" class="fw-bold fs-6">OBSERVACIÓN</label>
+                                            <label for="txtmotivo" class="fw-bold fs-6">OBSERVACIÓN</label>
                                             <input type="text" id="txtmotivo" class="form-control form-control-xs" wire:model="motivo">
                                         </fieldset>
                                         
@@ -228,20 +228,20 @@
                                     <button type="button" class="btn btn-dark btn-xs" wire:click="personalBuscar3">
                                         <i class="fa-solid fa-magnifying-glass"></i> Buscar
                                     </button>
-                                    <input type="text" id="txt_dni2" maxlength="8" pattern="[0-9]*" placeholder="DNI" wire:model.lazy="dni3" oninput="this.value = this.value.replace(/\D/g,'').slice(0,8)" class="form-control form-control-xs @error('dni') is-invalid border-danger shadow-sm @enderror bg-light" readonly>
+                                    <input type="text" id="txt_dni3" maxlength="8" pattern="[0-9]*" placeholder="DNI" wire:model.lazy="dni3" oninput="this.value = this.value.replace(/\D/g,'').slice(0,8)" class="form-control form-control-xs @error('dni') is-invalid border-danger shadow-sm @enderror bg-light" readonly required>
                                 </div>
                             </div>
                             <div class="col-xl-2">
-                                <input type="text" id="txt_nombres2" class="form-control form-control-xs text-uppercase bg-light" placeholder="{{ $appaterno3 . ' ' . $apmaterno3 . ' ' . $nombres3 }}" readonly>
+                                <input type="text" id="txt_datos3" class="form-control form-control-xs text-uppercase bg-light" placeholder="{{ $appaterno3 . ' ' . $apmaterno3 . ' ' . $nombres3 }}" readonly>
                             </div>
                             <div class="col-xl-3">
-                                <input type="text" id="txt_nombres2" class="form-control form-control-xs bg-light" placeholder="{{ $celpersonal3 . ' / ' . $celinstitucional3 . ' / ' . $correopersonal3 . ' / ' . $correoinstitucional3 }}" readonly>
+                                <input type="text" id="txt_comunicacion3" class="form-control form-control-xs bg-light" placeholder="{{ $celpersonal3 . ' / ' . $celinstitucional3 . ' / ' . $correopersonal3 . ' / ' . $correoinstitucional3 }}" readonly>
                             </div>
                             <div class="col-xl-4">
-                                <input type="text" id="txt_nombres2" class="form-control form-control-xs text-uppercase bg-light" placeholder="{{ $sededestino3 . ' / ' . $dependenciadestino3 . ' / ' .$despachodestino3 }}" readonly>
+                                <input type="text" id="txt_dependencia3" class="form-control form-control-xs text-uppercase bg-light" placeholder="{{ $sededestino3 . ' / ' . $dependenciadestino3 . ' / ' .$despachodestino3 }}" readonly>
                             </div>
                             <div class="col-xl-2">
-                                <input type="text" id="txt_nombres2" class="form-control form-control-xs text-uppercase bg-light" placeholder="{{ $regimen3 . ' / ' . $cargo3 }}" readonly>
+                                <input type="text" id="txt_regimen3" class="form-control form-control-xs text-uppercase bg-light" placeholder="{{ $regimen3 . ' / ' . $cargo3 }}" readonly>
                             </div>
                         </div>
 
