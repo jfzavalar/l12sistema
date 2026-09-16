@@ -970,6 +970,30 @@ class BienestrasladoComponent extends Component
                     'coddespachodestino2' => $this->coddespachodestino2,
                     'despachodestino2' => $this->despachodestino2,
 
+                    'persona_id3' => $this->persona_id3,
+                    'dni3' => $this->dni3,
+                    'personal_id3' => $this->personal_id3,
+                    'datos3' => $this->datos3,
+                    'regimen3' => $this->regimen3,
+                    'regimen_tipo3' => $this->tipo_regimen3,
+                    'cargo3' => $this->cargo3,
+                    'cargo_condicion3' => $this->cargo_condicion3,
+
+                    'codsedeorigen3' => $this->codsedeorigen3,
+                    'sedeorigen3' => $this->sedeorigen3,
+                    'coddependenciaorigen3' => $this->coddependenciaorigen3,
+                    'dependenciaorigen3' => $this->dependenciaorigen3,
+                    'coddespachoorigen3' => $this->coddespachoorigen3,
+                    'despachoorigen3' => $this->despachoorigen3,
+
+                    'codsededestino3' => $this->codsededestino3,
+                    'sededestino3' => $this->sededestino3,
+                    'coddependenciadestino3' => $this->coddependenciadestino3,
+                    'dependenciadestino3' => $this->dependenciadestino3,
+                    'coddespachodestino3' => $this->coddespachodestino3,
+                    'despachodestino3' => $this->despachodestino3,
+
+
                     'referencia' => $this->referencia,
                     'motivo' => $this->motivo,
 
