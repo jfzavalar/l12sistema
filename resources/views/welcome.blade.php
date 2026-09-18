@@ -143,23 +143,44 @@
         <h3 class="text-center">SERVICIOS INTERNOS DEL DFJUNÍN</h3>
         <hr />
 
-            <div class="col-lg-4 col-md-6 mb-4">
-              <a href="{{ route('paginas.informatica-atenciones.index') }}" class="text-decoration-none">
-                  <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-4 card-hover transition bg-primary-subtle">                     
-                    <!-- Contenedor del Icono/Imagen centrado -->
-                    <div class="d-flex justify-content-center align-items-center mb-3">
-                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle d-inline-flex">
-                            <i class="fa-solid fa-laptop-code text-primary fs-1"></i>
-                            <!-- Si prefieres mantener tu SVG o imagen circular, reemplaza la línea del <i> por tu <img> o <svg> -->
-                        </div>
+            <div class="row">
+              <div class="col-lg-4 col-md-6 mb-4">
+                <a href="{{ route('paginas.informatica-atenciones.index') }}" class="text-decoration-none">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-4 card-hover transition bg-primary-subtle">                     
+                      <!-- Contenedor del Icono/Imagen centrado -->
+                      <div class="d-flex justify-content-center align-items-center mb-3">
+                          <div class="bg-primary bg-opacity-10 p-3 rounded-circle d-inline-flex">
+                              <i class="fa-solid fa-laptop-code text-primary fs-1"></i>
+                              <!-- Si prefieres mantener tu SVG o imagen circular, reemplaza la línea del <i> por tu <img> o <svg> -->
+                          </div>
+                      </div>
+                      <!-- Título y Descripción -->
+                      <div class="card-body p-0">
+                          <h3 class="fw-bold text-dark fs-4 mb-2">INFORMÁTICA</h3>
+                          <p class="text-muted mb-0">Registro de Incidencias / Solicitudes</p>
+                      </div>
                     </div>
-                    <!-- Título y Descripción -->
-                    <div class="card-body p-0">
-                        <h3 class="fw-bold text-dark fs-4 mb-2">INFORMÁTICA</h3>
-                        <p class="text-muted mb-0">Registro de Incidencias / Solicitudes</p>
+                </a>
+              </div>
+
+              <div class="col-lg-4 col-md-6 mb-4">
+                <a href="#" class="text-decoration-none">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-4 card-hover transition bg-primary-subtle">                     
+                      <!-- Contenedor del Icono/Imagen centrado -->
+                      <div class="d-flex justify-content-center align-items-center mb-3">
+                          <div class="bg-primary bg-opacity-10 p-3 rounded-circle d-inline-flex">
+                              <i class="fa-solid fa-phone-volume text-primary fs-1"></i>
+                              <!-- Si prefieres mantener tu SVG o imagen circular, reemplaza la línea del <i> por tu <img> o <svg> -->
+                          </div>
+                      </div>
+                      <!-- Título y Descripción -->
+                      <div class="card-body p-0">
+                          <h3 class="fw-bold text-dark fs-4 mb-2">DIRECTORIO</h3>
+                          <p class="text-muted mb-0">Anexos Telefónicos</p>
+                      </div>
                     </div>
-                  </div>
-              </a>
+                </a>
+              </div>
             </div>
 
             

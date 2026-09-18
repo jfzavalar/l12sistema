@@ -717,7 +717,8 @@
         @include('livewire.partials.modales.buscar-patrimonio-bienes')
         
         {{-- MODAL CARGAR PDF --}}
-        @include('livewire.intranet.atenciones.partials.pdf-cargar-component')
+        @include('livewire.partials.modales.cargar-pdf-acta')
+        @include('livewire.partials.modales.cargar-pdf-evidencia')
     </div>
 
 </div>
