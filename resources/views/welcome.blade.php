@@ -6,7 +6,7 @@
 
 @section('content')
 
-<main>
+    <main>
       <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
         <div class="carousel-indicators">
           <button
@@ -163,20 +163,36 @@
                 </a>
               </div>
 
-              <div class="col-lg-4 col-md-6 mb-4">
+              {{-- <div class="col-lg-4 col-md-6 mb-4">
                 <a href="#" class="text-decoration-none">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-4 card-hover transition bg-primary-subtle">                     
+                      <div class="d-flex justify-content-center align-items-center mb-3">
+                          <div class="bg-primary bg-opacity-10 p-3 rounded-circle d-inline-flex">
+                              <i class="fa-solid fa-phone-volume text-primary fs-1"></i>
+                          </div>
+                      </div>
+                      <div class="card-body p-0">
+                          <h3 class="fw-bold text-dark fs-4 mb-2">DIRECTORIO</h3>
+                          <p class="text-muted mb-0">Anexos Telefónicos</p>
+                      </div>
+                    </div>
+                </a>
+              </div> --}}
+
+              <div class="col-lg-4 col-md-6 mb-4">
+                <a href="{{ route('paginas.formatos-anexos.index') }}" class="text-decoration-none">
                     <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-4 card-hover transition bg-primary-subtle">                     
                       <!-- Contenedor del Icono/Imagen centrado -->
                       <div class="d-flex justify-content-center align-items-center mb-3">
                           <div class="bg-primary bg-opacity-10 p-3 rounded-circle d-inline-flex">
-                              <i class="fa-solid fa-phone-volume text-primary fs-1"></i>
+                              <i class="fa-regular fa-file-lines text-primary fs-1"></i>
                               <!-- Si prefieres mantener tu SVG o imagen circular, reemplaza la línea del <i> por tu <img> o <svg> -->
                           </div>
                       </div>
                       <!-- Título y Descripción -->
                       <div class="card-body p-0">
-                          <h3 class="fw-bold text-dark fs-4 mb-2">DIRECTORIO</h3>
-                          <p class="text-muted mb-0">Anexos Telefónicos</p>
+                          <h3 class="fw-bold text-dark fs-4 mb-2">DOCUMENTOS IMPORTANTES</h3>
+                          <p class="text-muted mb-0">Formatos y Anexos</p>
                       </div>
                     </div>
                 </a>
