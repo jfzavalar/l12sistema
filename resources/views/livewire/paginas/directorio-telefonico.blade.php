@@ -42,7 +42,9 @@
             <tbody class="align-middle">
                 @forelse ($lista_activos as $item1)
                     <tr class="shadow-sm border-0 border-start border-4 border-secondary rounded-start">
-                        <td>{{ $loop->iteration }}</td>
+                        <th>
+                            <i class="fa-solid fa-phone-volume text-success"></i> {{ $loop->iteration }}
+                        </th>
                         <td>
                             <small class="fs-6 fw-bold mb-1">{{ $item1->datos }}</small>
                             {{-- <br>

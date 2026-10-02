@@ -165,10 +165,10 @@
 
               <div class="col-lg-4 col-md-6 mb-4">
                 <a href="{{ route('paginas.directorio-telefonico.index') }}" class="text-decoration-none">
-                    <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-4 card-hover transition bg-primary-subtle">                     
+                    <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-4 card-hover transition bg-success-subtle">                     
                       <div class="d-flex justify-content-center align-items-center mb-3">
                           <div class="bg-primary bg-opacity-10 p-3 rounded-circle d-inline-flex">
-                              <i class="fa-solid fa-phone-volume text-primary fs-1"></i>
+                              <i class="fa-solid fa-phone-volume text-success fs-1"></i>
                           </div>
                       </div>
                       <div class="card-body p-0">
