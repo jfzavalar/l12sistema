@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        <table class="table table-hover table-sm table-xsmall">
+        <table class="table table-hover table-xsmall">
             <thead class="table-primary text-center align-middle">
                 <tr>
                     <th scope="col">#</th>
@@ -45,11 +45,11 @@
                         <th>
                             <i class="fa-solid fa-phone-volume text-success"></i> {{ $loop->iteration }}
                         </th>
-                        <td>
-                            <small class="fs-6 fw-bold mb-1">{{ $item1->datos }}</small>
+                        <th>
+                            {{ $item1->datos }}
                             {{-- <br>
                             <small class="text-muted fs-6 fw-bold">{{ $item1->dni }}</small> --}}
-                        </td>
+                        </th>
                         <td>
                             <b>SEDE:</b> {{ $item1->sededestino }} <br>
                             <b>DEPENDENCIA:</b> {{ $item1->dependenciadestino }} <br>

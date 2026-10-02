@@ -1,17 +1,17 @@
 /*
  Navicat Premium Dump SQL
 
- Source Server         : DB10.13.100.15
+ Source Server         : Localhost
  Source Server Type    : MySQL
- Source Server Version : 101113 (10.11.13-MariaDB-0ubuntu0.24.04.1)
- Source Host           : 10.13.100.15:3306
+ Source Server Version : 100432 (10.4.32-MariaDB)
+ Source Host           : localhost:3306
  Source Schema         : l12sistema
 
  Target Server Type    : MySQL
- Target Server Version : 101113 (10.11.13-MariaDB-0ubuntu0.24.04.1)
+ Target Server Version : 100432 (10.4.32-MariaDB)
  File Encoding         : 65001
 
- Date: 02/10/2026 10:51:17
+ Date: 02/10/2026 17:09:29
 */
 
 SET NAMES utf8mb4;
@@ -45,7 +45,7 @@ CREATE TABLE `administraciones_expimportantes`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 105 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 105 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of administraciones_expimportantes
@@ -169,6 +169,7 @@ CREATE TABLE `cache`  (
 -- ----------------------------
 -- Records of cache
 -- ----------------------------
+INSERT INTO `cache` VALUES ('dfjunin_cache_spatie.permission.cache', 'a:3:{s:5:\"alias\";a:6:{s:1:\"a\";s:2:\"id\";s:1:\"b\";s:5:\"grupo\";s:1:\"c\";s:4:\"name\";s:1:\"d\";s:10:\"guard_name\";s:1:\"e\";s:6:\"activo\";s:1:\"r\";s:5:\"roles\";}s:11:\"permissions\";a:131:{i:0;a:6:{s:1:\"a\";i:1;s:1:\"b\";s:9:\"DASHBOARD\";s:1:\"c\";s:9:\"dashboard\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:6:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;i:4;i:11;i:5;i:25;}}i:1;a:6:{s:1:\"a\";i:2;s:1:\"b\";s:8:\"PROCESOS\";s:1:\"c\";s:14:\"procesos.admin\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:11;}}i:2;a:6:{s:1:\"a\";i:3;s:1:\"b\";s:20:\"PROCESOS.ADMIN.USERS\";s:1:\"c\";s:26:\"procesos.admin.users.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:11;}}i:3;a:6:{s:1:\"a\";i:5;s:1:\"b\";s:20:\"PROCESOS.ADMIN.USERS\";s:1:\"c\";s:27:\"procesos.admin.users.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:11;}}i:4;a:6:{s:1:\"a\";i:6;s:1:\"b\";s:20:\"PROCESOS.ADMIN.USERS\";s:1:\"c\";s:25:\"procesos.admin.users.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:11;}}i:5;a:6:{s:1:\"a\";i:7;s:1:\"b\";s:20:\"PROCESOS.ADMIN.USERS\";s:1:\"c\";s:28:\"procesos.admin.users.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:6;a:6:{s:1:\"a\";i:8;s:1:\"b\";s:20:\"PROCESOS.ADMIN.ROLES\";s:1:\"c\";s:26:\"procesos.admin.roles.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:11;}}i:7;a:6:{s:1:\"a\";i:9;s:1:\"b\";s:20:\"PROCESOS.ADMIN.ROLES\";s:1:\"c\";s:27:\"procesos.admin.roles.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:11;}}i:8;a:6:{s:1:\"a\";i:10;s:1:\"b\";s:20:\"PROCESOS.ADMIN.ROLES\";s:1:\"c\";s:25:\"procesos.admin.roles.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:11;}}i:9;a:6:{s:1:\"a\";i:11;s:1:\"b\";s:20:\"PROCESOS.ADMIN.ROLES\";s:1:\"c\";s:28:\"procesos.admin.roles.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:10;a:6:{s:1:\"a\";i:12;s:1:\"b\";s:26:\"PROCESOS.ADMIN.PERMISSIONS\";s:1:\"c\";s:32:\"procesos.admin.permissions.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:11;}}i:11;a:6:{s:1:\"a\";i:13;s:1:\"b\";s:26:\"PROCESOS.ADMIN.PERMISSIONS\";s:1:\"c\";s:33:\"procesos.admin.permissions.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:11;}}i:12;a:6:{s:1:\"a\";i:14;s:1:\"b\";s:26:\"PROCESOS.ADMIN.PERMISSIONS\";s:1:\"c\";s:31:\"procesos.admin.permissions.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:11;}}i:13;a:6:{s:1:\"a\";i:15;s:1:\"b\";s:26:\"PROCESOS.ADMIN.PERMISSIONS\";s:1:\"c\";s:34:\"procesos.admin.permissions.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:14;a:6:{s:1:\"a\";i:16;s:1:\"b\";s:20:\"PROCESOS.INFORMATICA\";s:1:\"c\";s:20:\"procesos.informatica\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:5:{i:0;i:1;i:1;i:2;i:2;i:3;i:3;i:11;i:4;i:15;}}i:15;a:6:{s:1:\"a\";i:17;s:1:\"b\";s:29:\"PROCESOS.INFORMATICA.FIRMASPC\";s:1:\"c\";s:36:\"procesos.informatica.firmaspcs.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:3;i:2;i:11;i:3;i:15;}}i:16;a:6:{s:1:\"a\";i:18;s:1:\"b\";s:29:\"PROCESOS.INFORMATICA.FIRMASPC\";s:1:\"c\";s:37:\"procesos.informatica.firmaspcs.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:3;i:2;i:11;}}i:17;a:6:{s:1:\"a\";i:19;s:1:\"b\";s:29:\"PROCESOS.INFORMATICA.FIRMASPC\";s:1:\"c\";s:35:\"procesos.informatica.firmaspcs.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:3;i:2;i:11;}}i:18;a:6:{s:1:\"a\";i:20;s:1:\"b\";s:29:\"PROCESOS.INFORMATICA.FIRMASPC\";s:1:\"c\";s:38:\"procesos.informatica.firmaspcs.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:19;a:6:{s:1:\"a\";i:21;s:1:\"b\";s:28:\"PROCESOS.INFORMATICA.SPIJWEB\";s:1:\"c\";s:30:\"mpfn.informatica.spijweb.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:5;i:2;i:11;}}i:20;a:6:{s:1:\"a\";i:22;s:1:\"b\";s:28:\"PROCESOS.INFORMATICA.SPIJWEB\";s:1:\"c\";s:31:\"mpfn.informatica.spijweb.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:5;i:2;i:11;}}i:21;a:6:{s:1:\"a\";i:23;s:1:\"b\";s:28:\"PROCESOS.INFORMATICA.SPIJWEB\";s:1:\"c\";s:29:\"mpfn.informatica.spijweb.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:5;i:2;i:11;}}i:22;a:6:{s:1:\"a\";i:24;s:1:\"b\";s:28:\"PROCESOS.INFORMATICA.SPIJWEB\";s:1:\"c\";s:32:\"mpfn.informatica.spijweb.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:23;a:6:{s:1:\"a\";i:25;s:1:\"b\";s:26:\"PROCESOS.INFORMATICA.TOKEN\";s:1:\"c\";s:33:\"procesos.informatica.tokens.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:3;i:2;i:11;}}i:24;a:6:{s:1:\"a\";i:26;s:1:\"b\";s:26:\"PROCESOS.INFORMATICA.TOKEN\";s:1:\"c\";s:34:\"procesos.informatica.tokens.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:3;i:2;i:11;}}i:25;a:6:{s:1:\"a\";i:27;s:1:\"b\";s:26:\"PROCESOS.INFORMATICA.TOKEN\";s:1:\"c\";s:32:\"procesos.informatica.tokens.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:3;i:2;i:11;}}i:26;a:6:{s:1:\"a\";i:28;s:1:\"b\";s:26:\"PROCESOS.INFORMATICA.TOKEN\";s:1:\"c\";s:35:\"procesos.informatica.tokens.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:27;a:6:{s:1:\"a\";i:29;s:1:\"b\";s:24:\"PROCESOS.INFORMATICA.IPS\";s:1:\"c\";s:26:\"mpfn.informatica.ips.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:11;i:3;i:22;}}i:28;a:6:{s:1:\"a\";i:30;s:1:\"b\";s:24:\"PROCESOS.INFORMATICA.IPS\";s:1:\"c\";s:27:\"mpfn.informatica.ips.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:11;}}i:29;a:6:{s:1:\"a\";i:31;s:1:\"b\";s:24:\"PROCESOS.INFORMATICA.IPS\";s:1:\"c\";s:25:\"mpfn.informatica.ips.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:11;}}i:30;a:6:{s:1:\"a\";i:32;s:1:\"b\";s:24:\"PROCESOS.INFORMATICA.IPS\";s:1:\"c\";s:28:\"mpfn.informatica.ips.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:31;a:6:{s:1:\"a\";i:33;s:1:\"b\";s:23:\"PROCESOS.ADMINISTRACION\";s:1:\"c\";s:23:\"procesos.administracion\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:6;i:2;i:11;}}i:32;a:6:{s:1:\"a\";i:34;s:1:\"b\";s:28:\"PROCESOS.ADMINISTRACION.RRHH\";s:1:\"c\";s:34:\"procesos.administracion.rrhh.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:6;i:2;i:11;}}i:33;a:6:{s:1:\"a\";i:35;s:1:\"b\";s:28:\"PROCESOS.ADMINISTRACION.RRHH\";s:1:\"c\";s:35:\"procesos.administracion.rrhh.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:6;i:2;i:11;}}i:34;a:6:{s:1:\"a\";i:36;s:1:\"b\";s:28:\"PROCESOS.ADMINISTRACION.RRHH\";s:1:\"c\";s:33:\"procesos.administracion.rrhh.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:6;i:2;i:11;}}i:35;a:6:{s:1:\"a\";i:37;s:1:\"b\";s:28:\"PROCESOS.ADMINISTRACION.RRHH\";s:1:\"c\";s:36:\"procesos.administracion.rrhh.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:36;a:6:{s:1:\"a\";i:38;s:1:\"b\";s:34:\"PROCESOS.ADMINISTRACION.PATRIMONIO\";s:1:\"c\";s:40:\"procesos.administracion.patrimonio.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:11;}}i:37;a:6:{s:1:\"a\";i:39;s:1:\"b\";s:34:\"PROCESOS.ADMINISTRACION.PATRIMONIO\";s:1:\"c\";s:41:\"procesos.administracion.patrimonio.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:11;}}i:38;a:6:{s:1:\"a\";i:40;s:1:\"b\";s:34:\"PROCESOS.ADMINISTRACION.PATRIMONIO\";s:1:\"c\";s:39:\"procesos.administracion.patrimonio.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:11;}}i:39;a:6:{s:1:\"a\";i:41;s:1:\"b\";s:34:\"PROCESOS.ADMINISTRACION.PATRIMONIO\";s:1:\"c\";s:42:\"procesos.administracion.patrimonio.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:40;a:6:{s:1:\"a\";i:42;s:1:\"b\";s:17:\"PROCESOS.INTRANET\";s:1:\"c\";s:17:\"procesos.intranet\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:4;i:2;i:11;}}i:41;a:6:{s:1:\"a\";i:43;s:1:\"b\";s:17:\"PROCESOS.INTRANET\";s:1:\"c\";s:23:\"procesos.intranet.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:4;i:2;i:11;}}i:42;a:6:{s:1:\"a\";i:44;s:1:\"b\";s:17:\"PROCESOS.INTRANET\";s:1:\"c\";s:24:\"procesos.intranet.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:4;i:2;i:11;}}i:43;a:6:{s:1:\"a\";i:45;s:1:\"b\";s:17:\"PROCESOS.INTRANET\";s:1:\"c\";s:22:\"procesos.intranet.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:4;i:2;i:11;}}i:44;a:6:{s:1:\"a\";i:46;s:1:\"b\";s:17:\"PROCESOS.INTRANET\";s:1:\"c\";s:25:\"procesos.intranet.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:4;}}i:45;a:6:{s:1:\"a\";i:47;s:1:\"b\";s:31:\"PROCESOS.INTRANET.CONFIGURACION\";s:1:\"c\";s:37:\"procesos.intranet.configuracion.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:4;i:2;i:11;}}i:46;a:6:{s:1:\"a\";i:48;s:1:\"b\";s:31:\"PROCESOS.INTRANET.CONFIGURACION\";s:1:\"c\";s:38:\"procesos.intranet.configuracion.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:4;i:2;i:11;}}i:47;a:6:{s:1:\"a\";i:49;s:1:\"b\";s:31:\"PROCESOS.INTRANET.CONFIGURACION\";s:1:\"c\";s:36:\"procesos.intranet.configuracion.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:4;i:2;i:11;}}i:48;a:6:{s:1:\"a\";i:50;s:1:\"b\";s:31:\"PROCESOS.INTRANET.CONFIGURACION\";s:1:\"c\";s:39:\"procesos.intranet.configuracion.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:49;a:6:{s:1:\"a\";i:51;s:1:\"b\";s:28:\"PROCESOS.INTRANET.ATENCIONES\";s:1:\"c\";s:34:\"procesos.intranet.atenciones.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:11;}}i:50;a:6:{s:1:\"a\";i:52;s:1:\"b\";s:28:\"PROCESOS.INTRANET.ATENCIONES\";s:1:\"c\";s:35:\"procesos.intranet.atenciones.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:11;}}i:51;a:6:{s:1:\"a\";i:53;s:1:\"b\";s:28:\"PROCESOS.INTRANET.ATENCIONES\";s:1:\"c\";s:33:\"procesos.intranet.atenciones.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:11;}}i:52;a:6:{s:1:\"a\";i:54;s:1:\"b\";s:28:\"PROCESOS.INTRANET.ATENCIONES\";s:1:\"c\";s:36:\"procesos.intranet.atenciones.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:53;a:6:{s:1:\"a\";i:55;s:1:\"b\";s:29:\"PROCESOS.INTRANET.INCIDENCIAS\";s:1:\"c\";s:44:\"procesos.intranet.incidencia_solicitud.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:11;}}i:54;a:6:{s:1:\"a\";i:56;s:1:\"b\";s:29:\"PROCESOS.INTRANET.INCIDENCIAS\";s:1:\"c\";s:45:\"procesos.intranet.incidencia_solicitud.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:11;}}i:55;a:6:{s:1:\"a\";i:57;s:1:\"b\";s:29:\"PROCESOS.INTRANET.INCIDENCIAS\";s:1:\"c\";s:43:\"procesos.intranet.incidencia_solicitud.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:11;}}i:56;a:6:{s:1:\"a\";i:58;s:1:\"b\";s:29:\"PROCESOS.INTRANET.INCIDENCIAS\";s:1:\"c\";s:46:\"procesos.intranet.incidencia_solicitud.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:57;a:6:{s:1:\"a\";i:59;s:1:\"b\";s:27:\"PROCESOS.INFORMATICA.FIRMAS\";s:1:\"c\";s:42:\"procesos.informatica.firmasdigitales.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:3;i:2;i:11;i:3;i:15;}}i:58;a:6:{s:1:\"a\";i:60;s:1:\"b\";s:27:\"PROCESOS.INFORMATICA.FIRMAS\";s:1:\"c\";s:43:\"procesos.informatica.firmasdigitales.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:3;}}i:59;a:6:{s:1:\"a\";i:61;s:1:\"b\";s:27:\"PROCESOS.INFORMATICA.FIRMAS\";s:1:\"c\";s:41:\"procesos.informatica.firmasdigitales.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:3;i:2;i:11;}}i:60;a:6:{s:1:\"a\";i:62;s:1:\"b\";s:27:\"PROCESOS.INFORMATICA.FIRMAS\";s:1:\"c\";s:44:\"procesos.informatica.firmasdigitales.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:61;a:6:{s:1:\"a\";i:63;s:1:\"b\";s:21:\"PROCESOS.VOLUNTARIADO\";s:1:\"c\";s:17:\"mpfn.voluntariado\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:7;i:2;i:8;i:3;i:11;}}i:62;a:6:{s:1:\"a\";i:64;s:1:\"b\";s:33:\"PROCESOS.VOLUNTARIADO.ASISTENCIAS\";s:1:\"c\";s:34:\"mpfn.voluntariado.asistencia.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:7;i:2;i:8;i:3;i:11;}}i:63;a:6:{s:1:\"a\";i:65;s:1:\"b\";s:33:\"PROCESOS.VOLUNTARIADO.ASISTENCIAS\";s:1:\"c\";s:35:\"mpfn.voluntariado.asistencia.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:7;i:2;i:8;i:3;i:11;}}i:64;a:6:{s:1:\"a\";i:66;s:1:\"b\";s:33:\"PROCESOS.VOLUNTARIADO.ASISTENCIAS\";s:1:\"c\";s:33:\"mpfn.voluntariado.asistencia.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:7;i:2;i:8;i:3;i:11;}}i:65;a:6:{s:1:\"a\";i:67;s:1:\"b\";s:33:\"PROCESOS.VOLUNTARIADO.ASISTENCIAS\";s:1:\"c\";s:36:\"mpfn.voluntariado.asistencia.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:7;}}i:66;a:6:{s:1:\"a\";i:68;s:1:\"b\";s:21:\"PROCESOS.VOLUNTARIADO\";s:1:\"c\";s:35:\"mpfn.voluntariado.voluntarios.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:7;i:2;i:8;i:3;i:11;}}i:67;a:6:{s:1:\"a\";i:69;s:1:\"b\";s:21:\"PROCESOS.VOLUNTARIADO\";s:1:\"c\";s:36:\"mpfn.voluntariado.voluntarios.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:7;i:2;i:8;i:3;i:11;}}i:68;a:6:{s:1:\"a\";i:70;s:1:\"b\";s:21:\"PROCESOS.VOLUNTARIADO\";s:1:\"c\";s:34:\"mpfn.voluntariado.voluntarios.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:7;i:2;i:8;i:3;i:11;}}i:69;a:6:{s:1:\"a\";i:71;s:1:\"b\";s:21:\"PROCESOS.VOLUNTARIADO\";s:1:\"c\";s:37:\"mpfn.voluntariado.voluntarios.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:7;}}i:70;a:6:{s:1:\"a\";i:72;s:1:\"b\";s:31:\"PROCESOS.ADMINISTRACION.ARCHIVO\";s:1:\"c\";s:37:\"procesos.administracion.archivo.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:11;}}i:71;a:6:{s:1:\"a\";i:73;s:1:\"b\";s:31:\"PROCESOS.ADMINISTRACION.ARCHIVO\";s:1:\"c\";s:38:\"procesos.administracion.archivo.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:11;}}i:72;a:6:{s:1:\"a\";i:74;s:1:\"b\";s:31:\"PROCESOS.ADMINISTRACION.ARCHIVO\";s:1:\"c\";s:36:\"procesos.administracion.archivo.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:11;}}i:73;a:6:{s:1:\"a\";i:75;s:1:\"b\";s:31:\"PROCESOS.ADMINISTRACION.ARCHIVO\";s:1:\"c\";s:39:\"procesos.administracion.archivo.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:74;a:6:{s:1:\"a\";i:76;s:1:\"b\";N;s:1:\"c\";s:9:\"mpfn.rrhh\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:7:{i:0;i:1;i:1;i:6;i:2;i:10;i:3;i:11;i:4;i:14;i:5;i:18;i:6;i:25;}}i:75;a:6:{s:1:\"a\";i:77;s:1:\"b\";N;s:1:\"c\";s:24:\"mpfn.rrhh.personal.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:6:{i:0;i:1;i:1;i:6;i:2;i:10;i:3;i:11;i:4;i:14;i:5;i:25;}}i:76;a:6:{s:1:\"a\";i:78;s:1:\"b\";N;s:1:\"c\";s:25:\"mpfn.rrhh.personal.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:6;i:2;i:10;i:3;i:11;}}i:77;a:6:{s:1:\"a\";i:79;s:1:\"b\";N;s:1:\"c\";s:23:\"mpfn.rrhh.personal.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:6;i:2;i:10;i:3;i:11;}}i:78;a:6:{s:1:\"a\";i:80;s:1:\"b\";N;s:1:\"c\";s:26:\"mpfn.rrhh.personal.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:6;}}i:79;a:6:{s:1:\"a\";i:81;s:1:\"b\";N;s:1:\"c\";s:30:\"mpfn.informatica.soporte.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:9;i:2;i:11;}}i:80;a:6:{s:1:\"a\";i:82;s:1:\"b\";N;s:1:\"c\";s:31:\"mpfn.informatica.soporte.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:9;i:2;i:11;}}i:81;a:6:{s:1:\"a\";i:83;s:1:\"b\";N;s:1:\"c\";s:29:\"mpfn.informatica.soporte.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:9;i:2;i:11;}}i:82;a:6:{s:1:\"a\";i:84;s:1:\"b\";N;s:1:\"c\";s:32:\"mpfn.informatica.soporte.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:83;a:6:{s:1:\"a\";i:85;s:1:\"b\";N;s:1:\"c\";s:16:\"mpfn.informatica\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:7:{i:0;i:1;i:1;i:3;i:2;i:5;i:3;i:9;i:4;i:11;i:5;i:15;i:6;i:22;}}i:84;a:6:{s:1:\"a\";i:86;s:1:\"b\";N;s:1:\"c\";s:15:\"mpfn.patrimonio\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:11;i:2;i:21;i:3;i:26;}}i:85;a:6:{s:1:\"a\";i:87;s:1:\"b\";N;s:1:\"c\";s:13:\"mpfn.intranet\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:12;i:2;i:13;i:3;i:20;}}i:86;a:6:{s:1:\"a\";i:88;s:1:\"b\";N;s:1:\"c\";s:34:\"mpfn.intranet.expimportantes.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:12;i:2;i:13;}}i:87;a:6:{s:1:\"a\";i:89;s:1:\"b\";N;s:1:\"c\";s:35:\"mpfn.intranet.expimportantes.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:12;i:2;i:13;}}i:88;a:6:{s:1:\"a\";i:90;s:1:\"b\";N;s:1:\"c\";s:33:\"mpfn.intranet.expimportantes.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:12;i:2;i:13;}}i:89;a:6:{s:1:\"a\";i:91;s:1:\"b\";N;s:1:\"c\";s:36:\"mpfn.intranet.expimportantes.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:12;}}i:90;a:6:{s:1:\"a\";i:92;s:1:\"b\";N;s:1:\"c\";s:32:\"mpfn.rrhh.personalrotacion.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:16;i:2;i:17;i:3;i:18;}}i:91;a:6:{s:1:\"a\";i:93;s:1:\"b\";N;s:1:\"c\";s:33:\"mpfn.rrhh.personalrotacion.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:16;i:2;i:17;}}i:92;a:6:{s:1:\"a\";i:94;s:1:\"b\";N;s:1:\"c\";s:31:\"mpfn.rrhh.personalrotacion.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:16;i:2;i:17;}}i:93;a:6:{s:1:\"a\";i:95;s:1:\"b\";N;s:1:\"c\";s:34:\"mpfn.rrhh.personalrotacion.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:16;}}i:94;a:6:{s:1:\"a\";i:96;s:1:\"b\";N;s:1:\"c\";s:17:\"mpfn.contabilidad\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:19;}}i:95;a:6:{s:1:\"a\";i:97;s:1:\"b\";N;s:1:\"c\";s:40:\"mpfn.contabilidad.gastosoperativos.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:19;}}i:96;a:6:{s:1:\"a\";i:98;s:1:\"b\";N;s:1:\"c\";s:41:\"mpfn.contabilidad.gastosoperativos.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:19;}}i:97;a:6:{s:1:\"a\";i:99;s:1:\"b\";N;s:1:\"c\";s:39:\"mpfn.contabilidad.gastosoperativos.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:19;}}i:98;a:6:{s:1:\"a\";i:100;s:1:\"b\";N;s:1:\"c\";s:42:\"mpfn.contabilidad.gastosoperativos.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:99;a:6:{s:1:\"a\";i:101;s:1:\"b\";N;s:1:\"c\";s:28:\"mpfn.patrimonio.bienes.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:100;a:6:{s:1:\"a\";i:102;s:1:\"b\";N;s:1:\"c\";s:29:\"mpfn.patrimonio.bienes.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:101;a:6:{s:1:\"a\";i:103;s:1:\"b\";N;s:1:\"c\";s:27:\"mpfn.patrimonio.bienes.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:102;a:6:{s:1:\"a\";i:104;s:1:\"b\";N;s:1:\"c\";s:30:\"mpfn.patrimonio.bienes.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:103;a:6:{s:1:\"a\";i:105;s:1:\"b\";N;s:1:\"c\";s:30:\"mpfn.patrimonio.traslado.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:26;i:2;i:27;}}i:104;a:6:{s:1:\"a\";i:106;s:1:\"b\";N;s:1:\"c\";s:31:\"mpfn.patrimonio.traslado.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:26;}}i:105;a:6:{s:1:\"a\";i:107;s:1:\"b\";N;s:1:\"c\";s:29:\"mpfn.patrimonio.traslado.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:26;}}i:106;a:6:{s:1:\"a\";i:108;s:1:\"b\";N;s:1:\"c\";s:32:\"mpfn.patrimonio.traslado.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:107;a:6:{s:1:\"a\";i:109;s:1:\"b\";N;s:1:\"c\";s:34:\"mpfn.patrimonio.asignaciones.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:21;}}i:108;a:6:{s:1:\"a\";i:110;s:1:\"b\";N;s:1:\"c\";s:35:\"mpfn.patrimonio.asignaciones.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:21;}}i:109;a:6:{s:1:\"a\";i:111;s:1:\"b\";N;s:1:\"c\";s:33:\"mpfn.patrimonio.asignaciones.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:110;a:6:{s:1:\"a\";i:112;s:1:\"b\";N;s:1:\"c\";s:36:\"mpfn.patrimonio.asignaciones.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:111;a:6:{s:1:\"a\";i:113;s:1:\"b\";N;s:1:\"c\";s:30:\"mpfn.intranet.atenciones.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:20;}}i:112;a:6:{s:1:\"a\";i:114;s:1:\"b\";N;s:1:\"c\";s:31:\"mpfn.intranet.atenciones.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:20;}}i:113;a:6:{s:1:\"a\";i:115;s:1:\"b\";N;s:1:\"c\";s:29:\"mpfn.intranet.atenciones.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:20;}}i:114;a:6:{s:1:\"a\";i:116;s:1:\"b\";N;s:1:\"c\";s:32:\"mpfn.intranet.atenciones.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:115;a:6:{s:1:\"a\";i:117;s:1:\"b\";N;s:1:\"c\";s:43:\"mpfn.patrimonio.asignacionessobrantes.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:23;}}i:116;a:6:{s:1:\"a\";i:118;s:1:\"b\";N;s:1:\"c\";s:44:\"mpfn.patrimonio.asignacionessobrantes.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:23;}}i:117;a:6:{s:1:\"a\";i:119;s:1:\"b\";N;s:1:\"c\";s:42:\"mpfn.patrimonio.asignacionessobrantes.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:23;}}i:118;a:6:{s:1:\"a\";i:120;s:1:\"b\";N;s:1:\"c\";s:45:\"mpfn.patrimonio.asignacionessobrantes.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:119;a:6:{s:1:\"a\";i:122;s:1:\"b\";N;s:1:\"c\";s:41:\"mpfn.intranet.atencionesincidencias.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:24;}}i:120;a:6:{s:1:\"a\";i:123;s:1:\"b\";N;s:1:\"c\";s:42:\"mpfn.intranet.atencionesincidencias.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:24;}}i:121;a:6:{s:1:\"a\";i:124;s:1:\"b\";N;s:1:\"c\";s:40:\"mpfn.intranet.atencionesincidencias.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:24;}}i:122;a:6:{s:1:\"a\";i:125;s:1:\"b\";N;s:1:\"c\";s:43:\"mpfn.intranet.atencionesincidencias.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:24;}}i:123;a:6:{s:1:\"a\";i:126;s:1:\"b\";N;s:1:\"c\";s:32:\"mpfn.rrhh.personal.legajos.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:25;}}i:124;a:6:{s:1:\"a\";i:127;s:1:\"b\";N;s:1:\"c\";s:33:\"mpfn.rrhh.personal.legajos.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:25;}}i:125;a:6:{s:1:\"a\";i:128;s:1:\"b\";N;s:1:\"c\";s:31:\"mpfn.rrhh.personal.legajos.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:25;}}i:126;a:6:{s:1:\"a\";i:129;s:1:\"b\";N;s:1:\"c\";s:34:\"mpfn.rrhh.personal.legajos.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}i:127;a:6:{s:1:\"a\";i:130;s:1:\"b\";N;s:1:\"c\";s:29:\"mpfn.informatica.anexos.index\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:28;}}i:128;a:6:{s:1:\"a\";i:131;s:1:\"b\";N;s:1:\"c\";s:30:\"mpfn.informatica.anexos.create\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:28;}}i:129;a:6:{s:1:\"a\";i:132;s:1:\"b\";N;s:1:\"c\";s:28:\"mpfn.informatica.anexos.edit\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:28;}}i:130;a:6:{s:1:\"a\";i:133;s:1:\"b\";N;s:1:\"c\";s:31:\"mpfn.informatica.anexos.destroy\";s:1:\"d\";s:3:\"web\";s:1:\"e\";s:1:\"1\";s:1:\"r\";a:1:{i:0;i:1;}}}s:5:\"roles\";a:28:{i:0;a:3:{s:1:\"a\";i:1;s:1:\"c\";s:11:\"Admin-Super\";s:1:\"d\";s:3:\"web\";}i:1;a:3:{s:1:\"a\";i:2;s:1:\"c\";s:9:\"Ips-Admin\";s:1:\"d\";s:3:\"web\";}i:2;a:3:{s:1:\"a\";i:4;s:1:\"c\";s:28:\"Intranet-Configuracion-Admin\";s:1:\"d\";s:3:\"web\";}i:3;a:3:{s:1:\"a\";i:5;s:1:\"c\";s:13:\"Spijweb-Admin\";s:1:\"d\";s:3:\"web\";}i:4;a:3:{s:1:\"a\";i:11;s:1:\"c\";s:9:\"Admin-Reg\";s:1:\"d\";s:3:\"web\";}i:5;a:3:{s:1:\"a\";i:25;s:1:\"c\";s:18:\"Rrhh-Legajos-Admin\";s:1:\"d\";s:3:\"web\";}i:6;a:3:{s:1:\"a\";i:3;s:1:\"c\";s:12:\"Firmas-Admin\";s:1:\"d\";s:3:\"web\";}i:7;a:3:{s:1:\"a\";i:15;s:1:\"c\";s:10:\"Firmas-Ver\";s:1:\"d\";s:3:\"web\";}i:8;a:3:{s:1:\"a\";i:22;s:1:\"c\";s:7:\"Ips-Ver\";s:1:\"d\";s:3:\"web\";}i:9;a:3:{s:1:\"a\";i:6;s:1:\"c\";s:10:\"Rrhh-Admin\";s:1:\"d\";s:3:\"web\";}i:10;a:3:{s:1:\"a\";i:7;s:1:\"c\";s:28:\"VoluntariadoAsistenciasAdmin\";s:1:\"d\";s:3:\"web\";}i:11;a:3:{s:1:\"a\";i:8;s:1:\"c\";s:26:\"VoluntariadoAsistenciasReg\";s:1:\"d\";s:3:\"web\";}i:12;a:3:{s:1:\"a\";i:10;s:1:\"c\";s:8:\"Rrhh-reg\";s:1:\"d\";s:3:\"web\";}i:13;a:3:{s:1:\"a\";i:14;s:1:\"c\";s:8:\"Rrhh-ver\";s:1:\"d\";s:3:\"web\";}i:14;a:3:{s:1:\"a\";i:18;s:1:\"c\";s:18:\"RrhhRotaciones-Ver\";s:1:\"d\";s:3:\"web\";}i:15;a:3:{s:1:\"a\";i:9;s:1:\"c\";s:13:\"Soporte-Admin\";s:1:\"d\";s:3:\"web\";}i:16;a:3:{s:1:\"a\";i:21;s:1:\"c\";s:26:\"PatrimonioAsignacion-Admin\";s:1:\"d\";s:3:\"web\";}i:17;a:3:{s:1:\"a\";i:26;s:1:\"c\";s:30:\"PatrimonioDesplazamiento-Admin\";s:1:\"d\";s:3:\"web\";}i:18;a:3:{s:1:\"a\";i:12;s:1:\"c\";s:20:\"ExpImportantes-Admin\";s:1:\"d\";s:3:\"web\";}i:19;a:3:{s:1:\"a\";i:13;s:1:\"c\";s:18:\"ExpImportantes-Reg\";s:1:\"d\";s:3:\"web\";}i:20;a:3:{s:1:\"a\";i:20;s:1:\"c\";s:13:\"Tickets-Admin\";s:1:\"d\";s:3:\"web\";}i:21;a:3:{s:1:\"a\";i:16;s:1:\"c\";s:20:\"RrhhRotaciones-Admin\";s:1:\"d\";s:3:\"web\";}i:22;a:3:{s:1:\"a\";i:17;s:1:\"c\";s:18:\"RrhhRotaciones-Reg\";s:1:\"d\";s:3:\"web\";}i:23;a:3:{s:1:\"a\";i:19;s:1:\"c\";s:20:\"GastosOperativos-Reg\";s:1:\"d\";s:3:\"web\";}i:24;a:3:{s:1:\"a\";i:27;s:1:\"c\";s:28:\"PatrimonioDesplazamiento-Ver\";s:1:\"d\";s:3:\"web\";}i:25;a:3:{s:1:\"a\";i:23;s:1:\"c\";s:34:\"PatrimonioAsignacionSorantes-Admin\";s:1:\"d\";s:3:\"web\";}i:26;a:3:{s:1:\"a\";i:24;s:1:\"c\";s:24:\"TicketsIncidencias-Admin\";s:1:\"d\";s:3:\"web\";}i:27;a:3:{s:1:\"a\";i:28;s:1:\"c\";s:23:\"AnexosTelefonicos-Admin\";s:1:\"d\";s:3:\"web\";}}}', 1791042760);
 INSERT INTO `cache` VALUES ('l12sistema_cache_44666924|10.13.120.68', 'i:1;', 1768260695);
 INSERT INTO `cache` VALUES ('l12sistema_cache_44666924|10.13.120.68:timer', 'i:1768260695;', 1768260695);
 INSERT INTO `cache` VALUES ('l12sistema_cache_45492022|10.13.122.79', 'i:1;', 1768860251);
@@ -255,7 +256,7 @@ CREATE TABLE `contabilidades_gastosoperativos_entregas`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 275 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 275 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of contabilidades_gastosoperativos_entregas
@@ -546,7 +547,7 @@ CREATE TABLE `contabilidades_gastosoperativos_entregashistoriales`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of contabilidades_gastosoperativos_entregashistoriales
@@ -597,7 +598,7 @@ CREATE TABLE `informaticas_bienes_anexos`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 528 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 528 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of informaticas_bienes_anexos
@@ -1180,7 +1181,7 @@ CREATE TABLE `informaticas_bienes_anexos_asignaciones`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 101 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 101 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of informaticas_bienes_anexos_asignaciones
@@ -1303,7 +1304,7 @@ CREATE TABLE `informaticas_bienes_tokens`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 253 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 253 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of informaticas_bienes_tokens
@@ -1596,7 +1597,7 @@ CREATE TABLE `informaticas_firmas_backup`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 286 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 286 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of informaticas_firmas_backup
@@ -1923,7 +1924,7 @@ CREATE TABLE `informaticas_firmas_pcs`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of informaticas_firmas_pcs
@@ -1964,7 +1965,7 @@ CREATE TABLE `informaticas_firmas_tokens`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 258 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 258 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of informaticas_firmas_tokens
@@ -2258,7 +2259,7 @@ CREATE TABLE `informaticas_ips`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`, `ip`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4972 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4972 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of informaticas_ips
@@ -7281,7 +7282,7 @@ CREATE TABLE `informaticas_soportes`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of informaticas_soportes
@@ -7300,7 +7301,7 @@ CREATE TABLE `informaticas_soportes_detalles`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of informaticas_soportes_detalles
@@ -7317,7 +7318,7 @@ CREATE TABLE `informaticas_soportes_tareas`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of informaticas_soportes_tareas
@@ -7375,7 +7376,7 @@ CREATE TABLE `informaticas_spijwebs`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of informaticas_spijwebs
@@ -7430,7 +7431,7 @@ CREATE TABLE `informaticas_spijwebs_entregas`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 276 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 276 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of informaticas_spijwebs_entregas
@@ -7726,7 +7727,7 @@ CREATE TABLE `informaticas_spijwebs_licencias`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 231 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 231 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of informaticas_spijwebs_licencias
@@ -8013,7 +8014,7 @@ CREATE TABLE `migrations`  (
   `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of migrations
@@ -8356,7 +8357,7 @@ CREATE TABLE `patrimonios_bienes`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`, `codigo_patrimonial`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10853 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 10853 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of patrimonios_bienes
@@ -19257,7 +19258,7 @@ CREATE TABLE `patrimonios_bienes_asignaciones`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 162 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 162 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of patrimonios_bienes_asignaciones
@@ -19460,7 +19461,7 @@ CREATE TABLE `patrimonios_bienes_asignaciones_detalles`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 941 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 941 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of patrimonios_bienes_asignaciones_detalles
@@ -19981,7 +19982,7 @@ CREATE TABLE `patrimonios_bienes_desplazamientos_temporales`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of patrimonios_bienes_desplazamientos_temporales
@@ -20043,7 +20044,7 @@ CREATE TABLE `patrimonios_bienes_desplazamientos_temporales_detalles`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of patrimonios_bienes_desplazamientos_temporales_detalles
@@ -20076,7 +20077,7 @@ CREATE TABLE `patrimonios_bienes_sobrantes`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 525 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 525 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of patrimonios_bienes_sobrantes
@@ -20649,7 +20650,7 @@ CREATE TABLE `patrimonios_bienes_sobrantes_asignaciones`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of patrimonios_bienes_sobrantes_asignaciones
@@ -20695,7 +20696,7 @@ CREATE TABLE `patrimonios_bienes_sobrantes_asignaciones_detalles`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of patrimonios_bienes_sobrantes_asignaciones_detalles
@@ -20708,6 +20709,7 @@ DROP TABLE IF EXISTS `permissions`;
 CREATE TABLE `permissions`  (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `grupo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `modulo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `guard_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `activo` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
@@ -20720,137 +20722,137 @@ CREATE TABLE `permissions`  (
 -- ----------------------------
 -- Records of permissions
 -- ----------------------------
-INSERT INTO `permissions` VALUES (1, 'DASHBOARD', 'dashboard', 'web', '1', '2025-10-03 06:20:44', '2025-10-03 06:20:48');
-INSERT INTO `permissions` VALUES (2, 'PROCESOS', 'procesos.admin', 'web', '1', '2025-10-03 07:02:50', '2025-10-03 07:02:52');
-INSERT INTO `permissions` VALUES (3, 'PROCESOS.ADMIN.USERS', 'procesos.admin.users.index', 'web', '1', '2025-10-03 07:05:18', '2025-10-03 07:05:23');
-INSERT INTO `permissions` VALUES (5, 'PROCESOS.ADMIN.USERS', 'procesos.admin.users.create', 'web', '1', '2025-10-03 07:05:21', '2025-10-03 07:05:25');
-INSERT INTO `permissions` VALUES (6, 'PROCESOS.ADMIN.USERS', 'procesos.admin.users.edit', 'web', '1', '2025-10-03 07:05:27', '2025-10-03 07:05:29');
-INSERT INTO `permissions` VALUES (7, 'PROCESOS.ADMIN.USERS', 'procesos.admin.users.destroy', 'web', '1', '2025-10-03 07:05:31', '2025-10-03 07:05:33');
-INSERT INTO `permissions` VALUES (8, 'PROCESOS.ADMIN.ROLES', 'procesos.admin.roles.index', 'web', '1', '2025-10-03 07:31:14', '2025-10-03 07:31:16');
-INSERT INTO `permissions` VALUES (9, 'PROCESOS.ADMIN.ROLES', 'procesos.admin.roles.create', 'web', '1', '2025-10-03 07:31:19', '2025-10-03 07:31:21');
-INSERT INTO `permissions` VALUES (10, 'PROCESOS.ADMIN.ROLES', 'procesos.admin.roles.edit', 'web', '1', '2025-10-03 07:31:23', '2025-10-03 07:31:25');
-INSERT INTO `permissions` VALUES (11, 'PROCESOS.ADMIN.ROLES', 'procesos.admin.roles.destroy', 'web', '1', '2025-10-03 07:31:27', '2025-10-03 07:31:29');
-INSERT INTO `permissions` VALUES (12, 'PROCESOS.ADMIN.PERMISSIONS', 'procesos.admin.permissions.index', 'web', '1', '2025-10-03 10:49:08', '2025-10-03 10:49:11');
-INSERT INTO `permissions` VALUES (13, 'PROCESOS.ADMIN.PERMISSIONS', 'procesos.admin.permissions.create', 'web', '1', '2025-10-03 10:49:14', '2025-10-03 10:49:16');
-INSERT INTO `permissions` VALUES (14, 'PROCESOS.ADMIN.PERMISSIONS', 'procesos.admin.permissions.edit', 'web', '1', '2025-10-03 10:49:18', '2025-10-03 10:49:20');
-INSERT INTO `permissions` VALUES (15, 'PROCESOS.ADMIN.PERMISSIONS', 'procesos.admin.permissions.destroy', 'web', '1', '2025-10-03 10:49:23', '2025-10-03 10:49:25');
-INSERT INTO `permissions` VALUES (16, 'PROCESOS.INFORMATICA', 'procesos.informatica', 'web', '1', '2025-10-06 04:37:06', '2025-10-06 04:37:10');
-INSERT INTO `permissions` VALUES (17, 'PROCESOS.INFORMATICA.FIRMASPC', 'procesos.informatica.firmaspcs.index', 'web', '1', '2025-10-06 04:37:12', '2025-10-06 04:37:14');
-INSERT INTO `permissions` VALUES (18, 'PROCESOS.INFORMATICA.FIRMASPC', 'procesos.informatica.firmaspcs.create', 'web', '1', '2025-10-06 04:37:16', '2025-10-06 04:37:19');
-INSERT INTO `permissions` VALUES (19, 'PROCESOS.INFORMATICA.FIRMASPC', 'procesos.informatica.firmaspcs.edit', 'web', '1', '2025-10-06 04:37:21', '2025-10-06 04:37:23');
-INSERT INTO `permissions` VALUES (20, 'PROCESOS.INFORMATICA.FIRMASPC', 'procesos.informatica.firmaspcs.destroy', 'web', '1', '2025-10-06 04:37:25', '2025-10-06 04:37:27');
-INSERT INTO `permissions` VALUES (21, 'PROCESOS.INFORMATICA.SPIJWEB', 'mpfn.informatica.spijweb.index', 'web', '1', '2025-10-06 04:37:29', '2025-10-06 04:37:32');
-INSERT INTO `permissions` VALUES (22, 'PROCESOS.INFORMATICA.SPIJWEB', 'mpfn.informatica.spijweb.create', 'web', '1', '2025-10-06 04:37:34', '2025-10-06 04:37:36');
-INSERT INTO `permissions` VALUES (23, 'PROCESOS.INFORMATICA.SPIJWEB', 'mpfn.informatica.spijweb.edit', 'web', '1', '2025-10-06 04:37:38', '2025-10-06 04:37:40');
-INSERT INTO `permissions` VALUES (24, 'PROCESOS.INFORMATICA.SPIJWEB', 'mpfn.informatica.spijweb.destroy', 'web', '1', '2025-10-06 04:37:42', '2025-10-06 04:37:44');
-INSERT INTO `permissions` VALUES (25, 'PROCESOS.INFORMATICA.TOKEN', 'procesos.informatica.tokens.index', 'web', '1', '2025-10-06 04:37:46', '2025-10-06 04:37:48');
-INSERT INTO `permissions` VALUES (26, 'PROCESOS.INFORMATICA.TOKEN', 'procesos.informatica.tokens.create', 'web', '1', '2025-10-06 04:37:50', '2025-10-06 04:37:52');
-INSERT INTO `permissions` VALUES (27, 'PROCESOS.INFORMATICA.TOKEN', 'procesos.informatica.tokens.edit', 'web', '1', '2025-10-06 04:37:54', '2025-10-06 04:37:56');
-INSERT INTO `permissions` VALUES (28, 'PROCESOS.INFORMATICA.TOKEN', 'procesos.informatica.tokens.destroy', 'web', '1', '2025-10-06 04:37:59', '2025-10-06 04:38:01');
-INSERT INTO `permissions` VALUES (29, 'PROCESOS.INFORMATICA.IPS', 'mpfn.informatica.ips.index', 'web', '1', '2025-10-06 04:38:03', '2025-10-06 04:38:05');
-INSERT INTO `permissions` VALUES (30, 'PROCESOS.INFORMATICA.IPS', 'mpfn.informatica.ips.create', 'web', '1', '2025-10-06 04:38:07', '2025-10-06 04:38:09');
-INSERT INTO `permissions` VALUES (31, 'PROCESOS.INFORMATICA.IPS', 'mpfn.informatica.ips.edit', 'web', '1', '2025-10-06 04:38:11', '2025-10-06 04:38:14');
-INSERT INTO `permissions` VALUES (32, 'PROCESOS.INFORMATICA.IPS', 'mpfn.informatica.ips.destroy', 'web', '1', '2025-10-06 04:38:16', '2025-10-06 04:38:18');
-INSERT INTO `permissions` VALUES (33, 'PROCESOS.ADMINISTRACION', 'procesos.administracion', 'web', '1', '2025-10-06 04:38:20', '2025-10-06 04:38:22');
-INSERT INTO `permissions` VALUES (34, 'PROCESOS.ADMINISTRACION.RRHH', 'procesos.administracion.rrhh.index', 'web', '1', '2025-10-06 04:38:24', '2025-10-06 04:38:26');
-INSERT INTO `permissions` VALUES (35, 'PROCESOS.ADMINISTRACION.RRHH', 'procesos.administracion.rrhh.create', 'web', '1', '2025-10-06 04:38:28', '2025-10-06 04:38:30');
-INSERT INTO `permissions` VALUES (36, 'PROCESOS.ADMINISTRACION.RRHH', 'procesos.administracion.rrhh.edit', 'web', '1', '2025-10-06 04:38:32', '2025-10-06 04:38:34');
-INSERT INTO `permissions` VALUES (37, 'PROCESOS.ADMINISTRACION.RRHH', 'procesos.administracion.rrhh.destroy', 'web', '1', '2025-10-06 04:38:36', '2025-10-06 04:38:38');
-INSERT INTO `permissions` VALUES (38, 'PROCESOS.ADMINISTRACION.PATRIMONIO', 'procesos.administracion.patrimonio.index', 'web', '1', '2025-10-06 04:38:39', '2025-10-06 04:38:41');
-INSERT INTO `permissions` VALUES (39, 'PROCESOS.ADMINISTRACION.PATRIMONIO', 'procesos.administracion.patrimonio.create', 'web', '1', '2025-10-06 04:38:43', '2025-10-06 04:38:45');
-INSERT INTO `permissions` VALUES (40, 'PROCESOS.ADMINISTRACION.PATRIMONIO', 'procesos.administracion.patrimonio.edit', 'web', '1', '2025-10-06 04:38:47', '2025-10-06 04:38:48');
-INSERT INTO `permissions` VALUES (41, 'PROCESOS.ADMINISTRACION.PATRIMONIO', 'procesos.administracion.patrimonio.destroy', 'web', '1', '2025-10-06 04:38:51', '2025-10-06 04:38:53');
-INSERT INTO `permissions` VALUES (42, 'PROCESOS.INTRANET', 'procesos.intranet', 'web', '1', '2025-10-21 10:26:11', '2025-10-21 10:26:14');
-INSERT INTO `permissions` VALUES (43, 'PROCESOS.INTRANET', 'procesos.intranet.index', 'web', '1', '2025-10-21 10:26:38', '2025-10-21 10:26:40');
-INSERT INTO `permissions` VALUES (44, 'PROCESOS.INTRANET', 'procesos.intranet.create', 'web', '1', '2025-10-21 10:26:55', '2025-10-21 10:26:56');
-INSERT INTO `permissions` VALUES (45, 'PROCESOS.INTRANET', 'procesos.intranet.edit', 'web', '1', '2025-10-21 10:27:10', '2025-10-21 10:27:18');
-INSERT INTO `permissions` VALUES (46, 'PROCESOS.INTRANET', 'procesos.intranet.destroy', 'web', '1', '2025-10-21 10:27:31', '2025-10-21 10:27:33');
-INSERT INTO `permissions` VALUES (47, 'PROCESOS.INTRANET.CONFIGURACION', 'procesos.intranet.configuracion.index', 'web', '1', '2025-10-23 04:15:53', '2025-10-23 04:15:55');
-INSERT INTO `permissions` VALUES (48, 'PROCESOS.INTRANET.CONFIGURACION', 'procesos.intranet.configuracion.create', 'web', '1', '2025-10-23 04:15:57', '2025-10-23 04:16:01');
-INSERT INTO `permissions` VALUES (49, 'PROCESOS.INTRANET.CONFIGURACION', 'procesos.intranet.configuracion.edit', 'web', '1', '2025-10-23 04:15:59', '2025-10-23 04:16:03');
-INSERT INTO `permissions` VALUES (50, 'PROCESOS.INTRANET.CONFIGURACION', 'procesos.intranet.configuracion.destroy', 'web', '1', '2025-10-23 04:16:05', '2025-10-23 04:16:07');
-INSERT INTO `permissions` VALUES (51, 'PROCESOS.INTRANET.ATENCIONES', 'procesos.intranet.atenciones.index', 'web', '1', '2025-10-23 06:39:35', '2025-10-23 06:39:36');
-INSERT INTO `permissions` VALUES (52, 'PROCESOS.INTRANET.ATENCIONES', 'procesos.intranet.atenciones.create', 'web', '1', '2025-10-23 06:39:39', '2025-10-23 06:39:41');
-INSERT INTO `permissions` VALUES (53, 'PROCESOS.INTRANET.ATENCIONES', 'procesos.intranet.atenciones.edit', 'web', '1', '2025-10-23 06:39:43', '2025-10-23 06:39:45');
-INSERT INTO `permissions` VALUES (54, 'PROCESOS.INTRANET.ATENCIONES', 'procesos.intranet.atenciones.destroy', 'web', '1', '2025-10-23 06:39:47', '2025-10-23 06:39:49');
-INSERT INTO `permissions` VALUES (55, 'PROCESOS.INTRANET.INCIDENCIAS', 'procesos.intranet.incidencia_solicitud.index', 'web', '1', '2025-10-23 06:44:36', '2025-10-23 06:44:38');
-INSERT INTO `permissions` VALUES (56, 'PROCESOS.INTRANET.INCIDENCIAS', 'procesos.intranet.incidencia_solicitud.create', 'web', '1', '2025-10-23 06:44:40', '2025-10-23 06:44:42');
-INSERT INTO `permissions` VALUES (57, 'PROCESOS.INTRANET.INCIDENCIAS', 'procesos.intranet.incidencia_solicitud.edit', 'web', '1', '2025-10-23 06:44:44', '2025-10-23 06:44:46');
-INSERT INTO `permissions` VALUES (58, 'PROCESOS.INTRANET.INCIDENCIAS', 'procesos.intranet.incidencia_solicitud.destroy', 'web', '1', '2025-10-23 06:44:49', '2025-10-23 06:44:51');
-INSERT INTO `permissions` VALUES (59, 'PROCESOS.INFORMATICA.FIRMAS', 'procesos.informatica.firmasdigitales.index', 'web', '1', '2025-10-24 06:59:36', '2025-10-24 06:59:38');
-INSERT INTO `permissions` VALUES (60, 'PROCESOS.INFORMATICA.FIRMAS', 'procesos.informatica.firmasdigitales.create', 'web', '1', '2025-10-24 06:59:41', '2025-10-24 06:59:43');
-INSERT INTO `permissions` VALUES (61, 'PROCESOS.INFORMATICA.FIRMAS', 'procesos.informatica.firmasdigitales.edit', 'web', '1', '2025-10-24 06:59:44', '2025-10-24 06:59:46');
-INSERT INTO `permissions` VALUES (62, 'PROCESOS.INFORMATICA.FIRMAS', 'procesos.informatica.firmasdigitales.destroy', 'web', '1', '2025-10-24 06:59:49', '2025-10-24 06:59:50');
-INSERT INTO `permissions` VALUES (63, 'PROCESOS.VOLUNTARIADO', 'mpfn.voluntariado', 'web', '1', '2025-11-19 12:13:00', '2025-11-19 12:13:02');
-INSERT INTO `permissions` VALUES (64, 'PROCESOS.VOLUNTARIADO.ASISTENCIAS', 'mpfn.voluntariado.asistencia.index', 'web', '1', '2025-11-19 12:13:54', '2025-11-19 12:13:56');
-INSERT INTO `permissions` VALUES (65, 'PROCESOS.VOLUNTARIADO.ASISTENCIAS', 'mpfn.voluntariado.asistencia.create', 'web', '1', '2025-11-19 12:13:58', '2025-11-19 12:14:00');
-INSERT INTO `permissions` VALUES (66, 'PROCESOS.VOLUNTARIADO.ASISTENCIAS', 'mpfn.voluntariado.asistencia.edit', 'web', '1', '2025-11-19 12:14:02', '2025-11-19 12:14:03');
-INSERT INTO `permissions` VALUES (67, 'PROCESOS.VOLUNTARIADO.ASISTENCIAS', 'mpfn.voluntariado.asistencia.destroy', 'web', '1', '2025-11-19 12:24:49', '2025-11-19 12:24:51');
-INSERT INTO `permissions` VALUES (68, 'PROCESOS.VOLUNTARIADO', 'mpfn.voluntariado.voluntarios.index', 'web', '1', '2025-11-19 12:24:53', '2025-11-19 12:24:55');
-INSERT INTO `permissions` VALUES (69, 'PROCESOS.VOLUNTARIADO', 'mpfn.voluntariado.voluntarios.create', 'web', '1', '2025-11-19 12:24:57', '2025-11-19 12:24:58');
-INSERT INTO `permissions` VALUES (70, 'PROCESOS.VOLUNTARIADO', 'mpfn.voluntariado.voluntarios.edit', 'web', '1', '2025-11-19 12:25:01', '2025-11-19 12:25:02');
-INSERT INTO `permissions` VALUES (71, 'PROCESOS.VOLUNTARIADO', 'mpfn.voluntariado.voluntarios.destroy', 'web', '1', '2025-11-19 12:29:01', '2025-11-19 12:29:03');
-INSERT INTO `permissions` VALUES (72, 'PROCESOS.ADMINISTRACION.ARCHIVO', 'procesos.administracion.archivo.index', 'web', '1', '2025-12-12 08:27:41', '2025-12-12 08:27:43');
-INSERT INTO `permissions` VALUES (73, 'PROCESOS.ADMINISTRACION.ARCHIVO', 'procesos.administracion.archivo.create', 'web', '1', '2025-12-12 08:29:17', '2025-12-12 08:29:19');
-INSERT INTO `permissions` VALUES (74, 'PROCESOS.ADMINISTRACION.ARCHIVO', 'procesos.administracion.archivo.edit', 'web', '1', '2025-12-12 08:29:21', '2025-12-12 08:29:23');
-INSERT INTO `permissions` VALUES (75, 'PROCESOS.ADMINISTRACION.ARCHIVO', 'procesos.administracion.archivo.destroy', 'web', '1', '2025-12-12 08:29:25', '2025-12-12 08:29:26');
-INSERT INTO `permissions` VALUES (76, NULL, 'mpfn.rrhh', 'web', '1', '2026-03-02 15:39:54', '2026-03-02 15:39:57');
-INSERT INTO `permissions` VALUES (77, NULL, 'mpfn.rrhh.personal.index', 'web', '1', '2026-03-02 15:40:21', '2026-03-02 15:40:23');
-INSERT INTO `permissions` VALUES (78, NULL, 'mpfn.rrhh.personal.create', 'web', '1', '2026-03-02 15:40:45', '2026-03-02 15:40:47');
-INSERT INTO `permissions` VALUES (79, NULL, 'mpfn.rrhh.personal.edit', 'web', '1', '2026-03-02 15:41:01', '2026-03-02 15:41:03');
-INSERT INTO `permissions` VALUES (80, NULL, 'mpfn.rrhh.personal.destroy', 'web', '1', '2026-03-03 09:30:13', '2026-03-03 09:30:15');
-INSERT INTO `permissions` VALUES (81, NULL, 'mpfn.informatica.soporte.index', 'web', '1', '2026-03-09 17:25:27', '2026-03-09 17:25:29');
-INSERT INTO `permissions` VALUES (82, NULL, 'mpfn.informatica.soporte.create', 'web', '1', '2026-03-09 17:25:46', '2026-03-09 17:25:48');
-INSERT INTO `permissions` VALUES (83, NULL, 'mpfn.informatica.soporte.edit', 'web', '1', '2026-03-09 17:26:00', '2026-03-09 17:26:02');
-INSERT INTO `permissions` VALUES (84, NULL, 'mpfn.informatica.soporte.destroy', 'web', '1', '2026-03-09 17:26:17', '2026-03-09 17:26:19');
-INSERT INTO `permissions` VALUES (85, NULL, 'mpfn.informatica', 'web', '1', '2026-03-13 15:17:35', '2026-03-13 15:17:37');
-INSERT INTO `permissions` VALUES (86, NULL, 'mpfn.patrimonio', 'web', '1', '2026-03-13 15:17:52', '2026-03-13 15:17:54');
-INSERT INTO `permissions` VALUES (87, NULL, 'mpfn.intranet', 'web', '1', '2026-03-20 12:06:55', '2026-03-20 12:06:57');
-INSERT INTO `permissions` VALUES (88, NULL, 'mpfn.intranet.expimportantes.index', 'web', '1', '2026-03-20 12:07:00', '2026-03-20 12:07:02');
-INSERT INTO `permissions` VALUES (89, NULL, 'mpfn.intranet.expimportantes.create', 'web', '1', '2026-03-20 12:07:04', '2026-03-20 12:07:06');
-INSERT INTO `permissions` VALUES (90, NULL, 'mpfn.intranet.expimportantes.edit', 'web', '1', '2026-03-20 12:07:08', '2026-03-20 12:07:10');
-INSERT INTO `permissions` VALUES (91, NULL, 'mpfn.intranet.expimportantes.destroy', 'web', '1', '2026-03-20 12:06:51', '2026-03-20 12:06:53');
-INSERT INTO `permissions` VALUES (92, NULL, 'mpfn.rrhh.personalrotacion.index', 'web', '1', '2026-03-24 12:39:26', '2026-03-24 12:39:28');
-INSERT INTO `permissions` VALUES (93, NULL, 'mpfn.rrhh.personalrotacion.create', 'web', '1', '2026-03-24 12:39:46', '2026-03-24 12:39:49');
-INSERT INTO `permissions` VALUES (94, NULL, 'mpfn.rrhh.personalrotacion.edit', 'web', '1', '2026-03-24 12:40:04', '2026-03-24 12:40:06');
-INSERT INTO `permissions` VALUES (95, NULL, 'mpfn.rrhh.personalrotacion.destroy', 'web', '1', '2026-03-24 12:40:31', '2026-03-24 12:40:33');
-INSERT INTO `permissions` VALUES (96, NULL, 'mpfn.contabilidad', 'web', '1', '2026-03-27 12:07:51', '2026-03-27 12:07:53');
-INSERT INTO `permissions` VALUES (97, NULL, 'mpfn.contabilidad.gastosoperativos.index', 'web', '1', '2026-03-27 12:08:20', '2026-03-27 12:08:22');
-INSERT INTO `permissions` VALUES (98, NULL, 'mpfn.contabilidad.gastosoperativos.create', 'web', '1', '2026-03-27 12:08:39', '2026-03-27 12:08:40');
-INSERT INTO `permissions` VALUES (99, NULL, 'mpfn.contabilidad.gastosoperativos.edit', 'web', '1', '2026-03-27 12:08:55', '2026-03-27 12:08:58');
-INSERT INTO `permissions` VALUES (100, NULL, 'mpfn.contabilidad.gastosoperativos.destroy', 'web', '1', '2026-03-27 12:09:12', '2026-03-27 12:09:14');
-INSERT INTO `permissions` VALUES (101, NULL, 'mpfn.patrimonio.bienes.index', 'web', '1', '2026-04-07 10:12:20', '2026-04-07 10:12:22');
-INSERT INTO `permissions` VALUES (102, NULL, 'mpfn.patrimonio.bienes.create', 'web', '1', '2026-04-07 10:12:24', '2026-04-07 10:12:26');
-INSERT INTO `permissions` VALUES (103, NULL, 'mpfn.patrimonio.bienes.edit', 'web', '1', '2026-04-07 10:12:28', '2026-04-07 10:12:30');
-INSERT INTO `permissions` VALUES (104, NULL, 'mpfn.patrimonio.bienes.destroy', 'web', '1', '2026-04-07 10:12:31', '2026-04-07 10:12:34');
-INSERT INTO `permissions` VALUES (105, NULL, 'mpfn.patrimonio.traslado.index', 'web', '1', '2026-04-07 14:47:02', '2026-04-07 14:47:06');
-INSERT INTO `permissions` VALUES (106, NULL, 'mpfn.patrimonio.traslado.create', 'web', '1', '2026-04-07 14:47:08', '2026-04-07 14:47:13');
-INSERT INTO `permissions` VALUES (107, NULL, 'mpfn.patrimonio.traslado.edit', 'web', '1', '2026-04-07 14:47:15', '2026-04-07 14:47:17');
-INSERT INTO `permissions` VALUES (108, NULL, 'mpfn.patrimonio.traslado.destroy', 'web', '1', '2026-04-07 14:47:19', '2026-04-07 14:47:21');
-INSERT INTO `permissions` VALUES (109, NULL, 'mpfn.patrimonio.asignaciones.index', 'web', '1', '2026-04-07 16:59:49', '2026-04-07 16:59:51');
-INSERT INTO `permissions` VALUES (110, NULL, 'mpfn.patrimonio.asignaciones.create', 'web', '1', '2026-04-07 16:59:53', '2026-04-07 16:59:55');
-INSERT INTO `permissions` VALUES (111, NULL, 'mpfn.patrimonio.asignaciones.edit', 'web', '1', '2026-04-07 16:59:58', '2026-04-07 17:00:00');
-INSERT INTO `permissions` VALUES (112, NULL, 'mpfn.patrimonio.asignaciones.destroy', 'web', '1', '2026-04-07 17:00:02', '2026-04-07 17:00:04');
-INSERT INTO `permissions` VALUES (113, NULL, 'mpfn.intranet.atenciones.index', 'web', '1', '2026-04-08 16:09:29', '2026-04-08 16:09:31');
-INSERT INTO `permissions` VALUES (114, NULL, 'mpfn.intranet.atenciones.create', 'web', '1', '2026-04-08 16:09:33', '2026-04-08 16:09:38');
-INSERT INTO `permissions` VALUES (115, NULL, 'mpfn.intranet.atenciones.edit', 'web', '1', '2026-04-08 16:09:40', '2026-04-08 16:09:42');
-INSERT INTO `permissions` VALUES (116, NULL, 'mpfn.intranet.atenciones.destroy', 'web', '1', '2026-04-08 16:09:44', '2026-04-08 16:09:46');
-INSERT INTO `permissions` VALUES (117, NULL, 'mpfn.patrimonio.asignacionessobrantes.index', 'web', '1', '2026-04-21 15:23:02', '2026-04-21 15:23:04');
-INSERT INTO `permissions` VALUES (118, NULL, 'mpfn.patrimonio.asignacionessobrantes.create', 'web', '1', '2026-04-21 15:23:06', '2026-04-21 15:23:08');
-INSERT INTO `permissions` VALUES (119, NULL, 'mpfn.patrimonio.asignacionessobrantes.edit', 'web', '1', '2026-04-21 15:23:10', '2026-04-21 15:23:12');
-INSERT INTO `permissions` VALUES (120, NULL, 'mpfn.patrimonio.asignacionessobrantes.destroy', 'web', '1', '2026-04-21 15:23:15', '2026-04-21 15:23:17');
-INSERT INTO `permissions` VALUES (122, NULL, 'mpfn.intranet.atencionesincidencias.index', 'web', '1', '2026-07-06 13:58:23', '2026-07-06 13:58:28');
-INSERT INTO `permissions` VALUES (123, NULL, 'mpfn.intranet.atencionesincidencias.create', 'web', '1', '2026-07-06 13:58:30', '2026-07-06 13:58:32');
-INSERT INTO `permissions` VALUES (124, NULL, 'mpfn.intranet.atencionesincidencias.edit', 'web', '1', '2026-07-06 13:58:35', '2026-07-06 13:58:38');
-INSERT INTO `permissions` VALUES (125, NULL, 'mpfn.intranet.atencionesincidencias.destroy', 'web', '1', '2026-07-06 13:58:41', '2026-07-06 13:58:44');
-INSERT INTO `permissions` VALUES (126, NULL, 'mpfn.rrhh.personal.legajos.index', 'web', '1', '2026-08-12 14:21:28', '2026-08-12 14:21:31');
-INSERT INTO `permissions` VALUES (127, NULL, 'mpfn.rrhh.personal.legajos.create', 'web', '1', '2026-08-12 14:21:34', '2026-08-12 14:21:36');
-INSERT INTO `permissions` VALUES (128, NULL, 'mpfn.rrhh.personal.legajos.edit', 'web', '1', '2026-08-12 14:21:38', '2026-08-12 14:21:40');
-INSERT INTO `permissions` VALUES (129, NULL, 'mpfn.rrhh.personal.legajos.destroy', 'web', '1', '2026-08-12 14:21:42', '2026-08-12 14:21:44');
-INSERT INTO `permissions` VALUES (130, NULL, 'mpfn.informatica.anexos.index', 'web', '1', '2026-09-10 15:16:11', '2026-09-10 15:16:14');
-INSERT INTO `permissions` VALUES (131, NULL, 'mpfn.informatica.anexos.create', 'web', '1', '2026-09-10 15:16:16', '2026-09-10 15:16:18');
-INSERT INTO `permissions` VALUES (132, NULL, 'mpfn.informatica.anexos.edit', 'web', '1', '2026-09-10 15:16:19', '2026-09-10 15:16:21');
-INSERT INTO `permissions` VALUES (133, NULL, 'mpfn.informatica.anexos.destroy', 'web', '1', '2026-09-10 15:16:23', '2026-09-10 15:16:25');
+INSERT INTO `permissions` VALUES (1, 'DASHBOARD', 'DASHBOARD', 'dashboard', 'web', '1', '2025-10-03 06:20:44', '2025-10-03 06:20:48');
+INSERT INTO `permissions` VALUES (2, 'ADM', 'ADM', 'procesos.admin', 'web', '1', '2025-10-03 07:02:50', '2025-10-03 07:02:52');
+INSERT INTO `permissions` VALUES (3, 'ADM', 'USER', 'procesos.admin.users.index', 'web', '1', '2025-10-03 07:05:18', '2025-10-03 07:05:23');
+INSERT INTO `permissions` VALUES (5, 'ADM', 'USER', 'procesos.admin.users.create', 'web', '1', '2025-10-03 07:05:21', '2025-10-03 07:05:25');
+INSERT INTO `permissions` VALUES (6, 'ADM', 'USER', 'procesos.admin.users.edit', 'web', '1', '2025-10-03 07:05:27', '2025-10-03 07:05:29');
+INSERT INTO `permissions` VALUES (7, 'ADM', 'USER', 'procesos.admin.users.destroy', 'web', '1', '2025-10-03 07:05:31', '2025-10-03 07:05:33');
+INSERT INTO `permissions` VALUES (8, 'ADM', 'ROLES', 'procesos.admin.roles.index', 'web', '1', '2025-10-03 07:31:14', '2025-10-03 07:31:16');
+INSERT INTO `permissions` VALUES (9, 'ADM', 'ROLES', 'procesos.admin.roles.create', 'web', '1', '2025-10-03 07:31:19', '2025-10-03 07:31:21');
+INSERT INTO `permissions` VALUES (10, 'ADM', 'ROLES', 'procesos.admin.roles.edit', 'web', '1', '2025-10-03 07:31:23', '2025-10-03 07:31:25');
+INSERT INTO `permissions` VALUES (11, 'ADM', 'ROLES', 'procesos.admin.roles.destroy', 'web', '1', '2025-10-03 07:31:27', '2025-10-03 07:31:29');
+INSERT INTO `permissions` VALUES (12, 'ADM', 'PERMISOS', 'procesos.admin.permissions.index', 'web', '1', '2025-10-03 10:49:08', '2025-10-03 10:49:11');
+INSERT INTO `permissions` VALUES (13, 'ADM', 'PERMISOS', 'procesos.admin.permissions.create', 'web', '1', '2025-10-03 10:49:14', '2025-10-03 10:49:16');
+INSERT INTO `permissions` VALUES (14, 'ADM', 'PERMISOS', 'procesos.admin.permissions.edit', 'web', '1', '2025-10-03 10:49:18', '2025-10-03 10:49:20');
+INSERT INTO `permissions` VALUES (15, 'ADM', 'PERMISOS', 'procesos.admin.permissions.destroy', 'web', '1', '2025-10-03 10:49:23', '2025-10-03 10:49:25');
+INSERT INTO `permissions` VALUES (16, 'INFORMATICA', 'INFORMATICA', 'procesos.informatica', 'web', '1', '2025-10-06 04:37:06', '2025-10-06 04:37:10');
+INSERT INTO `permissions` VALUES (17, 'INFORMATICA', 'FIRMAS_PC', 'procesos.informatica.firmaspcs.index', 'web', '1', '2025-10-06 04:37:12', '2025-10-06 04:37:14');
+INSERT INTO `permissions` VALUES (18, 'INFORMATICA', 'FIRMAS_PC', 'procesos.informatica.firmaspcs.create', 'web', '1', '2025-10-06 04:37:16', '2025-10-06 04:37:19');
+INSERT INTO `permissions` VALUES (19, 'INFORMATICA', 'FIRMAS_PC', 'procesos.informatica.firmaspcs.edit', 'web', '1', '2025-10-06 04:37:21', '2025-10-06 04:37:23');
+INSERT INTO `permissions` VALUES (20, 'INFORMATICA', 'FIRMAS_PC', 'procesos.informatica.firmaspcs.destroy', 'web', '1', '2025-10-06 04:37:25', '2025-10-06 04:37:27');
+INSERT INTO `permissions` VALUES (21, 'INFORMATICA', 'SPIGWEB', 'mpfn.informatica.spijweb.index', 'web', '1', '2025-10-06 04:37:29', '2025-10-06 04:37:32');
+INSERT INTO `permissions` VALUES (22, 'INFORMATICA', 'SPIGWEB', 'mpfn.informatica.spijweb.create', 'web', '1', '2025-10-06 04:37:34', '2025-10-06 04:37:36');
+INSERT INTO `permissions` VALUES (23, 'INFORMATICA', 'SPIGWEB', 'mpfn.informatica.spijweb.edit', 'web', '1', '2025-10-06 04:37:38', '2025-10-06 04:37:40');
+INSERT INTO `permissions` VALUES (24, 'INFORMATICA', 'SPIGWEB', 'mpfn.informatica.spijweb.destroy', 'web', '1', '2025-10-06 04:37:42', '2025-10-06 04:37:44');
+INSERT INTO `permissions` VALUES (25, 'INFORMATICA', 'TOKEN', 'procesos.informatica.tokens.index', 'web', '1', '2025-10-06 04:37:46', '2025-10-06 04:37:48');
+INSERT INTO `permissions` VALUES (26, 'INFORMATICA', 'TOKEN', 'procesos.informatica.tokens.create', 'web', '1', '2025-10-06 04:37:50', '2025-10-06 04:37:52');
+INSERT INTO `permissions` VALUES (27, 'INFORMATICA', 'TOKEN', 'procesos.informatica.tokens.edit', 'web', '1', '2025-10-06 04:37:54', '2025-10-06 04:37:56');
+INSERT INTO `permissions` VALUES (28, 'INFORMATICA', 'TOKEN', 'procesos.informatica.tokens.destroy', 'web', '1', '2025-10-06 04:37:59', '2025-10-06 04:38:01');
+INSERT INTO `permissions` VALUES (29, 'INFORMATICA', 'IP', 'mpfn.informatica.ips.index', 'web', '1', '2025-10-06 04:38:03', '2025-10-06 04:38:05');
+INSERT INTO `permissions` VALUES (30, 'INFORMATICA', 'IP', 'mpfn.informatica.ips.create', 'web', '1', '2025-10-06 04:38:07', '2025-10-06 04:38:09');
+INSERT INTO `permissions` VALUES (31, 'INFORMATICA', 'IP', 'mpfn.informatica.ips.edit', 'web', '1', '2025-10-06 04:38:11', '2025-10-06 04:38:14');
+INSERT INTO `permissions` VALUES (32, 'INFORMATICA', 'IP', 'mpfn.informatica.ips.destroy', 'web', '1', '2025-10-06 04:38:16', '2025-10-06 04:38:18');
+INSERT INTO `permissions` VALUES (33, 'ADMINISTRACION', 'ADMINISTRACION', 'procesos.administracion', 'web', '1', '2025-10-06 04:38:20', '2025-10-06 04:38:22');
+INSERT INTO `permissions` VALUES (34, 'ADMINISTRACION', 'RRHH', 'procesos.administracion.rrhh.index', 'web', '1', '2025-10-06 04:38:24', '2025-10-06 04:38:26');
+INSERT INTO `permissions` VALUES (35, 'ADMINISTRACION', 'RRHH', 'procesos.administracion.rrhh.create', 'web', '1', '2025-10-06 04:38:28', '2025-10-06 04:38:30');
+INSERT INTO `permissions` VALUES (36, 'ADMINISTRACION', 'RRHH', 'procesos.administracion.rrhh.edit', 'web', '1', '2025-10-06 04:38:32', '2025-10-06 04:38:34');
+INSERT INTO `permissions` VALUES (37, 'ADMINISTRACION', 'RRHH', 'procesos.administracion.rrhh.destroy', 'web', '1', '2025-10-06 04:38:36', '2025-10-06 04:38:38');
+INSERT INTO `permissions` VALUES (38, 'ADMINISTRACION', 'PATRIMONIO', 'procesos.administracion.patrimonio.index', 'web', '1', '2025-10-06 04:38:39', '2025-10-06 04:38:41');
+INSERT INTO `permissions` VALUES (39, 'ADMINISTRACION', 'PATRIMONIO', 'procesos.administracion.patrimonio.create', 'web', '1', '2025-10-06 04:38:43', '2025-10-06 04:38:45');
+INSERT INTO `permissions` VALUES (40, 'ADMINISTRACION', 'PATRIMONIO', 'procesos.administracion.patrimonio.edit', 'web', '1', '2025-10-06 04:38:47', '2025-10-06 04:38:48');
+INSERT INTO `permissions` VALUES (41, 'ADMINISTRACION', 'PATRIMONIO', 'procesos.administracion.patrimonio.destroy', 'web', '1', '2025-10-06 04:38:51', '2025-10-06 04:38:53');
+INSERT INTO `permissions` VALUES (42, 'INTRANET', 'INTRANET', 'procesos.intranet', 'web', '1', '2025-10-21 10:26:11', '2025-10-21 10:26:14');
+INSERT INTO `permissions` VALUES (43, 'INTRANET', 'INTRANET', 'procesos.intranet.index', 'web', '1', '2025-10-21 10:26:38', '2025-10-21 10:26:40');
+INSERT INTO `permissions` VALUES (44, 'INTRANET', 'INTRANET', 'procesos.intranet.create', 'web', '1', '2025-10-21 10:26:55', '2025-10-21 10:26:56');
+INSERT INTO `permissions` VALUES (45, 'INTRANET', 'INTRANET', 'procesos.intranet.edit', 'web', '1', '2025-10-21 10:27:10', '2025-10-21 10:27:18');
+INSERT INTO `permissions` VALUES (46, 'INTRANET', 'INTRANET', 'procesos.intranet.destroy', 'web', '1', '2025-10-21 10:27:31', '2025-10-21 10:27:33');
+INSERT INTO `permissions` VALUES (47, 'INTRANET', 'CONFIGURACION', 'procesos.intranet.configuracion.index', 'web', '1', '2025-10-23 04:15:53', '2025-10-23 04:15:55');
+INSERT INTO `permissions` VALUES (48, 'INTRANET', 'CONFIGURACION', 'procesos.intranet.configuracion.create', 'web', '1', '2025-10-23 04:15:57', '2025-10-23 04:16:01');
+INSERT INTO `permissions` VALUES (49, 'INTRANET', 'CONFIGURACION', 'procesos.intranet.configuracion.edit', 'web', '1', '2025-10-23 04:15:59', '2025-10-23 04:16:03');
+INSERT INTO `permissions` VALUES (50, 'INTRANET', 'CONFIGURACION', 'procesos.intranet.configuracion.destroy', 'web', '1', '2025-10-23 04:16:05', '2025-10-23 04:16:07');
+INSERT INTO `permissions` VALUES (51, 'INTRANET', 'ATENCIONES', 'procesos.intranet.atenciones.index', 'web', '1', '2025-10-23 06:39:35', '2025-10-23 06:39:36');
+INSERT INTO `permissions` VALUES (52, 'INTRANET', 'ATENCIONES', 'procesos.intranet.atenciones.create', 'web', '1', '2025-10-23 06:39:39', '2025-10-23 06:39:41');
+INSERT INTO `permissions` VALUES (53, 'INTRANET', 'ATENCIONES', 'procesos.intranet.atenciones.edit', 'web', '1', '2025-10-23 06:39:43', '2025-10-23 06:39:45');
+INSERT INTO `permissions` VALUES (54, 'INTRANET', 'ATENCIONES', 'procesos.intranet.atenciones.destroy', 'web', '1', '2025-10-23 06:39:47', '2025-10-23 06:39:49');
+INSERT INTO `permissions` VALUES (55, 'INTRANET', 'INCIDENCIAS_SOLICITUDES', 'procesos.intranet.incidencia_solicitud.index', 'web', '1', '2025-10-23 06:44:36', '2025-10-23 06:44:38');
+INSERT INTO `permissions` VALUES (56, 'INTRANET', 'INCIDENCIAS_SOLICITUDES', 'procesos.intranet.incidencia_solicitud.create', 'web', '1', '2025-10-23 06:44:40', '2025-10-23 06:44:42');
+INSERT INTO `permissions` VALUES (57, 'INTRANET', 'INCIDENCIAS_SOLICITUDES', 'procesos.intranet.incidencia_solicitud.edit', 'web', '1', '2025-10-23 06:44:44', '2025-10-23 06:44:46');
+INSERT INTO `permissions` VALUES (58, 'INTRANET', 'INCIDENCIAS_SOLICITUDES', 'procesos.intranet.incidencia_solicitud.destroy', 'web', '1', '2025-10-23 06:44:49', '2025-10-23 06:44:51');
+INSERT INTO `permissions` VALUES (59, 'INFORMATICA', 'FIRMAS_DIGITALES', 'procesos.informatica.firmasdigitales.index', 'web', '1', '2025-10-24 06:59:36', '2025-10-24 06:59:38');
+INSERT INTO `permissions` VALUES (60, 'INFORMATICA', 'FIRMAS_DIGITALES', 'procesos.informatica.firmasdigitales.create', 'web', '1', '2025-10-24 06:59:41', '2025-10-24 06:59:43');
+INSERT INTO `permissions` VALUES (61, 'INFORMATICA', 'FIRMAS_DIGITALES', 'procesos.informatica.firmasdigitales.edit', 'web', '1', '2025-10-24 06:59:44', '2025-10-24 06:59:46');
+INSERT INTO `permissions` VALUES (62, 'INFORMATICA', 'FIRMAS_DIGITALES', 'procesos.informatica.firmasdigitales.destroy', 'web', '1', '2025-10-24 06:59:49', '2025-10-24 06:59:50');
+INSERT INTO `permissions` VALUES (63, 'VOLUNTARIADO', 'VOLUNTARIADO', 'mpfn.voluntariado', 'web', '1', '2025-11-19 12:13:00', '2025-11-19 12:13:02');
+INSERT INTO `permissions` VALUES (64, 'VOLUNTARIADO', 'ASISTENCIAS', 'mpfn.voluntariado.asistencia.index', 'web', '1', '2025-11-19 12:13:54', '2025-11-19 12:13:56');
+INSERT INTO `permissions` VALUES (65, 'VOLUNTARIADO', 'ASISTENCIAS', 'mpfn.voluntariado.asistencia.create', 'web', '1', '2025-11-19 12:13:58', '2025-11-19 12:14:00');
+INSERT INTO `permissions` VALUES (66, 'VOLUNTARIADO', 'ASISTENCIAS', 'mpfn.voluntariado.asistencia.edit', 'web', '1', '2025-11-19 12:14:02', '2025-11-19 12:14:03');
+INSERT INTO `permissions` VALUES (67, 'VOLUNTARIADO', 'ASISTENCIAS', 'mpfn.voluntariado.asistencia.destroy', 'web', '1', '2025-11-19 12:24:49', '2025-11-19 12:24:51');
+INSERT INTO `permissions` VALUES (68, 'VOLUNTARIADO', 'VOLUNTARIOS', 'mpfn.voluntariado.voluntarios.index', 'web', '1', '2025-11-19 12:24:53', '2025-11-19 12:24:55');
+INSERT INTO `permissions` VALUES (69, 'VOLUNTARIADO', 'VOLUNTARIOS', 'mpfn.voluntariado.voluntarios.create', 'web', '1', '2025-11-19 12:24:57', '2025-11-19 12:24:58');
+INSERT INTO `permissions` VALUES (70, 'VOLUNTARIADO', 'VOLUNTARIOS', 'mpfn.voluntariado.voluntarios.edit', 'web', '1', '2025-11-19 12:25:01', '2025-11-19 12:25:02');
+INSERT INTO `permissions` VALUES (71, 'VOLUNTARIADO', 'VOLUNTARIOS', 'mpfn.voluntariado.voluntarios.destroy', 'web', '1', '2025-11-19 12:29:01', '2025-11-19 12:29:03');
+INSERT INTO `permissions` VALUES (72, 'ADMINISTRACION', 'ARCHIVO', 'procesos.administracion.archivo.index', 'web', '1', '2025-12-12 08:27:41', '2025-12-12 08:27:43');
+INSERT INTO `permissions` VALUES (73, 'ADMINISTRACION', 'ARCHIVO', 'procesos.administracion.archivo.create', 'web', '1', '2025-12-12 08:29:17', '2025-12-12 08:29:19');
+INSERT INTO `permissions` VALUES (74, 'ADMINISTRACION', 'ARCHIVO', 'procesos.administracion.archivo.edit', 'web', '1', '2025-12-12 08:29:21', '2025-12-12 08:29:23');
+INSERT INTO `permissions` VALUES (75, 'ADMINISTRACION', 'ARCHIVO', 'procesos.administracion.archivo.destroy', 'web', '1', '2025-12-12 08:29:25', '2025-12-12 08:29:26');
+INSERT INTO `permissions` VALUES (76, 'RRHH', 'RRHH', 'mpfn.rrhh', 'web', '1', '2026-03-02 15:39:54', '2026-03-02 15:39:57');
+INSERT INTO `permissions` VALUES (77, 'RRHH', 'PERSONAL', 'mpfn.rrhh.personal.index', 'web', '1', '2026-03-02 15:40:21', '2026-03-02 15:40:23');
+INSERT INTO `permissions` VALUES (78, 'RRHH', 'PERSONAL', 'mpfn.rrhh.personal.create', 'web', '1', '2026-03-02 15:40:45', '2026-03-02 15:40:47');
+INSERT INTO `permissions` VALUES (79, 'RRHH', 'PERSONAL', 'mpfn.rrhh.personal.edit', 'web', '1', '2026-03-02 15:41:01', '2026-03-02 15:41:03');
+INSERT INTO `permissions` VALUES (80, 'RRHH', 'PERSONAL', 'mpfn.rrhh.personal.destroy', 'web', '1', '2026-03-03 09:30:13', '2026-03-03 09:30:15');
+INSERT INTO `permissions` VALUES (81, 'INFORMATICA', 'SOPORTE', 'mpfn.informatica.soporte.index', 'web', '1', '2026-03-09 17:25:27', '2026-03-09 17:25:29');
+INSERT INTO `permissions` VALUES (82, 'INFORMATICA', 'SOPORTE', 'mpfn.informatica.soporte.create', 'web', '1', '2026-03-09 17:25:46', '2026-03-09 17:25:48');
+INSERT INTO `permissions` VALUES (83, 'INFORMATICA', 'SOPORTE', 'mpfn.informatica.soporte.edit', 'web', '1', '2026-03-09 17:26:00', '2026-03-09 17:26:02');
+INSERT INTO `permissions` VALUES (84, 'INFORMATICA', 'SOPORTE', 'mpfn.informatica.soporte.destroy', 'web', '1', '2026-03-09 17:26:17', '2026-03-09 17:26:19');
+INSERT INTO `permissions` VALUES (85, 'INFORMATICA', 'INFORMATICA', 'mpfn.informatica', 'web', '1', '2026-03-13 15:17:35', '2026-03-13 15:17:37');
+INSERT INTO `permissions` VALUES (86, 'PATRIMONIO', 'PATRIMONIO', 'mpfn.patrimonio', 'web', '1', '2026-03-13 15:17:52', '2026-03-13 15:17:54');
+INSERT INTO `permissions` VALUES (87, 'INTRANET', 'INTRANET', 'mpfn.intranet', 'web', '1', '2026-03-20 12:06:55', '2026-03-20 12:06:57');
+INSERT INTO `permissions` VALUES (88, 'INTRANET', 'EXPEDIENTES_IMPORTANTE', 'mpfn.intranet.expimportantes.index', 'web', '1', '2026-03-20 12:07:00', '2026-03-20 12:07:02');
+INSERT INTO `permissions` VALUES (89, 'INTRANET', 'EXPEDIENTES_IMPORTANTE', 'mpfn.intranet.expimportantes.create', 'web', '1', '2026-03-20 12:07:04', '2026-03-20 12:07:06');
+INSERT INTO `permissions` VALUES (90, 'INTRANET', 'EXPEDIENTES_IMPORTANTE', 'mpfn.intranet.expimportantes.edit', 'web', '1', '2026-03-20 12:07:08', '2026-03-20 12:07:10');
+INSERT INTO `permissions` VALUES (91, 'INTRANET', 'EXPEDIENTES_IMPORTANTE', 'mpfn.intranet.expimportantes.destroy', 'web', '1', '2026-03-20 12:06:51', '2026-03-20 12:06:53');
+INSERT INTO `permissions` VALUES (92, 'RRHH', 'ROTACION_DE_PERSONAL', 'mpfn.rrhh.personalrotacion.index', 'web', '1', '2026-03-24 12:39:26', '2026-03-24 12:39:28');
+INSERT INTO `permissions` VALUES (93, 'RRHH', 'ROTACION_DE_PERSONAL', 'mpfn.rrhh.personalrotacion.create', 'web', '1', '2026-03-24 12:39:46', '2026-03-24 12:39:49');
+INSERT INTO `permissions` VALUES (94, 'RRHH', 'ROTACION_DE_PERSONAL', 'mpfn.rrhh.personalrotacion.edit', 'web', '1', '2026-03-24 12:40:04', '2026-03-24 12:40:06');
+INSERT INTO `permissions` VALUES (95, 'RRHH', 'ROTACION_DE_PERSONAL', 'mpfn.rrhh.personalrotacion.destroy', 'web', '1', '2026-03-24 12:40:31', '2026-03-24 12:40:33');
+INSERT INTO `permissions` VALUES (96, 'CONTABILIDAD', 'CONTABILIDAD', 'mpfn.contabilidad', 'web', '1', '2026-03-27 12:07:51', '2026-03-27 12:07:53');
+INSERT INTO `permissions` VALUES (97, 'CONTABILIDAD', 'VERIFICAR_ENTRAGA_DE_GASTOS_OPERATIVOS', 'mpfn.contabilidad.gastosoperativos.index', 'web', '1', '2026-03-27 12:08:20', '2026-03-27 12:08:22');
+INSERT INTO `permissions` VALUES (98, 'CONTABILIDAD', 'VERIFICAR_ENTRAGA_DE_GASTOS_OPERATIVOS', 'mpfn.contabilidad.gastosoperativos.create', 'web', '1', '2026-03-27 12:08:39', '2026-03-27 12:08:40');
+INSERT INTO `permissions` VALUES (99, 'CONTABILIDAD', 'VERIFICAR_ENTRAGA_DE_GASTOS_OPERATIVOS', 'mpfn.contabilidad.gastosoperativos.edit', 'web', '1', '2026-03-27 12:08:55', '2026-03-27 12:08:58');
+INSERT INTO `permissions` VALUES (100, 'CONTABILIDAD', 'VERIFICAR_ENTRAGA_DE_GASTOS_OPERATIVOS', 'mpfn.contabilidad.gastosoperativos.destroy', 'web', '1', '2026-03-27 12:09:12', '2026-03-27 12:09:14');
+INSERT INTO `permissions` VALUES (101, 'PATRIMONIO', 'BIENES', 'mpfn.patrimonio.bienes.index', 'web', '1', '2026-04-07 10:12:20', '2026-04-07 10:12:22');
+INSERT INTO `permissions` VALUES (102, 'PATRIMONIO', 'BIENES', 'mpfn.patrimonio.bienes.create', 'web', '1', '2026-04-07 10:12:24', '2026-04-07 10:12:26');
+INSERT INTO `permissions` VALUES (103, 'PATRIMONIO', 'BIENES', 'mpfn.patrimonio.bienes.edit', 'web', '1', '2026-04-07 10:12:28', '2026-04-07 10:12:30');
+INSERT INTO `permissions` VALUES (104, 'PATRIMONIO', 'BIENES', 'mpfn.patrimonio.bienes.destroy', 'web', '1', '2026-04-07 10:12:31', '2026-04-07 10:12:34');
+INSERT INTO `permissions` VALUES (105, 'PATRIMONIO', 'TRASLADO', 'mpfn.patrimonio.traslado.index', 'web', '1', '2026-04-07 14:47:02', '2026-04-07 14:47:06');
+INSERT INTO `permissions` VALUES (106, 'PATRIMONIO', 'TRASLADO', 'mpfn.patrimonio.traslado.create', 'web', '1', '2026-04-07 14:47:08', '2026-04-07 14:47:13');
+INSERT INTO `permissions` VALUES (107, 'PATRIMONIO', 'TRASLADO', 'mpfn.patrimonio.traslado.edit', 'web', '1', '2026-04-07 14:47:15', '2026-04-07 14:47:17');
+INSERT INTO `permissions` VALUES (108, 'PATRIMONIO', 'TRASLADO', 'mpfn.patrimonio.traslado.destroy', 'web', '1', '2026-04-07 14:47:19', '2026-04-07 14:47:21');
+INSERT INTO `permissions` VALUES (109, 'PATRIMONIO', 'ASIGNACION', 'mpfn.patrimonio.asignaciones.index', 'web', '1', '2026-04-07 16:59:49', '2026-04-07 16:59:51');
+INSERT INTO `permissions` VALUES (110, 'PATRIMONIO', 'ASIGNACION', 'mpfn.patrimonio.asignaciones.create', 'web', '1', '2026-04-07 16:59:53', '2026-04-07 16:59:55');
+INSERT INTO `permissions` VALUES (111, 'PATRIMONIO', 'ASIGNACION', 'mpfn.patrimonio.asignaciones.edit', 'web', '1', '2026-04-07 16:59:58', '2026-04-07 17:00:00');
+INSERT INTO `permissions` VALUES (112, 'PATRIMONIO', 'ASIGNACION', 'mpfn.patrimonio.asignaciones.destroy', 'web', '1', '2026-04-07 17:00:02', '2026-04-07 17:00:04');
+INSERT INTO `permissions` VALUES (113, 'INTRANET', 'ATENCIONES', 'mpfn.intranet.atenciones.index', 'web', '1', '2026-04-08 16:09:29', '2026-04-08 16:09:31');
+INSERT INTO `permissions` VALUES (114, 'INTRANET', 'ATENCIONES', 'mpfn.intranet.atenciones.create', 'web', '1', '2026-04-08 16:09:33', '2026-04-08 16:09:38');
+INSERT INTO `permissions` VALUES (115, 'INTRANET', 'ATENCIONES', 'mpfn.intranet.atenciones.edit', 'web', '1', '2026-04-08 16:09:40', '2026-04-08 16:09:42');
+INSERT INTO `permissions` VALUES (116, 'INTRANET', 'ATENCIONES', 'mpfn.intranet.atenciones.destroy', 'web', '1', '2026-04-08 16:09:44', '2026-04-08 16:09:46');
+INSERT INTO `permissions` VALUES (117, 'PATRIMONIO', 'ASIGNACION_SOBRANTES', 'mpfn.patrimonio.asignacionessobrantes.index', 'web', '1', '2026-04-21 15:23:02', '2026-04-21 15:23:04');
+INSERT INTO `permissions` VALUES (118, 'PATRIMONIO', 'ASIGNACION_SOBRANTES', 'mpfn.patrimonio.asignacionessobrantes.create', 'web', '1', '2026-04-21 15:23:06', '2026-04-21 15:23:08');
+INSERT INTO `permissions` VALUES (119, 'PATRIMONIO', 'ASIGNACION_SOBRANTES', 'mpfn.patrimonio.asignacionessobrantes.edit', 'web', '1', '2026-04-21 15:23:10', '2026-04-21 15:23:12');
+INSERT INTO `permissions` VALUES (120, 'PATRIMONIO', 'ASIGNACION_SOBRANTES', 'mpfn.patrimonio.asignacionessobrantes.destroy', 'web', '1', '2026-04-21 15:23:15', '2026-04-21 15:23:17');
+INSERT INTO `permissions` VALUES (122, 'INTRANET', 'ATENCION_DE_INCIDENCIAS', 'mpfn.intranet.atencionesincidencias.index', 'web', '1', '2026-07-06 13:58:23', '2026-07-06 13:58:28');
+INSERT INTO `permissions` VALUES (123, 'INTRANET', 'ATENCION_DE_INCIDENCIAS', 'mpfn.intranet.atencionesincidencias.create', 'web', '1', '2026-07-06 13:58:30', '2026-07-06 13:58:32');
+INSERT INTO `permissions` VALUES (124, 'INTRANET', 'ATENCION_DE_INCIDENCIAS', 'mpfn.intranet.atencionesincidencias.edit', 'web', '1', '2026-07-06 13:58:35', '2026-07-06 13:58:38');
+INSERT INTO `permissions` VALUES (125, 'INTRANET', 'ATENCION_DE_INCIDENCIAS', 'mpfn.intranet.atencionesincidencias.destroy', 'web', '1', '2026-07-06 13:58:41', '2026-07-06 13:58:44');
+INSERT INTO `permissions` VALUES (126, 'RRHH', 'LEGAJOS_DE_PERSONAL', 'mpfn.rrhh.personal.legajos.index', 'web', '1', '2026-08-12 14:21:28', '2026-08-12 14:21:31');
+INSERT INTO `permissions` VALUES (127, 'RRHH', 'LEGAJOS_DE_PERSONAL', 'mpfn.rrhh.personal.legajos.create', 'web', '1', '2026-08-12 14:21:34', '2026-08-12 14:21:36');
+INSERT INTO `permissions` VALUES (128, 'RRHH', 'LEGAJOS_DE_PERSONAL', 'mpfn.rrhh.personal.legajos.edit', 'web', '1', '2026-08-12 14:21:38', '2026-08-12 14:21:40');
+INSERT INTO `permissions` VALUES (129, 'RRHH', 'LEGAJOS_DE_PERSONAL', 'mpfn.rrhh.personal.legajos.destroy', 'web', '1', '2026-08-12 14:21:42', '2026-08-12 14:21:44');
+INSERT INTO `permissions` VALUES (130, 'INFORMATICA', 'ANEXOS_TELEFONICOS', 'mpfn.informatica.anexos.index', 'web', '1', '2026-09-10 15:16:11', '2026-09-10 15:16:14');
+INSERT INTO `permissions` VALUES (131, 'INFORMATICA', 'ANEXOS_TELEFONICOS', 'mpfn.informatica.anexos.create', 'web', '1', '2026-09-10 15:16:16', '2026-09-10 15:16:18');
+INSERT INTO `permissions` VALUES (132, 'INFORMATICA', 'ANEXOS_TELEFONICOS', 'mpfn.informatica.anexos.edit', 'web', '1', '2026-09-10 15:16:19', '2026-09-10 15:16:21');
+INSERT INTO `permissions` VALUES (133, 'INFORMATICA', 'ANEXOS_TELEFONICOS', 'mpfn.informatica.anexos.destroy', 'web', '1', '2026-09-10 15:16:23', '2026-09-10 15:16:25');
 
 -- ----------------------------
 -- Table structure for personales
@@ -20889,7 +20891,7 @@ CREATE TABLE `personales`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 773 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 773 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of personales
@@ -21736,7 +21738,7 @@ CREATE TABLE `personales_atenciones`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6134 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6134 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of personales_atenciones
@@ -27877,7 +27879,7 @@ CREATE TABLE `personales_atenciones_incidencias_solicitudes`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 164 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 164 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of personales_atenciones_incidencias_solicitudes
@@ -28062,7 +28064,7 @@ CREATE TABLE `personales_atenciones_servicios`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 42 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 42 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of personales_atenciones_servicios
@@ -28120,7 +28122,7 @@ CREATE TABLE `personales_cargos`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of personales_cargos
@@ -28170,7 +28172,7 @@ CREATE TABLE `personales_contrato`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of personales_contrato
@@ -28191,7 +28193,7 @@ CREATE TABLE `personales_dependencias`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 123 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 123 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of personales_dependencias
@@ -28330,7 +28332,7 @@ CREATE TABLE `personales_despachos`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of personales_despachos
@@ -28387,7 +28389,7 @@ CREATE TABLE `personales_historiales_ubicacione`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 30 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 30 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of personales_historiales_ubicacione
@@ -28468,7 +28470,7 @@ CREATE TABLE `personales_legajos`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 128 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 128 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of personales_legajos
@@ -28628,7 +28630,7 @@ CREATE TABLE `personales_rotaciones`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 160 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 160 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of personales_rotaciones
@@ -28812,7 +28814,7 @@ CREATE TABLE `personales_sedes`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of personales_sedes
@@ -28865,7 +28867,7 @@ CREATE TABLE `personas`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`, `dni`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 681 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 681 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of personas
@@ -29948,20 +29950,7 @@ CREATE TABLE `sessions`  (
 -- ----------------------------
 -- Records of sessions
 -- ----------------------------
-INSERT INTO `sessions` VALUES ('8kWpR1Vhh2jE0ccYAGE0SX7C9AH6BrUGx1Fq77le', NULL, '10.13.120.192', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiZkx1bURvSWFDNmhqRWlNUlNBeDBJUlJlbUY5bVBvbUdieTR4WDBkYSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MTk6Imh0dHA6Ly8xMC4xMy4xMDAuMTUiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1771421209);
-INSERT INTO `sessions` VALUES ('CyiUwCd8rgwjz4ekInPyCougEnN7BxLdlAKkDVeG', NULL, '10.13.100.20', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 OPR/127.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoicTIwRENjQThtUTJIN0hqQWlPVXFWUHo2VkdxbXh6VEdMdnYzU01haCI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czoyNDoiaHR0cDovLzEwLjEzLjEwMC4xNS9ycmhoIjt9czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjU6Imh0dHA6Ly8xMC4xMy4xMDAuMTUvbG9naW4iO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1771515772);
-INSERT INTO `sessions` VALUES ('d2oULIK3rhdJWW9qVmVm3AN6Ul1WrDhPeJjd489V', NULL, '10.13.122.189', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiYkRuTkZVWWR4RjJPWk85MnVLeWo5TlRHVFRteEhDa3JEdDhoU2dBeSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MTk6Imh0dHA6Ly8xMC4xMy4xMDAuMTUiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1772200147);
-INSERT INTO `sessions` VALUES ('dUc7E69ivaIr66wEE6ASjrt1ZX92GAp52r32iBtI', NULL, '10.13.122.82', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiSmFseDZWNGJSTGtvM0lub2xMUjNwSnhZTFhKRGl0bVBMak9lbkxwdCI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czozMjoiaHR0cDovLzEwLjEzLjEwMC4xNS92b2x1bnRhcmlhZG8iO31zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czoyNToiaHR0cDovLzEwLjEzLjEwMC4xNS9sb2dpbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1772481685);
-INSERT INTO `sessions` VALUES ('ED7kWtohRIsbwiyPUhIpHfb4oQMvelXZX7rWS6fo', 2, '10.13.100.20', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 OPR/127.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiSlZxV291aFQ1NTJnQlY1bHF5NDVZVFdSSUU2NWFTY3d2ckMxWGplRSI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjI0OiJodHRwOi8vMTAuMTMuMTAwLjE1L3JyaGgiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToyO30=', 1772483409);
-INSERT INTO `sessions` VALUES ('kGpQjxkQIO0El2ADv5JmqYgY7FkRkkvTGCXDFtEV', 2, '10.13.100.20', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 OPR/127.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoidzhWQ2xnenNEd0k5ZW1NelR1NU8wU0xERVhlZ2RwZ3FZSTlTWlE4YyI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjIzOiJodHRwOi8vMTAuMTMuMTAwLjE1L2lwcyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjI7fQ==', 1772472381);
-INSERT INTO `sessions` VALUES ('NyQug3ZdyknesDKkFe3LSFMNPXhgy2EqSBHTMtOU', 2, '10.13.100.20', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 OPR/127.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiYkN2YThrYXhWYk9qMnl2RUpscDhKY1JmR2ZZWlhHZWI2MlVzZWZkZSI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjMyOiJodHRwOi8vMTAuMTMuMTAwLjE1L3ZvbHVudGFyaWFkbyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjI7fQ==', 1771334442);
-INSERT INTO `sessions` VALUES ('pTKX1X8DX33RTQgLIy5nlzXfrqToIti10usl0RoG', 2, '10.13.100.20', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 OPR/127.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiUVRFOGZTSHhGcEhJSlFzdTV5cUpjSXhRVW1CQXNFS3llM1BlcHhCNCI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjI0OiJodHRwOi8vMTAuMTMuMTAwLjE1L3JyaGgiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToyO30=', 1771251106);
-INSERT INTO `sessions` VALUES ('rZ9wz0DS9nQDAt0aewOWyLg5OWh6ikucD0nz8aS4', NULL, '10.13.100.20', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 OPR/127.0.0.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoieWxiSFpydHNzR2hWOTVzaWtkM0RPTWFiRHRWTWdGVWk1dDJBVEVZYyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjU6Imh0dHA6Ly8xMC4xMy4xMDAuMTUvbG9naW4iO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1771592079);
-INSERT INTO `sessions` VALUES ('vfihiPBLJDB12iTvrjYSjPdjimDM7sNbmwQAbeGN', NULL, '10.13.100.128', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiMWRQQnp3eGpIekd5YlB1SXNqb0FPUUlac2wxNzBwRFVGbkNVOEh2QyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MTk6Imh0dHA6Ly8xMC4xMy4xMDAuMTUiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1771433661);
-INSERT INTO `sessions` VALUES ('VVjvcbn094S3HhoZLbxuSl7X9o8jejnFQ0GDXISh', 2, '10.13.100.20', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 OPR/127.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiWkFLWE1CcklLWFFwTkxmNjM4Y05zS2wzeGJacWdqSmNzWWE3V1FyQiI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjI0OiJodHRwOi8vMTAuMTMuMTAwLjE1L3JyaGgiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToyO30=', 1771420182);
-INSERT INTO `sessions` VALUES ('wmCbkt97T3GkyJxxnv7VdQ1lhwpOSxadB7cElHWP', 19, '10.13.110.68', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiYjZ4U1JUM09yNVhFdVU2OGJqNTlsU1d5NFJidkpQRlR1a293dlRJUSI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjMyOiJodHRwOi8vMTAuMTMuMTAwLjE1L3ZvbHVudGFyaWFkbyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE5O30=', 1772473027);
-INSERT INTO `sessions` VALUES ('Xi65Fa83EPn6vMiRN3Y2fZT7xYgqg9b6ZImj5xA9', 2, '10.13.100.20', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 OPR/127.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiSEU1NUFGN0ZYU0p4QkJ1T3ptQlEzVENwNlR1VGFXWGhJamFteVhJYyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjQ6Imh0dHA6Ly8xMC4xMy4xMDAuMTUvcnJoaCI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjI7fQ==', 1771864895);
-INSERT INTO `sessions` VALUES ('YnRk4g6M36fTKHoX0VAuIdWnYAQYOyXEXoOjCZS2', 2, '10.13.100.20', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 OPR/127.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiMHp2QlF0VjF0YXlyRk4wR2E4T01uMklteFhuQ1dyM3JpcmZSYjN5ZiI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjI1OiJodHRwOi8vMTAuMTMuMTAwLjE1L3VzZXJzIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6Mjt9', 1771881096);
+INSERT INTO `sessions` VALUES ('GFR3sQz2sRt7GeHcsQ9X2Vi3X9Y5UAf86QdsLHNn', 2, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36 OPR/136.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiRllUNzBjU09QWDZZY2ROa1luTXc2RUxPZ21JeU9WRmY5Zk1iQXE3bCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDM6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9kaXJlY3RvcmlvLXRlbGVmb25pY28iO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToyO30=', 1790978256);
 
 -- ----------------------------
 -- Table structure for users
@@ -29983,7 +29972,7 @@ CREATE TABLE `users`  (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`, `dni`) USING BTREE,
   UNIQUE INDEX `users_email_unique`(`email` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 66 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 66 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of users
@@ -30068,7 +30057,7 @@ CREATE TABLE `voluntariados`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2572 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2572 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of voluntariados
@@ -32673,7 +32662,7 @@ CREATE TABLE `voluntariados_marcaciones`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1243 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1243 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of voluntariados_marcaciones
