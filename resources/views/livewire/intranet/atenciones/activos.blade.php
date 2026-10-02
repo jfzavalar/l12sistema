@@ -198,25 +198,25 @@
             </div>
 
             <div class="table-responsive-xl">
-                    <div class="row g-3">                      
-                        <div class="col-lg-1 col-sm-12">
-                            <div class="input-group">
-                                <button type="button" class="btn btn-dark btn-sm" wire:click="reportesFiltros">
-                                    <i class="fa-solid fa-filter"></i> Filtrar por:
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-11 col-sm-12">
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
-                                <input type="text" name="txtsearchpersonalatenciones2" id="txtsearchpersonalatenciones2" class="form-control form-control-sm me-1" placeholder="Buscar por DNI o Datos del Personal" wire:model.live="search">
-                                <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3 me-1" wire:click="nuevo">
-                                    <i class="fa-solid fa-file"></i> Nuevo
-                                </button>
-                            </div>
+                <div class="row g-3">                      
+                    <div class="col-lg-1 col-sm-12">
+                        <div class="input-group">
+                            <button type="button" class="btn btn-dark btn-sm" wire:click="reportesFiltros">
+                                <i class="fa-solid fa-filter"></i> Filtrar por:
+                            </button>
                         </div>
                     </div>
+
+                    <div class="col-lg-11 col-sm-12">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
+                            <input type="text" name="txtsearchpersonalatenciones2" id="txtsearchpersonalatenciones2" class="form-control form-control-sm me-1" placeholder="Buscar por DNI o Datos del Personal" wire:model.live="search">
+                            <button type="button" id="btnnuevo" class="btn btn-primary btn-sm rounded-3 me-1" wire:click="nuevo">
+                                <i class="fa-solid fa-file"></i> Nuevo
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <table class="table table-striped table-hover table-sm table-xsmall">
                     <thead class="table-primary text-center align-middle">
                         <tr>

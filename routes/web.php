@@ -19,6 +19,7 @@ use App\Http\Controllers\Intranet\AtencionesController;
 use App\Http\Controllers\Intranet\AtencionesincidenciasController;
 use App\Http\Controllers\Intranet\ConfiguracionController;
 use App\Http\Controllers\Intranet\ExpimportantesController;
+use App\Http\Controllers\Paginas\DirectoriotelefonicoController;
 use App\Http\Controllers\Paginas\FormatosController;
 use App\Http\Controllers\Paginas\InformaticaAtencionesController;
 use App\Http\Controllers\Patrimonio\BienesasignacionController;
@@ -173,6 +174,8 @@ Route::middleware('auth','can:procesos.intranet.index')->group(function () {
 Route::resource('formatos-anexos',FormatosController::class)->names('paginas.formatos-anexos');
 
 Route::resource('informatica-atenciones',InformaticaAtencionesController::class)->names('paginas.informatica-atenciones');
+
+Route::resource('directorio-telefonico',DirectoriotelefonicoController::class)->names('paginas.directorio-telefonico');
 
 
 

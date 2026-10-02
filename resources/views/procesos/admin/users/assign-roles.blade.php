@@ -22,9 +22,10 @@
         @csrf
 
         <div class="mb-3">
-            @foreach($roles->chunk(2) as $chunk)
+            {{-- @foreach($roles->chunk(2) as $chunk) --}}
+            @foreach($roles as $role)
                 <div class="row">
-                    @foreach($chunk as $role)
+                    {{-- @foreach($chunk as $role) --}}
                         <div class="col-md-6">
                             <div class="form-check">
                                 <input type="checkbox" name="roles[]" value="{{ $role->name }}"
@@ -33,7 +34,7 @@
                                 <label class="form-check-label">{{ $role->name }}</label>
                             </div>
                         </div>
-                    @endforeach
+                    {{-- @endforeach --}}
                 </div>
             @endforeach
         </div>

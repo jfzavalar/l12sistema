@@ -163,8 +163,8 @@
                 </a>
               </div>
 
-              {{-- <div class="col-lg-4 col-md-6 mb-4">
-                <a href="#" class="text-decoration-none">
+              <div class="col-lg-4 col-md-6 mb-4">
+                <a href="{{ route('paginas.directorio-telefonico.index') }}" class="text-decoration-none">
                     <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-4 card-hover transition bg-primary-subtle">                     
                       <div class="d-flex justify-content-center align-items-center mb-3">
                           <div class="bg-primary bg-opacity-10 p-3 rounded-circle d-inline-flex">
@@ -177,7 +177,7 @@
                       </div>
                     </div>
                 </a>
-              </div> --}}
+              </div>
 
               <div class="col-lg-4 col-md-6 mb-4">
                 <a href="{{ route('paginas.formatos-anexos.index') }}" class="text-decoration-none">
