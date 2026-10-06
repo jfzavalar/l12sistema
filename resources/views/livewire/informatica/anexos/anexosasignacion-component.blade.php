@@ -212,7 +212,7 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            {{-- <td colspan="8">{{ $lista_activos->links() }}</td> --}}
+                            <td colspan="12">{{ $lista_activos->links() }}</td>
                         </tr>
                     </tfoot>
                 </table>

@@ -6,23 +6,23 @@
     <h3 class="text-muted fw-bold mb-1 text-center">
         CENTRAL DF JUNIN: 064-602987
     </h3>
-    <p></p>
+    <hr>
     <div class="table-responsive-xl">
         <div class="row mb-3">                      
-            <div class="col-xl-3">
+            <div class="col-xl-2">
                 <label for="txtsearch" class="fw-bold fs-6">BUSCAR POR PERSONAL</label>
                 <div class="input-group">
                     <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
-                    <input type="text" name="txtsearch" id="txtsearch" class="form-control" placeholder="Buscar por Datos del Personal" wire:model.live="search">
+                    <input type="text" name="txtsearch" id="txtsearch" class="form-control is-valid" placeholder="Apellidos y nombre" wire:model.live="search">
                 </div>
             </div>
             <div class="col-xl-2">
                 <label for="txtsearch3" class="fw-bold fs-6">ANEXO</label>
-                <input type="text" name="txtsearch3" id="txtsearch3" class="form-control" placeholder="Buscar por número" wire:model.live="searchanexo">
+                <input type="text" name="txtsearch3" id="txtsearch3" class="form-control is-valid" placeholder="Número de anexo" wire:model.live="searchanexo">
             </div>
             <div class="col-xl-2">
                 <label for="cmbsearch1" class="fw-bold fs-6">SEDE</label>
-                <select name="cmbsearch1" id="cmbsearch1" class="form-select" wire:model.live="searchsede">
+                <select name="cmbsearch1" id="cmbsearch1" class="form-select is-valid" wire:model.live="searchsede">
                     <option value="">Seleccionar...</option>
                     @foreach ($lista_sedes as $sede)
                         <option value="{{ $sede->id }}">{{ $sede->nombre }}</option>
@@ -31,7 +31,7 @@
             </div>
             <div class="col-xl-5">
                 <label for="cmbsearch2" class="fw-bold fs-6">DEPENDENCIA</label>
-                <select name="cmbsearch2" id="cmbsearch2" class="form-select" wire:model.live="searchdependencia">
+                <select name="cmbsearch2" id="cmbsearch2" class="form-select is-valid" wire:model.live="searchdependencia">
                     <option value="">Seleccionar...</option>
                     @foreach ($lista_dependencias as $dependencia)
                         <option value="{{ $dependencia->id }}">{{ $dependencia->nombre }}</option>
@@ -42,6 +42,17 @@
                 <label for="txtsearch2" class="fw-bold fs-6">DEPENDENCIA</label>
                 <input type="text" name="txtsearch2" id="txtsearch2" class="form-control" placeholder="Buscar por Dependencia" wire:model.live="searchdependencia">
             </div> --}}
+            <div class="col-xl-1">
+                <label for="reportes" class="fw-bold fs-6 d-block">REPORTES</label>
+                <div class="btn-group" role="group" aria-label="Reportes">
+                    <button type="button" class="btn btn-naranja">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </button>
+                    <button type="button" class="btn btn-success">
+                        <i class="fa-solid fa-file-excel"></i>
+                    </button>
+                </div>
+            </div>
         </div>
 
         <table class="table table-hover table-xsmall">
@@ -73,12 +84,14 @@
                             <i class="fa-solid fa-phone-volume fs-6"></i> <small class="text-muted fs-6 fw-bold">{{ $loop->iteration }}</small>
                         </th>
                         <th>
-                            {{ $item1->datos }}
+                            <small class="text-muted fs-6 fw-bold">{{ $item1->datos }}</small>
                             <br>
-                            <small class="text-muted fs-6 fw-bold">{{ $item1->cargo }}</small>
+                            {{ $item1->cargo }}
                         </th>
                         <td>
-                            <b>SEDE:</b> {{ $item1->sededestino }} <br>
+                            {{-- <b>SEDE:</b> {{ $item1->sededestino }} <br> --}}
+                            <small class="text-muted fs-6 fw-bold">SEDE: {{ $item1->sededestino }}</small>
+                            <br>
                             <b>DEPENDENCIA:</b> {{ $item1->dependenciadestino }} <br>
                             <b>DESPACHO:</b> {{ $item1->despachodestino }}
                         </td>

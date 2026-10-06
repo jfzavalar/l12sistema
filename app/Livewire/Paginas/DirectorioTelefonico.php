@@ -37,6 +37,7 @@ class DirectorioTelefonico extends Component
     public function render()
     {
         $lista_activos = InformaticasBienesAnexosAsignaciones::where('activo',1)
+            ->where('custodia','NO')
             // BUSCADOR
             ->when($this->search, function ($query) {
 
