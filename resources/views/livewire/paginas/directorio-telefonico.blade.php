@@ -48,11 +48,19 @@
             <thead class="table-primary text-center align-middle">
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">DNI - PERSONAL</th>
-                    <th scope="col">DEPENDENCIA</th>
-                    <th scope="col">PISO - OFICINA</th>
+                    <th scope="col">
+                        <i class="fa-solid fa-user"></i> DNI - PERSONAL
+                    </th>
+                    <th scope="col">
+                        <i class="fa-solid fa-building"></i> DEPENDENCIA
+                    </th>
+                    <th scope="col">
+                        <i class="fa-solid fa-person-shelter"></i> PISO - OFICINA
+                    </th>
                     {{-- <th scope="col">CARGO</th> --}}
-                    <th scope="col">ANEXO</th>
+                    <th scope="col">
+                        <i class="fa-solid fa-phone-volume"></i> ANEXO
+                    </th>
                     <th scope="col" colspan="3" class="table-dark">
                         <i class="fa-solid fa-gears"></i>
                     </th>
@@ -62,7 +70,7 @@
                 @forelse ($lista_activos as $item1)
                     <tr class="shadow-sm border-0 border-start border-4 border-secondary rounded-start">
                         <th>
-                            <i class="fa-solid fa-phone-volume text-success"></i> {{ $loop->iteration }}
+                            <i class="fa-solid fa-phone-volume fs-6"></i> <small class="text-muted fs-6 fw-bold">{{ $loop->iteration }}</small>
                         </th>
                         <th>
                             {{ $item1->datos }}
@@ -77,7 +85,7 @@
                         <th>
                             PISO: {{ $item1->piso }}
                             <br>
-                            OFICINA: {{ $item1->oficina }}
+                            <span class="text-primary">OFICINA: {{ $item1->oficina }}</span>
                             <br>
                             {{ $item1->observacion }}
                         </th>
