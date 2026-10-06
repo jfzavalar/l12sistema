@@ -3,6 +3,8 @@
 namespace App\Livewire\Paginas;
 
 use App\Models\InformaticasBienesAnexosAsignaciones;
+use App\Models\Personales_dependencia;
+use App\Models\Personales_sede;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -11,8 +13,14 @@ class DirectorioTelefonico extends Component
     use WithPagination;
     protected $paginationTheme = "bootstrap";
 
+    // VARIABLES DE FORMULARIO
+
+    public $codsededestino = '',
+            $coddependenciadestino = '';
+
     // VARIABLES INPUTS DE BUSQUEDA
     public $search = '',
+            $searchsede = '',
             $searchdependencia = '',
             $searchanexo = '';
 
@@ -41,19 +49,38 @@ class DirectorioTelefonico extends Component
 
             })
 
+            // BUSCADOR POR SEDE
+            ->when($this->searchsede, function ($query) {
+                $searchsede = trim($this->searchsede);
+
+                $query->where(function ($q) use ($searchsede) {
+                    $q->where('codsededestino', $searchsede);
+                });
+            })
+
             // BUSCADOR POR DEPENDENCIA
             ->when($this->searchdependencia, function ($query) {
                 $searchdependencia = trim($this->searchdependencia);
 
-                // Dividir en palabras clave
-                $keywords = explode(' ', $searchdependencia);
-
-                $query->where(function ($q) use ($keywords) {
-                    foreach ($keywords as $word) {
-                        $q->where('dependenciadestino', 'like', '%' . $word . '%');
-                    }
+                $query->where(function ($q) use ($searchdependencia) {
+                    $q->where('coddependenciadestino', $searchdependencia);
                 });
             })
+
+            
+
+            // BUSCADOR POR DEPENDENCIA
+            // ->when($this->searchdependencia, function ($query) {
+            //     $searchdependencia = trim($this->searchdependencia);
+
+            //     $keywords = explode(' ', $searchdependencia);
+
+            //     $query->where(function ($q) use ($keywords) {
+            //         foreach ($keywords as $word) {
+            //             $q->where('dependenciadestino', 'like', '%' . $word . '%');
+            //         }
+            //     });
+            // })
 
             // BUSCADOR POR ANEXO
             ->when($this->searchanexo, function ($query) {
@@ -68,7 +95,22 @@ class DirectorioTelefonico extends Component
 
             ->paginate();
 
+        $lista_sedes = Personales_sede::select('id','nombre','nombred')
+            ->where('activo','1')
+            // ->where('nombre','like','%' . $this->searchsedes . '%')
+            ->distinct()
+            ->orderBy('nombre')
+            ->get();
+
+        $lista_dependencias = Personales_dependencia::select('id','nombre')
+            ->where('activo','1')
+            ->where('sede_id',$this->searchsede)
+            // ->where('nombre','like','%' . $this->searchdependencias . '%')
+            ->distinct()
+            ->orderBy('nombre')
+            ->get();
+
         return view('livewire.paginas.directorio-telefonico',
-                compact('lista_activos'));
+                compact('lista_activos','lista_sedes','lista_dependencias'));
     }
 }

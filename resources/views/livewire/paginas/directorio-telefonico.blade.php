@@ -16,14 +16,32 @@
                     <input type="text" name="txtsearch" id="txtsearch" class="form-control" placeholder="Buscar por Datos del Personal" wire:model.live="search">
                 </div>
             </div>
-            <div class="col-xl-7">
-                <label for="txtsearch2" class="fw-bold fs-6">DEPENDENCIA</label>
-                <input type="text" name="txtsearch2" id="txtsearch2" class="form-control" placeholder="Buscar por Dependencia" wire:model.live="searchdependencia">
-            </div>
             <div class="col-xl-2">
                 <label for="txtsearch3" class="fw-bold fs-6">ANEXO</label>
                 <input type="text" name="txtsearch3" id="txtsearch3" class="form-control" placeholder="Buscar por número" wire:model.live="searchanexo">
             </div>
+            <div class="col-xl-2">
+                <label for="cmbsearch1" class="fw-bold fs-6">SEDE</label>
+                <select name="cmbsearch1" id="cmbsearch1" class="form-select" wire:model.live="searchsede">
+                    <option value="">Seleccionar...</option>
+                    @foreach ($lista_sedes as $sede)
+                        <option value="{{ $sede->id }}">{{ $sede->nombre }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-xl-5">
+                <label for="cmbsearch2" class="fw-bold fs-6">DEPENDENCIA</label>
+                <select name="cmbsearch2" id="cmbsearch2" class="form-select" wire:model.live="searchdependencia">
+                    <option value="">Seleccionar...</option>
+                    @foreach ($lista_dependencias as $dependencia)
+                        <option value="{{ $dependencia->id }}">{{ $dependencia->nombre }}</option>
+                    @endforeach
+                </select>
+            </div>
+            {{-- <div class="col-xl-7">
+                <label for="txtsearch2" class="fw-bold fs-6">DEPENDENCIA</label>
+                <input type="text" name="txtsearch2" id="txtsearch2" class="form-control" placeholder="Buscar por Dependencia" wire:model.live="searchdependencia">
+            </div> --}}
         </div>
 
         <table class="table table-hover table-xsmall">
@@ -32,7 +50,8 @@
                     <th scope="col">#</th>
                     <th scope="col">DNI - PERSONAL</th>
                     <th scope="col">DEPENDENCIA</th>
-                    <th scope="col">CARGO</th>
+                    <th scope="col">PISO - OFICINA</th>
+                    {{-- <th scope="col">CARGO</th> --}}
                     <th scope="col">ANEXO</th>
                     <th scope="col" colspan="3" class="table-dark">
                         <i class="fa-solid fa-gears"></i>
@@ -47,17 +66,24 @@
                         </th>
                         <th>
                             {{ $item1->datos }}
-                            {{-- <br>
-                            <small class="text-muted fs-6 fw-bold">{{ $item1->dni }}</small> --}}
+                            <br>
+                            <small class="text-muted fs-6 fw-bold">{{ $item1->cargo }}</small>
                         </th>
                         <td>
                             <b>SEDE:</b> {{ $item1->sededestino }} <br>
                             <b>DEPENDENCIA:</b> {{ $item1->dependenciadestino }} <br>
                             <b>DESPACHO:</b> {{ $item1->despachodestino }}
                         </td>
-                        <td>{{ $item1->cargo }}</td>
-                        <td>
-                            <span class="badge bg-light text-primary border fs-6">
+                        <th>
+                            PISO: {{ $item1->piso }}
+                            <br>
+                            OFICINA: {{ $item1->oficina }}
+                            <br>
+                            {{ $item1->observacion }}
+                        </th>
+                        {{-- <td>{{ $item1->cargo }}</td> --}}
+                        <td class="text-center">
+                            <span class="badge bg-success-subtle text-success border fs-6">
                                 {{ $item1->anexo }}
                             </span>
                         </td>
