@@ -428,10 +428,10 @@ class AnexosasignacionComponent extends Component
             ->get();
 
         $lista_anexos = InformaticasBienesAnexos::where('activo','1')
-            ->where('asignado','0')
+            // ->where('asignado','0')
             ->where('anexo','like','%' . $this->searchanexos . '%')
             ->orderBy('anexo')
-            ->paginate(5,['*'], 'anexosPage');
+            ->paginate(10,['*'], 'anexosPage');
 
         return view('livewire.informatica.anexos.anexosasignacion-component',
                     compact('lista_activos','lista_historial','estadisticas',
@@ -587,6 +587,8 @@ class AnexosasignacionComponent extends Component
 
     public function guardar()
     {
+        $this->validate();
+        
         try
         {
             $registro = null;
@@ -650,7 +652,7 @@ class AnexosasignacionComponent extends Component
                     ]
                 );
 
-                // ACTUALIZAR EL REGISTRO ANTERIOR EN CASO SEA UNA ASIGANCION, DEVOLUCION O CUSTODIA
+                // ACTUALIZAR EL REGISTRO ANTERIOR EN CASO SEA UNA ASIGNACION, DEVOLUCION O CUSTODIA
                 if (!empty($this->anexoasignado_id)){
                     $iInformaticaBienesAnexoAsignado = InformaticasBienesAnexosAsignaciones::findOrFail($this->anexoasignado_id);
 
@@ -725,15 +727,22 @@ class AnexosasignacionComponent extends Component
                 ]);
 
                 // ACTUALIZAMOS ACTIVO DE LA TABLA INFORMATICASBIENESANEXOS
+
+
+                // ACTUALIZAMOS ACTIVO DE LA TABLA INFORMATICASBIENESANEXOS
                 
                 $iInformaticaBienesAnexo = InformaticasBienesAnexos::findOrFail($registro2->anexo_id);
 
                 if ($this->asignacionlibrecustodia === "DEVOLUCION") {
                     $iInformaticaBienesAnexo->update([
+                        'asignado' => "0",
+                        'custodia' => "NO",
                         'activo' => "0",
                     ]);
                 } else {
                     $iInformaticaBienesAnexo->update([
+                        'asignado' => "1",
+                        'custodia' => $this->custodia,
                         'activo' => "1",
                     ]);
                 }
@@ -918,6 +927,7 @@ class AnexosasignacionComponent extends Component
                     'transformador' => $this->transformador,
                     'auriculares' => $this->auriculares,
                     'baseauriculares' => $this->baseauriculares,
+                    'custodia' => $this->custodia,
                     'motivo' => $this->motivo,
                     'asignacionlibrecustodia' => $this->asignacionlibrecustodia,
                     'asignacionlibrecustodiadesde' => $this->asignacionlibrecustodiadesde,

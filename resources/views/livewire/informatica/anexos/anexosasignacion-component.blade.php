@@ -418,7 +418,7 @@
                                         <div class="row">
                                             <div class="col-xl-1">
                                                 <label for="cmbpiso" class="fw-bold fs-6">PISO:</label>
-                                                <select name="" id="cmbpiso" class="form-select form-select-sm" wire:model="piso">
+                                                <select name="" id="cmbpiso" class="form-select form-select-sm" wire:model="piso" required>
                                                     <option value="">...</option>
                                                     <option value="1">1</option>
                                                     <option value="2">2</option>
@@ -434,7 +434,7 @@
                                             </div>
                                             <div class="col-xl-1">
                                                 <label for="txtoficina" class="fw-bold fs-6">OFICINA:</label>
-                                                <input type="text" id="txtoficina" class="form-control form-control-sm" wire:model="oficina">
+                                                <input type="text" id="txtoficina" class="form-control form-control-sm" wire:model="oficina" required>
                                             </div>
 
                                             <div class="col-xl-5">
@@ -614,6 +614,8 @@
             </div>
         </div>
 
+        {{-- MODAL BUSCAR ANEXOS --}}
+
         <div class="modal fade @if($modalAnexoBuscar) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content rounded-5">
@@ -630,7 +632,7 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="input-group mb-2">
-                                                <span class="input-group-text input-group-text-xs fw-bold" id="basic-addon2">Total: {{ $lista_personas->total() }}</span>
+                                                <span class="input-group-text input-group-text-xs fw-bold" id="basic-addon2">Total: {{ $lista_anexos->total() }}</span>
                                                 <input type="text" id="txtSearchAnexo" class="form-control form-control-sm" placeholder="Buscar anexo ..." wire:model.live="searchanexos">
                                             </div>
                                         </div>
@@ -646,6 +648,7 @@
                                             <th scope="col">TIPO</th>
                                             <th scope="col">MODELO</th>
                                             <th scope="col">MARCA</th>
+                                            <th scope="col">ESTADO</th>
                                             <th scope="col"><i class="fa-solid fa-gears"></i></th>
                                         </tr>
                                     </thead>
@@ -673,6 +676,11 @@
                                                 <td class="text-center">{{ $anexo->tipo }}</td>
                                                 <td class="text-center">{{ $anexo->modelo }}</td>
                                                 <td class="text-center">{{ $anexo->marca }}</td>
+                                                <td class="text-center">
+                                                    <span class="badge py-1 {{ $anexo->asignado == 0 ? 'bg-danger-subtle text-danger' : 'bg-success-subtle text-success' }}">
+                                                        {{ $anexo->asignado == 0 ? 'Libre' : 'Asignado' }}
+                                                    </span>
+                                                </td>
                                                 <td>
                                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                         <div class="btn-group" role="group">
@@ -689,7 +697,7 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="8">
+                                            <td colspan="9">
                                                 {{ $lista_anexos->links() }}
                                             </td>
                                         </tr>
