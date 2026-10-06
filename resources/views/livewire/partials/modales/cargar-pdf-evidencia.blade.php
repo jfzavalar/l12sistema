@@ -1,7 +1,7 @@
 <div class="modal fade @if($modalPDFEvidenciaCargar) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <form wire:submit.prevent="actualizar_pdf">
+            <form wire:submit.prevent="actualizar_pdf_evidencia">
                 <div class="modal-header bg-warning-subtle">
                     <h1 class="modal-title fs-5" id="pdf-cargar-componentLabel">
                         <i class="fa-brands fa-searchengin"></i> CARGAR PDF EVIDENCIA

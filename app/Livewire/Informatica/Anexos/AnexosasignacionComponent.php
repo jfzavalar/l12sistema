@@ -588,7 +588,7 @@ class AnexosasignacionComponent extends Component
     public function guardar()
     {
         $this->validate();
-        
+
         try
         {
             $registro = null;
@@ -943,6 +943,24 @@ class AnexosasignacionComponent extends Component
                     'updated_user' => $usuario_datos,
                 ]);
 
+                // ACTUALIZAMOS ACTIVO DE LA TABLA INFORMATICASBIENESANEXOS
+                
+                $iInformaticaBienesAnexo = InformaticasBienesAnexos::where('anexo',$this->anexo);
+
+                if ($this->asignacionlibrecustodia === "DEVOLUCION") {
+                    $iInformaticaBienesAnexo->update([
+                        'asignado' => "0",
+                        'custodia' => "NO",
+                        'activo' => "0",
+                    ]);
+                } else {
+                    $iInformaticaBienesAnexo->update([
+                        'asignado' => "1",
+                        'custodia' => $this->custodia,
+                        'activo' => "1",
+                    ]);
+                }
+
             });
 
             // CERRAR MODAL NUEVO - EDITAR
@@ -1072,12 +1090,12 @@ class AnexosasignacionComponent extends Component
         }
     }
 
-    public function editarEvidencia()
+    public function editar_pdf_evidencia($anexoAsignadoId)
     {
         
     }
 
-    public function actualizarEvidencia()
+    public function actualizar_pdf_evidencia()
     {
         
     }

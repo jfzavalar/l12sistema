@@ -1845,6 +1845,78 @@ class Activos extends Component
         }
     }
 
+    public function editar_pdf_evidencia($atencion_id)
+    {
+        $this->atencion_id = $atencion_id;
+
+        $this->pdf_acta = null; // 🔥 CLAVE
+        
+        
+        // CAMBIAR EL VALOR DE LA BANDERA PARA PODER CARGAR ACTA PDF
+        $this->bandera_documento = "EVIDENCIA";
+
+        // ABRIR MODAL CARGAR PDF
+        $this->modalPDFEvidenciaCargar = true;
+    }
+
+    public function actualizar_pdf_evidencia()
+    {
+        // ===== DATOS PERSONAL =====
+        $iatencion = PersonalesAtencione::where('id', $this->atencion_id)->firstOrFail();
+
+        $this->dni = $iatencion->dni;
+        // $this->cod_patrimonial = $isoporte->bien_cod_patrimonial;
+        
+        // Validar solo el PDF
+        $this->validate([
+            'pdf_acta' => 'required|file|mimes:pdf|max:5120'
+        ]);
+
+        try {
+
+            DB::transaction(function () use ($iatencion) {
+
+                $usuario = auth()->user()->datos;
+
+                // Ruta actual
+                $rutaEvidencia = $this->actualizar_acta();
+
+                $iatencion->update([
+                    'ruta_evidencia' => $rutaEvidencia,
+                    'updated_user' => $usuario,
+                ]);
+
+            });
+
+            $this->reset('pdf_acta');
+
+            // CERRAR EL MODAL
+            $this->modalPDFCargar = false;
+            $this->modalPDFEvidenciaCargar = false;
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Documento cargado',
+                mensaje: 'El PDF se cargó correctamente.',
+                tipo: 'success'
+            );
+
+        }
+        catch (\Throwable $e) {
+
+            report($e);
+
+            $this->pdf_acta = null;
+
+            $this->dispatch(
+                'alerta-actualizado',
+                titulo: 'Error',
+                mensaje: 'Ocurrió un error al cargar el PDF.',
+                tipo: 'error'
+            );
+        }
+    }
+
 
     // ============================================================================================================================
     // CAGAR PDF
@@ -1936,6 +2008,7 @@ class Activos extends Component
     {
         // CERRAR MODAL CARGAR PDF
         $this->modalPDFCargar = false;
+        $this->modalPDFEvidenciaCargar = false;
     }
 
     // FUNCIÓN PARA MODAL ENVIAR CORREO

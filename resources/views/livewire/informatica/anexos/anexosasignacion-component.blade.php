@@ -1,7 +1,7 @@
 <div>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-1 mb-2 border-bottom">
         <h1 class="h2">
-            <i class="fa-solid fa-blender-phone"></i> ANEXOS TELEFÓNICOS:
+            <i class="fa-solid fa-phone-volume"></i> ANEXOS TELEFÓNICOS:
         </h1>
         <div class="row">
             <div class="col-auto">
@@ -67,7 +67,7 @@
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="input-group input-group-sm mb-2">
-                            <span class="input-group-text fw-bold" id="basic-addon2">Total: </span>
+                            <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }} </span>
                             <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar por Apellidos y Nombres O Anexo Telefónico">
                             @can('mpfn.informatica.anexos.create')
                                 <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" wire:click="nuevo">

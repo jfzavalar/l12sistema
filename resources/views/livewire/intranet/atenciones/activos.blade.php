@@ -13,6 +13,8 @@
         </div>
     @endif --}}
 
+    {{ $bandera_documento }}
+
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-1 mb-2 border-bottom">
         <h1 class="h2">
             <i class="fa-solid fa-ticket"></i> TICKETS: {{ strtoupper(now()->locale('es')->translatedFormat('F Y')) }}
@@ -232,7 +234,9 @@
                             <th scope="col" class="bg-success-subtle">SOLUCIÓN</th>                     
                             <th scope="col" class="bg-success-subtle">ESTADO</th>
                             <th scope="col" class="bg-success-subtle">ATENDIDO POR</th>
-                            <th scope="col" colspan="3" class="table-dark"><i class="fa-solid fa-gears"></i></th>
+                            <th scope="col" class="table-dark"><i class="fa-solid fa-gears"></i></th>
+                            <th scope="col" class="table-dark">Acta</th>
+                            <th scope="col" class="table-dark">Evidencias</th>
                         </tr>
                     </thead>
                     <tbody class="align-middle">
@@ -354,6 +358,11 @@
                                 </td>
                                 <td class="text-stard">
                                     <div class="btn-group" role="group">
+                                        @if ($item->created_user === auth()->user()->datos || auth()->user()->hasRole('Admin-Super'))
+                                            <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar_pdf_evidencia({{ $item->id }})">
+                                                <i class="fa-solid fa-upload"></i><br>Cargar
+                                            </button>
+                                        @endif
                                         @if($item->ruta_evidencia)
                                             <a type="button" class="btn btn-outline-dark btn-xs" href="{{ asset('storage/'.$item->ruta_evidencia) }}" target="_blank">
                                                 <i class="fa-solid fa-eye"></i> <i class="fa-solid fa-receipt"></i><br> Evidencia
