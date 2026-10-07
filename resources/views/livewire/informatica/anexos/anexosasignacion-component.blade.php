@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-auto">
                 <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarTotal">
-                    <span class="alert alert-primary d-block mb-0">
+                    <span class="alert alert-secondary d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-chart-simple"></i>
                             TOTAL: {{ $estadisticas->total }}
@@ -20,13 +20,13 @@
                     <span class="alert alert-success d-block mb-0">
                         <span class="fw-bold">
                             <i class="fa-solid fa-check-double"></i>
-                            ASIGNADOS: {{ $estadisticas->asignados }}
+                            ASIGNADOS: {{ $estadisticas->asignados + $estadisticas->reasignados }}
                         </span>
                     </span>
                 </button>
             </div>
 
-            <div class="col-auto">
+            {{-- <div class="col-auto">
                 <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarReasignados">
                     <span class="alert alert-secondary d-block mb-0">
                         <span class="fw-bold">
@@ -35,7 +35,7 @@
                         </span>
                     </span>
                 </button>
-            </div>
+            </div> --}}
 
             <div class="col-auto">
                 <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarDevueltos">
@@ -54,6 +54,26 @@
                         <span class="fw-bold">
                             <i class="fa-solid fa-check-double"></i>
                             CUSTODIA: {{ $estadisticas->custodia }}
+                        </span>
+                    </span>
+                </button>
+            </div>
+            <div class="col-auto">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarConacta">
+                    <span class="alert alert-primary d-block mb-0">
+                        <span class="fw-bold">
+                            <i class="fa-solid fa-file"></i>
+                            ACTA: {{ $estadisticas->con_acta }}
+                        </span>
+                    </span>
+                </button>
+            </div>
+            <div class="col-auto">
+                <button class="btn text-start p-0 border-0 bg-transparent" wire:click="filtrarSinacta">
+                    <span class="alert alert-danger d-block mb-0">
+                        <span class="fw-bold">
+                            <i class="fa-solid fa-file-circle-xmark"></i>
+                            SIN ACTA: {{ $estadisticas->sin_acta }}
                         </span>
                     </span>
                 </button>

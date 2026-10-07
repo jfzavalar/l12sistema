@@ -236,7 +236,9 @@ class AnexosasignacionComponent extends Component
     public $filtro_asignados,
             $filtro_reasignados,
             $filtro_devueltos,
-            $filtro_custodia;
+            $filtro_custodia,
+            $filtro_con_acta,
+            $filtro_sin_acta;
 
     public function filtrarTotal($value = null)
     {
@@ -246,12 +248,13 @@ class AnexosasignacionComponent extends Component
     {
         $this->resetFiltros();
         $this->filtro_asignados = 'ASIGNACION';
-    }
-    public function filtrarReasignados($value = null)
-    {
-        $this->resetFiltros();
         $this->filtro_reasignados = 'REASIGNACION';
     }
+    // public function filtrarReasignados($value = null)
+    // {
+    //     $this->resetFiltros();
+    //     $this->filtro_reasignados = 'REASIGNACION';
+    // }
     public function filtrarDevueltos($value = null)
     {
         $this->resetFiltros();
@@ -262,6 +265,16 @@ class AnexosasignacionComponent extends Component
         $this->resetFiltros();
         $this->filtro_custodia = 'SI';
     }
+    public function filtrarConacta($value = null)
+    {
+        $this->resetFiltros();
+        $this->filtro_con_acta = 'con';
+    }
+    public function filtrarSinacta($value = null)
+    {
+        $this->resetFiltros();
+        $this->filtro_sin_acta = 'sin';
+    }
     public function resetFiltros()
     {
         $this->search = null;
@@ -269,6 +282,8 @@ class AnexosasignacionComponent extends Component
         $this->filtro_reasignados = null;
         $this->filtro_devueltos = null; 
         $this->filtro_custodia = null;
+        $this->filtro_con_acta = null;
+        $this->filtro_sin_acta = null;
 
         $this->resetPage('anexosasignacionPage');
     }
@@ -294,23 +309,26 @@ class AnexosasignacionComponent extends Component
             })
 
             // FILTRO ASIGNADOS
-            ->when($this->filtro_asignados, function ($q) {
-
-                $q->where(
-                    'asignacionlibrecustodia',
-                    $this->filtro_asignados
-                );
-
+            ->when($this->filtro_asignados || $this->filtro_reasignados, function ($q) {
+                $q->where(function ($query) {
+                    if ($this->filtro_asignados) {
+                        $query->where('asignacionlibrecustodia', $this->filtro_asignados);
+                    }
+                    if ($this->filtro_reasignados) {
+                        $query->orWhere('asignacionlibrecustodia', $this->filtro_reasignados);
+                    }
+                });
             })
+
             // FILTRO REASIGNADOS
-            ->when($this->filtro_reasignados, function ($q) {
+            // ->when($this->filtro_reasignados, function ($q) {
 
-                $q->where(
-                    'asignacionlibrecustodia',
-                    $this->filtro_reasignados
-                );
+            //     $q->where(
+            //         'asignacionlibrecustodia',
+            //         $this->filtro_reasignados
+            //     );
 
-            })
+            // })
             // FILTRO DEVULETOS
             ->when($this->filtro_devueltos, function ($q) {
 
@@ -329,6 +347,19 @@ class AnexosasignacionComponent extends Component
                 );
 
             })
+            // FILTRO CON ACTA O SIN ACTA
+            ->when($this->filtro_con_acta === 'con', fn($q) =>
+                $q->whereNotNull('ruta_documento')
+                ->where('ruta_documento', '<>', '')
+            )
+
+            ->when($this->filtro_sin_acta === 'sin', fn($q) =>
+                $q->where(fn($q2) =>
+                    $q2->whereNull('ruta_documento')
+                    ->orWhere('ruta_documento', '')
+                )
+            )
+
             ->orderBy('id','desc')
             ->paginate(10,['*'],'anexosasignacionPage');
 
@@ -358,7 +389,19 @@ class AnexosasignacionComponent extends Component
                 SUM(CASE
                     WHEN custodia = 'SI'
                     THEN 1 ELSE 0
-                END) as custodia
+                END) as custodia,
+
+                SUM(CASE 
+                    WHEN ruta_documento IS NOT NULL 
+                    AND ruta_documento <> '' 
+                    THEN 1 ELSE 0 
+                END) as con_acta,
+
+                SUM(CASE 
+                    WHEN ruta_documento IS NULL 
+                    OR ruta_documento = '' 
+                    THEN 1 ELSE 0 
+                END) as sin_acta
             ")
             ->first();
 
