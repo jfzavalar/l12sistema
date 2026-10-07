@@ -835,7 +835,7 @@ class AnexosasignacionComponent extends Component
         $this->modelo = $instanciaTabla->modelo;
         $this->anexo = $instanciaTabla->anexo;
         $this->marca = $instanciaTabla->marca;
-        $this->transformador = $instanciaTabla->trasformador;
+        $this->transformador = $instanciaTabla->transformador;
         $this->auriculares = $instanciaTabla->auriculares;
         $this->baseauriculares = $instanciaTabla->baseauriculares;
         $this->custodia = $instanciaTabla->custodia;
