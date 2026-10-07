@@ -72,7 +72,7 @@ class AnexosController extends Controller
         $pdf = Pdf::loadView('pdf.informatica.anexotelefonico-acta', compact('instanciaTbl'));
 
         //Mostrar PDF
-        return $pdf->stream('anexo_'.$instanciaTbl->dni.'.pdf');
+        return $pdf->stream('acta_'.$instanciaTbl->id.'_anexo_'.$instanciaTbl->anexo.'_usuario_'.$instanciaTbl->dni.'.pdf');
         
         //Descargar PDF
         // return response()->streamDownload(function () use ($pdf) {
