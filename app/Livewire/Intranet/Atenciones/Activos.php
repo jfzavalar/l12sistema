@@ -417,8 +417,8 @@ class Activos extends Component
                 'personales.tipo_documento'
             )
             // ->where('personales.tipo_documento','CONTRATO')
-            ->where('personales.activo', "1")
-            ->where('personas.activo','1')
+            ->whereIn('personales.activo', ['1','2'])
+            ->whereIn('personas.activo',['1','2'])
             ->when($this->searchpersonas !== '', function ($query) {
                 $query->where(function ($q) {
                     $q->where('personas.dni', 'like', '%' . $this->searchpersonas . '%')
@@ -1417,7 +1417,9 @@ class Activos extends Component
         $this->fotoactual = $ipersona->foto;
 
         // DATOS DEL PERSONAL
-        $ipersonal = Personale::where([['persona_dni',$this->dni],['activo',1],])->firstOrFail();
+        $ipersonal = Personale::where('persona_dni', $this->dni)
+            ->whereIn('activo', [1, 2])
+            ->firstOrFail();
 
         $this->personal_id = $ipersonal->id;
 

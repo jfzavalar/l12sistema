@@ -13,8 +13,6 @@
         </div>
     @endif --}}
 
-    {{ $bandera_documento }}
-
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-1 mb-2 border-bottom">
         <h1 class="h2">
             <i class="fa-solid fa-ticket"></i> TICKETS: {{ strtoupper(now()->locale('es')->translatedFormat('F Y')) }}
