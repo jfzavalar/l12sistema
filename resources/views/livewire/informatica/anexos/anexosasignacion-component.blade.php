@@ -174,13 +174,14 @@
                                     </span>
                                     <br>
                                     @if ($item->custodia === "SI")
-                                        <b>Desde:</b>
+                                        {{-- <b>Desde:</b>
                                         <br>
                                         <span class="text-primary">{{ $item->asignacionlibrecustodiadesde }}</span>
                                         <br>
                                         <b>Hasta:</b>
                                         <br>
-                                        <span class="text-primary">{{ $item->asignacionlibrecustodiahasta}}</span>
+                                        <span class="text-primary">{{ $item->asignacionlibrecustodiahasta}}</span> --}}
+                                        <b>{{ $item->motivo }}</b>
                                     @endif
                                 </td>
                                 {{-- <td>
