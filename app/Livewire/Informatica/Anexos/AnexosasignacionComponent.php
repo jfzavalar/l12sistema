@@ -386,6 +386,7 @@ class AnexosasignacionComponent extends Component
             ->paginate(10,['*'],'anexosasignacionPage');
 
         $lista_historial = InformaticasBienesAnexosAsignaciones::where('anexo_id',$this->anexo_id)
+            ->whereIn('activo',['0','1'])
             ->orderBy('id','desc')
             ->paginate(10,['*'],'anexosasignacionHistorialPage');
         
