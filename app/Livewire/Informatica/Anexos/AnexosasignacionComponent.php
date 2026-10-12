@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Informatica\Anexos;
 
-use App\Exports\TicketsfiltrosExport;
+use App\Exports\AnexosfiltrosExport;
 use App\Mail\NotificacionInformaticaTicket;
 use App\Models\InformaticasBienesAnexos;
 use App\Models\InformaticasBienesAnexosAsignaciones;
@@ -211,6 +211,9 @@ class AnexosasignacionComponent extends Component
 
     public $bandera_documento="EVIDENCIA";
 
+    public $filtro_sede,
+            $filtro_dependencia;
+
     public function updatedTipo($value)
     {
         if ($value === "1"){
@@ -360,6 +363,25 @@ class AnexosasignacionComponent extends Component
                 )
             )
 
+            // FILTRO SEDE
+            ->when($this->filtro_sede, function ($q) {
+
+                $q->where(
+                    'sededestino',
+                    $this->filtro_sede
+                );
+
+            })
+            // FILTRO DEPENDENCIA
+            ->when($this->filtro_dependencia, function ($q) {
+
+                $q->where(
+                    'dependenciadestino',
+                    $this->filtro_dependencia
+                );
+
+            })
+
             ->orderBy('id','desc')
             ->paginate(10,['*'],'anexosasignacionPage');
 
@@ -476,10 +498,22 @@ class AnexosasignacionComponent extends Component
             ->orderBy('anexo')
             ->paginate(10,['*'], 'anexosPage');
 
+        $lista_sedes_filtro = Personales_sede::select('id','nombre','nombred')
+            ->where('activo','1')
+            ->orderBy('nombre')
+            ->get();
+            
+        $lista_dependencias_filtro = Personales_dependencia::select('id','nombre')
+            ->where('activo','1')
+            ->where('sede','=',$this->filtro_sede)
+            ->orderBy('nombre')
+            ->get();
+
         return view('livewire.informatica.anexos.anexosasignacion-component',
                     compact('lista_activos','lista_historial','estadisticas',
                             'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos','lista_informaticos',
-                            'lista_anexos'));
+                            'lista_anexos',
+                            'lista_sedes_filtro','lista_dependencias_filtro'));
     }
 
     // ============================================================================================================================
@@ -1168,6 +1202,16 @@ class AnexosasignacionComponent extends Component
     }
 
     // ============================================================================================================================
+    // MODALES REPORTES CON FILTROS
+    // ============================================================================================================================
+
+    public function reportesFiltros()
+    {
+        $this->modalReportesFiltros = true;
+    }
+
+
+    // ============================================================================================================================
     // MODALES BUSCAR
     // ============================================================================================================================
 
@@ -1484,5 +1528,20 @@ class AnexosasignacionComponent extends Component
     public function cerrar_anexo()
     {
         $this->modalAnexoTelefonico = false;
+    }
+
+    // ============================================================================================================================
+    // EXPORTAR EXCEL
+    // ============================================================================================================================
+
+    public function exportarExcel()
+    {
+        return Excel::download(
+            new AnexosfiltrosExport(
+                $this->filtro_sede,
+                $this->filtro_dependencia,
+            ),
+            'reporte_anexos.xlsx'
+        );
     }
 }

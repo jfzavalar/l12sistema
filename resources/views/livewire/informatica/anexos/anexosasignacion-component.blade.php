@@ -85,7 +85,15 @@
         <div class="card-body">
             <div class="table-responsive-xl">
                 <div class="row">
-                    <div class="col-xl-12">
+                    <div class="col-xl-1 col-sm-12">
+                        <div class="input-group">
+                            <button type="button" class="btn btn-dark btn-sm" wire:click="reportesFiltros">
+                                <i class="fa-solid fa-filter"></i> Filtrar por:
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-11">
                         <div class="input-group input-group-sm mb-2">
                             <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }} </span>
                             <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar por Apellidos y Nombres O Anexo Telefónico">
@@ -791,6 +799,68 @@
                             </button>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL FILTRO - REPORTES -->
+        <div class="modal fade @if($modalReportesFiltros) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
+            <div class="modal-dialog" style="max-width:95%;">
+                <div class="modal-content">
+                    <div class="modal-header bg-info-subtle">
+                        <h1 class="modal-title fs-5" id="filtroModalLabel">
+                            <i class="fa-solid fa-filter"></i> FILTROS - REPORTE : Total: {{ $lista_activos->total() }}
+                        </h1>
+                        <button type="button" class="btn-close" wire:click="cerrarBuscar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row g-3">                      
+                            <div class="col-xl-4 col-lg-6 col-sm-12">
+                                <label for="cmb_filtrosede" class="fw-bold fs-6">Sede</label>
+                                <div class="input-group">
+                                    {{-- <input type="text" id="txt_sede" class="form-control form-control-xs bg-light" wire:model="filtrosedeorigen" readonly required> --}}
+                                    <select id="cmb_filtrosede" class="form-select form-select-sm" wire:model.live="filtro_sede">
+                                        <option value="">Seleccionar...</option>
+                                        @foreach ($lista_sedes_filtro as $sede)
+                                            <option value="{{ $sede->nombre }}">{{ $sede->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('sedeorigen')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                            <div class="col-xl-8 col-lg-6 col-sm-12">
+                                <label for="cmb_filtrodependencia" class="fw-bold fs-6">Dependencia</label>
+                                <div class="input-group position-relative">
+                                    {{-- <input type="text" id="txt_dependencia" class="form-control form-control-xs bg-light" wire:model="filtrodependenciaorigen" readonly required> --}}
+                                    <select id="cmb_filtrodependencia" class="form-select form-select-sm" wire:model.live="filtro_dependencia">
+                                        <option value="">Seleccionar...</option>
+                                        @foreach ($lista_dependencias_filtro as $dependencia)
+                                            <option value="{{ $dependencia->nombre }}">{{ $dependencia->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('dependenciaorigen')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-naranja btn-sm" wire:click="resetFiltros">
+                            <i class="fa-solid fa-eraser"></i> Limpiar
+                        </button>
+                        <button class="btn btn-success btn-sm" wire:click="exportarExcel">
+                            <i class="fa-solid fa-file-excel"></i> Exportar a Excel
+                        </button>
+                        {{-- <button class="btn btn-dark btn-sm" wire:click="descargarPdfsMasivo">
+                            <i class="fa-solid fa-file-pdf"></i> Descargar Actas de Mantenimiento
+                        </button> --}}
+                        <button type="button" class="btn btn-secondary btn-sm" wire:click="cerrarBuscar">
+                            <i class="fa-solid fa-rectangle-xmark"></i> Cerrar
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
