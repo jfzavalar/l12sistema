@@ -25,7 +25,8 @@
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">DNI</th>
-                                    <th scope="col">Datos</th>
+                                    <th scope="col">DATOS</th>
+                                    <th scope="col">ESTADO</th>
                                     <th scope="col"><i class="fa-solid fa-gears"></i></th>
                                 </tr>
                             </thead>
@@ -35,6 +36,18 @@
                                         <th>{{ $loop->iteration }}</th>
                                         <th>{{ $persona->dni }}</th>
                                         <td>{{ $persona->datos }}</td>
+                                        <td class="text-center">
+                                            <span class="badge 
+                                                @if(in_array($persona->tipo_documento, ['ADENDA','CONTRATO','INCORPORACION']))
+                                                    bg-primary-subtle text-primary
+                                                @elseif($persona->tipo_documento === 'LICENCIA')
+                                                    bg-danger-subtle text-danger
+                                                @else
+                                                    bg-dark-subtle text-dark
+                                                @endif">
+                                                {{ $persona->tipo_documento }}
+                                            </span>
+                                        </td>
                                         <td>
                                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                 <div class="btn-group" role="group">
@@ -51,7 +64,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="4">
+                                    <td colspan="5">
                                         {{ $lista_personas->links() }}
                                     </td>
                                 </tr>
