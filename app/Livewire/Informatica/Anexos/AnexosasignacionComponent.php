@@ -1290,12 +1290,12 @@ class AnexosasignacionComponent extends Component
 
         $this->personal_id = $ipersonal->id;
 
-        $this->codsedeorigen = $ipersonal->codsedeorigen;
+        $this->codsedeorigen = $ipersonal->codsededestino;
         $this->sedeorigen = $ipersonal->sededestino;   
-        $this->coddependenciaorigen = $ipersonal->coddependenciaorigen;
-        $this->dependenciaorigen = $ipersonal->dependenciaorigen;
-        $this->coddespachoorigen = $ipersonal->coddespachoorigen;
-        $this->despachoorigen = $ipersonal->despachoorigen;
+        $this->coddependenciaorigen = $ipersonal->coddependenciadestino;
+        $this->dependenciaorigen = $ipersonal->dependenciadestino;
+        $this->coddespachoorigen = $ipersonal->coddespachodestino;
+        $this->despachoorigen = $ipersonal->despachodestino;
 
         $this->codsededestino = $ipersonal->codsededestino;
         $this->sededestino = $ipersonal->sededestino;   
