@@ -221,12 +221,20 @@
             <tbody>
                 <tr>
                     <td class="borde-superior">
-                        ENTREGUÉ CONFORME
+                        RESPONSABLE INFORMÁTICO
                         <br>{{ $instanciaTbl->informatico }}
                         <br>{{ $instanciaTbl->informatico_dni }}
                     </td>
                     <td></td>
-                    <td></td>
+                    @if ($penultimo)
+                        <td class="borde-superior">
+                            ENTREGUÉ CONFORME
+                            <br>{{ $penultimo->datos }}
+                            <br>{{ $penultimo->dni }}
+                        </td>
+                    @else
+                        <td></td>
+                    @endif
                     <td></td>
                     <td class="borde-superior">
                         RECIBÍ CONFORME

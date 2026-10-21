@@ -84,27 +84,48 @@
     <div class="card">
         <div class="card-body">
             <div class="table-responsive-xl">
-                <div class="row">
-                    <div class="col-xl-1 col-sm-12">
-                        <div class="input-group">
-                            <button type="button" class="btn btn-dark btn-sm" wire:click="reportesFiltros">
+                <div class="row bg-secondary-subtle rounded-2 mb-2">
+                    <div class="col-xl-3 mt-1 mb-1">
+                        <div class="input-group input-group-sm">
+                            {{-- <button type="button" class="btn btn-dark btn-sm" wire:click="reportesFiltros">
                                 <i class="fa-solid fa-filter"></i> Filtrar por:
-                            </button>
+                            </button> --}}
+                            <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }} </span>
+                            <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar por Apellidos O Anexo Telefónico">
                         </div>
                     </div>
-
-                    <div class="col-xl-11">
-                        <div class="input-group input-group-sm mb-2">
-                            <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }} </span>
-                            <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar por Apellidos y Nombres O Anexo Telefónico">
+                    <div class="col-xl-3 mt-1 mb-1">
+                        <select id="cmb_filtrosede" class="form-select form-select-sm" wire:model.live="filtro_sede">
+                            <option value="">Seleccionar Sede</option>
+                            @foreach ($lista_sedes_filtro as $sede)
+                                <option value="{{ $sede->nombre }}">{{ $sede->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-xl-5 mt-1 mb-1">
+                        <select id="cmb_filtrodependencia" class="form-select form-select-sm" wire:model.live="filtro_dependencia">
+                            <option value="">Seleccionar Dependencia</option>
+                            @foreach ($lista_dependencias_filtro as $dependencia)
+                                <option value="{{ $dependencia->nombre }}">{{ $dependencia->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-xl-1 mt-1 mb-1">
+                        <div class="input-group">
                             @can('mpfn.informatica.anexos.create')
                                 <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" wire:click="nuevo">
                                     <i class="fa-solid fa-file"></i> Nuevo
                                 </button>
                             @endcan
+                            <button class="btn btn-success btn-sm" wire:click="exportarExcel" title="Exportar a Excel">
+                                <i class="fa-solid fa-file-excel"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
+
+                
+
                 <table class="table table-striped table-hover table-sm table-xsmall">
                     <thead class="table-primary text-center align-middle">
                         <tr>
@@ -827,9 +848,6 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                @error('sedeorigen')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
                             </div>
                             <div class="col-xl-8 col-lg-6 col-sm-12">
                                 <label for="cmb_filtrodependencia" class="fw-bold fs-6">Dependencia</label>
@@ -842,9 +860,6 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                @error('dependenciaorigen')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
                             </div>
                         </div>
                     </div>

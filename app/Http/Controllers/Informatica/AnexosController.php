@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\InformaticasBienesAnexosAsignaciones;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use PhpParser\Node\Stmt\If_;
 
 class AnexosController extends Controller
 {
@@ -69,9 +70,21 @@ class AnexosController extends Controller
     {
         $instanciaTbl = InformaticasBienesAnexosAsignaciones::findOrFail($id);
 
-        $pdf = Pdf::loadView('pdf.informatica.anexotelefonico-acta', compact('instanciaTbl'));
+        // Buscar el penúltimo registro con el mismo anexo
+        $penultimo = InformaticasBienesAnexosAsignaciones::where('anexo', $instanciaTbl->anexo)
+                        ->where('id', '<', $instanciaTbl->id) // solo anteriores
+                        ->orderBy('id', 'desc')                      
+                        ->first();
+        
+        // Validar existencia
+        if (!$penultimo) {
+            $penultimo = null; // explícito, para que la vista lo maneje con @if
+        }
 
-        //Mostrar PDF
+        $pdf = Pdf::loadView('pdf.informatica.anexotelefonico-acta', compact('instanciaTbl','penultimo'));
+        
+
+        // MOSTRAR PDF
         return $pdf->stream('acta_'.$instanciaTbl->id.'_anexo_'.$instanciaTbl->anexo.'_usuario_'.$instanciaTbl->dni.'.pdf');
         
         //Descargar PDF
@@ -79,4 +92,5 @@ class AnexosController extends Controller
         //     echo $pdf->stream();
         // }, 'spijweb_'.$userspijweb->dni.'.pdf');
     }
+
 }
