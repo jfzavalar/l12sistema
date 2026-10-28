@@ -7,36 +7,21 @@
 @section('content')
 
     <main>
-      <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
+      <div id="myCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+
         <div class="carousel-indicators">
-          <button
-            type="button"
-            data-bs-target="#myCarousel"
-            data-bs-slide-to="0"
-            class="active"
-            aria-current="true"
-            aria-label="Slide 1"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#myCarousel"
-            data-bs-slide-to="1"
-            aria-label="Slide 2"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#myCarousel"
-            data-bs-slide-to="2"
-            aria-label="Slide 3"
-          ></button>
+          <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
         </div>
+
         <div class="carousel-inner">
           <div class="carousel-item active">
             <img src="{{ asset('img/fondo2025.jpg') }}" class="d-block w-100" alt="Primera imagen del carrusel">
             <div class="container">
               <div class="carousel-caption text-start">
                 <h1>Bienvenido a la Intranet</h1>
-                <p class="opacity-75">
+                <p class="opacity-5">
                   Distrito Fiscal de Junín
                 </p>
                 {{-- <p>
