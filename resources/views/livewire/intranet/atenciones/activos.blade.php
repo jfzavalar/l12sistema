@@ -226,7 +226,7 @@
                             </th>
                             {{-- <th scope="col">REGIMEN - CARGO</th> --}}
                             {{-- <th scope="col" class="table-danger">TIPO</th> --}}
-                            <th scope="col" class="bg-success-subtle">MEDIO</th>
+                            <th scope="col" class="bg-success-subtle">POR</th>
                             <th scope="col" class="bg-success-subtle">TIPO</th>
                             {{-- <th scope="col" class="bg-success-subtle">DESCRIPCIÓN DEL SERVICIO</th> --}}
                             <th scope="col" class="bg-success-subtle">SOLUCIÓN</th>                     
@@ -243,10 +243,11 @@
                                 <th class="text-center">
                                     <i class="fa-solid fa-ticket"></i> {{ $item->id }}
                                 </th>
-                                <td>
-                                    <b>{{ $item->dni }}</b>
-                                    <br> {{ $item->datos }}
-                                    <br>{{ $item->created_at }}
+                                <td class="align-middle">
+                                    <b>{{ $item->datos }}</b>
+                                    <br>
+                                    <b>DNI: {{ $item->dni }}</b>
+                                    <p class="text-muted">{{ $item->created_at }}</p>
                                 </td>
                                 {{-- <td>
                                     <b>{{ $item->regimen }}</b>
@@ -260,7 +261,7 @@
                                     <br>
                                     <b>DESPACHO: </b>{{ $item->despachodestino }}
                                 </td> --}}
-                                <td class="text-center align-middle">
+                                <td class="text-center align-middle fs-6">
                                     @if ($item->reportado_por === "CEA")
                                         <b>CEA</b>
                                     @elseif (($item->reportado_por === "CORREO"))
@@ -293,7 +294,7 @@
                                     <br>
                                     <b>DESCRIPCIÓN: </b>{{ $item->detalle_servicio }}
                                 </td>
-                                <td>
+                                <td style="width: 20%;">
                                     {{ $item->respuesta }}
                                 </td>
                                 <td class="text-center align-middle">
