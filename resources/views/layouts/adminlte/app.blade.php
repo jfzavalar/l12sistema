@@ -682,13 +682,13 @@
                                             </a>
                                         </li>
                                     @endcan
-                                    <li class="nav-item">
+                                    {{-- <li class="nav-item">
                                         <a class="nav-link ms-3 {{ request()->routeIs('mpfn.intranet.atencionesserviciosdetalles.index') ? 'active bg-primary text-white fw-bold rounded-pill' : 'text-white' }}"
                                             href="{{ route('mpfn.intranet.atencionesserviciosdetalles.index') }}">
                                             <i class="nav-icon fa-regular fa-circle"></i>
                                             <p>Papeletas</p>
                                         </a>
-                                    </li>
+                                    </li> --}}
                                 </ul>
                             </li>
                         @endcan
@@ -716,7 +716,7 @@
     @livewireScripts
 
     <!-- SWEETALERT2 -->
-    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     {{-- ASIGNAR FOCUS A LAS INPUTS --}}
     <script>
