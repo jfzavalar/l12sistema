@@ -87,16 +87,16 @@ class AtencionesController extends Controller
 
         if (!empty($ipersonal->bien_id)) {
             $ibien = PatrimoniosBiene::select(
-                    'codigo_barra',
-                    'codigo_patrimonial',
-                    'descripcion',
-                    'marca',
-                    'modelo',
-                    'nro_serie',
-                    'medidas',
-                    'color',
-                    'estado',
-                )
+                'codigo_barra',
+                'codigo_patrimonial',
+                'descripcion',
+                'marca',
+                'modelo',
+                'nro_serie',
+                'medidas',
+                'color',
+                'estado',
+            )
                 ->where('id', $ipersonal->bien_id)
                 ->first();
         }
@@ -110,12 +110,12 @@ class AtencionesController extends Controller
         return $pdf->stream('reportePDF.pdf');
     }
 
-    public function exportarPDFporUsuario($dni,$anio,$mes)
+    public function exportarPDFporUsuario($dni, $anio, $mes)
     {
         $iusuario = User::firstWhere([
-                        'activo' => 1,
-                        'dni' => $dni,
-                    ]);
+            'activo' => 1,
+            'dni' => $dni,
+        ]);
 
         $iatenciones_por_usuario = PersonalesAtencione::select('personales_atenciones.*')
             ->where('personales_atenciones.activo', 1)
@@ -146,16 +146,16 @@ class AtencionesController extends Controller
         return $pdf->stream('reportePDF.pdf');
     }
 
-    public function exportarPDFporUsuario2($dni,$anio,$mes)
+    public function exportarPDFporUsuario2($dni, $anio, $mes)
     {
         $iusuario = User::firstWhere([
-                        'activo' => 1,
-                        'dni' => $dni,
-                    ]);
+            'activo' => 1,
+            'dni' => $dni,
+        ]);
 
         $iatenciones_por_usuario = PersonalesAtencione::select('personales_atenciones.*')
             ->where('personales_atenciones.activo', 1)
-            ->where('servicio','DIGITALIZACION - CARPETAS')
+            ->where('servicio', 'DIGITALIZACION - CARPETAS')
             ->where('personales_atenciones.atendido_por_dni', $dni)
             ->whereYear('personales_atenciones.created_at', $anio)
             ->whereMonth('personales_atenciones.created_at', $mes)

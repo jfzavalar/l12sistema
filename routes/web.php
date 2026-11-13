@@ -1,4 +1,5 @@
 <?php
+
 use App\Exports\UsuariosExport;
 use App\Http\Controllers\Admin\DependenciasController;
 use App\Http\Controllers\Admin\DespachosController;
@@ -69,18 +70,17 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/permissions', [PermissionController::class, 'index'])->name('procesos.admin.permissions.index');
 
-Route::middleware(['auth','can:procesos.admin.users.index'])->group(function () {
+Route::middleware(['auth', 'can:procesos.admin.users.index'])->group(function () {
 
     Route::get('/users', [UserController::class, 'index'])->name('procesos.admin.users.index');
     Route::get('usuarios/exportar', [UserController::class, 'exportarExcel']);
     // Route::get('/export-usuarios', function () { return Excel::download(new UsuariosExport, 'usuarios.xlsx');});
-    
+
     Route::get('/users/{user}/roles', [UserController::class, 'editRoles'])->name('procesos.admin.users.roles.edit');
     Route::post('/users/{user}/roles', [UserController::class, 'updateRoles'])->name('procesos.admin.users.roles.update');
-
 });
 
-Route::middleware(['auth','can:procesos.admin.roles.index'])->group(function () {
+Route::middleware(['auth', 'can:procesos.admin.roles.index'])->group(function () {
     Route::get('/roles', [RoleController::class, 'index'])->name('procesos.admin.roles.index');
     Route::get('/roles/create', [RoleController::class, 'create'])->name('procesos.admin.roles.create');
     Route::post('/roles', [RoleController::class, 'store'])->name('procesos.admin.roles.store');
@@ -96,7 +96,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('sedes', SedesController::class)->names('mpfn.admin.sedes');
 });
 //ADMINISTRACION
-Route::middleware('auth','can:procesos.administracion.archivo.index')->group(function () {
+Route::middleware('auth', 'can:procesos.administracion.archivo.index')->group(function () {
     Route::resource('archivo', ArchivoController::class)->names('procesos.administracion.archivo');
 });
 
@@ -106,7 +106,7 @@ Route::middleware('auth','can:procesos.administracion.archivo.index')->group(fun
 //     Route::get('pdf/patrimonio/bieninformatico-traslado-acta/{id}', [PatrimonioController::class, 'exportarPDF'])->name('pdf.patrimonio.bieninformatico-traslado-acta');
 // });
 
-Route::middleware('auth','can:procesos.administracion.rrhh.index')->group(function () {
+Route::middleware('auth', 'can:procesos.administracion.rrhh.index')->group(function () {
     Route::resource('rrhh', RrhhController::class)->names('procesos.administracion.rrhh');
 });
 
@@ -118,27 +118,28 @@ Route::middleware('auth')->group(function () {
 
 //INFORMATICA
 
-Route::middleware('auth','can:mpfn.informatica.anexos.index')->group(function () {
+Route::middleware('auth', 'can:mpfn.informatica.anexos.index')->group(function () {
     Route::resource('anexos', AnexosController::class)->names('mpfn.informatica.anexos');
     Route::get('pdf/informatica/anexotelefonico-acta/{id}', [AnexosController::class, 'exportarPDF'])->name('pdf.informatica.anexotelefonico-acta');
+    Route::get('pdf/informatica/anexotelefonico-reporte', [AnexosController::class, 'exportarPDFReporte'])->name('pdf.informatica.anexotelefonico-reporte');
 });
 
-Route::middleware('auth','can:mpfn.informatica.soporte.index')->group(function () {
+Route::middleware('auth', 'can:mpfn.informatica.soporte.index')->group(function () {
     Route::resource('soporte', soporteController::class)->names('mpfn.informatica.soporte');
     Route::get('pdf/informatica/soporte-acta/{id}', [soporteController::class, 'exportarPDF'])->name('pdf.informatica.soporte-acta');
 });
 
 
-Route::middleware('auth','can:procesos.informatica.firmasdigitales.index')->group(function () {
+Route::middleware('auth', 'can:procesos.informatica.firmasdigitales.index')->group(function () {
     Route::resource('firmas', FirmasdigitalesController::class)->names('procesos.informatica.firmasdigitales');
     Route::get('pdf/informatica/token-acta/{id}', [FirmasdigitalesController::class, 'exportarPDF'])->name('pdf.informatica.token-acta');
 });
 
-Route::middleware('auth','can:mpfn.informatica.ips.index')->group(function () {
+Route::middleware('auth', 'can:mpfn.informatica.ips.index')->group(function () {
     Route::resource('ips', IpsController::class)->names('mpfn.informatica.ips');
     // Route::get('pdf/informatica/firmapc-acta/{id}', [IpsController::class, 'exportarPDF'])->name('pdf.informatica.firmapc-acta');
 });
-Route::middleware('auth','can:mpfn.informatica.spijweb.index')->group(function () {
+Route::middleware('auth', 'can:mpfn.informatica.spijweb.index')->group(function () {
     Route::resource('spijweb', SpijwebController::class)->names('mpfn.informatica.spijweb');
     Route::get('pdf/informatica/spijweb-acta/{id}', [SpijwebController::class, 'exportarPDF'])->name('pdf.informatica.spijweb-acta');
 });
@@ -150,32 +151,32 @@ Route::middleware('auth')->group(function () {
 
 
 // INTRANET
-Route::middleware('auth','can:mpfn.intranet.atenciones.index')->group(function () {
+Route::middleware('auth', 'can:mpfn.intranet.atenciones.index')->group(function () {
     Route::resource('atenciones', AtencionesController::class)->names('mpfn.intranet.atenciones');
     Route::get('pdf/informatica/atencion-acta/{id}', [AtencionesController::class, 'exportarPDF'])->name('pdf.informatica.atencion-acta');
     Route::get('pdf/informatica/atencion-por-usuario-acta/{dni}/{anio}/{mes}', [AtencionesController::class, 'exportarPDFporUsuario'])->name('pdf.informatica.atencion-por-usuario-acta');
     Route::get('pdf/informatica/atencion-por-usuario-acta2/{dni}/{anio}/{mes}', [AtencionesController::class, 'exportarPDFporUsuario2'])->name('pdf.informatica.atencion-por-usuario-acta2');
 });
 
-Route::middleware('auth','can:mpfn.intranet.atencionesincidencias.index')->group(function () {
+Route::middleware('auth', 'can:mpfn.intranet.atencionesincidencias.index')->group(function () {
     Route::resource('INF-Servicios', AtencionesincidenciasController::class)->names('mpfn.intranet.atencionesserviciosdetalles');
 });
 
-Route::middleware('auth','can:mpfn.intranet.expimportantes.index')->group(function () {
+Route::middleware('auth', 'can:mpfn.intranet.expimportantes.index')->group(function () {
     Route::resource('expedientes', ExpimportantesController::class)->names('mpfn.intranet.expimportantes');
 });
 
-Route::middleware('auth','can:procesos.intranet.index')->group(function () {
+Route::middleware('auth', 'can:procesos.intranet.index')->group(function () {
     Route::resource('configuracion', ConfiguracionController::class)->names('mpfn.intranet.configuracion');
 });
 
 // PAGINAS
 
-Route::resource('formatos-anexos',FormatosController::class)->names('paginas.formatos-anexos');
+Route::resource('formatos-anexos', FormatosController::class)->names('paginas.formatos-anexos');
 
-Route::resource('informatica-atenciones',InformaticaAtencionesController::class)->names('paginas.informatica-atenciones');
+Route::resource('informatica-atenciones', InformaticaAtencionesController::class)->names('paginas.informatica-atenciones');
 
-Route::resource('directorio-telefonico',DirectoriotelefonicoController::class)->names('paginas.directorio-telefonico');
+Route::resource('directorio-telefonico', DirectoriotelefonicoController::class)->names('paginas.directorio-telefonico');
 
 
 
@@ -183,18 +184,18 @@ Route::resource('directorio-telefonico',DirectoriotelefonicoController::class)->
 
 // PATRIMONIO
 
-Route::middleware('auth','can:mpfn.patrimonio.bienes.index')->group(function () {
+Route::middleware('auth', 'can:mpfn.patrimonio.bienes.index')->group(function () {
     Route::resource('bienes', BienesController::class)->names('mpfn.patrimonio.bienes');
 });
-Route::middleware('auth','can:mpfn.patrimonio.asignaciones.index')->group(function () {
+Route::middleware('auth', 'can:mpfn.patrimonio.asignaciones.index')->group(function () {
     Route::resource('bienesasignados', BienesasignacionController::class)->names('mpfn.patrimonio.asignaciones');
     Route::get('pdf/patrimio/bienesasignados-acta/{id}', [BienesasignacionController::class, 'exportarPDF'])->name('pdf.patrimonio.bienesasignados-acta');
 });
-Route::middleware('auth','can:mpfn.patrimonio.asignacionessobrantes.index')->group(function () {
+Route::middleware('auth', 'can:mpfn.patrimonio.asignacionessobrantes.index')->group(function () {
     Route::resource('bienesasignadossobrantes', BienesasignacionsobranteController::class)->names('mpfn.patrimonio.asignacionessobrantes');
     Route::get('pdf/patrimio/bienessobrantesasignados-acta/{id}', [BienesasignacionsobranteController::class, 'exportarPDF'])->name('pdf.patrimonio.bienessobrantesasignados-acta');
 });
-Route::middleware('auth','can:mpfn.patrimonio.traslado.index')->group(function () {
+Route::middleware('auth', 'can:mpfn.patrimonio.traslado.index')->group(function () {
     Route::resource('bienestraslado', BienestrasladoController::class)->names('mpfn.patrimonio.traslado');
     Route::get('pdf/patrimio/bienesdesplazamiento-acta/{id}', [BienestrasladoController::class, 'exportarPDF'])->name('pdf.patrimonio.bienesdesplazamiento-acta');
 });
@@ -218,4 +219,4 @@ Route::middleware('auth')->group(function () {
 });
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

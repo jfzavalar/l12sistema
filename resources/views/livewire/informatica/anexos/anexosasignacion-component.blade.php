@@ -90,11 +90,13 @@
                             {{-- <button type="button" class="btn btn-dark btn-sm" wire:click="reportesFiltros">
                                 <i class="fa-solid fa-filter"></i> Filtrar por:
                             </button> --}}
-                            <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }} </span>
-                            <input type="text" id="txtsearchusuario" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar por Apellidos O Anexo Telefónico">
+                            <span class="input-group-text fw-bold" id="basic-addon2">Total:
+                                {{ $lista_activos->total() }} </span>
+                            <input type="text" id="txtsearchusuario" class="form-control form-control-sm"
+                                wire:model.live="search" placeholder="Buscar por Apellidos O Anexo Telefónico">
                         </div>
                     </div>
-                    <div class="col-xl-3 mt-1 mb-1">
+                    <div class="col-xl-2 mt-1 mb-1">
                         <select id="cmb_filtrosede" class="form-select form-select-sm" wire:model.live="filtro_sede">
                             <option value="">Seleccionar Sede</option>
                             @foreach ($lista_sedes_filtro as $sede)
@@ -103,28 +105,33 @@
                         </select>
                     </div>
                     <div class="col-xl-5 mt-1 mb-1">
-                        <select id="cmb_filtrodependencia" class="form-select form-select-sm" wire:model.live="filtro_dependencia">
+                        <select id="cmb_filtrodependencia" class="form-select form-select-sm"
+                            wire:model.live="filtro_dependencia">
                             <option value="">Seleccionar Dependencia</option>
                             @foreach ($lista_dependencias_filtro as $dependencia)
                                 <option value="{{ $dependencia->nombre }}">{{ $dependencia->nombre }}</option>
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-xl-1 mt-1 mb-1">
-                        <div class="input-group">
+                    <div class="col-xl-2 mt-1 mb-1">
+                        <div class="input-group justify-content-end">
                             @can('mpfn.informatica.anexos.create')
-                                <button type="button" id="btnnuevo" class="btn btn-primary btn-sm" wire:click="nuevo">
+                                <button type="button" id="btnnuevo" class="btn btn-primary btn-sm me-1"
+                                    wire:click="nuevo">
                                     <i class="fa-solid fa-file"></i> Nuevo
                                 </button>
                             @endcan
-                            <button class="btn btn-success btn-sm" wire:click="exportarExcel" title="Exportar a Excel">
-                                <i class="fa-solid fa-file-excel"></i>
+                            <button class="btn btn-success btn-sm me-1" wire:click="exportarExcel"
+                                title="Exportar a Excel">
+                                <i class="fa-solid fa-file-excel"></i> Excel
                             </button>
+                            <a type="button" class="btn btn-naranja btn-sm"
+                                href="{{ route('pdf.informatica.anexotelefonico-reporte') }}" target="_blank">
+                                <i class="fa-solid fa-file-pdf"></i> PDF
+                            </a>
                         </div>
                     </div>
                 </div>
-
-                
 
                 <table class="table table-striped table-hover table-sm table-xsmall">
                     <thead class="table-primary text-center align-middle">
@@ -143,7 +150,8 @@
                             {{-- <th scope="col" class="table-success">FECHA</th> --}}
                             <th scope="col" class="table-dark">INFORMÁTICO</th>
                             <th scope="col" class="table-success">REGISTRADO POR</th>
-                            <th scope="col" class="table-dark" colspan="3" ><i class="fa-solid fa-gears"></i></th>
+                            <th scope="col" class="table-dark" colspan="3"><i class="fa-solid fa-gears"></i>
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="align-middle">
@@ -185,16 +193,18 @@
                                 <td class="text-center">
                                     <b>{{ $item->estado }}</b>
                                     <br>
-                                    <span class="badge py-1 {{ in_array($item->asignacionlibrecustodia, ['ASIGNACION', 'REASIGNACION']) ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }}">
+                                    <span
+                                        class="badge py-1 {{ in_array($item->asignacionlibrecustodia, ['ASIGNACION', 'REASIGNACION']) ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }}">
                                         {{ $item->asignacionlibrecustodia }}
                                     </span>
                                 </td>
                                 <td class="text-center">
-                                    <span class="badge py-1 {{ in_array($item->custodia, ['NO']) ? 'bg-primary-subtle text-primary' : 'bg-danger-subtle text-danger' }} fs-7">
+                                    <span
+                                        class="badge py-1 {{ in_array($item->custodia, ['NO']) ? 'bg-primary-subtle text-primary' : 'bg-danger-subtle text-danger' }} fs-7">
                                         {{ $item->custodia }}
                                     </span>
                                     <br>
-                                    @if ($item->custodia === "SI")
+                                    @if ($item->custodia === 'SI')
                                         {{-- <b>Desde:</b>
                                         <br>
                                         <span class="text-primary">{{ $item->asignacionlibrecustodiadesde }}</span>
@@ -214,14 +224,16 @@
                                 <td>
                                     <div class="btn-group" role="group">
                                         @can('mpfn.informatica.anexos.edit')
-                                            <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar({{ $item->id }})">
+                                            <button type="button" class="btn btn-outline-success btn-xs"
+                                                wire:click="editar({{ $item->id }})">
                                                 <i class="fa-solid fa-pen-to-square"></i><br>Editar
                                             </button>
-                                        @endcan                                       
-                                        {{-- @if ( $item->asignacionlibrecustodia !== "ASIGNACION" && $item->asignacionlibrecustodia !== "REASIGNACION") --}}
-                                            <button type="button" class="btn btn-outline-primary btn-xs" wire:click="nuevo({{ $item->id }},'REASIGNACION')">
-                                                <i class="fa-solid fa-right-to-bracket"></i><br>Reasignar
-                                            </button>
+                                        @endcan
+                                        {{-- @if ($item->asignacionlibrecustodia !== 'ASIGNACION' && $item->asignacionlibrecustodia !== 'REASIGNACION') --}}
+                                        <button type="button" class="btn btn-outline-primary btn-xs"
+                                            wire:click="nuevo({{ $item->id }},'REASIGNACION')">
+                                            <i class="fa-solid fa-right-to-bracket"></i><br>Reasignar
+                                        </button>
                                         {{-- @else
                                             <button type="button" class="btn btn-outline-danger btn-xs" wire:click="nuevo({{ $item->id }},'DEVOLUCION')">
                                                 <i class="fa-solid fa-right-from-bracket"></i><br>Devolver
@@ -231,23 +243,30 @@
                                 </td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <a type="button" class="btn btn-outline-naranja btn-xs" href="{{ route('pdf.informatica.anexotelefonico-acta', ['id' => $item->id]) }}" target="_blank">
+                                        <a type="button" class="btn btn-outline-naranja btn-xs"
+                                            href="{{ route('pdf.informatica.anexotelefonico-acta', ['id' => $item->id]) }}"
+                                            target="_blank">
                                             <i class="fa-solid fa-file-pdf"></i><br>Acta
                                         </a>
-                                        <button type="button" class="btn btn-outline-warning btn-xs" wire:click="editar_pdf({{ $item->id }})">
+                                        <button type="button" class="btn btn-outline-warning btn-xs"
+                                            wire:click="editar_pdf({{ $item->id }})">
                                             <i class="fa-solid fa-upload"></i><br>Cargar
                                         </button>
-                                        @if($item->ruta_documento)
-                                            <a type="button" class="btn btn-outline-dark btn-xs" href="{{ asset('storage/'.$item->ruta_documento) }}" target="_blank">
-                                                <i class="fa-solid fa-eye"></i> <i class="fa-solid fa-file-signature"></i><br> Firmado
+                                        @if ($item->ruta_documento)
+                                            <a type="button" class="btn btn-outline-dark btn-xs"
+                                                href="{{ asset('storage/' . $item->ruta_documento) }}"
+                                                target="_blank">
+                                                <i class="fa-solid fa-eye"></i> <i
+                                                    class="fa-solid fa-file-signature"></i><br> Firmado
                                             </a>
                                         @endif
                                     </div>
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-outline-info btn-xs" wire:click="historial('{{ $item->anexo_id }}')">
+                                    <button type="button" class="btn btn-outline-info btn-xs"
+                                        wire:click="historial('{{ $item->anexo_id }}')">
                                         <i class="fa-solid fa-timeline"></i><br>Historial
-                                    </button>  
+                                    </button>
                                 </td>
                             </tr>
                         @empty
@@ -272,14 +291,16 @@
 
     <div>
         {{-- Modal Nuevo-Editar --}}
-        <div class="modal fade @if($modalNuevoEditarAbrir) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
+        <div class="modal fade @if ($modalNuevoEditarAbrir) show d-block @endif bg-secondary bg-opacity-75"
+            tabindex="-1">
             <div class="modal-dialog" style="max-width:90%;">
                 <div class="modal-content">
                     <div class="modal-header bg-{{ $colorHeaderModal }}">
                         <h1 class="modal-title fs-5" id="nuevoEditarModalLabel">
                             <i class="fa-solid fa-file"></i> {{ $textoHeaderModal }}
                         </h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" wire:click="cerrar"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            wire:click="cerrar"></button>
                     </div>
                     <form wire:submit.prevent="{{ $funcionGuardarActualizar }}">
                         <div class="modal-body">
@@ -288,13 +309,17 @@
                                     <div class="row">
                                         <div class="col-xl-6">
                                             <fieldset class="border p-3 rounded mb-3" {{ $seccionPersona }}>
-                                                <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS PERSONALES</legend>
+                                                <legend
+                                                    class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">
+                                                    DATOS PERSONALES</legend>
                                                 @include('livewire.partials.componentes.persona-datos')
                                             </fieldset>
                                         </div>
                                         <div class="col-xl-6">
                                             <fieldset class="border p-3 rounded mb-3" {{ $seccionPersonal }}>
-                                                <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DATOS INSTITUCIONALES</legend>
+                                                <legend
+                                                    class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">
+                                                    DATOS INSTITUCIONALES</legend>
                                                 @include('livewire.partials.componentes.personal-datos')
                                             </fieldset>
                                         </div>
@@ -310,7 +335,9 @@
                             <div class="row">
                                 <div class="col">
                                     <fieldset class="border p-3 rounded mb-3" {{ $seccionDetalle }}>
-                                        <legend class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">DETALLES DEL ANEXO</legend>
+                                        <legend
+                                            class="float-none w-outo px-3 fs-6 fw-bold text-muted text-center rounded bg-{{ $colorHeaderModal }}">
+                                            DETALLES DEL ANEXO</legend>
                                         {{-- @include('livewire.rrhh.contratos.partials.datos-contrato-component') --}}
                                         <div class="row">
                                             <div class="col-xl-9">
@@ -318,157 +345,262 @@
                                                     <div class="col-xl-3">
                                                         <label for="txtanexo" class="fw-bold fs-6">ANEXO:</label>
                                                         <div class="input-group input-group-xs">
-                                                            <button type="button" class="btn btn-{{ $colorGuardarActualizar }} btn-sm" wire:click="anexoBuscar">
+                                                            <button type="button"
+                                                                class="btn btn-{{ $colorGuardarActualizar }} btn-sm"
+                                                                wire:click="anexoBuscar">
                                                                 <i class="fa-solid fa-magnifying-glass"></i> Buscar
                                                             </button>
-                                                            <input type="text" id="txtanexo" class="form-control form-control-sm" wire:model="anexo" required>
+                                                            <input type="text" id="txtanexo"
+                                                                class="form-control form-control-sm"
+                                                                wire:model="anexo" required>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-3">
                                                         <label for="txtserie" class="fw-bold fs-6">SERIE:</label>
-                                                        <input type="text" id="txtserie" class="form-control form-control-xs" wire:model="serie" disabled>
+                                                        <input type="text" id="txtserie"
+                                                            class="form-control form-control-xs" wire:model="serie"
+                                                            disabled>
                                                     </div>
                                                     <div class="col-xl-3">
                                                         <label for="txtmarca" class="fw-bold fs-6">MARCA:</label>
-                                                        <input type="text" id="txtmarca" class="form-control form-control-xs" wire:model="marca" disabled>
+                                                        <input type="text" id="txtmarca"
+                                                            class="form-control form-control-xs" wire:model="marca"
+                                                            disabled>
                                                     </div>
                                                     <div class="col-xl-3">
                                                         <label for="txtmodelo" class="fw-bold fs-6">MODELO:</label>
-                                                        <input type="text" id="txtmodelo" class="form-control form-control-xs" wire:model="modelo" disabled>
+                                                        <input type="text" id="txtmodelo"
+                                                            class="form-control form-control-xs" wire:model="modelo"
+                                                            disabled>
                                                     </div>
 
                                                     <div class="col-xl-3">
                                                         <label for="1" class="fw-bold fs-6">TIPO</label>
                                                         <div class="d-flex gap-2">
-                                                            <input type="radio" id="1" name="tipo" class="btn-check" value="1" autocomplete="off" wire:model.live="tipo">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="1">1</label>
+                                                            <input type="radio" id="1" name="tipo"
+                                                                class="btn-check" value="1" autocomplete="off"
+                                                                wire:model.live="tipo">
+                                                            <label
+                                                                class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill"
+                                                                for="1">1</label>
 
-                                                            <input type="radio" id="2" name="tipo" class="btn-check" value="2" autocomplete="off" wire:model.live="tipo">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="2">2</label>
+                                                            <input type="radio" id="2" name="tipo"
+                                                                class="btn-check" value="2" autocomplete="off"
+                                                                wire:model.live="tipo">
+                                                            <label
+                                                                class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill"
+                                                                for="2">2</label>
 
-                                                            <input type="radio" id="3" name="tipo" class="btn-check" value="3" autocomplete="off" wire:model.live="tipo">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="3">3</label>
+                                                            <input type="radio" id="3" name="tipo"
+                                                                class="btn-check" value="3" autocomplete="off"
+                                                                wire:model.live="tipo">
+                                                            <label
+                                                                class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill"
+                                                                for="3">3</label>
                                                         </div>
                                                         @error('regimen')
                                                             <small class="text-danger">{{ $message }}</small>
                                                         @enderror
                                                     </div>
-                                                    
-                                                    <div class="col-xl-3">
-                                                        <label for="transformador_si" class="fw-bold fs-6">TRANSFORMADOR:</label>
-                                                        <div class="d-flex gap-2">
-                                                            <input type="radio" id="transformador_si" name="transformador" class="btn-check" value="SI" autocomplete="off" wire:model.live="transformador">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="transformador_si">SI</label>
 
-                                                            <input type="radio" id="transformador_no" name="transformador" class="btn-check" value="NO" autocomplete="off" wire:model.live="transformador">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="transformador_no">NO</label>
+                                                    <div class="col-xl-3">
+                                                        <label for="transformador_si"
+                                                            class="fw-bold fs-6">TRANSFORMADOR:</label>
+                                                        <div class="d-flex gap-2">
+                                                            <input type="radio" id="transformador_si"
+                                                                name="transformador" class="btn-check" value="SI"
+                                                                autocomplete="off" wire:model.live="transformador">
+                                                            <label
+                                                                class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill"
+                                                                for="transformador_si">SI</label>
+
+                                                            <input type="radio" id="transformador_no"
+                                                                name="transformador" class="btn-check" value="NO"
+                                                                autocomplete="off" wire:model.live="transformador">
+                                                            <label
+                                                                class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill"
+                                                                for="transformador_no">NO</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-3">
-                                                        <label for="auriculares_si" class="fw-bold fs-6">AURICULARES:</label>
+                                                        <label for="auriculares_si"
+                                                            class="fw-bold fs-6">AURICULARES:</label>
                                                         <div class="d-flex gap-2">
-                                                            <input type="radio" id="auriculares_si" name="auriculares" class="btn-check" value="SI" autocomplete="off" wire:model.live="auriculares">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="auriculares_si">SI</label>
+                                                            <input type="radio" id="auriculares_si"
+                                                                name="auriculares" class="btn-check" value="SI"
+                                                                autocomplete="off" wire:model.live="auriculares">
+                                                            <label
+                                                                class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill"
+                                                                for="auriculares_si">SI</label>
 
-                                                            <input type="radio" id="auriculares_no" name="auriculares" class="btn-check" value="NO" autocomplete="off" wire:model.live="auriculares">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="auriculares_no">NO</label>
+                                                            <input type="radio" id="auriculares_no"
+                                                                name="auriculares" class="btn-check" value="NO"
+                                                                autocomplete="off" wire:model.live="auriculares">
+                                                            <label
+                                                                class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill"
+                                                                for="auriculares_no">NO</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-3">
-                                                        <label for="baseauricular_si" class="fw-bold fs-6">BASE AURICULAR:</label>
+                                                        <label for="baseauricular_si" class="fw-bold fs-6">BASE
+                                                            AURICULAR:</label>
                                                         <div class="d-flex gap-2">
-                                                            <input type="radio" id="baseauricular_si" name="baseauricular" class="btn-check" value="SI" autocomplete="off" wire:model.live="baseauriculares">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="baseauricular_si">SI</label>
+                                                            <input type="radio" id="baseauricular_si"
+                                                                name="baseauricular" class="btn-check" value="SI"
+                                                                autocomplete="off" wire:model.live="baseauriculares">
+                                                            <label
+                                                                class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill"
+                                                                for="baseauricular_si">SI</label>
 
-                                                            <input type="radio" id="baseauricular_no" name="baseauricular" class="btn-check" value="NO" autocomplete="off" wire:model.live="baseauriculares">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="baseauricular_no">NO</label>
+                                                            <input type="radio" id="baseauricular_no"
+                                                                name="baseauricular" class="btn-check" value="NO"
+                                                                autocomplete="off" wire:model.live="baseauriculares">
+                                                            <label
+                                                                class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill"
+                                                                for="baseauricular_no">NO</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-6">
                                                         <label for="estado_bueno" class="fw-bold fs-6">ESTADO:</label>
                                                         <div class="d-flex gap-2">
-                                                            <input type="radio" id="estado_bueno" name="estado" class="btn-check" value="BUENO" autocomplete="off" wire:model.live="estado">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="estado_bueno">BUENO</label>
+                                                            <input type="radio" id="estado_bueno" name="estado"
+                                                                class="btn-check" value="BUENO" autocomplete="off"
+                                                                wire:model.live="estado">
+                                                            <label
+                                                                class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill"
+                                                                for="estado_bueno">BUENO</label>
 
-                                                            <input type="radio" id="estado_malo" name="estado" class="btn-check" value="MALO" autocomplete="off" wire:model.live="estado">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="estado_malo">MALO</label>
+                                                            <input type="radio" id="estado_malo" name="estado"
+                                                                class="btn-check" value="MALO" autocomplete="off"
+                                                                wire:model.live="estado">
+                                                            <label
+                                                                class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill"
+                                                                for="estado_malo">MALO</label>
 
-                                                            <input type="radio" id="estado_regular" name="estado" class="btn-check" value="REGULAR" autocomplete="off" wire:model.live="estado">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="estado_regular">REGULAR</label>
+                                                            <input type="radio" id="estado_regular" name="estado"
+                                                                class="btn-check" value="REGULAR" autocomplete="off"
+                                                                wire:model.live="estado">
+                                                            <label
+                                                                class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill"
+                                                                for="estado_regular">REGULAR</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-6">
-                                                        <label for="alc_asignacion" class="fw-bold fs-6">ASIGNACIÓN:</label>
+                                                        <label for="alc_asignacion"
+                                                            class="fw-bold fs-6">ASIGNACIÓN:</label>
                                                         <div class="d-flex gap-2">
-                                                            <input type="radio" id="alc_asignacion" name="asignacionlibrecustodia" class="btn-check" value="ASIGNACION" autocomplete="off" wire:model.live="asignacionlibrecustodia">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="alc_asignacion">ASIGNACIÓN</label>
+                                                            <input type="radio" id="alc_asignacion"
+                                                                name="asignacionlibrecustodia" class="btn-check"
+                                                                value="ASIGNACION" autocomplete="off"
+                                                                wire:model.live="asignacionlibrecustodia">
+                                                            <label
+                                                                class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill"
+                                                                for="alc_asignacion">ASIGNACIÓN</label>
 
-                                                            <input type="radio" id="alc_reasignacion" name="asignacionlibrecustodia" class="btn-check" value="REASIGNACION" autocomplete="off" wire:model.live="asignacionlibrecustodia">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="alc_reasignacion">REASIGNACIÓN</label>
+                                                            <input type="radio" id="alc_reasignacion"
+                                                                name="asignacionlibrecustodia" class="btn-check"
+                                                                value="REASIGNACION" autocomplete="off"
+                                                                wire:model.live="asignacionlibrecustodia">
+                                                            <label
+                                                                class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill"
+                                                                for="alc_reasignacion">REASIGNACIÓN</label>
 
-                                                            <input type="radio" id="alc_devolucion" name="asignacionlibrecustodia" class="btn-check" value="DEVOLUCION" autocomplete="off" wire:model.live="asignacionlibrecustodia">
-                                                            <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="alc_devolucion">DEVOLUCIÓN</label>
+                                                            <input type="radio" id="alc_devolucion"
+                                                                name="asignacionlibrecustodia" class="btn-check"
+                                                                value="DEVOLUCION" autocomplete="off"
+                                                                wire:model.live="asignacionlibrecustodia">
+                                                            <label
+                                                                class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill"
+                                                                for="alc_devolucion">DEVOLUCIÓN</label>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-xl-3">
                                                 <div class="text-center">
-                                                    @if ($tipo === "1")
-                                                        <img src="{{ asset('storage/imagenes/anexos/tipo1.png') }}" width="250">
-                                                    @elseif ($tipo === "2")
-                                                        <img src="{{ asset('storage/imagenes/anexos/tipo2.png') }}" width="250">
-                                                    @elseif ($tipo === "3")
-                                                        <img src="{{ asset('storage/imagenes/anexos/tipo3.png') }}" width="250">
+                                                    @if ($tipo === '1')
+                                                        <img src="{{ asset('storage/imagenes/anexos/tipo1.png') }}"
+                                                            width="250">
+                                                    @elseif ($tipo === '2')
+                                                        <img src="{{ asset('storage/imagenes/anexos/tipo2.png') }}"
+                                                            width="250">
+                                                    @elseif ($tipo === '3')
+                                                        <img src="{{ asset('storage/imagenes/anexos/tipo3.png') }}"
+                                                            width="250">
                                                     @endif
                                                 </div>
                                             </div>
                                         </div>
                                     </fieldset>
                                     <fieldset class="border p-3 rounded mb-3">
-                                        <div class="row">                                          
-                                            @if ($asignacionlibrecustodia === "REASIGNACION")
+                                        <div class="row">
+                                            @if ($asignacionlibrecustodia === 'REASIGNACION')
                                                 <div class="col-12 col-xl">
                                                     <label for="custodia_si" class="fw-bold fs-6">CUSTODIA:</label>
                                                     <div class="d-flex gap-2">
-                                                        <input type="radio" id="custodia_si" name="custodia" class="btn-check" value="SI" autocomplete="off" wire:model.live="custodia">
-                                                        <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="custodia_si">SI</label>
+                                                        <input type="radio" id="custodia_si" name="custodia"
+                                                            class="btn-check" value="SI" autocomplete="off"
+                                                            wire:model.live="custodia">
+                                                        <label
+                                                            class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill"
+                                                            for="custodia_si">SI</label>
 
-                                                        <input type="radio" id="custodia_no" name="custodia" class="btn-check" value="NO" autocomplete="off" wire:model.live="custodia">
-                                                        <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="custodia_no">NO</label>
+                                                        <input type="radio" id="custodia_no" name="custodia"
+                                                            class="btn-check" value="NO" autocomplete="off"
+                                                            wire:model.live="custodia">
+                                                        <label
+                                                            class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill"
+                                                            for="custodia_no">NO</label>
                                                     </div>
                                                 </div>
                                             @endif
-                                            @if ($custodia === "SI")
+                                            @if ($custodia === 'SI')
                                                 <div class="col-12 col-xl">
                                                     <label for="motivo_renuncia" class="fw-bold fs-6">MOTIVO:</label>
                                                     <div class="d-flex gap-2">
-                                                        <input type="radio" id="motivo_renuncia" name="motivo" class="btn-check" value="RENUNCIA" autocomplete="off" wire:model.live="motivo">
-                                                        <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="motivo_renuncia">RENUNCIA</label>
+                                                        <input type="radio" id="motivo_renuncia" name="motivo"
+                                                            class="btn-check" value="RENUNCIA" autocomplete="off"
+                                                            wire:model.live="motivo">
+                                                        <label
+                                                            class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill"
+                                                            for="motivo_renuncia">RENUNCIA</label>
 
-                                                        <input type="radio" id="motivo_licencia" name="motivo" class="btn-check" value="LICENCIA" autocomplete="off" wire:model.live="motivo">
-                                                        <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="motivo_licencia">LICENCIA</label>
+                                                        <input type="radio" id="motivo_licencia" name="motivo"
+                                                            class="btn-check" value="LICENCIA" autocomplete="off"
+                                                            wire:model.live="motivo">
+                                                        <label
+                                                            class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill"
+                                                            for="motivo_licencia">LICENCIA</label>
 
-                                                        <input type="radio" id="motivo_vacaciones" name="motivo" class="btn-check" value="VACACIONES" autocomplete="off" wire:model.live="motivo">
-                                                        <label class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill" for="motivo_vacaciones">VACACIONES</label>
+                                                        <input type="radio" id="motivo_vacaciones" name="motivo"
+                                                            class="btn-check" value="VACACIONES" autocomplete="off"
+                                                            wire:model.live="motivo">
+                                                        <label
+                                                            class="btn btn-outline-{{ $colorGuardarActualizar }} btn-xs flex-fill"
+                                                            for="motivo_vacaciones">VACACIONES</label>
                                                     </div>
                                                 </div>
                                             @endif
-                                            @if ($motivo === "LICENCIA" || $motivo === "VACACIONES")
+                                            @if ($motivo === 'LICENCIA' || $motivo === 'VACACIONES')
                                                 <div class="col-12 col-xl">
                                                     <label for="txtdede" class="fw-bold fs-6">DESDE:</label>
-                                                    <input type="date" id="txtdede" class="form-control form-control-sm" wire:model="asignacionlibrecustodiadesde">
+                                                    <input type="date" id="txtdede"
+                                                        class="form-control form-control-sm"
+                                                        wire:model="asignacionlibrecustodiadesde">
                                                 </div>
                                                 <div class="col-12 col-xl">
                                                     <label for="txthasta" class="fw-bold fs-6">HASTA:</label>
-                                                    <input type="date" id="txthasta" class="form-control form-control-sm" wire:model="asignacionlibrecustodiahasta">
+                                                    <input type="date" id="txthasta"
+                                                        class="form-control form-control-sm"
+                                                        wire:model="asignacionlibrecustodiahasta">
                                                 </div>
                                             @endif
                                         </div>
                                         <div class="row">
                                             <div class="col-xl-1">
                                                 <label for="cmbpiso" class="fw-bold fs-6">PISO:</label>
-                                                <select name="" id="cmbpiso" class="form-select form-select-sm" wire:model="piso" required>
+                                                <select name="" id="cmbpiso"
+                                                    class="form-select form-select-sm" wire:model="piso" required>
                                                     <option value="">...</option>
                                                     <option value="1">1</option>
                                                     <option value="2">2</option>
@@ -484,16 +616,21 @@
                                             </div>
                                             <div class="col-xl-1">
                                                 <label for="txtoficina" class="fw-bold fs-6">OFICINA:</label>
-                                                <input type="text" id="txtoficina" class="form-control form-control-sm" wire:model="oficina" required>
+                                                <input type="text" id="txtoficina"
+                                                    class="form-control form-control-sm" wire:model="oficina"
+                                                    required>
                                             </div>
 
                                             <div class="col-xl-5">
                                                 <label for="txtobservacion" class="fw-bold fs-6">OBSERVACIÓN:</label>
-                                                <input type="text" id="txtobservacion" class="form-control form-control-sm" wire:model="observacion">
+                                                <input type="text" id="txtobservacion"
+                                                    class="form-control form-control-sm" wire:model="observacion">
                                             </div>
                                             <div class="col-xl-5">
-                                                <label for="txt_informatico" class="fw-bold fs-6">INFORMÁTICO RESPONSABLE</label>
-                                                <select id="txt_informatico" class="form-select form-select-sm" wire:model="informatico_dni" required>
+                                                <label for="txt_informatico" class="fw-bold fs-6">INFORMÁTICO
+                                                    RESPONSABLE</label>
+                                                <select id="txt_informatico" class="form-select form-select-sm"
+                                                    wire:model="informatico_dni" required>
                                                     <option value="">Seleccionar...</option>
                                                     @foreach ($lista_informaticos as $item)
                                                         <option value="{{ $item->dni }}">
@@ -511,7 +648,8 @@
                             <button type="submit" class="btn btn-{{ $colorGuardarActualizar }} btn-sm">
                                 <i class="fa-solid fa-floppy-disk"></i> {{ $textoGuardarActualizar }}
                             </button>
-                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" wire:click="cerrar">
+                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"
+                                wire:click="cerrar">
                                 <i class="fa-solid fa-rectangle-xmark"></i> Cerrar
                             </button>
                         </div>
@@ -521,14 +659,16 @@
         </div>
 
         {{-- Modal historial --}}
-        <div class="modal fade @if($modalHistorial) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
+        <div class="modal fade @if ($modalHistorial) show d-block @endif bg-secondary bg-opacity-75"
+            tabindex="-1">
             <div class="modal-dialog" style="max-width:90%;">
                 <div class="modal-content">
                     <div class="modal-header bg-{{ $colorHeaderModal }}">
                         <h1 class="modal-title fs-5" id="nuevoEditarModalLabel">
                             <i class="fa-solid fa-file"></i> {{ $textoHeaderModal }}
                         </h1>
-                        <button type="button" class="btn-close" aria-label="Close" wire:click="historial_cerrar"></button>
+                        <button type="button" class="btn-close" aria-label="Close"
+                            wire:click="historial_cerrar"></button>
                     </div>
                     <div class="modal-body">
                         <div class="table-responsive-xl">
@@ -536,7 +676,9 @@
                                 <div class="col-xl-12">
                                     <div class="input-group input-group-sm mb-2">
                                         <span class="input-group-text fw-bold" id="basic-addon2">Total: </span>
-                                        <input type="text" id="txtsearchusuario2" class="form-control form-control-sm" wire:model.live="search" placeholder="Buscar por DNI, Apellidos y Nombres o Anexo">
+                                        <input type="text" id="txtsearchusuario2"
+                                            class="form-control form-control-sm" wire:model.live="search"
+                                            placeholder="Buscar por DNI, Apellidos y Nombres o Anexo">
                                     </div>
                                 </div>
                             </div>
@@ -557,7 +699,8 @@
                                         {{-- <th scope="col" class="table-success">FECHA</th> --}}
                                         <th scope="col" class="table-dark">INFORMÁTICO</th>
                                         <th scope="col" class="table-success">REGISTRADO POR</th>
-                                        <th scope="col" class="table-dark" colspan="1" ><i class="fa-solid fa-gears"></i></th>
+                                        <th scope="col" class="table-dark" colspan="1"><i
+                                                class="fa-solid fa-gears"></i></th>
                                     </tr>
                                 </thead>
                                 <tbody class="align-middle">
@@ -597,7 +740,8 @@
                                             <td class="text-center">
                                                 {{ $item->estado }}
                                                 <br>
-                                                <span class="badge py-1 {{ in_array($item->asignacionlibrecustodia, ['ASIGNACION', 'REASIGNACION']) ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }}">
+                                                <span
+                                                    class="badge py-1 {{ in_array($item->asignacionlibrecustodia, ['ASIGNACION', 'REASIGNACION']) ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }}">
                                                     {{ $item->asignacionlibrecustodia }}
                                                 </span>
                                             </td>
@@ -605,33 +749,42 @@
                                                 
                                             </td> --}}
                                             <td class="text-center">
-                                                <span class="badge py-1 {{ in_array($item->custodia, ['NO']) ? 'bg-primary-subtle text-primary' : 'bg-danger-subtle text-danger' }} fs-7">
+                                                <span
+                                                    class="badge py-1 {{ in_array($item->custodia, ['NO']) ? 'bg-primary-subtle text-primary' : 'bg-danger-subtle text-danger' }} fs-7">
                                                     {{ $item->custodia }}
                                                 </span>
                                                 <br>
-                                                @if ($item->custodia === "SI")
+                                                @if ($item->custodia === 'SI')
                                                     <b>Desde:</b>
                                                     <br>
-                                                    <span class="text-primary">{{ $item->asignacionlibrecustodiadesde }}</span>
+                                                    <span
+                                                        class="text-primary">{{ $item->asignacionlibrecustodiadesde }}</span>
                                                     <br>
                                                     <b>Hasta:</b>
                                                     <br>
-                                                    <span class="text-primary">{{ $item->asignacionlibrecustodiahasta}}</span>
+                                                    <span
+                                                        class="text-primary">{{ $item->asignacionlibrecustodiahasta }}</span>
                                                 @endif
                                             </td>
                                             <td>{{ $item->informatico }}</td>
                                             <td>{{ $item->created_user }}</td>
                                             <td>
                                                 <div class="btn-group" role="group">
-                                                    <a type="button" class="btn btn-outline-naranja btn-xs" href="{{ route('pdf.informatica.anexotelefonico-acta', ['id' => $item->id]) }}" target="_blank">
+                                                    <a type="button" class="btn btn-outline-naranja btn-xs"
+                                                        href="{{ route('pdf.informatica.anexotelefonico-acta', ['id' => $item->id]) }}"
+                                                        target="_blank">
                                                         <i class="fa-solid fa-file-pdf"></i><br>Acta
                                                     </a>
-                                                    <button type="button" class="btn btn-outline-warning btn-xs" wire:click="editar_pdf({{ $item->id }})">
+                                                    <button type="button" class="btn btn-outline-warning btn-xs"
+                                                        wire:click="editar_pdf({{ $item->id }})">
                                                         <i class="fa-solid fa-upload"></i><br>Cargar
                                                     </button>
-                                                    @if($item->ruta_documento)
-                                                        <a type="button" class="btn btn-outline-dark btn-xs" href="{{ asset('storage/'.$item->ruta_documento) }}" target="_blank">
-                                                            <i class="fa-solid fa-eye"></i> <i class="fa-solid fa-file-signature"></i><br> Firmado
+                                                    @if ($item->ruta_documento)
+                                                        <a type="button" class="btn btn-outline-dark btn-xs"
+                                                            href="{{ asset('storage/' . $item->ruta_documento) }}"
+                                                            target="_blank">
+                                                            <i class="fa-solid fa-eye"></i> <i
+                                                                class="fa-solid fa-file-signature"></i><br> Firmado
                                                         </a>
                                                     @endif
                                                 </div>
@@ -666,7 +819,8 @@
 
         {{-- MODAL BUSCAR ANEXOS --}}
 
-        <div class="modal fade @if($modalAnexoBuscar) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
+        <div class="modal fade @if ($modalAnexoBuscar) show d-block @endif bg-secondary bg-opacity-75"
+            tabindex="-1">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content rounded-5">
                     <form action="">
@@ -682,8 +836,11 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="input-group mb-2">
-                                                <span class="input-group-text input-group-text-xs fw-bold" id="basic-addon2">Total: {{ $lista_anexos->total() }}</span>
-                                                <input type="text" id="txtSearchAnexo" class="form-control form-control-sm" placeholder="Buscar anexo ..." wire:model.live="searchanexos">
+                                                <span class="input-group-text input-group-text-xs fw-bold"
+                                                    id="basic-addon2">Total: {{ $lista_anexos->total() }}</span>
+                                                <input type="text" id="txtSearchAnexo"
+                                                    class="form-control form-control-sm"
+                                                    placeholder="Buscar anexo ..." wire:model.live="searchanexos">
                                             </div>
                                         </div>
                                     </div>
@@ -707,18 +864,22 @@
                                             <tr>
                                                 <th>{{ $loop->iteration }}</th>
                                                 <td>
-                                                    @if ($anexo->tipo === "1")
-                                                        <img src="{{ asset('storage/imagenes/anexos/tipo1.png') }}" width="80">
-                                                    @elseif ($anexo->tipo === "2")
-                                                        <img src="{{ asset('storage/imagenes/anexos/tipo2.png') }}" width="80">
-                                                    @elseif ($anexo->tipo === "3")
-                                                        <img src="{{ asset('storage/imagenes/anexos/tipo3.png') }}" width="80">
+                                                    @if ($anexo->tipo === '1')
+                                                        <img src="{{ asset('storage/imagenes/anexos/tipo1.png') }}"
+                                                            width="80">
+                                                    @elseif ($anexo->tipo === '2')
+                                                        <img src="{{ asset('storage/imagenes/anexos/tipo2.png') }}"
+                                                            width="80">
+                                                    @elseif ($anexo->tipo === '3')
+                                                        <img src="{{ asset('storage/imagenes/anexos/tipo3.png') }}"
+                                                            width="80">
                                                     @endif
                                                 </td>
                                                 <th class="text-center fs-7">
                                                     {{ $anexo->anexo }}
                                                     <br>
-                                                    <button type="button" class="btn btn-outline-success btn-xs" wire:click="editar_anexo({{ $anexo->id }})">
+                                                    <button type="button" class="btn btn-outline-success btn-xs"
+                                                        wire:click="editar_anexo({{ $anexo->id }})">
                                                         <i class="fa-solid fa-pen-to-square"></i>
                                                     </button>
                                                 </th>
@@ -727,14 +888,17 @@
                                                 <td class="text-center">{{ $anexo->modelo }}</td>
                                                 <td class="text-center">{{ $anexo->marca }}</td>
                                                 <td class="text-center">
-                                                    <span class="badge py-1 {{ $anexo->asignado == 0 ? 'bg-danger-subtle text-danger' : 'bg-success-subtle text-success' }}">
+                                                    <span
+                                                        class="badge py-1 {{ $anexo->asignado == 0 ? 'bg-danger-subtle text-danger' : 'bg-success-subtle text-success' }}">
                                                         {{ $anexo->asignado == 0 ? 'Libre' : 'Asignado' }}
                                                     </span>
                                                 </td>
                                                 <td>
                                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                         <div class="btn-group" role="group">
-                                                            <button type="button" class="btn btn-{{ $colorAgregar}} btn-xs" wire:click="agregar_anexo({{ $anexo->id }})">
+                                                            <button type="button"
+                                                                class="btn btn-{{ $colorAgregar }} btn-xs"
+                                                                wire:click="agregar_anexo({{ $anexo->id }})">
                                                                 <i class="fa-solid fa-circle-plus"></i><br>Agregar
                                                             </button>
                                                         </div>
@@ -742,7 +906,6 @@
                                                 </td>
                                             </tr>
                                         @empty
-                                            
                                         @endforelse
                                     </tbody>
                                     <tfoot>
@@ -752,11 +915,12 @@
                                             </td>
                                         </tr>
                                     </tfoot>
-                                </table>                       
-                            </div>          
+                                </table>
+                            </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" wire:click="cerrarBuscar">
+                            <button type="button" class="btn btn-outline-secondary btn-sm"
+                                wire:click="cerrarBuscar">
                                 <i class="fa-solid fa-door-closed"></i> Cerrar
                             </button>
                         </div>
@@ -767,7 +931,8 @@
 
         {{-- MODAL PARA ACTUALIZAR ANEXO --}}
 
-        <div class="modal fade @if($modalAnexoTelefonico) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
+        <div class="modal fade @if ($modalAnexoTelefonico) show d-block @endif bg-secondary bg-opacity-75"
+            tabindex="-1">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content rounded-5">
                     <form wire:submit.prevent="actualizar_anexo">
@@ -782,41 +947,50 @@
                                 <div class="row">
                                     <div class="col-xl-12 col-lg-6 col-sm-3">
                                         <label for="txtanexo2" class="fw-bold">ANEXO</label>
-                                        <input type="text" id="txtanexo2" class="form-control form-control-sm" wire:model="anexo2">
+                                        <input type="text" id="txtanexo2" class="form-control form-control-sm"
+                                            wire:model="anexo2">
                                     </div>
                                     <div class="col-xl-3 col-lg-6 col-sm-3">
                                         <label for="txtserie2" class="fw-bold">SERIE</label>
-                                        <input type="text" id="txtserie2" class="form-control form-control-sm" wire:model="serie2">
+                                        <input type="text" id="txtserie2" class="form-control form-control-sm"
+                                            wire:model="serie2">
                                     </div>
                                     <div class="col-xl-3 col-lg-6 col-sm-3">
                                         <label for="txttipo2" class="fw-bold">TIPO</label>
-                                        <input type="text" id="txttipo2" class="form-control form-control-sm" wire:model="tipo2">
+                                        <input type="text" id="txttipo2" class="form-control form-control-sm"
+                                            wire:model="tipo2">
                                     </div>
                                     <div class="col-xl-3 col-lg-6 col-sm-3">
                                         <label for="txtmodelo2" class="fw-bold">MODELO</label>
-                                        <input type="text" id="txtmodelo2" class="form-control form-control-sm" wire:model="modelo2">
+                                        <input type="text" id="txtmodelo2" class="form-control form-control-sm"
+                                            wire:model="modelo2">
                                     </div>
                                     <div class="col-xl-3 col-lg-6 col-sm-3">
                                         <label for="txtmarca2" class="fw-bold">MARCA</label>
-                                        <input type="text" id="txtmarca2" class="form-control form-control-sm" wire:model="marca2">
+                                        <input type="text" id="txtmarca2" class="form-control form-control-sm"
+                                            wire:model="marca2">
                                     </div>
                                     <div class="col-12 text-center">
-                                        @if ($tipo2 === "1")
-                                            <img src="{{ asset('storage/imagenes/anexos/tipo1.png') }}" width="300">
-                                        @elseif ($tipo2 === "2")
-                                            <img src="{{ asset('storage/imagenes/anexos/tipo2.png') }}" width="300">
-                                        @elseif ($tipo2 === "3")
-                                            <img src="{{ asset('storage/imagenes/anexos/tipo3.png') }}" width="300">
+                                        @if ($tipo2 === '1')
+                                            <img src="{{ asset('storage/imagenes/anexos/tipo1.png') }}"
+                                                width="300">
+                                        @elseif ($tipo2 === '2')
+                                            <img src="{{ asset('storage/imagenes/anexos/tipo2.png') }}"
+                                                width="300">
+                                        @elseif ($tipo2 === '3')
+                                            <img src="{{ asset('storage/imagenes/anexos/tipo3.png') }}"
+                                                width="300">
                                         @endif
                                     </div>
-                                </div>                    
-                            </div>          
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-{{ $colorGuardarActualizar }} btn-sm">
                                 <i class="fa-solid fa-floppy-disk"></i> Actualizar
                             </button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm" wire:click="cerrar_anexo">
+                            <button type="button" class="btn btn-outline-secondary btn-sm"
+                                wire:click="cerrar_anexo">
                                 <i class="fa-solid fa-door-closed"></i> Cerrar
                             </button>
                         </div>
@@ -826,22 +1000,25 @@
         </div>
 
         <!-- MODAL FILTRO - REPORTES -->
-        <div class="modal fade @if($modalReportesFiltros) show d-block @endif bg-secondary bg-opacity-75" tabindex="-1">
+        <div class="modal fade @if ($modalReportesFiltros) show d-block @endif bg-secondary bg-opacity-75"
+            tabindex="-1">
             <div class="modal-dialog" style="max-width:95%;">
                 <div class="modal-content">
                     <div class="modal-header bg-info-subtle">
                         <h1 class="modal-title fs-5" id="filtroModalLabel">
-                            <i class="fa-solid fa-filter"></i> FILTROS - REPORTE : Total: {{ $lista_activos->total() }}
+                            <i class="fa-solid fa-filter"></i> FILTROS - REPORTE : Total:
+                            {{ $lista_activos->total() }}
                         </h1>
                         <button type="button" class="btn-close" wire:click="cerrarBuscar"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="row g-3">                      
+                        <div class="row g-3">
                             <div class="col-xl-4 col-lg-6 col-sm-12">
                                 <label for="cmb_filtrosede" class="fw-bold fs-6">Sede</label>
                                 <div class="input-group">
                                     {{-- <input type="text" id="txt_sede" class="form-control form-control-xs bg-light" wire:model="filtrosedeorigen" readonly required> --}}
-                                    <select id="cmb_filtrosede" class="form-select form-select-sm" wire:model.live="filtro_sede">
+                                    <select id="cmb_filtrosede" class="form-select form-select-sm"
+                                        wire:model.live="filtro_sede">
                                         <option value="">Seleccionar...</option>
                                         @foreach ($lista_sedes_filtro as $sede)
                                             <option value="{{ $sede->nombre }}">{{ $sede->nombre }}</option>
@@ -853,10 +1030,12 @@
                                 <label for="cmb_filtrodependencia" class="fw-bold fs-6">Dependencia</label>
                                 <div class="input-group position-relative">
                                     {{-- <input type="text" id="txt_dependencia" class="form-control form-control-xs bg-light" wire:model="filtrodependenciaorigen" readonly required> --}}
-                                    <select id="cmb_filtrodependencia" class="form-select form-select-sm" wire:model.live="filtro_dependencia">
+                                    <select id="cmb_filtrodependencia" class="form-select form-select-sm"
+                                        wire:model.live="filtro_dependencia">
                                         <option value="">Seleccionar...</option>
                                         @foreach ($lista_dependencias_filtro as $dependencia)
-                                            <option value="{{ $dependencia->nombre }}">{{ $dependencia->nombre }}</option>
+                                            <option value="{{ $dependencia->nombre }}">{{ $dependencia->nombre }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -882,12 +1061,12 @@
         </div>
 
 
-        {{--MODAL BUSCAR PERSONAL --}}
+        {{-- MODAL BUSCAR PERSONAL --}}
         @include('livewire.partials.modales.buscar-personal-datos')
 
         {{-- MODALE BUSCAR SEDES-DEPENDENCIAS-DESPACHOS --}}
         @include('livewire.partials.modales.buscar-personal-sede-dependencia-despacho')
-        
+
         {{-- MODAL BUSCAR CARGO --}}
         @include('livewire.partials.modales.buscar-personal-cargo')
 
@@ -898,4 +1077,3 @@
     </div>
 
 </div>
-

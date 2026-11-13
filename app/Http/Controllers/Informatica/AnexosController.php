@@ -72,25 +72,36 @@ class AnexosController extends Controller
 
         // Buscar el penúltimo registro con el mismo anexo
         $penultimo = InformaticasBienesAnexosAsignaciones::where('anexo', $instanciaTbl->anexo)
-                        ->where('id', '<', $instanciaTbl->id) // solo anteriores
-                        ->orderBy('id', 'desc')                      
-                        ->first();
-        
+            ->where('id', '<', $instanciaTbl->id) // solo anteriores
+            ->orderBy('id', 'desc')
+            ->first();
+
         // Validar existencia
         if (!$penultimo) {
             $penultimo = null; // explícito, para que la vista lo maneje con @if
         }
 
-        $pdf = Pdf::loadView('pdf.informatica.anexotelefonico-acta', compact('instanciaTbl','penultimo'));
-        
+        $pdf = Pdf::loadView('pdf.informatica.anexotelefonico-acta', compact('instanciaTbl', 'penultimo'));
+
 
         // MOSTRAR PDF
-        return $pdf->stream('acta_'.$instanciaTbl->id.'_anexo_'.$instanciaTbl->anexo.'_usuario_'.$instanciaTbl->dni.'.pdf');
-        
+        return $pdf->stream('acta_' . $instanciaTbl->id . '_anexo_' . $instanciaTbl->anexo . '_usuario_' . $instanciaTbl->dni . '.pdf');
+
         //Descargar PDF
         // return response()->streamDownload(function () use ($pdf) {
         //     echo $pdf->stream();
         // }, 'spijweb_'.$userspijweb->dni.'.pdf');
     }
 
+    public function exportarPDFReporte()
+    {
+        $instanciaTbl = InformaticasBienesAnexosAsignaciones::where('activo', '1')
+            ->orderBy('sededestino', 'asc')
+            ->orderBy('dependenciadestino', 'asc')
+            ->get();
+
+        $pdf = Pdf::loadView('pdf.informatica.anexotelefonico-reporte', compact('instanciaTbl'));
+
+        return $pdf->stream('reporte.pdf');
+    }
 }
