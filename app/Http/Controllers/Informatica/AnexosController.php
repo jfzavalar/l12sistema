@@ -96,6 +96,7 @@ class AnexosController extends Controller
     public function exportarPDFReporte()
     {
         $instanciaTbl = InformaticasBienesAnexosAsignaciones::where('activo', '1')
+            ->where('custodia', 'NO')
             ->orderBy('sededestino', 'asc')
             ->orderBy('dependenciadestino', 'asc')
             ->get();
