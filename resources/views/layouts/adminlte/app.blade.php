@@ -837,7 +837,7 @@
             }
 
             // Redireccionar luego del logout
-            window.location.href = "route('login')";
+            window.location.href = "{{ route('login') }}";
         }
 
         function resetTimer() {
