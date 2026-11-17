@@ -63,170 +63,181 @@ class AnexosasignacionComponent extends Component
     public $colorAgregar;
 
     //VARIABLES PARA OCULTAR Y MOSTRAR TXT_OTROS
-    public $mostrarcontroles = "d-none",$mostrarcontrolgpli="d-none";
-    public $mostrarotrosp = "d-none", $mostrarotrosc = "d-none",$mostrarcargafoto = "d-none";
+    public $mostrarcontroles = "d-none", $mostrarcontrolgpli = "d-none";
+    public $mostrarotrosp = "d-none", $mostrarotrosc = "d-none", $mostrarcargafoto = "d-none";
 
     //VARIABLES PARA BLOQUEAR SECCIONES
     public $seccionFoto = "",
-            $seccionPersona = "",
-            $seccionPersonal    = "",
-            $seccionDetalle = "";
+        $seccionPersona = "",
+        $seccionPersonal    = "",
+        $seccionDetalle = "";
 
-     // VARIABLES DE FUNCION GUARDAR O ACTUALIZAR
+    // VARIABLES DE FUNCION GUARDAR O ACTUALIZAR
     public $funcionGuardarActualizar;
 
     // VARIABLES INPUTS DE BUSQUEDA
-    public $search, 
-            $searchi,
-            $searchhistorial, 
-            $searchpersonas, 
-            $searchsedes,
-            $searchdependencias,
-            $searchdespachos,
-            $searchcargos,
-            $searchservicios,
-            $searchincidenciasolicitud,
-            $searchbienes,
-            $searchanexos;
-    
-    public function updatingSearch(){
+    public $search,
+        $searchi,
+        $searchhistorial,
+        $searchpersonas,
+        $searchsedes,
+        $searchdependencias,
+        $searchdespachos,
+        $searchcargos,
+        $searchservicios,
+        $searchincidenciasolicitud,
+        $searchbienes,
+        $searchanexos;
+
+    public function updatingSearch()
+    {
         $this->resetPage('anexosasignacionPage');
     }
-    public function updatingSearchi(){
+    public function updatingSearchi()
+    {
         $this->resetPage('anexosasignacioninactivosPage');
     }
-    public function updatingSearchhistorial(){
+    public function updatingSearchhistorial()
+    {
         $this->resetPage('anexosasignacionhistorialPage');
     }
-    public function updatingSearchpersonas(){
+    public function updatingSearchpersonas()
+    {
         $this->resetPage('personasPage');
     }
-    public function updatingSearchsedes(){
+    public function updatingSearchsedes()
+    {
         $this->resetPage('sedesPage');
     }
-    public function updatingSearchdependencias(){
+    public function updatingSearchdependencias()
+    {
         $this->resetPage('dependenciasPage');
     }
-    public function updatingSearchdespachos(){
+    public function updatingSearchdespachos()
+    {
         $this->resetPage('despachosPage');
     }
-    public function updatingSearchcargos(){
+    public function updatingSearchcargos()
+    {
         $this->resetPage('cargosPage');
     }
-    public function updatingSearchpersonalatenciones(){
+    public function updatingSearchpersonalatenciones()
+    {
         $this->resetPage('personalatencionesPage');
     }
-    public function updatingSearchservicios(){
+    public function updatingSearchservicios()
+    {
         $this->resetPage('serviciosPage');
     }
-    public function updatingSearchincidenciasolicitud(){
+    public function updatingSearchincidenciasolicitud()
+    {
         $this->resetPage('incidenciasolicitudPage');
     }
-    public function updatingSearchbienes(){
+    public function updatingSearchbienes()
+    {
         $this->resetPage('bienesPage');
     }
-    public function updatingSearchanexos(){
+    public function updatingSearchanexos()
+    {
         $this->resetPage('anexosPage');
     }
 
     public $user_login;
 
     public $persona_id,
-            $dni,
-            $datos,
-            $appaterno,
-            $apmaterno,
-            $nombres,
-            $genero,
-            $estadocivil,
-            $fechanacimiento,
-            $celpersonal,
-            $correopersonal,
-            $foto,$fotoactual,$inputFileKey,
-            $created_at,
-            $updated_at;
+        $dni,
+        $datos,
+        $appaterno,
+        $apmaterno,
+        $nombres,
+        $genero,
+        $estadocivil,
+        $fechanacimiento,
+        $celpersonal,
+        $correopersonal,
+        $foto, $fotoactual, $inputFileKey,
+        $created_at,
+        $updated_at;
 
     public $personal_id,
-            $regimen,
-            $tipo_regimen,
-            $cargo,
-            $cargo_condicion,
+        $regimen,
+        $tipo_regimen,
+        $cargo,
+        $cargo_condicion,
 
-            $codsedeorigen,
-            $sedeorigen,
-            $coddependenciaorigen,
-            $dependenciaorigen,
-            $coddespachoorigen,
-            $despachoorigen,
+        $codsedeorigen,
+        $sedeorigen,
+        $coddependenciaorigen,
+        $dependenciaorigen,
+        $coddespachoorigen,
+        $despachoorigen,
 
-            $codsededestino,
-            $sededestino,
-            $coddependenciadestino,
-            $dependenciadestino,
-            $coddespachodestino,
-            $despachodestino,
-            
-            $celinstitucional,            
-            $correoinstitucional,
-            $tipo_documento,
-            
-            $piso,
-            $oficina;
+        $codsededestino,
+        $sededestino,
+        $coddependenciadestino,
+        $dependenciadestino,
+        $coddespachodestino,
+        $despachodestino,
+
+        $celinstitucional,
+        $correoinstitucional,
+        $tipo_documento,
+
+        $piso,
+        $oficina;
 
     public $anexoasignado_id,
-            $anexo_id,
-            $serie,
-            $tipo = "1",
-            $modelo = "J189",
-            $anexo,
-            $marca = "AVAYA",
-            $transformador = "SI",
-            $auriculares = "NO",
-            $baseauriculares = "NO",
-            $motivo,
-            $asignacionlibrecustodia = "ASIGNACION",
-            $asignacionlibrecustodiadesde,
-            $asignacionlibrecustodiahasta,
-            $custodia = "NO",
-            $observacion,
-            $ruta_evidencia,
-            $ruta_documento,
-            $estado = "BUENO",
-            $informatico_dni,
-            $informatico,
-            $activo,
-            $created_user_cargo,
-            $created_user,
-            $updated_user;
-    
+        $anexo_id,
+        $serie,
+        $tipo = "1",
+        $modelo = "J189",
+        $anexo,
+        $marca = "AVAYA",
+        $transformador = "SI",
+        $auriculares = "NO",
+        $baseauriculares = "NO",
+        $motivo,
+        $asignacionlibrecustodia = "ASIGNACION",
+        $asignacionlibrecustodiadesde,
+        $asignacionlibrecustodiahasta,
+        $custodia = "NO",
+        $observacion,
+        $ruta_evidencia,
+        $ruta_documento,
+        $estado = "BUENO",
+        $informatico_dni,
+        $informatico,
+        $activo,
+        $created_user_cargo,
+        $created_user,
+        $updated_user;
+
     public $anexo_id2,
-            $anexo2,
-            $serie2,
-            $tipo2,
-            $modelo2,
-            $marca2,
-            $asignado;
+        $anexo2,
+        $serie2,
+        $tipo2,
+        $modelo2,
+        $marca2,
+        $asignado;
 
     public $pdf_acta;
 
-    public $bandera_documento="EVIDENCIA";
+    public $bandera_documento = "EVIDENCIA";
 
     public $filtro_sede,
-            $filtro_dependencia;
+        $filtro_dependencia;
 
     public function updatedTipo($value)
     {
-        if ($value === "1"){
+        if ($value === "1") {
             $this->modelo = "J189";
             $this->auriculares = "NO";
             $this->baseauriculares = "NO";
-        }
-        elseif ($value === "2") {
+        } elseif ($value === "2") {
             $this->modelo = "J139";
             $this->auriculares = "NO";
             $this->baseauriculares = "NO";
-        }
-        elseif ($value === "3") {
+        } elseif ($value === "3") {
             $this->modelo = "K155";
             $this->auriculares = "SI";
             $this->baseauriculares = "SI";
@@ -237,11 +248,11 @@ class AnexosasignacionComponent extends Component
     // FUNCIONES DE FILTRADO
     // ============================================================================================================================
     public $filtro_asignados,
-            $filtro_reasignados,
-            $filtro_devueltos,
-            $filtro_custodia,
-            $filtro_con_acta,
-            $filtro_sin_acta;
+        $filtro_reasignados,
+        $filtro_devueltos,
+        $filtro_custodia,
+        $filtro_con_acta,
+        $filtro_sin_acta;
 
     public function filtrarTotal($value = null)
     {
@@ -283,7 +294,7 @@ class AnexosasignacionComponent extends Component
         $this->search = null;
         $this->filtro_asignados = null;
         $this->filtro_reasignados = null;
-        $this->filtro_devueltos = null; 
+        $this->filtro_devueltos = null;
         $this->filtro_custodia = null;
         $this->filtro_con_acta = null;
         $this->filtro_sin_acta = null;
@@ -298,7 +309,7 @@ class AnexosasignacionComponent extends Component
 
     public function render()
     {
-        $lista_activos = InformaticasBienesAnexosAsignaciones::where('activo',1)
+        $lista_activos = InformaticasBienesAnexosAsignaciones::where('activo', 1)
             // BUSCADOR
             ->when($this->search, function ($query) {
 
@@ -307,7 +318,7 @@ class AnexosasignacionComponent extends Component
                 $query->where(function ($q) use ($search) {
 
                     $q->where('anexo', 'like', '%' . $search . '%')
-                    ->orWhere('datos', 'like', '%' . $search . '%');
+                        ->orWhere('datos', 'like', '%' . $search . '%');
                 });
             })
 
@@ -339,7 +350,6 @@ class AnexosasignacionComponent extends Component
                     'asignacionlibrecustodia',
                     $this->filtro_devueltos
                 );
-
             })
             // FILTRO CUSTODIA
             ->when($this->filtro_custodia, function ($q) {
@@ -348,18 +358,22 @@ class AnexosasignacionComponent extends Component
                     'custodia',
                     $this->filtro_custodia
                 );
-
             })
             // FILTRO CON ACTA O SIN ACTA
-            ->when($this->filtro_con_acta === 'con', fn($q) =>
+            ->when(
+                $this->filtro_con_acta === 'con',
+                fn($q) =>
                 $q->whereNotNull('ruta_documento')
-                ->where('ruta_documento', '<>', '')
+                    ->where('ruta_documento', '<>', '')
             )
 
-            ->when($this->filtro_sin_acta === 'sin', fn($q) =>
-                $q->where(fn($q2) =>
+            ->when(
+                $this->filtro_sin_acta === 'sin',
+                fn($q) =>
+                $q->where(
+                    fn($q2) =>
                     $q2->whereNull('ruta_documento')
-                    ->orWhere('ruta_documento', '')
+                        ->orWhere('ruta_documento', '')
                 )
             )
 
@@ -370,7 +384,6 @@ class AnexosasignacionComponent extends Component
                     'sededestino',
                     $this->filtro_sede
                 );
-
             })
             // FILTRO DEPENDENCIA
             ->when($this->filtro_dependencia, function ($q) {
@@ -379,17 +392,16 @@ class AnexosasignacionComponent extends Component
                     'dependenciadestino',
                     $this->filtro_dependencia
                 );
-
             })
 
-            ->orderBy('id','desc')
-            ->paginate(10,['*'],'anexosasignacionPage');
+            ->orderBy('id', 'desc')
+            ->paginate(10, ['*'], 'anexosasignacionPage');
 
-        $lista_historial = InformaticasBienesAnexosAsignaciones::where('anexo_id',$this->anexo_id)
-            ->whereIn('activo',['0','1'])
-            ->orderBy('id','desc')
-            ->paginate(10,['*'],'anexosasignacionHistorialPage');
-        
+        $lista_historial = InformaticasBienesAnexosAsignaciones::where('anexo_id', $this->anexo_id)
+            ->whereIn('activo', ['0', '1'])
+            ->orderBy('id', 'desc')
+            ->paginate(10, ['*'], 'anexosasignacionHistorialPage');
+
         $estadisticas = InformaticasBienesAnexosAsignaciones::where('activo', 1)
             ->selectRaw("
                 COUNT(*) as total,
@@ -428,7 +440,7 @@ class AnexosasignacionComponent extends Component
             ")
             ->first();
 
-        $lista_personas = Persona::join('personales','personas.id','=','personales.persona_id')
+        $lista_personas = Persona::join('personales', 'personas.id', '=', 'personales.persona_id')
             ->select(
                 'personas.*',
                 'personales.persona_id',
@@ -447,81 +459,94 @@ class AnexosasignacionComponent extends Component
                 'personales.tipo_documento'
             )
             // ->where('personales.tipo_documento','CONTRATO')
-            ->whereIn('personales.activo', ['1','2'])
-            ->whereIn('personas.activo',['1','2'])
+            ->whereIn('personales.activo', ['1', '2'])
+            ->whereIn('personas.activo', ['1', '2'])
             ->when($this->searchpersonas !== '', function ($query) {
                 $query->where(function ($q) {
                     $q->where('personas.dni', 'like', '%' . $this->searchpersonas . '%')
-                    ->orWhere('personas.datos', 'like', '%' . $this->searchpersonas . '%');
+                        ->orWhere('personas.datos', 'like', '%' . $this->searchpersonas . '%');
                 });
             })
             ->orderBy('personas.datos')
-            ->paginate(10,['*'],'personasPage');
+            ->paginate(10, ['*'], 'personasPage');
 
-        $lista_sedes = Personales_sede::select('id','nombre','nombred')
-            ->where('activo','1')
-            ->where('nombre','like','%' . $this->searchsedes . '%')
+        $lista_sedes = Personales_sede::select('id', 'nombre', 'nombred')
+            ->where('activo', '1')
+            ->where('nombre', 'like', '%' . $this->searchsedes . '%')
             ->distinct()
             ->orderBy('nombre')
-            ->paginate(15,['*'], 'sedesPage');
-            
-        $lista_dependencias = Personales_dependencia::select('id','nombre')
-            ->where('activo','1')
-            ->where('sede_id',$this->codsededestino)
-            ->where('nombre','like','%' . $this->searchdependencias . '%')
+            ->paginate(15, ['*'], 'sedesPage');
+
+        $lista_dependencias = Personales_dependencia::select('id', 'nombre')
+            ->where('activo', '1')
+            ->where('sede_id', $this->codsededestino)
+            ->where('nombre', 'like', '%' . $this->searchdependencias . '%')
             ->distinct()
             ->orderBy('nombre')
-            ->paginate(10,['*'], 'dependenciasPage');
+            ->paginate(10, ['*'], 'dependenciasPage');
 
-        $lista_despachos = Personales_despacho::select('id','nombre')
-            ->where('activo','1')
-            ->where('nombre','like','%' . $this->searchdespachos . '%')
+        $lista_despachos = Personales_despacho::select('id', 'nombre')
+            ->where('activo', '1')
+            ->where('nombre', 'like', '%' . $this->searchdespachos . '%')
             ->distinct()
             ->orderBy('nombre')
-            ->paginate(10,['*'], 'despachosPage');
+            ->paginate(10, ['*'], 'despachosPage');
 
-        $lista_cargos = Personales_cargo::select('id','nombre')
-            ->where('activo','1')
-            ->where('nombre','like','%' . $this->searchcargos . '%')
+        $lista_cargos = Personales_cargo::select('id', 'nombre')
+            ->where('activo', '1')
+            ->where('nombre', 'like', '%' . $this->searchcargos . '%')
             ->distinct()
             ->orderBy('nombre')
-            ->paginate(10,['*'], 'cargosPage');
+            ->paginate(10, ['*'], 'cargosPage');
 
-        $lista_informaticos = User::select('dni','datos','cargo')
-            ->where('activo','1')
-            ->where('cargo','INFORMATICO')
+        $lista_informaticos = User::select('dni', 'datos', 'cargo')
+            ->where('activo', '1')
+            ->where('cargo', 'INFORMATICO')
             ->orderBy('datos')
             ->get();
 
-        $lista_anexos = InformaticasBienesAnexos::where('activo','1')
+        $lista_anexos = InformaticasBienesAnexos::where('activo', '1')
             // ->where('asignado','0')
-            ->where('anexo','like','%' . $this->searchanexos . '%')
+            ->where('anexo', 'like', '%' . $this->searchanexos . '%')
             ->orderBy('anexo')
-            ->paginate(10,['*'], 'anexosPage');
+            ->paginate(10, ['*'], 'anexosPage');
 
-        $lista_sedes_filtro = Personales_sede::select('id','nombre','nombred')
-            ->where('activo','1')
-            ->orderBy('nombre')
-            ->get();
-            
-        $lista_dependencias_filtro = Personales_dependencia::select('id','nombre')
-            ->where('activo','1')
-            ->where('sede','=',$this->filtro_sede)
+        $lista_sedes_filtro = Personales_sede::select('id', 'nombre', 'nombred')
+            ->where('activo', '1')
             ->orderBy('nombre')
             ->get();
 
-        return view('livewire.informatica.anexos.anexosasignacion-component',
-                    compact('lista_activos','lista_historial','estadisticas',
-                            'lista_personas','lista_sedes','lista_dependencias','lista_despachos','lista_cargos','lista_informaticos',
-                            'lista_anexos',
-                            'lista_sedes_filtro','lista_dependencias_filtro'));
+        $lista_dependencias_filtro = Personales_dependencia::select('id', 'nombre')
+            ->where('activo', '1')
+            ->where('sede', '=', $this->filtro_sede)
+            ->orderBy('nombre')
+            ->get();
+
+        return view(
+            'livewire.informatica.anexos.anexosasignacion-component',
+            compact(
+                'lista_activos',
+                'lista_historial',
+                'estadisticas',
+                'lista_personas',
+                'lista_sedes',
+                'lista_dependencias',
+                'lista_despachos',
+                'lista_cargos',
+                'lista_informaticos',
+                'lista_anexos',
+                'lista_sedes_filtro',
+                'lista_dependencias_filtro'
+            )
+        );
     }
 
     // ============================================================================================================================
     // REGLAS DE VALIDACIÓN
     // ============================================================================================================================
 
-    protected function rules(){
+    protected function rules()
+    {
         return [
             'dni' => 'required',
         ];
@@ -547,10 +572,10 @@ class AnexosasignacionComponent extends Component
         $this->fotoactual = null;
         $this->inputFileKey = rand();
 
-        $this->funcionGuardarActualizar="guardar";
+        $this->funcionGuardarActualizar = "guardar";
 
         if ($instanciaTabla) {
-            
+
             if ($vAsignacionlibrecustodia === 'DEVOLUCION') {
                 $this->colorHeaderModal = "dark-subtle";
                 $this->textoHeaderModal = "DEVOLUCIÓN";
@@ -580,14 +605,14 @@ class AnexosasignacionComponent extends Component
 
                 $this->codsedeorigen = $instanciaTabla->codsededestino;
                 $this->sedeorigen = $instanciaTabla->sededestino;
-                $this->coddependenciaorigen= $instanciaTabla->coddependenciadestino;
+                $this->coddependenciaorigen = $instanciaTabla->coddependenciadestino;
                 $this->dependenciaorigen = $instanciaTabla->dependenciadestino;
                 $this->coddespachoorigen = $instanciaTabla->coddespachodestino;
                 $this->despachoorigen = $instanciaTabla->despachodestino;
 
                 $this->codsededestino = $instanciaTabla->codsededestino;
                 $this->sededestino = $instanciaTabla->sededestino;
-                $this->coddependenciadestino= $instanciaTabla->coddependenciadestino;
+                $this->coddependenciadestino = $instanciaTabla->coddependenciadestino;
                 $this->dependenciadestino = $instanciaTabla->dependenciadestino;
                 $this->coddespachodestino = $instanciaTabla->coddespachodestino;
                 $this->despachodestino = $instanciaTabla->despachodestino;
@@ -611,7 +636,7 @@ class AnexosasignacionComponent extends Component
                 $this->custodia = $instanciaTabla->custodia;
                 $this->estado = $instanciaTabla->estado;
                 $this->asignacionlibrecustodia = $vAsignacionlibrecustodia;
-            } elseif ($vAsignacionlibrecustodia === 'REASIGNACION'){
+            } elseif ($vAsignacionlibrecustodia === 'REASIGNACION') {
                 $this->colorHeaderModal = "info-subtle";
                 $this->textoHeaderModal = "REASIGNACIÓN";
                 $this->colorGuardarActualizar = "info";
@@ -636,7 +661,7 @@ class AnexosasignacionComponent extends Component
                 $this->seccionPersona = "";
                 $this->seccionPersonal    = "";
                 $this->seccionDetalle = "disabled";
-            } else{
+            } else {
                 $this->colorHeaderModal = "primary-subtle";
                 $this->textoHeaderModal = "NUEVO";
                 $this->colorGuardarActualizar = "primary";
@@ -657,7 +682,7 @@ class AnexosasignacionComponent extends Component
             $this->created_user_cargo = $instanciaTabla->created_user_cargo;
             $this->created_user = $instanciaTabla->created_user;
             $this->updated_user = $instanciaTabla->updated_user;
-        }     
+        }
 
         // ABRIR MODAL NUEVO - EDITAR
         $this->modalNuevoEditarAbrir = true;
@@ -667,8 +692,7 @@ class AnexosasignacionComponent extends Component
     {
         $this->validate();
 
-        try
-        {
+        try {
             $registro = null;
             $registro2 = null;
 
@@ -676,7 +700,7 @@ class AnexosasignacionComponent extends Component
             $registro = InformaticasBienesAnexos::where('anexo', $this->anexo)->first();
 
             // VALIDAR SI EL ANEXO YA ESTÁ ASIGNADO
-            if ( $registro && $this->asignacionlibrecustodia === 'ASIGNACION') {
+            if ($registro && $this->asignacionlibrecustodia === 'ASIGNACION') {
 
                 $existeAsignacion = InformaticasBienesAnexosAsignaciones::where('anexo_id', $registro->id)
                     ->where('activo', 1)
@@ -731,7 +755,7 @@ class AnexosasignacionComponent extends Component
                 );
 
                 // ACTUALIZAR EL REGISTRO ANTERIOR EN CASO SEA UNA ASIGNACION, DEVOLUCION O CUSTODIA
-                if (!empty($this->anexoasignado_id)){
+                if (!empty($this->anexoasignado_id)) {
                     $iInformaticaBienesAnexoAsignado = InformaticasBienesAnexosAsignaciones::findOrFail($this->anexoasignado_id);
 
                     $iInformaticaBienesAnexoAsignado->update([
@@ -746,7 +770,7 @@ class AnexosasignacionComponent extends Component
                     'dni' => $this->dni,
                     'appaterno' => $this->appaterno,
                     'apmaterno' => $this->apmaterno,
-                    'nombres' => $this->nombres,                   
+                    'nombres' => $this->nombres,
                     'datos' => $this->datos,
                     'celpersonal' => $this->celpersonal,
                     'celinstitucional' => $this->celinstitucional,
@@ -808,7 +832,7 @@ class AnexosasignacionComponent extends Component
 
 
                 // ACTUALIZAMOS ACTIVO DE LA TABLA INFORMATICASBIENESANEXOS
-                
+
                 $iInformaticaBienesAnexo = InformaticasBienesAnexos::findOrFail($registro2->anexo_id);
 
                 if ($this->asignacionlibrecustodia === "DEVOLUCION") {
@@ -824,7 +848,6 @@ class AnexosasignacionComponent extends Component
                         'activo' => "1",
                     ]);
                 }
-                
             });
 
             // CERRAR MODAL NUEVO - EDITAR
@@ -837,10 +860,7 @@ class AnexosasignacionComponent extends Component
                 mensaje: 'Se guardaron los datos correctamente.',
                 tipo: 'success',
             );
-        }
-
-        catch (\Throwable $e) 
-        {
+        } catch (\Throwable $e) {
             dd($e); // 🔥 Déjalo mientras pruebas
         }
     }
@@ -884,14 +904,14 @@ class AnexosasignacionComponent extends Component
 
         $this->codsedeorigen = $instanciaTabla->codsededestino;
         $this->sedeorigen = $instanciaTabla->sededestino;
-        $this->coddependenciaorigen= $instanciaTabla->coddependenciadestino;
+        $this->coddependenciaorigen = $instanciaTabla->coddependenciadestino;
         $this->dependenciaorigen = $instanciaTabla->dependenciadestino;
         $this->coddespachoorigen = $instanciaTabla->coddespachodestino;
         $this->despachoorigen = $instanciaTabla->despachodestino;
 
         $this->codsededestino = $instanciaTabla->codsededestino;
         $this->sededestino = $instanciaTabla->sededestino;
-        $this->coddependenciadestino= $instanciaTabla->coddependenciadestino;
+        $this->coddependenciadestino = $instanciaTabla->coddependenciadestino;
         $this->dependenciadestino = $instanciaTabla->dependenciadestino;
         $this->coddespachodestino = $instanciaTabla->coddespachodestino;
         $this->despachodestino = $instanciaTabla->despachodestino;
@@ -932,10 +952,10 @@ class AnexosasignacionComponent extends Component
 
         // ABRIR MODAL NUEVO - EDITAR
         $this->modalNuevoEditarAbrir = true;
-        
     }
 
-    public function actualizar(){
+    public function actualizar()
+    {
 
         $this->validate();
 
@@ -963,7 +983,7 @@ class AnexosasignacionComponent extends Component
                     'dni' => $this->dni,
                     'appaterno' => $this->appaterno,
                     'apmaterno' => $this->apmaterno,
-                    'nombres' => $this->nombres,                   
+                    'nombres' => $this->nombres,
                     'datos' => $this->datos,
                     'celpersonal' => $this->celpersonal,
                     'celinstitucional' => $this->celinstitucional,
@@ -1022,8 +1042,8 @@ class AnexosasignacionComponent extends Component
                 ]);
 
                 // ACTUALIZAMOS ACTIVO DE LA TABLA INFORMATICASBIENESANEXOS
-                
-                $iInformaticaBienesAnexo = InformaticasBienesAnexos::where('anexo',$this->anexo);
+
+                $iInformaticaBienesAnexo = InformaticasBienesAnexos::where('anexo', $this->anexo);
 
                 if ($this->asignacionlibrecustodia === "DEVOLUCION") {
                     $iInformaticaBienesAnexo->update([
@@ -1038,14 +1058,13 @@ class AnexosasignacionComponent extends Component
                         'activo' => "1",
                     ]);
                 }
-
             });
 
             // CERRAR MODAL NUEVO - EDITAR
             $this->modalNuevoEditarAbrir = false;
             $this->modalPDFCargar = false;
             $this->modalPDFEvidenciaCargar = false;
-            
+
             // ALERTA DE ACTUALIZACIÓN
             $this->dispatch(
                 'alerta-actualizado',
@@ -1053,7 +1072,6 @@ class AnexosasignacionComponent extends Component
                 mensaje: 'Los datos se han actualizado correctamente.',
                 tipo: 'success'
             );
-
         } catch (\Throwable $e) {
 
             dd($e); // 🔥 Déjalo mientras pruebas
@@ -1068,14 +1086,14 @@ class AnexosasignacionComponent extends Component
         $this->modalPDFEvidenciaCargar = false;
 
         $this->dispatch(
-                'alerta-cancelar',
-                titulo: 'Cancelar',
-                mensaje: 'Se canceló la operación.',
-                tipo: 'error'
-            );
+            'alerta-cancelar',
+            titulo: 'Cancelar',
+            mensaje: 'Se canceló la operación.',
+            tipo: 'error'
+        );
     }
 
-    public function historial( $anexoAsignadoId)
+    public function historial($anexoAsignadoId)
     {
         $this->anexo_id = $anexoAsignadoId;
 
@@ -1085,7 +1103,7 @@ class AnexosasignacionComponent extends Component
         $this->textoGuardarActualizar = "Guardar";
         $this->colorAgregar = "outline-info";
 
-         // ABRIR MODAL HISTORIAL
+        // ABRIR MODAL HISTORIAL
         $this->modalHistorial = true;
     }
 
@@ -1107,7 +1125,7 @@ class AnexosasignacionComponent extends Component
         // ABRIR MODAL CARGAR PDF
         $this->modalPDFCargar = true;
     }
-    
+
     public function actualizar_pdf()
     {
         // ===== DATOS DE LA INSTANCIA =====
@@ -1115,7 +1133,7 @@ class AnexosasignacionComponent extends Component
 
         $this->anexo = $iAnexoAsignado->token_codigo;
         $this->asignacionlibrecustodia = $iAnexoAsignado->asignacionlibrecustodia;
-        
+
         // ===== VALIDAR SOLOR PDF =====
         $this->validate([
             'pdf_acta' => 'required|file|mimes:pdf|max:5120'
@@ -1140,7 +1158,6 @@ class AnexosasignacionComponent extends Component
                     'ruta_documento' => $rutaDocumento,
                     'updated_user' => $usuario_datos,
                 ]);
-
             });
 
             $this->reset('pdf_acta');
@@ -1154,7 +1171,6 @@ class AnexosasignacionComponent extends Component
 
             // CERRAR MODAL CARGAR PDF
             $this->modalPDFCargar = false;
-
         } catch (\Throwable $e) {
 
             report($e);
@@ -1168,15 +1184,9 @@ class AnexosasignacionComponent extends Component
         }
     }
 
-    public function editar_pdf_evidencia($anexoAsignadoId)
-    {
-        
-    }
+    public function editar_pdf_evidencia($anexoAsignadoId) {}
 
-    public function actualizar_pdf_evidencia()
-    {
-        
-    }
+    public function actualizar_pdf_evidencia() {}
 
     private function validarActa()
     {
@@ -1185,8 +1195,8 @@ class AnexosasignacionComponent extends Component
         if (empty($iAnexoAsignado->ruta_documento)) {
 
             $nombreArchivo = 'acta_' . $iAnexoAsignado->id . '_' .
-                            $iAnexoAsignado->anexo . '_' .
-                            $iAnexoAsignado->dni . '.pdf';
+                $iAnexoAsignado->anexo . '_' .
+                $iAnexoAsignado->dni . '.pdf';
 
             return $this->pdf_acta->storeAs(
                 'informatica/anexos/actas',
@@ -1265,13 +1275,14 @@ class AnexosasignacionComponent extends Component
         $this->modalInformaticaServicioDetalleBuscar = false;
         $this->modalPatrimonioBienesBuscar = false;
         $this->modalAnexoBuscar = false;
-    } 
+    }
 
     // ============================================================================================================================
     // FUNCIONES AGREGAR
     // ============================================================================================================================
-    
-    public function agregar_persona(Persona $ipersona){
+
+    public function agregar_persona(Persona $ipersona)
+    {
         // DATOS DE LA PERSONA
         $this->persona_id = $ipersona->id;
         $this->dni = $ipersona->dni;
@@ -1291,14 +1302,14 @@ class AnexosasignacionComponent extends Component
         $this->personal_id = $ipersonal->id;
 
         $this->codsedeorigen = $ipersonal->codsededestino;
-        $this->sedeorigen = $ipersonal->sededestino;   
+        $this->sedeorigen = $ipersonal->sededestino;
         $this->coddependenciaorigen = $ipersonal->coddependenciadestino;
         $this->dependenciaorigen = $ipersonal->dependenciadestino;
         $this->coddespachoorigen = $ipersonal->coddespachodestino;
         $this->despachoorigen = $ipersonal->despachodestino;
 
         $this->codsededestino = $ipersonal->codsededestino;
-        $this->sededestino = $ipersonal->sededestino;   
+        $this->sededestino = $ipersonal->sededestino;
         $this->coddependenciadestino = $ipersonal->coddependenciadestino;
         $this->dependenciadestino = $ipersonal->dependenciadestino;
         $this->coddespachodestino = $ipersonal->coddespachodestino;
@@ -1411,7 +1422,7 @@ class AnexosasignacionComponent extends Component
         $this->cargo = $icargo->nombre;
 
         // RETABLECER SERVICIO DETALLE
-        
+
         // RESTABLECER VARIABLES DE BUSQUEDA
         $this->reset([
             'searchpersonas',
@@ -1446,7 +1457,6 @@ class AnexosasignacionComponent extends Component
 
         // CERRAR MODAL
         $this->modalAnexoBuscar = false;
-
     }
 
     // ============================================================================================================================
@@ -1492,7 +1502,7 @@ class AnexosasignacionComponent extends Component
                     'tipo' => $this->tipo2,
                     'modelo' => $this->modelo2,
                     'marca' => $this->marca2,
-                    
+
 
                     'informatico_dni' => $this->informatico_dni,
                     'informatico' => $iinformatico->datos ?? null,
@@ -1501,16 +1511,15 @@ class AnexosasignacionComponent extends Component
                     // 'created_user' => $usuario_datos,
                     'updated_user' => $usuario_datos,
                 ]);
-
             });
 
             // CERRAR MODAL NUEVO - EDITAR
             $this->modalAnexoTelefonico = false;
-            
+
             // RESTABLECER ALGUNAS VARIABLES
             $this->reset(['searchanexos']);
 
-            
+
             // ALERTA DE ACTUALIZACIÓN
             $this->dispatch(
                 'alerta-actualizado',
@@ -1518,7 +1527,6 @@ class AnexosasignacionComponent extends Component
                 mensaje: 'Los datos se han actualizado correctamente.',
                 tipo: 'success'
             );
-
         } catch (\Throwable $e) {
 
             dd($e); // 🔥 Déjalo mientras pruebas

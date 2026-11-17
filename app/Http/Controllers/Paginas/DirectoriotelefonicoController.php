@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Paginas;
 
 use App\Http\Controllers\Controller;
+use App\Models\InformaticasBienesAnexosAsignaciones;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class DirectoriotelefonicoController extends Controller
@@ -61,5 +63,18 @@ class DirectoriotelefonicoController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function exportarPDFReporte()
+    {
+        $instanciaTbl = InformaticasBienesAnexosAsignaciones::where('activo', '1')
+            ->where('custodia', 'NO')
+            ->orderBy('sededestino', 'asc')
+            ->orderBy('dependenciadestino', 'asc')
+            ->get();
+
+        $pdf = Pdf::loadView('pdf.informatica.anexotelefonico-reporte', compact('instanciaTbl'));
+
+        return $pdf->stream('reporte.pdf');
     }
 }

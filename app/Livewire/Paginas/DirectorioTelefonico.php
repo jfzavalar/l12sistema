@@ -2,11 +2,13 @@
 
 namespace App\Livewire\Paginas;
 
+use App\Exports\AnexosfiltrosExport;
 use App\Models\InformaticasBienesAnexosAsignaciones;
 use App\Models\Personales_dependencia;
 use App\Models\Personales_sede;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DirectorioTelefonico extends Component
 {
@@ -16,28 +18,34 @@ class DirectorioTelefonico extends Component
     // VARIABLES DE FORMULARIO
 
     public $codsededestino = '',
-            $coddependenciadestino = '';
+        $coddependenciadestino = '';
 
     // VARIABLES INPUTS DE BUSQUEDA
     public $search = '',
-            $searchsede = '',
-            $searchdependencia = '',
-            $searchanexo = '';
+        $searchsede = '',
+        $searchdependencia = '',
+        $searchanexo = '';
 
-    public function updatingSearch(){
+    public $filtro_sede,
+        $filtro_dependencia;
+
+    public function updatingSearch()
+    {
         $this->resetPage('directorioPage');
     }
-    public function updatingSearchdependencia(){
+    public function updatingSearchdependencia()
+    {
         $this->resetPage('directorioPage');
     }
-    public function updatingSearchanexo(){
+    public function updatingSearchanexo()
+    {
         $this->resetPage('directorioPage');
     }
 
     public function render()
     {
-        $lista_activos = InformaticasBienesAnexosAsignaciones::where('activo',1)
-            ->where('custodia','NO')
+        $lista_activos = InformaticasBienesAnexosAsignaciones::where('activo', 1)
+            ->where('custodia', 'NO')
             // BUSCADOR
             ->when($this->search, function ($query) {
 
@@ -45,9 +53,8 @@ class DirectorioTelefonico extends Component
 
                 $query->where(function ($q) use ($search) {
                     $q->where('dni', 'like', '%' . $search . '%')
-                    ->orWhere('datos', 'like', '%' . $search . '%');
+                        ->orWhere('datos', 'like', '%' . $search . '%');
                 });
-
             })
 
             // BUSCADOR POR SEDE
@@ -68,7 +75,7 @@ class DirectorioTelefonico extends Component
                 });
             })
 
-            
+
 
             // BUSCADOR POR DEPENDENCIA
             // ->when($this->searchdependencia, function ($query) {
@@ -96,22 +103,39 @@ class DirectorioTelefonico extends Component
 
             ->paginate();
 
-        $lista_sedes = Personales_sede::select('id','nombre','nombred')
-            ->where('activo','1')
+        $lista_sedes = Personales_sede::select('id', 'nombre', 'nombred')
+            ->where('activo', '1')
             // ->where('nombre','like','%' . $this->searchsedes . '%')
             ->distinct()
             ->orderBy('nombre')
             ->get();
 
-        $lista_dependencias = Personales_dependencia::select('id','nombre')
-            ->where('activo','1')
-            ->where('sede_id',$this->searchsede)
+        $lista_dependencias = Personales_dependencia::select('id', 'nombre')
+            ->where('activo', '1')
+            ->where('sede_id', $this->searchsede)
             // ->where('nombre','like','%' . $this->searchdependencias . '%')
             ->distinct()
             ->orderBy('nombre')
             ->get();
 
-        return view('livewire.paginas.directorio-telefonico',
-                compact('lista_activos','lista_sedes','lista_dependencias'));
+        return view(
+            'livewire.paginas.directorio-telefonico',
+            compact('lista_activos', 'lista_sedes', 'lista_dependencias')
+        );
+    }
+
+    // ============================================================================================================================
+    // EXPORTAR EXCEL
+    // ============================================================================================================================
+
+    public function exportarExcel()
+    {
+        return Excel::download(
+            new AnexosfiltrosExport(
+                $this->filtro_sede,
+                $this->filtro_dependencia,
+            ),
+            'reporte_anexos.xlsx'
+        );
     }
 }

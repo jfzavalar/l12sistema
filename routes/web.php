@@ -178,6 +178,8 @@ Route::resource('informatica-atenciones', InformaticaAtencionesController::class
 
 Route::resource('directorio-telefonico', DirectoriotelefonicoController::class)->names('paginas.directorio-telefonico');
 
+Route::get('pdf/informatica/anexotelefonico-reporte', [DirectoriotelefonicoController::class, 'exportarPDFReporte'])->name('pdf.informatica.anexotelefonico-reporte');
+
 
 
 

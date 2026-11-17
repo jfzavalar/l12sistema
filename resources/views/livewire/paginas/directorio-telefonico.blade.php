@@ -8,17 +8,19 @@
     </h3>
     <hr>
     <div class="table-responsive-xl">
-        <div class="row mb-3">                      
+        <div class="row mb-3">
             <div class="col-xl-2">
                 <label for="txtsearch" class="fw-bold fs-6">BUSCAR POR PERSONAL</label>
                 <div class="input-group">
                     <span class="input-group-text fw-bold" id="basic-addon2">Total: {{ $lista_activos->total() }}</span>
-                    <input type="text" name="txtsearch" id="txtsearch" class="form-control is-valid" placeholder="Apellidos y nombre" wire:model.live="search">
+                    <input type="text" name="txtsearch" id="txtsearch" class="form-control is-valid"
+                        placeholder="Apellidos y nombre" wire:model.live="search">
                 </div>
             </div>
             <div class="col-xl-2">
                 <label for="txtsearch3" class="fw-bold fs-6">ANEXO</label>
-                <input type="text" name="txtsearch3" id="txtsearch3" class="form-control is-valid" placeholder="Número de anexo" wire:model.live="searchanexo">
+                <input type="text" name="txtsearch3" id="txtsearch3" class="form-control is-valid"
+                    placeholder="Número de anexo" wire:model.live="searchanexo">
             </div>
             <div class="col-xl-2">
                 <label for="cmbsearch1" class="fw-bold fs-6">SEDE</label>
@@ -31,7 +33,8 @@
             </div>
             <div class="col-xl-5">
                 <label for="cmbsearch2" class="fw-bold fs-6">DEPENDENCIA</label>
-                <select name="cmbsearch2" id="cmbsearch2" class="form-select is-valid" wire:model.live="searchdependencia">
+                <select name="cmbsearch2" id="cmbsearch2" class="form-select is-valid"
+                    wire:model.live="searchdependencia">
                     <option value="">Seleccionar...</option>
                     @foreach ($lista_dependencias as $dependencia)
                         <option value="{{ $dependencia->id }}">{{ $dependencia->nombre }}</option>
@@ -45,12 +48,13 @@
             <div class="col-xl-1">
                 <label for="reportes" class="fw-bold fs-6 d-block">REPORTES</label>
                 <div class="btn-group" role="group" aria-label="Reportes">
-                    <button type="button" class="btn btn-naranja">
-                        <i class="fa-solid fa-file-pdf"></i>
-                    </button>
-                    <button type="button" class="btn btn-success">
+                    <button class="btn btn-success me-1" wire:click="exportarExcel" title="Exportar a Excel">
                         <i class="fa-solid fa-file-excel"></i>
                     </button>
+                    <a type="button" class="btn btn-naranja"
+                        href="{{ route('pdf.informatica.anexotelefonico-reporte') }}" target="_blank">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -81,7 +85,8 @@
                 @forelse ($lista_activos as $item1)
                     <tr class="shadow-sm border-0 border-start border-4 border-secondary rounded-start">
                         <th>
-                            <i class="fa-solid fa-phone-volume fs-6"></i> <small class="text-muted fs-6 fw-bold">{{ $loop->iteration }}</small>
+                            <i class="fa-solid fa-phone-volume fs-6"></i> <small
+                                class="text-muted fs-6 fw-bold">{{ $loop->iteration }}</small>
                         </th>
                         <th>
                             <small class="text-muted fs-6 fw-bold">{{ $item1->datos }}</small>
